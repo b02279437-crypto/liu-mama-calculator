@@ -195,11 +195,13 @@
       calculate();
     }
 
-    function copyAccount() {
-      const accountText = document.getElementById('accountText').innerText;
-      navigator.clipboard.writeText(accountText);
-      alert('帳號已複製：' + accountText);
+      function copyAccount() {
+      const text = document.getElementById('accountText').innerText;
+      navigator.clipboard.writeText(text);
+      alert('匯款帳戶已複製');
     }
   </script>
+</body>
+</html>
 </body>
 </html>
