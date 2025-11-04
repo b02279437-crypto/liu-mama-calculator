@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>劉嘛麻 手炒麻辣底料</title>
-<link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+<title>LIU MAMA 劉嘛麻 手炒麻辣底料包預訂</title>
+<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
 <style>
 @keyframes handwriting {
   0% {opacity: 0; transform: translateY(10px);}
@@ -19,11 +19,12 @@ body {
   animation: handwriting 1s ease-in-out;
 }
 h2 {
-  font-size: 50px;
+  font-size: 42px;
   font-weight: bold;
   color: #1e4f7b;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   animation: handwriting 1s ease-in-out;
+  line-height: 1.3;
 }
 p {
   font-size: 14px;
@@ -127,7 +128,13 @@ input[type='checkbox'] {
 </style>
 </head>
 <body>
-<h2>劉嘛麻 手炒麻辣底料</h2>
+
+<h2>
+  <span style="font-family: 'Amatic SC', cursive;">LIU MAMA</span>&nbsp;&nbsp;
+  <span style="font-family: 'Zhi Mang Xing', cursive;">劉嘛麻</span><br>
+  <span style="font-family: 'Zhi Mang Xing', cursive;">手炒麻辣底料包預訂</span>
+</h2>
+
 <p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
 <table>
@@ -155,7 +162,7 @@ input[type='checkbox'] {
   </colgroup>
   <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
   <tr>
-    <td>711超商寄送</td>
+    <td>711超商取貨</td>
     <td>$60</td>
     <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
     <td id="sub711">$0</td>
@@ -208,5 +215,6 @@ function copyAccount() {
   alert('匯款帳戶已複製');
 }
 </script>
+
 </body>
 </html>
