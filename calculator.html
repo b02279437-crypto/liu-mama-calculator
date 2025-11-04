@@ -165,9 +165,9 @@
     }
 
     function copyAccount() {
-      const text = document.getElementById('accountText').innerText;
-      navigator.clipboard.writeText(text);
-      alert('匯款帳戶已複製');
+      const accountNumber = "123456789"; // 只複製帳號
+      navigator.clipboard.writeText(accountNumber);
+      alert('帳號已複製：' + accountNumber);
     }
   </script>
 </body>
