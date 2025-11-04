@@ -227,8 +227,10 @@ table small {
 
 <div class="account-box">
   <h3>匯款帳戶資訊</h3>
-  <p id="accountText">台新銀行 812　帳號：123456789　戶名：劉姳</p>
-  <button class="copy-btn" onclick="copyAccount()">複製匯款帳戶</button>
+  <p id="accountText">
+    台新銀行 812　帳號：<span id="accountNumber">123456789</span>　戶名：劉姳
+  </p>
+  <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
   
   <p class="account-link">
     <span>匯款完成後，煩請填寫詳細訂購資料</span> 🔗&nbsp;
@@ -260,9 +262,9 @@ function selectShip(type) {
 }
 
 function copyAccount() {
-  const text = document.getElementById('accountText').innerText;
+  const text = document.getElementById('accountNumber').innerText;
   navigator.clipboard.writeText(text);
-  alert('匯款帳戶已複製');
+  alert('匯款帳號已複製');
 }
 </script>
 
