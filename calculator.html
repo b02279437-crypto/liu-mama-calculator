@@ -3,11 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LIU MAMA 劉嘛麻 手炒麻辣底料包預訂</title>
+<title>LIU MAMA 麻辣底料包預訂</title>
+
 <!-- 英文字型 -->
 <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
 <!-- 中文圓潤字型 Noto Sans TC -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+<!-- 中文書法字體 (標題中文) -->
+<link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+
 <style>
 @keyframes handwriting {
   0% {opacity: 0; transform: translateY(10px);}
@@ -31,7 +35,12 @@ h2 {
 }
 h2 span.english {
   font-family: 'Amatic SC', cursive;
-  font-weight: bold; /* 英文粗體 */
+  font-weight: bold;
+}
+h2 span.chinese {
+  font-family: 'Zhi Mang Xing', 'Noto Sans TC', sans-serif;
+  font-size: 28px; /* 中文小一點 */
+  font-weight: normal;
 }
 p {
   font-size: 14px;
@@ -127,7 +136,7 @@ input[type='checkbox'] {
   font-size:14px;
 }
 .account-link a {
-  color: red;
+  color: #B22222; /* 麻辣紅 */
   font-size: 18px;
   font-weight: bold;
   text-decoration: underline;
@@ -151,7 +160,7 @@ input[type='checkbox'] {
 <h2>
   <span class="english">LIU MAMA</span>&nbsp;&nbsp;
   劉嘛麻<br>
-  手炒麻辣底料包預訂
+  <span class="chinese">麻辣底料包預訂</span>
 </h2>
 
 <p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
@@ -200,8 +209,10 @@ input[type='checkbox'] {
   <h3>匯款帳戶資訊</h3>
   <p id="accountText">台新銀行 812　帳號：123456789　戶名：劉姳</p>
   <button class="copy-btn" onclick="copyAccount()">複製匯款帳戶</button>
+  
+  <!-- 匯款完成提示放在按鈕下方 -->
   <p class="account-link">
-    <span>LIU MAMA 麻辣底料包預訂</span> 🔗&nbsp;
+    <span>匯款完成後，煩請填寫詳細訂購資料表單</span> 🔗&nbsp;
     <a href="https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview" target="_blank" rel="noopener noreferrer">
       表單
     </a>
@@ -219,4 +230,24 @@ function calculate() {
   if (document.getElementById('shipPost').checked) ship = 120;
 
   document.getElementById('sub711').innerText = document.getElementById('ship711').checked ? '$60' : '$0';
-  document.getElementById('subPost').innerText =
+  document.getElementById('subPost').innerText = document.getElementById('shipPost').checked ? '$120' : '$0';
+
+  let total = sub1 + ship;
+  document.getElementById('total').innerText = '總金額：$' + total;
+}
+
+function selectShip(type) {
+  if (type === '711') document.getElementById('shipPost').checked = false;
+  if (type === 'post') document.getElementById('ship711').checked = false;
+  calculate();
+}
+
+function copyAccount() {
+  const text = document.getElementById('accountText').innerText;
+  navigator.clipboard.writeText(text);
+  alert('匯款帳戶已複製');
+}
+</script>
+
+</body>
+</html>
