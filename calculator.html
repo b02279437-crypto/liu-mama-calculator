@@ -22,21 +22,19 @@
     p {
       font-size: 14px;
       color: #555;
-      margin-bottom: 15px;
     }
     table {
-      width: 80%;
-      max-width: 500px;
-      margin: 10px auto;
+      width: auto;
+      margin: 15px auto;
       border-collapse: collapse;
       background: #ffffff;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      font-size: 16px;
+      font-size: 14px;
       text-align: center;
     }
     th, td {
-      padding: 10px 12px;
+      padding: 4px 8px;
       border-bottom: 1px solid #dfe6e9;
       vertical-align: middle;
     }
@@ -45,10 +43,10 @@
       color: #2c3e50;
     }
     input[type='number'] {
-      width: 70px;
+      width: 60px;
       text-align: center;
-      font-size: 16px;
-      padding: 5px;
+      font-size: 14px;
+      padding: 4px;
       border: 1px solid #b0bec5;
       border-radius: 6px;
     }
@@ -56,7 +54,7 @@
       transform: scale(1.3);
     }
     .total {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
       color: #1e4f7b;
       margin-top: 15px;
@@ -72,9 +70,9 @@
       background-color: #1e4f7b;
       color: white;
       border: none;
-      padding: 10px 18px;
+      padding: 8px 16px;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 14px;
       cursor: pointer;
       margin-top: 10px;
     }
@@ -90,7 +88,7 @@
   <table>
     <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
     <tr>
-      <td>麻辣底料包</td>
+      <td>手炒麻辣湯底</td>
       <td>$320</td>
       <td><input type="number" id="qty1" min="0" value="0" onchange="calculate()"></td>
       <td id="sub1">$0</td>
@@ -100,13 +98,13 @@
   <table>
     <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
     <tr>
-      <td>711寄送</td>
+      <td>711超商寄送</td>
       <td>$60</td>
       <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
       <td id="sub711">$0</td>
     </tr>
     <tr>
-      <td>宅配</td>
+      <td>郵局宅配</td>
       <td>$120</td>
       <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
       <td id="subPost">$0</td>
@@ -117,7 +115,7 @@
 
   <div class="account-box">
     <h3>匯款帳戶資訊</h3>
-    <p id="accountText">銀行 812　帳號：123456789　戶名：陳慧珍</p>
+    <p id="accountText">台新銀行 812　帳號：123456789　戶名：劉姳</p>
     <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
   </div>
 
@@ -144,7 +142,7 @@
     }
 
     function copyAccount() {
-      const accountNumber = "123456789";
+      const accountNumber = "123456789"; // 只複製帳號
       navigator.clipboard.writeText(accountNumber);
       alert('帳號已複製：' + accountNumber);
     }
