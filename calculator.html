@@ -15,21 +15,8 @@
       background-color: #f7f6f2;
       color: #2c3e50;
       text-align: center;
-      padding: 20px;
-      font-size: 14px;
-    }
-    h2 {
-      font-family: 'Amatic SC', cursive;
-      font-size: 36px;
-      color: #1e4f7b;
-      margin-bottom: 8px;
+      padding: 30px;
       animation: handwriting 1s ease-in-out;
-    }
-    p {
-      font-size: 14px;
-      color: #555;
-      font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
-      animation: handwriting 1.2s ease-in-out;
     }
     table {
       width: 90%;
@@ -38,21 +25,13 @@
       background: #ffffff;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      font-size: 14px;
+      animation: handwriting 1.5s ease-in-out;
+      font-size: 16px;
     }
     th, td {
-      padding: 6px 10px;
+      padding: 12px;
       border-bottom: 1px solid #dfe6e9;
       font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
-      vertical-align: middle;
-      text-align: center;
-    }
-    td:nth-child(2), td:nth-child(4) {
-      text-align: right;
-    }
-    td:nth-child(3) input[type='number'] {
-      margin: 0 auto;
-      display: block;
     }
     th {
       background-color: #cce0ff;
@@ -60,10 +39,10 @@
       letter-spacing: 1px;
     }
     input[type='number'] {
-      width: 70px;
-      height: 32px;
+      width: 60px;
       text-align: center;
       font-size: 16px;
+      font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
       border: 1px solid #b0bec5;
       border-radius: 6px;
       padding: 4px;
@@ -78,35 +57,50 @@
       transform: scale(1.2);
     }
     .total {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: bold;
       color: #1e4f7b;
-      margin-top: 15px;
+      margin-top: 20px;
       letter-spacing: 1px;
+      animation: handwriting 2s ease-in-out;
     }
     .account-box {
-      margin-top: 25px;
+      margin-top: 30px;
       background: #eaf3ff;
-      padding: 15px;
+      padding: 18px;
       border-radius: 12px;
       display: inline-block;
-      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      animation: handwriting 2s ease-in-out;
     }
     .copy-btn {
       background-color: #1e4f7b;
       color: white;
       border: none;
-      padding: 8px 18px;
+      padding: 8px 16px;
       border-radius: 8px;
       font-size: 14px;
       cursor: pointer;
-      margin-top: 8px;
+      margin-top: 10px;
       letter-spacing: 0.5px;
       font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
       transition: background 0.3s ease;
     }
     .copy-btn:hover {
       background-color: #163b5b;
+    }
+    h2 {
+      font-family: 'Amatic SC', cursive;
+      font-size: 32px;
+      color: #1e4f7b;
+      margin-bottom: 8px;
+      animation: handwriting 1s ease-in-out;
+    }
+    p {
+      font-size: 14px;
+      color: #555;
+      font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
+      animation: handwriting 1.2s ease-in-out;
     }
   </style>
 </head>
@@ -144,7 +138,7 @@
 
   <div class="account-box">
     <h3>匯款帳戶資訊</h3>
-    <p id="accountText">銀行 812　帳號：123456789　戶名：劉姳</p>
+    <p id="accountText">台新銀行 812　帳號：123456789　戶名：劉姳</p>
     <button class="copy-btn" onclick="copyAccount()">複製匯款帳戶</button>
   </div>
 
@@ -171,9 +165,9 @@
     }
 
     function copyAccount() {
-      const accountNumber = "123456789";
-      navigator.clipboard.writeText(accountNumber);
-      alert('帳號已複製：' + accountNumber);
+      const text = document.getElementById('accountText').innerText;
+      navigator.clipboard.writeText(text);
+      alert('匯款帳戶已複製');
     }
   </script>
 </body>
