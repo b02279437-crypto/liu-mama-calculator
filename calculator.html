@@ -15,11 +15,12 @@
       background-color: #f7f6f2;
       color: #2c3e50;
       text-align: center;
-      padding: 30px;
+      padding: 20px;
       animation: handwriting 1s ease-in-out;
     }
     table {
-      width: 90%;
+      width: 100%;
+      max-width: 500px;
       margin: 15px auto;
       border-collapse: collapse;
       background: #ffffff;
@@ -27,11 +28,16 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       animation: handwriting 1.5s ease-in-out;
       font-size: 16px;
+      table-layout: fixed; /* 固定寬度欄位，防止變形 */
+      word-break: keep-all; /* 避免中文換行 */
     }
     th, td {
-      padding: 12px;
+      padding: 10px;
       border-bottom: 1px solid #dfe6e9;
       font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
+      white-space: nowrap; /* 不換行 */
+      overflow: hidden;
+      text-overflow: ellipsis; /* 超出用... */
     }
     th {
       background-color: #cce0ff;
@@ -65,13 +71,15 @@
       animation: handwriting 2s ease-in-out;
     }
     .account-box {
-      margin-top: 30px;
+      margin-top: 20px;
       background: #eaf3ff;
-      padding: 18px;
+      padding: 15px;
       border-radius: 12px;
       display: inline-block;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       animation: handwriting 2s ease-in-out;
+      max-width: 500px;
+      width: 100%;
     }
     .copy-btn {
       background-color: #1e4f7b;
@@ -91,7 +99,7 @@
     }
     h2 {
       font-family: 'Amatic SC', cursive;
-      font-size: 32px;
+      font-size: 28px;
       color: #1e4f7b;
       margin-bottom: 8px;
       animation: handwriting 1s ease-in-out;
@@ -101,6 +109,23 @@
       color: #555;
       font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
       animation: handwriting 1.2s ease-in-out;
+      white-space: nowrap; /* 不換行 */
+    }
+
+    /* 手機響應式 */
+    @media (max-width: 480px) {
+      table, .account-box {
+        font-size: 14px;
+      }
+      input[type='number'] {
+        width: 50px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      .total {
+        font-size: 18px;
+      }
     }
   </style>
 </head>
@@ -151,6 +176,7 @@
       let ship = 0;
       if (document.getElementById('ship711').checked) ship = 60;
       if (document.getElementById('shipPost').checked) ship = 120;
+
       document.getElementById('sub711').innerText = document.getElementById('ship711').checked ? '$60' : '$0';
       document.getElementById('subPost').innerText = document.getElementById('shipPost').checked ? '$120' : '$0';
 
@@ -165,9 +191,9 @@
     }
 
     function copyAccount() {
-      const accountNumber = "123456789"; // 只複製帳號
-      navigator.clipboard.writeText(accountNumber);
-      alert('帳號已複製：' + accountNumber);
+      const accountText = document.getElementById('accountText').innerText;
+      navigator.clipboard.writeText(accountText);
+      alert('帳號已複製：' + accountText);
     }
   </script>
 </body>
