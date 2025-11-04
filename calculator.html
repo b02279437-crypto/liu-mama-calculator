@@ -34,18 +34,19 @@
       text-align: center;
     }
     th, td {
-      padding: 6px 12px;
+      padding: 4px 8px;
       border-bottom: 1px solid #dfe6e9;
+      vertical-align: middle;
     }
     th {
       background-color: #cce0ff;
       color: #2c3e50;
     }
     input[type='number'] {
-      width: 70px;
+      width: 60px;
       text-align: center;
       font-size: 14px;
-      padding: 6px;
+      padding: 4px;
       border: 1px solid #b0bec5;
       border-radius: 6px;
     }
@@ -115,7 +116,7 @@
   <div class="account-box">
     <h3>匯款帳戶資訊</h3>
     <p id="accountText">台新銀行 812　帳號：123456789　戶名：劉姳</p>
-    <button class="copy-btn" onclick="copyAccount()">複製帳號</button>
+    <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
   </div>
 
   <script>
@@ -141,7 +142,7 @@
     }
 
     function copyAccount() {
-      const accountNumber = "123456789";
+      const accountNumber = "123456789"; // 只複製帳號
       navigator.clipboard.writeText(accountNumber);
       alert('帳號已複製：' + accountNumber);
     }
