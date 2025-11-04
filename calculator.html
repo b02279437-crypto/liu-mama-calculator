@@ -15,7 +15,7 @@
 }
 body {
   font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
-  background-color: #f7f6f2; /* 米白背景 */
+  background-color: #f7f6f2;
   color: #2c3e50;
   text-align: center;
   padding: 20px;
@@ -31,6 +31,7 @@ h2 {
 }
 h2 span.english {
   font-family: 'Amatic SC', cursive;
+  font-weight: bold; /* 英文粗體 */
 }
 p {
   font-size: 14px;
@@ -63,7 +64,7 @@ th, td {
   text-overflow: ellipsis;
 }
 th {
-  background-color: #7f9bb3; /* 莫蘭迪藍 */
+  background-color: #7f9bb3;
   color: #ffffff;
   letter-spacing: 1px;
 }
@@ -95,7 +96,7 @@ input[type='checkbox'] {
 }
 .account-box {
   margin-top: 20px;
-  background: #c0cbd6; /* 更淺莫蘭迪藍，高級感 */
+  background: #c0cbd6;
   padding: 15px;
   border-radius: 12px;
   display: inline-block;
@@ -126,14 +127,22 @@ input[type='checkbox'] {
   font-size:14px;
 }
 .account-link a {
-  color: #1e4f7b;
+  color: red;
+  font-size: 18px;
+  font-weight: bold;
   text-decoration: underline;
+}
+.account-link span {
+  font-weight: normal;
+  font-size: 16px;
 }
 @media (max-width: 480px) {
   table { font-size: 14px; }
   input[type='number'] { width: 50px; }
   h2 { font-size: 30px; }
   .total { font-size: 18px; }
+  .account-link a { font-size: 16px; }
+  .account-link span { font-size: 14px; }
 }
 </style>
 </head>
@@ -147,7 +156,6 @@ input[type='checkbox'] {
 
 <p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
-<!-- 麻辣底料包表格 -->
 <table>
   <colgroup>
     <col>
@@ -164,7 +172,6 @@ input[type='checkbox'] {
   </tr>
 </table>
 
-<!-- 寄送方式表格 -->
 <table>
   <colgroup>
     <col>
@@ -194,8 +201,10 @@ input[type='checkbox'] {
   <p id="accountText">台新銀行 812　帳號：123456789　戶名：劉姳</p>
   <button class="copy-btn" onclick="copyAccount()">複製匯款帳戶</button>
   <p class="account-link">
-    請匯款後填寫以下表單 🔗&nbsp;
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview" target="_blank" rel="noopener noreferrer">表單</a>
+    <span>LIU MAMA 麻辣底料包預訂</span> 🔗&nbsp;
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview" target="_blank" rel="noopener noreferrer">
+      表單
+    </a>
   </p>
 </div>
 
@@ -210,24 +219,4 @@ function calculate() {
   if (document.getElementById('shipPost').checked) ship = 120;
 
   document.getElementById('sub711').innerText = document.getElementById('ship711').checked ? '$60' : '$0';
-  document.getElementById('subPost').innerText = document.getElementById('shipPost').checked ? '$120' : '$0';
-
-  let total = sub1 + ship;
-  document.getElementById('total').innerText = '總金額：$' + total;
-}
-
-function selectShip(type) {
-  if (type === '711') document.getElementById('shipPost').checked = false;
-  if (type === 'post') document.getElementById('ship711').checked = false;
-  calculate();
-}
-
-function copyAccount() {
-  const text = document.getElementById('accountText').innerText;
-  navigator.clipboard.writeText(text);
-  alert('匯款帳戶已複製');
-}
-</script>
-
-</body>
-</html>
+  document.getElementById('subPost').innerText =
