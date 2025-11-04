@@ -95,8 +95,8 @@
       display: inline-block;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       animation: handwriting 2s ease-in-out;
-      max-width: 500px; /* 跟表格一樣寬 */
-      width: 100%;       /* 自動適應手機 */
+      max-width: 500px;
+      width: 100%;
     }
     .copy-btn {
       background-color: #1e4f7b;
@@ -106,4 +106,102 @@
       border-radius: 8px;
       font-size: 14px;
       cursor: pointer;
-      margin... (truncated)
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+      font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
+      transition: background 0.3s ease;
+    }
+    .copy-btn:hover {
+      background-color: #163b5b;
+    }
+    @media (max-width: 480px) {
+      table { font-size: 14px; }
+      input[type='number'] { width: 50px; }
+      h2 { font-size: 30px; } /* 手機版標題稍小 */
+      .total { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <h2>LIU MAMA Price Calculator</h2>
+  <p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
+
+  <table>
+    <colgroup>
+      <col>
+      <col>
+      <col>
+      <col>
+    </colgroup>
+    <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
+    <tr>
+      <td>麻辣底料包</td>
+      <td>$320</td>
+      <td><input type="number" id="qty1" min="0" value="0" onchange="calculate()"></td>
+      <td id="sub1">$0</td>
+    </tr>
+  </table>
+
+  <table>
+    <colgroup>
+      <col style="width:55%;">
+      <col style="width:15%;">
+      <col style="width:15%;">
+      <col style="width:15%;">
+    </colgroup>
+    <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
+    <tr>
+      <td>711超商寄送</td>
+      <td>$60</td>
+      <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
+      <td id="sub711">$0</td>
+    </tr>
+    <tr>
+      <td>郵局宅配</td>
+      <td>$120</td>
+      <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
+      <td id="subPost">$0</td>
+    </tr>
+  </table>
+
+  <div class="total" id="total">總金額：$0</div>
+
+  <div class="account-box">
+    <h3>匯款帳戶資訊</h3>
+    <p id="accountText">台新銀行 812　帳號：123456789　戶名：劉姳</p>
+    <button class="copy-btn" onclick="copyAccount()">複製匯款帳戶</button>
+  </div>
+
+  <script>
+    function calculate() {
+      let qty1 = parseInt(document.getElementById('qty1').value) || 0;
+      let sub1 = qty1 * 320;
+      document.getElementById('sub1').innerText = '$' + sub1;
+
+      let ship = 0;
+      if (document.getElementById('ship711').checked) ship = 60;
+      if (document.getElementById('shipPost').checked) ship = 120;
+
+      document.getElementById('sub711').innerText = document.getElementById('ship711').checked ? '$60' : '$0';
+      document.getElementById('subPost').innerText = document.getElementById('shipPost').checked ? '$120' : '$0';
+
+      let total = sub1 + ship;
+      document.getElementById('total').innerText = '總金額：$' + total;
+    }
+
+    function selectShip(type) {
+      if (type === '711') document.getElementById('shipPost').checked = false;
+      if (type === 'post') document.getElementById('ship711').checked = false;
+      calculate();
+    }
+
+      function copyAccount() {
+      const text = document.getElementById('accountText').innerText;
+      navigator.clipboard.writeText(text);
+      alert('匯款帳戶已複製');
+    }
+  </script>
+</body>
+</html>
+</body>
+</html>
