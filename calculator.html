@@ -142,10 +142,10 @@ input[type='checkbox'] {
   font-size:14px;
 }
 
-/* 最後一行文字醒目 */
+/* 最後一行文字恢復原本大小與粗細 */
 .account-link span, .account-link a {
-  font-size: 22px;       /* 稍大字型 */
-  font-weight: 600;      /* 適度加粗 */
+  font-size: 14px;       /* 原本大小 */
+  font-weight: normal;   /* 原本粗細 */
   color: #1e4f7b;        /* 深藍色 */
 }
 
@@ -154,8 +154,8 @@ input[type='checkbox'] {
   input[type='number'] { width: 50px; }
   h2 { font-size: 40px; }
   .total { font-size: 18px; }
-  .account-link a { font-size: 18px; }
-  .account-link span { font-size: 18px; }
+  .account-link a { font-size: 14px; }
+  .account-link span { font-size: 14px; }
 }
 </style>
 </head>
@@ -201,54 +201,4 @@ input[type='checkbox'] {
     <td>郵局宅配</td>
     <td>$120</td>
     <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
-    <td id="subPost">$0</td>
-  </tr>
-</table>
-
-<div class="total" id="total">總金額：$0</div>
-
-<div class="account-box">
-  <h3>匯款帳戶資訊</h3>
-  <p id="accountText">台新銀行 812　帳號：123456789　戶名：劉姳</p>
-  <button class="copy-btn" onclick="copyAccount()">複製匯款帳戶</button>
-  
-  <p class="account-link">
-    <span>匯款完成後，煩請填寫詳細訂購資料表單</span> 🔗&nbsp;
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview" target="_blank" rel="noopener noreferrer">
-      表單
-    </a>
-  </p>
-</div>
-
-<script>
-function calculate() {
-  let qty1 = parseInt(document.getElementById('qty1').value) || 0;
-  let sub1 = qty1 * 320;
-  document.getElementById('sub1').innerText = '$' + sub1;
-
-  let ship = 0;
-  if (document.getElementById('ship711').checked) ship = 60;
-  if (document.getElementById('shipPost').checked) ship = 120;
-
-  document.getElementById('sub711').innerText = document.getElementById('ship711').checked ? '$60' : '$0';
-  document.getElementById('subPost').innerText = document.getElementById('shipPost').checked ? '$120' : '$0';
-
-  let total = sub1 + ship;
-  document.getElementById('total').innerText = '總金額：$' + total;
-}
-
-function selectShip(type) {
-  if (type === '711') document.getElementById('shipPost').checked = false;
-  if (type === 'post') document.getElementById('ship711').checked = false;
-  calculate();
-}
-
-function copyAccount() {
-  const text = document.getElementById('accountText').innerText;
-  navigator.clipboard.writeText(text);
-  alert('匯款帳戶已複製');
-}
-</script>
-
-</body>
-</html>
+    <td id="subPost">$0
