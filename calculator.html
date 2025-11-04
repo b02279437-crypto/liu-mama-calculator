@@ -22,19 +22,21 @@
     p {
       font-size: 14px;
       color: #555;
+      margin-bottom: 15px;
     }
     table {
-      width: auto;
-      margin: 15px auto;
+      width: 80%;
+      max-width: 500px;
+      margin: 10px auto;
       border-collapse: collapse;
       background: #ffffff;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      font-size: 14px;
+      font-size: 16px;
       text-align: center;
     }
     th, td {
-      padding: 4px 8px;
+      padding: 10px 12px;
       border-bottom: 1px solid #dfe6e9;
       vertical-align: middle;
     }
@@ -43,10 +45,10 @@
       color: #2c3e50;
     }
     input[type='number'] {
-      width: 60px;
+      width: 70px;
       text-align: center;
-      font-size: 14px;
-      padding: 4px;
+      font-size: 16px;
+      padding: 5px;
       border: 1px solid #b0bec5;
       border-radius: 6px;
     }
@@ -54,7 +56,7 @@
       transform: scale(1.3);
     }
     .total {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: bold;
       color: #1e4f7b;
       margin-top: 15px;
@@ -70,9 +72,9 @@
       background-color: #1e4f7b;
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 10px 18px;
       border-radius: 8px;
-      font-size: 14px;
+      font-size: 16px;
       cursor: pointer;
       margin-top: 10px;
     }
@@ -142,7 +144,7 @@
     }
 
     function copyAccount() {
-      const accountNumber = "123456789"; // 只複製帳號
+      const accountNumber = "123456789";
       navigator.clipboard.writeText(accountNumber);
       alert('帳號已複製：' + accountNumber);
     }
