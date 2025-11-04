@@ -15,21 +15,8 @@
       background-color: #f7f6f2;
       color: #2c3e50;
       text-align: center;
-      padding: 20px;
-      font-size: 14px; /* 整體文字縮小 */
-    }
-    h2 {
-      font-family: 'Amatic SC', cursive;
-      font-size: 36px; /* 標題保持原本大小 */
-      color: #1e4f7b;
-      margin-bottom: 8px;
+      padding: 30px;
       animation: handwriting 1s ease-in-out;
-    }
-    p {
-      font-size: 14px;
-      color: #555;
-      font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
-      animation: handwriting 1.2s ease-in-out;
     }
     table {
       width: 90%;
@@ -38,10 +25,11 @@
       background: #ffffff;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      font-size: 14px; /* 表格文字縮小 */
+      animation: handwriting 1.5s ease-in-out;
+      font-size: 16px;
     }
     th, td {
-      padding: 6px 10px; /* 表格高度縮小 */
+      padding: 12px;
       border-bottom: 1px solid #dfe6e9;
       font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
     }
@@ -51,10 +39,9 @@
       letter-spacing: 1px;
     }
     input[type='number'] {
-      width: 70px;      /* 數字框寬度增加 */
-      height: 32px;     /* 數字框高度增加 */
+      width: 60px;
       text-align: center;
-      font-size: 16px;  /* 文字清楚 */
+      font-size: 16px;
       font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
       border: 1px solid #b0bec5;
       border-radius: 6px;
@@ -70,35 +57,50 @@
       transform: scale(1.2);
     }
     .total {
-      font-size: 18px; /* 縮小總金額字體 */
+      font-size: 20px;
       font-weight: bold;
       color: #1e4f7b;
-      margin-top: 15px;
+      margin-top: 20px;
       letter-spacing: 1px;
+      animation: handwriting 2s ease-in-out;
     }
     .account-box {
-      margin-top: 25px;
+      margin-top: 30px;
       background: #eaf3ff;
-      padding: 15px;
+      padding: 18px;
       border-radius: 12px;
       display: inline-block;
-      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      animation: handwriting 2s ease-in-out;
     }
     .copy-btn {
       background-color: #1e4f7b;
       color: white;
       border: none;
-      padding: 8px 18px;  /* 按鈕稍大 */
+      padding: 8px 16px;
       border-radius: 8px;
       font-size: 14px;
       cursor: pointer;
-      margin-top: 8px;
+      margin-top: 10px;
       letter-spacing: 0.5px;
       font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
       transition: background 0.3s ease;
     }
     .copy-btn:hover {
       background-color: #163b5b;
+    }
+    h2 {
+      font-family: 'Amatic SC', cursive;
+      font-size: 32px;
+      color: #1e4f7b;
+      margin-bottom: 8px;
+      animation: handwriting 1s ease-in-out;
+    }
+    p {
+      font-size: 14px;
+      color: #555;
+      font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
+      animation: handwriting 1.2s ease-in-out;
     }
   </style>
 </head>
@@ -163,9 +165,10 @@
     }
 
     function copyAccount() {
-      const accountNumber = "123456789"; // 只複製帳號
-      navigator.clipboard.writeText(accountNumber);
-      alert('帳號已複製：' + accountNumber);
+  const accountNumber = "123456789"; // 只複製帳號
+  navigator.clipboard.writeText(accountNumber);
+  alert('帳號已複製：' + accountNumber);
+}
     }
   </script>
 </body>
