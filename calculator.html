@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LIU MAMA Price Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    @keyframes handwriting {
+      0% {opacity: 0; transform: translateY(10px);}
+      100% {opacity: 1; transform: translateY(0);}
+    }
+
+    body {
+      font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
+      background-color: #f7f6f2;
+      color: #2c3e50;
+      text-align: center;
+      padding: 30px;
+      animation: handwriting 1s ease-in-out;
+    }
+    table {
+      width: 90%;
+      margin: 15px auto;
+      border-collapse: collapse;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      animation: handwriting 1.5s ease-in-out;
+      font-size: 16px;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #dfe6e9;
+      font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
+    }
+    th {
+      background-color: #cce0ff;
+      color: #2c3e50;
+      letter-spacing: 1px;
+    }
+    input[type='number'] {
+      width: 60px;
+      text-align: center;
+      font-size: 16px;
+      font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
+      border: 1px solid #b0bec5;
+      border-radius: 6px;
+      padding: 4px;
+      transition: 0.2s;
+    }
+    input[type='number']:focus {
+      border-color: #1e4f7b;
+      box-shadow: 0 0 5px #a8c0ff;
+      outline: none;
+    }
+    input[type='checkbox'] {
+      transform: scale(1.2);
+    }
+    .total {
+      font-size: 20px;
+      font-weight: bold;
+      color: #1e4f7b;
+      margin-top: 20px;
+      letter-spacing: 1px;
+      animation: handwriting 2s ease-in-out;
+    }
+    .account-box {
+      margin-top: 30px;
+      background: #eaf3ff;
+      padding: 18px;
+      border-radius: 12px;
+      display: inline-block;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      animation: handwriting 2s ease-in-out;
+    }
+    .copy-btn {
+      background-color: #1e4f7b;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+      font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
+      transition: background 0.3s ease;
+    }
+    .copy-btn:hover {
+      background-color: #163b5b;
+    }
+    h2 {
+      font-family: 'Amatic SC', cursive;
+      font-size: 36px;
+      color: #1e4f7b;
+      margin-bottom: 8px;
+      animation: handwriting 1s ease-in-out;
+    }
+    p {
+      font-size: 14px;
+      color: #555;
+      font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
+      animation: handwriting 1.2s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <h2>LIU MAMA Price Calculator</h2>
+  <p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
+
+  <table>
+    <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
+    <tr>
+      <td>手炒麻辣湯底</td>
+      <td>$320</td>
+      <td><input type="number" id="qty1" min="0" value="0" onchange="calculate()"></td>
+      <td id="sub1">$0</td>
+    </tr>
+  </table>
+
+  <table>
+    <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
+    <tr>
+      <td>711超商寄送</td>
+      <td>$60</td>
+      <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
+      <td id="sub711">$0</td>
+    </tr>
+    <tr>
+      <td>郵局宅配</td>
+      <td>$120</td>
+      <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
+      <td id="subPost">$0</td>
+    </tr>
+  </table>
+
+  <div class="total" id="total">總金額：$0</div>
+
+  <div class="account-box">
+    <h3>匯款帳戶資訊</h3>
+    <p id="accountText">台新銀行 812　帳號：123456789　戶名：劉姳</p>
+    <button class="copy-btn" onclick="copyAccount()">複製匯款帳戶</button>
+  </div>
+
+  <script>
+    function calculate() {
+      let qty1 = parseInt(document.getElementById('qty1').value) || 0;
+      let sub1 = qty1 * 320;
+      document.getElementById('sub1').innerText = '$' + sub1;
+
+      let ship = 0;
+      if (document.getElementById('ship711').checked) ship = 60;
+      if (document.getElementById('shipPost').checked) ship = 120;
+      document.getElementById('sub711').innerText = document.getElementById('ship711').checked ? '$60' : '$0';
+      document.getElementById('subPost').innerText = document.getElementById('shipPost').checked ? '$120' : '$0';
+
+      let total = sub1 + ship;
+      document.getElementById('total').innerText = '總金額：$' + total;
+    }
+
+    function selectShip(type) {
+      if (type === '711') document.getElementById('shipPost').checked = false;
+      if (type === 'post') document.getElementById('ship711').checked = false;
+      calculate();
+    }
+
+    function copyAccount() {
+      const text = document.getElementById('accountText').innerText;
+      navigator.clipboard.writeText(text);
+      alert('匯款帳戶已複製');
+    }
+  </script>
+</body>
+</html>
