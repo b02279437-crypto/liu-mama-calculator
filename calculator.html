@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LIU MAMA 劉嘛麻 手炒麻辣底料包預訂</title>
-<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
 <style>
 @keyframes handwriting {
   0% {opacity: 0; transform: translateY(10px);}
   100% {opacity: 1; transform: translateY(0);}
 }
 body {
-  font-family: 'Zhi Mang Xing', cursive;
+  font-family: 'Microsoft JhengHei', 'DFKai-SB', 'KaiTi', sans-serif;
   background-color: #f7f6f2; /* 米白背景 */
   color: #2c3e50;
   text-align: center;
@@ -25,6 +25,9 @@ h2 {
   margin-bottom: 10px;
   animation: handwriting 1s ease-in-out;
   line-height: 1.3;
+}
+h2 span.english {
+  font-family: 'Amatic SC', cursive;
 }
 p {
   font-size: 14px;
@@ -130,9 +133,9 @@ input[type='checkbox'] {
 <body>
 
 <h2>
-  <span style="font-family: 'Amatic SC', cursive;">LIU MAMA</span>&nbsp;&nbsp;
-  <span style="font-family: 'Zhi Mang Xing', cursive;">劉嘛麻</span><br>
-  <span style="font-family: 'Zhi Mang Xing', cursive;">手炒麻辣底料包預訂</span>
+  <span class="english">LIU MAMA</span>&nbsp;&nbsp;
+  劉嘛麻<br>
+  手炒麻辣底料包預訂
 </h2>
 
 <p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
@@ -162,7 +165,7 @@ input[type='checkbox'] {
   </colgroup>
   <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
   <tr>
-    <td>711超商取貨</td>
+    <td>711超商寄送</td>
     <td>$60</td>
     <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
     <td id="sub711">$0</td>
@@ -182,7 +185,8 @@ input[type='checkbox'] {
   <p id="accountText">台新銀行 812　帳號：123456789　戶名：劉姳</p>
   <button class="copy-btn" onclick="copyAccount()">複製匯款帳戶</button>
   <p class="account-link">
-    請匯款後&nbsp;<a href="https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview" target="_blank" rel="noopener noreferrer">填寫訂單表單</a>
+    請匯款後填寫以下表單 🔗&nbsp;
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview" target="_blank" rel="noopener noreferrer">表單</a>
   </p>
 </div>
 
