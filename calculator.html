@@ -18,6 +18,20 @@
       padding: 20px;
       animation: handwriting 1s ease-in-out;
     }
+    h2 {
+      font-family: 'Amatic SC', cursive;
+      font-size: 36px; /* 標題變大 */
+      color: #1e4f7b;
+      margin-bottom: 8px;
+      animation: handwriting 1s ease-in-out;
+    }
+    p {
+      font-size: 14px;
+      color: #555;
+      font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
+      animation: handwriting 1.2s ease-in-out;
+      white-space: nowrap;
+    }
     table {
       width: 100%;
       max-width: 500px;
@@ -28,16 +42,19 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       animation: handwriting 1.5s ease-in-out;
       font-size: 16px;
-      table-layout: fixed; /* 固定寬度欄位，防止變形 */
-      word-break: keep-all; /* 避免中文換行 */
+      table-layout: fixed; /* 固定欄位比例 */
     }
+    colgroup col:first-child { width: 55%; } /* 品項欄寬 */
+    colgroup col:nth-child(2) { width: 15%; }
+    colgroup col:nth-child(3) { width: 15%; }
+    colgroup col:nth-child(4) { width: 15%; }
     th, td {
       padding: 10px;
       border-bottom: 1px solid #dfe6e9;
       font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
       white-space: nowrap; /* 不換行 */
       overflow: hidden;
-      text-overflow: ellipsis; /* 超出用... */
+      text-overflow: ellipsis;
     }
     th {
       background-color: #cce0ff;
@@ -97,35 +114,11 @@
     .copy-btn:hover {
       background-color: #163b5b;
     }
-    h2 {
-      font-family: 'Amatic SC', cursive;
-      font-size: 28px;
-      color: #1e4f7b;
-      margin-bottom: 8px;
-      animation: handwriting 1s ease-in-out;
-    }
-    p {
-      font-size: 14px;
-      color: #555;
-      font-family: 'Noto Sans TC', 'Amatic SC', sans-serif;
-      animation: handwriting 1.2s ease-in-out;
-      white-space: nowrap; /* 不換行 */
-    }
-
-    /* 手機響應式 */
     @media (max-width: 480px) {
-      table, .account-box {
-        font-size: 14px;
-      }
-      input[type='number'] {
-        width: 50px;
-      }
-      h2 {
-        font-size: 24px;
-      }
-      .total {
-        font-size: 18px;
-      }
+      table { font-size: 14px; }
+      input[type='number'] { width: 50px; }
+      h2 { font-size: 30px; } /* 手機版標題稍小 */
+      .total { font-size: 18px; }
     }
   </style>
 </head>
@@ -134,9 +127,15 @@
   <p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
   <table>
+    <colgroup>
+      <col>
+      <col>
+      <col>
+      <col>
+    </colgroup>
     <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
     <tr>
-      <td>手炒麻辣湯底</td>
+      <td>手炒麻辣湯底（香麻十三中藥材）</td>
       <td>$320</td>
       <td><input type="number" id="qty1" min="0" value="0" onchange="calculate()"></td>
       <td id="sub1">$0</td>
@@ -144,6 +143,12 @@
   </table>
 
   <table>
+    <colgroup>
+      <col style="width:55%;">
+      <col style="width:15%;">
+      <col style="width:15%;">
+      <col style="width:15%;">
+    </colgroup>
     <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
     <tr>
       <td>711超商寄送</td>
