@@ -23,10 +23,10 @@ body {
   animation: handwriting 1s ease-in-out;
 }
 
-/* 標題加大且加粗 */
+/* 標題加大加粗 */
 h2 {
-  font-size: 52px;
-  font-weight: 700;
+  font-size: 60px;       /* 加大 */
+  font-weight: 900;      /* 加粗 */
   color: #1e4f7b;
   margin-bottom: 10px;
   line-height: 1.3;
@@ -35,7 +35,7 @@ h2 {
 
 h2 span.english {
   font-family: 'Amatic SC', cursive;
-  font-weight: bold;
+  font-weight: 900;
 }
 
 p {
@@ -136,7 +136,7 @@ input[type='checkbox'] {
   background-color: #163b5b;
 }
 
-/* 最後一行文字恢復原本大小與粗細，顯眼深藍 */
+/* 最後一行文字 */
 .account-link {
   margin-top: 10px;
   font-size: 14px;
@@ -144,18 +144,24 @@ input[type='checkbox'] {
   white-space: normal;
 }
 
-.account-link span,
+.account-link span {
+  font-size: 14px;
+  font-weight: normal;
+  color: #1e4f7b;  /* 深藍 */
+  display: inline;
+}
+
 .account-link a {
   font-size: 14px;
   font-weight: normal;
-  color: #1e4f7b;
+  color: #B22222;  /* 深紅 */
   display: inline;
 }
 
 @media (max-width: 480px) {
   table { font-size: 14px; }
   input[type='number'] { width: 50px; }
-  h2 { font-size: 40px; }
+  h2 { font-size: 48px; }
   .total { font-size: 18px; }
   .account-link a { font-size: 14px; }
   .account-link span { font-size: 14px; }
@@ -216,10 +222,8 @@ input[type='checkbox'] {
   <button class="copy-btn" onclick="copyAccount()">複製匯款帳戶</button>
   
   <p class="account-link">
-    <span>匯款完成後，煩請填寫詳細訂購資料表單</span> 🔗&nbsp;
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview" target="_blank" rel="noopener noreferrer">
-      表單
-    </a>
+    <span>匯款完成後，煩請填寫詳細訂購資料</span> 🔗&nbsp;
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview" target="_blank" rel="noopener noreferrer">表單</a>
   </p>
 </div>
 
