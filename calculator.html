@@ -104,20 +104,14 @@ input[type='checkbox'] { transform: scale(1.2); }
 #finishOrderBtn {
   display: inline-block;
   margin: 25px auto 0;
-  background-color: #F4E0BE;
-  color: #B22222;
+  background-color: #F4E0BE; /* 奶茶色 */
+  color: #B22222; /* 紅字 */
   font-size: 16px;
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 12px;
   border: none;
   cursor: pointer;
   font-weight: bold;
-}
-
-#previewContainer img {
-  max-width: 90%;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 @media (max-width: 480px) {
@@ -132,9 +126,7 @@ input[type='checkbox'] { transform: scale(1.2); }
 <h2><span class="english">LIU MAMA Order</span></h2>
 <p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
-<!-- 訂單區域 -->
 <div id="orderSection">
-
 <table>
   <colgroup><col><col><col><col></colgroup>
   <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
@@ -171,16 +163,9 @@ input[type='checkbox'] { transform: scale(1.2); }
   <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
 </div>
 
-</div> <!-- end orderSection -->
-
-<!-- 截圖並跳轉表單按鈕 -->
-<button id="finishOrderBtn" onclick="finishOrder()">截圖訂單並前往填寫表單</button>
-
-<!-- 手機長按預覽 -->
-<div id="previewContainer" style="display:none; text-align:center; margin-top:15px;">
-  <p>長按圖片以儲存至手機</p>
-  <img id="orderPreview"/>
 </div>
+
+<button id="finishOrderBtn" onclick="finishOrder()">截圖訂單並前往填寫表單</button>
 
 <script>
 function calculate() {
@@ -212,28 +197,16 @@ function copyAccount() {
 }
 
 function finishOrder() {
-  const orderSection = document.getElementById('orderSection');
-  html2canvas(orderSection, { scale: 2 }).then(canvas => {
-    // 顯示預覽
-    const previewImg = document.getElementById('orderPreview');
-    previewImg.src = canvas.toDataURL();
-    document.getElementById('previewContainer').style.display = 'block';
-
-    // 下載圖片
-    const link = document.createElement('a');
-    link.href = canvas.toDataURL();
+  html2canvas(document.getElementById('orderSection')).then(canvas => {
+    let link = document.createElement('a');
     link.download = 'liu_mama_order.png';
-    document.body.appendChild(link);
+    link.href = canvas.toDataURL();
     link.click();
-    document.body.removeChild(link);
 
-    // 自動跳轉表單
-    window.open('https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview', '_blank');
-
-    // 顯示感謝訊息
     setTimeout(() => {
+      window.open('https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview', '_blank');
       alert('感謝訂購！請填寫訂購資料以便我們安排製作與寄送');
-    }, 300);
+    }, 500);
   });
 }
 </script>
