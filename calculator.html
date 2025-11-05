@@ -22,7 +22,6 @@ h2 {
   font-weight: 900;
   color: #1e4f7b;
   margin-bottom: 10px;
-  line-height: 1.3;
 }
 
 h2 span.english {
@@ -58,7 +57,10 @@ th, td {
   overflow: hidden;
 }
 
-th { background-color: #7f9bb3; color: #ffffff; }
+th {
+  background-color: #7f9bb3;
+  color: #ffffff;
+}
 
 input[type='number'] {
   width: 40px;
@@ -82,7 +84,7 @@ input[type='checkbox'] { transform: scale(1.2); }
   width: 75%;
   max-width: 420px;
   margin: 15px auto;
-  background: #d3d3d3;
+  background: #7f9bb3; /* 莫蘭迪淺藍 */
   color: #000000;
   padding: 12px;
   border-radius: 12px;
@@ -96,6 +98,7 @@ input[type='checkbox'] { transform: scale(1.2); }
   border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
+  margin-top: 8px;
 }
 
 #finishOrderBtn {
@@ -110,7 +113,12 @@ input[type='checkbox'] { transform: scale(1.2); }
   cursor: pointer;
   font-weight: bold;
 }
-#finishOrderBtn:active { opacity: 0.8; }
+
+#previewContainer img {
+  max-width: 90%;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
 
 @media (max-width: 480px) {
   table { font-size: 14px; }
@@ -124,48 +132,55 @@ input[type='checkbox'] { transform: scale(1.2); }
 <h2><span class="english">LIU MAMA Order</span></h2>
 <p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
-<!-- 這個區塊是截圖範圍 -->
+<!-- 訂單區域 -->
 <div id="orderSection">
 
-  <table>
-    <colgroup><col><col><col><col></colgroup>
-    <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
-    <tr>
-      <td>麻辣底料包<br><small>(2人份)</small></td>
-      <td>$320</td>
-      <td><input type="number" id="qty1" min="0" value="0" onchange="calculate()"></td>
-      <td id="sub1">$0</td>
-    </tr>
-  </table>
+<table>
+  <colgroup><col><col><col><col></colgroup>
+  <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
+  <tr>
+    <td>麻辣底料包<br><small>(2人份)</small></td>
+    <td>$320</td>
+    <td><input type="number" id="qty1" min="0" value="0" onchange="calculate()"></td>
+    <td id="sub1">$0</td>
+  </tr>
+</table>
 
-  <table>
-    <colgroup><col><col><col><col></colgroup>
-    <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
-    <tr>
-      <td>711超商取貨</td>
-      <td>$60</td>
-      <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
-      <td id="sub711">$0</td>
-    </tr>
-    <tr>
-      <td>郵局宅配</td>
-      <td>$120</td>
-      <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
-      <td id="subPost">$0</td>
-    </tr>
-  </table>
+<table>
+  <colgroup><col><col><col><col></colgroup>
+  <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
+  <tr>
+    <td>711超商取貨</td>
+    <td>$60</td>
+    <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
+    <td id="sub711">$0</td>
+  </tr>
+  <tr>
+    <td>郵局宅配</td>
+    <td>$120</td>
+    <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
+    <td id="subPost">$0</td>
+  </tr>
+</table>
 
-  <div class="total" id="total">總金額：$0</div>
+<div class="total" id="total">總金額：$0</div>
 
-  <div class="account-box">
-    <h3>匯款帳戶資訊</h3>
-    <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span>　戶名：陳慧珍</p>
-    <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
-  </div>
+<div class="account-box">
+  <h3>匯款帳戶資訊</h3>
+  <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span>　戶名：陳慧珍</p>
+  <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
+</div>
 
-</div> <!-- 截圖區塊結束 -->
+</div> <!-- end orderSection -->
 
+<!-- 截圖並跳轉表單按鈕 -->
 <button id="finishOrderBtn" onclick="finishOrder()">截圖訂單並前往填寫表單</button>
+
+<!-- 手機長按預覽 -->
+<div id="previewContainer" style="display:none; text-align:center; margin-top:15px;">
+  <p>長按圖片以儲存至手機</p>
+  <img id="orderPreview"/>
+</div>
 
 <script>
 function calculate() {
@@ -197,22 +212,28 @@ function copyAccount() {
 }
 
 function finishOrder() {
-  html2canvas(document.getElementById('orderSection'), { scale: 2 }).then(canvas => {
-    canvas.toBlob(function(blob) {
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'liu_mama_order.png';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+  const orderSection = document.getElementById('orderSection');
+  html2canvas(orderSection, { scale: 2 }).then(canvas => {
+    // 顯示預覽
+    const previewImg = document.getElementById('orderPreview');
+    previewImg.src = canvas.toDataURL();
+    document.getElementById('previewContainer').style.display = 'block';
 
-      setTimeout(() => {
-        alert('感謝訂購！請填寫訂購資料以便我們安排製作與寄送');
-        window.open('https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview', '_blank');
-      }, 500);
-    });
+    // 下載圖片
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL();
+    link.download = 'liu_mama_order.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // 自動跳轉表單
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview', '_blank');
+
+    // 顯示感謝訊息
+    setTimeout(() => {
+      alert('感謝訂購！請填寫訂購資料以便我們安排製作與寄送');
+    }, 300);
   });
 }
 </script>
