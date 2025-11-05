@@ -58,10 +58,7 @@ th, td {
   overflow: hidden;
 }
 
-th {
-  background-color: #7f9bb3;
-  color: #ffffff;
-}
+th { background-color: #7f9bb3; color: #ffffff; }
 
 input[type='number'] {
   width: 40px;
@@ -127,41 +124,46 @@ input[type='checkbox'] { transform: scale(1.2); }
 <h2><span class="english">LIU MAMA Order</span></h2>
 <p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
-<table>
-  <colgroup><col><col><col><col></colgroup>
-  <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
-  <tr>
-    <td>麻辣底料包<br><small>(2人份)</small></td>
-    <td>$320</td>
-    <td><input type="number" id="qty1" min="0" value="0" onchange="calculate()"></td>
-    <td id="sub1">$0</td>
-  </tr>
-</table>
+<!-- 這個區塊是截圖範圍 -->
+<div id="orderSection">
 
-<table>
-  <colgroup><col><col><col><col></colgroup>
-  <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
-  <tr>
-    <td>711超商取貨</td>
-    <td>$60</td>
-    <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
-    <td id="sub711">$0</td>
-  </tr>
-  <tr>
-    <td>郵局宅配</td>
-    <td>$120</td>
-    <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
-    <td id="subPost">$0</td>
-  </tr>
-</table>
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
+    <tr>
+      <td>麻辣底料包<br><small>(2人份)</small></td>
+      <td>$320</td>
+      <td><input type="number" id="qty1" min="0" value="0" onchange="calculate()"></td>
+      <td id="sub1">$0</td>
+    </tr>
+  </table>
 
-<div class="total" id="total">總金額：$0</div>
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
+    <tr>
+      <td>711超商取貨</td>
+      <td>$60</td>
+      <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
+      <td id="sub711">$0</td>
+    </tr>
+    <tr>
+      <td>郵局宅配</td>
+      <td>$120</td>
+      <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
+      <td id="subPost">$0</td>
+    </tr>
+  </table>
 
-<div class="account-box">
-  <h3>匯款帳戶資訊</h3>
-  <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span>　戶名：陳慧珍</p>
-  <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
-</div>
+  <div class="total" id="total">總金額：$0</div>
+
+  <div class="account-box">
+    <h3>匯款帳戶資訊</h3>
+    <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span>　戶名：陳慧珍</p>
+    <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
+  </div>
+
+</div> <!-- 截圖區塊結束 -->
 
 <button id="finishOrderBtn" onclick="finishOrder()">截圖訂單並前往填寫表單</button>
 
@@ -195,16 +197,22 @@ function copyAccount() {
 }
 
 function finishOrder() {
-  html2canvas(document.body).then(canvas => {
-    let link = document.createElement('a');
-    link.download = 'liu_mama_order.png';
-    link.href = canvas.toDataURL();
-    link.click();
+  html2canvas(document.getElementById('orderSection'), { scale: 2 }).then(canvas => {
+    canvas.toBlob(function(blob) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'liu_mama_order.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
 
-    setTimeout(() => {
-      alert('感謝訂購！請填寫訂購資料以便我們安排製作與寄送');
-      window.open('https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview', '_blank');
-    }, 500);
+      setTimeout(() => {
+        alert('感謝訂購！請填寫訂購資料以便我們安排製作與寄送');
+        window.open('https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview', '_blank');
+      }, 500);
+    });
   });
 }
 </script>
