@@ -23,22 +23,17 @@ body {
   animation: handwriting 1s ease-in-out;
 }
 
-/* LOGO 上方置中 */
+/* =======================
+   標題區塊
+   ======================= */
 .logo-title-vertical {
   text-align: center;
   margin-bottom: 8px;
 }
 
-.logo-title-vertical img {
-  height: 120px;  /* Logo 大小可以調整 */
-  width: auto;
-  display: block;
-  margin: 0 auto 8px auto;
-}
-
-/* 標題加大加粗 */
+/* 標題文字 */
 h2 {
-  font-size: 75px;
+  font-size: 75px;     /* 標題大小 */
   font-weight: 900;
   color: #1e4f7b;
   margin-bottom: 10px;
@@ -51,12 +46,16 @@ h2 span.english {
   font-weight: 900;
 }
 
+/* 說明文字 */
 p {
   font-size: 14px;
   color: #555;
   animation: handwriting 1.2s ease-in-out;
 }
 
+/* =======================
+   訂購表格區塊
+   ======================= */
 table {
   width: 100%;
   max-width: 500px;
@@ -90,7 +89,7 @@ th {
   letter-spacing: 1px;
 }
 
-/* ✅ 數字框縮小 */
+/* 數字輸入框 */
 input[type='number'] {
   width: 40px;
   height: 28px;
@@ -108,10 +107,12 @@ input[type='number']:focus {
   outline: none;
 }
 
+/* 勾選框 */
 input[type='checkbox'] {
   transform: scale(1.2);
 }
 
+/* 總金額 */
 .total {
   font-size: 20px;
   font-weight: bold;
@@ -121,6 +122,9 @@ input[type='checkbox'] {
   animation: handwriting 2s ease-in-out;
 }
 
+/* =======================
+   匯款帳戶區塊
+   ======================= */
 .account-box {
   width: 88%;
   max-width: 500px;
@@ -133,6 +137,7 @@ input[type='checkbox'] {
   font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
 }
 
+/* 複製帳號按鈕 */
 .copy-btn {
   background-color: #1e4f7b;
   color: white;
@@ -150,6 +155,7 @@ input[type='checkbox'] {
   background-color: #163b5b;
 }
 
+/* 表單連結文字 */
 .account-link {
   margin-top: 10px;
   font-size: 14px;
@@ -162,6 +168,7 @@ input[type='checkbox'] {
   color: #B22222;
 }
 
+/* RWD 手機版 */
 @media (max-width: 480px) {
   table { font-size: 14px; }
   input[type='number'] { width: 50px; }
@@ -171,14 +178,19 @@ input[type='checkbox'] {
 </head>
 <body>
 
-<!-- ✅ Logo 在上方 -->
+<!-- =======================
+     標題區塊
+     ======================= -->
 <div class="logo-title-vertical">
-  <img src="img/logo.png" alt="LIU MAMA LOGO">  <!-- 🔧 把這路徑改成你的 -->
   <h2><span class="english">LIU MAMA Order</span></h2>
 </div>
 
+<!-- 說明文字 -->
 <p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
+<!-- =======================
+     商品表格
+     ======================= -->
 <table>
   <colgroup><col><col><col><col></colgroup>
   <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
@@ -190,6 +202,9 @@ input[type='checkbox'] {
   </tr>
 </table>
 
+<!-- =======================
+     寄送方式表格
+     ======================= -->
 <table>
   <colgroup><col><col><col><col></colgroup>
   <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
@@ -207,12 +222,16 @@ input[type='checkbox'] {
   </tr>
 </table>
 
+<!-- 總金額 -->
 <div class="total" id="total">總金額：$0</div>
 
+<!-- =======================
+     匯款帳戶資訊區塊
+     ======================= -->
 <div class="account-box">
   <h3>匯款帳戶資訊</h3>
   <p id="accountText">
-    台新銀行 812　帳號：<span id="accountNumber">123456789</span>　戶名：劉姳
+    台新銀行 812　帳號：<span id="accountNumber">123456789</span>　戶名：陳慧珍
   </p>
   <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
   
@@ -224,6 +243,9 @@ input[type='checkbox'] {
 </div>
 
 <script>
+/* =======================
+   JavaScript 計算區塊
+   ======================= */
 function calculate() {
   let qty1 = parseInt(document.getElementById('qty1').value) || 0;
   let sub1 = qty1 * 320;
