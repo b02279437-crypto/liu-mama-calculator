@@ -84,7 +84,7 @@ input[type='checkbox'] { transform: scale(1.2); }
   width: 75%;
   max-width: 420px;
   margin: 15px auto;
-  background: #7f9bb3; /* 莫蘭迪淺藍 */
+  background: #cfd2d4; /* 莫蘭迪淺灰 */
   color: #000000;
   padding: 12px;
   border-radius: 12px;
@@ -107,7 +107,7 @@ input[type='checkbox'] { transform: scale(1.2); }
   background-color: #F4E0BE; /* 奶茶色 */
   color: #B22222; /* 紅字 */
   font-size: 16px;
-  padding: 6px 12px;
+  padding: 8px 16px;
   border-radius: 12px;
   border: none;
   cursor: pointer;
@@ -162,7 +162,6 @@ input[type='checkbox'] { transform: scale(1.2); }
   <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span>　戶名：陳慧珍</p>
   <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
 </div>
-
 </div>
 
 <button id="finishOrderBtn" onclick="finishOrder()">截圖訂單並前往填寫表單</button>
@@ -197,17 +196,21 @@ function copyAccount() {
 }
 
 function finishOrder() {
-  html2canvas(document.getElementById('orderSection')).then(canvas => {
-    let link = document.createElement('a');
-    link.download = 'liu_mama_order.png';
-    link.href = canvas.toDataURL();
-    link.click();
+  if(confirm("是否下載截圖再前往填寫表單？\n點「取消」將直接前往表單")) {
+    html2canvas(document.getElementById('orderSection')).then(canvas => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = 'liu_mama_order.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-    setTimeout(() => {
-      window.open('https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview', '_blank');
       alert('感謝訂購！請填寫訂購資料以便我們安排製作與寄送');
-    }, 500);
-  });
+      window.open('https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview','_blank');
+    });
+  } else {
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview','_blank');
+  }
 }
 </script>
 
