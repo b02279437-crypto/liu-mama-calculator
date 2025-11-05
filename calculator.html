@@ -24,10 +24,7 @@ h2 {
   margin-bottom: 10px;
 }
 
-h2 span.english {
-  font-family: 'Amatic SC', cursive;
-  font-weight: 900;
-}
+h2 span.english { font-family: 'Amatic SC', cursive; font-weight: 900; }
 
 p { font-size: 14px; color: #555; }
 
@@ -55,12 +52,10 @@ th, td {
   border-bottom: 1px solid #dfe6e9;
   white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-th {
-  background-color: #7f9bb3;
-  color: #ffffff;
-}
+th { background-color: #7f9bb3; color: #ffffff; }
 
 input[type='number'] {
   width: 40px;
@@ -81,13 +76,14 @@ input[type='checkbox'] { transform: scale(1.2); }
 }
 
 .account-box {
-  width: 75%;
+  width: 90%;
   max-width: 420px;
   margin: 15px auto;
-  background: #cfd2d4; /* 莫蘭迪淺灰 */
+  background: #cfd2d4;
   color: #000000;
   padding: 12px;
   border-radius: 12px;
+  word-wrap: break-word;
 }
 
 .copy-btn {
@@ -95,17 +91,23 @@ input[type='checkbox'] { transform: scale(1.2); }
   color: white;
   border: none;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 14px;
   cursor: pointer;
   margin-top: 8px;
 }
 
-#finishOrderBtn {
-  display: inline-block;
-  margin: 25px auto 0;
-  background-color: #F4E0BE; /* 奶茶色 */
-  color: #B22222; /* 紅字 */
+#buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+#screenshotBtn {
+  background-color: #F4E0BE;
+  color: #9e3520;
   font-size: 16px;
   padding: 8px 16px;
   border-radius: 12px;
@@ -114,10 +116,29 @@ input[type='checkbox'] { transform: scale(1.2); }
   font-weight: bold;
 }
 
+#formBtn {
+  background-color: #9e3520;
+  color: #FFFFFF;
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#formReminder {
+  font-size: 14px;
+  color: #555;
+  margin-top: 10px;
+}
+
 @media (max-width: 480px) {
   table { font-size: 14px; }
   h2 { font-size: 48px; }
-  #finishOrderBtn { font-size: 14px; padding: 6px 12px; }
+  #screenshotBtn, #formBtn { font-size: 14px; padding: 6px 12px; }
+  .account-box p { word-break: break-all; }
+  #formReminder { font-size: 14px; }
 }
 </style>
 </head>
@@ -164,7 +185,11 @@ input[type='checkbox'] { transform: scale(1.2); }
 </div>
 </div>
 
-<button id="finishOrderBtn" onclick="finishOrder()">截圖訂單並前往填寫表單</button>
+<div id="buttonContainer">
+  <button id="screenshotBtn" onclick="screenshotOrder()">截圖訂單</button>
+  <button id="formBtn" onclick="goToForm()">下一步,填寫訂購資訊</button>
+</div>
+<p id="formReminder">煩請一定要填寫訂購表單!</p>
 
 <script>
 function calculate() {
@@ -192,25 +217,23 @@ function selectShip(type) {
 function copyAccount() {
   const text = document.getElementById('accountNumber').innerText;
   navigator.clipboard.writeText(text);
-  alert('匯款帳號已複製！記得匯款後，按下最下方的截圖訂單按鈕喔！');
+  alert('匯款帳號已複製！記得匯款後，再按下截圖訂單按鈕！');
 }
 
-function finishOrder() {
-  if(confirm("是否下載截圖再前往填寫表單？\n點「取消」將直接前往表單")) {
-    html2canvas(document.getElementById('orderSection')).then(canvas => {
-      const link = document.createElement('a');
-      link.href = canvas.toDataURL('image/png');
-      link.download = 'liu_mama_order.png';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+function screenshotOrder() {
+  html2canvas(document.getElementById('orderSection')).then(canvas => {
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png');
+    link.download = 'liu_mama_order.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    alert('截圖已下載！記得填寫表單喔！');
+  });
+}
 
-      alert('感謝訂購！請填寫訂購資料以便我們安排製作與寄送');
-      window.open('https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview','_blank');
-    });
-  } else {
-    window.open('https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview','_blank');
-  }
+function goToForm() {
+  window.open('https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview', '_blank');
 }
 </script>
 
