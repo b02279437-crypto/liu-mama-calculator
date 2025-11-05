@@ -23,6 +23,19 @@ body {
   animation: handwriting 1s ease-in-out;
 }
 
+/* LOGO 上方置中 */
+.logo-title-vertical {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.logo-title-vertical img {
+  height: 120px;  /* Logo 大小可以調整 */
+  width: auto;
+  display: block;
+  margin: 0 auto 8px auto;
+}
+
 /* 標題加大加粗 */
 h2 {
   font-size: 75px;
@@ -58,10 +71,10 @@ table {
   font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
 }
 
-colgroup col:first-child { width: 45%; }  /* 品項 */
-colgroup col:nth-child(2) { width: 15%; } /* 價格 */
-colgroup col:nth-child(3) { width: 20%; } /* 數量 */
-colgroup col:nth-child(4) { width: 20%; } /* 小計加大 */
+colgroup col:first-child { width: 45%; }
+colgroup col:nth-child(2) { width: 15%; }
+colgroup col:nth-child(3) { width: 20%; }
+colgroup col:nth-child(4) { width: 20%; }
 
 th, td {
   padding: 10px;
@@ -77,14 +90,15 @@ th {
   letter-spacing: 1px;
 }
 
+/* ✅ 數字框縮小 */
 input[type='number'] {
-  width: 60px;
+  width: 40px;
+  height: 28px;
+  font-size: 14px;
   text-align: center;
-  font-size: 16px;
   border: 1px solid #b0bec5;
   border-radius: 6px;
-  padding: 4px;
-  transition: 0.2s;
+  padding: 2px;
   font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
 }
 
@@ -136,65 +150,40 @@ input[type='checkbox'] {
   background-color: #163b5b;
 }
 
-/* 最後一行文字 */
 .account-link {
   margin-top: 10px;
   font-size: 14px;
   display: block;
-  white-space: normal;
-}
-
-.account-link span {
-  font-size: 14px;
-  font-weight: normal;
-  color: #1e4f7b;  /* 深藍 */
-  display: inline;
 }
 
 .account-link a {
   font-size: 14px;
   font-weight: normal;
-  color: #B22222;  /* 深紅 */
-  display: inline;
-}
-
-/* 表格內備註文字 */
-table small {
-  font-size: 12px;
-  color: #555;
+  color: #B22222;
 }
 
 @media (max-width: 480px) {
   table { font-size: 14px; }
   input[type='number'] { width: 50px; }
   h2 { font-size: 48px; }
-  .total { font-size: 18px; }
-  .account-link a { font-size: 14px; }
-  .account-link span { font-size: 14px; }
 }
 </style>
 </head>
 <body>
 
-<h2>
-  <span class="english">LIU MAMA Order</span>
-</h2>
+<!-- ✅ Logo 在上方 -->
+<div class="logo-title-vertical">
+  <img src="img/logo.png" alt="LIU MAMA LOGO">  <!-- 🔧 把這路徑改成你的 -->
+  <h2><span class="english">LIU MAMA Order</span></h2>
+</div>
 
 <p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
 <table>
-  <colgroup>
-    <col>
-    <col>
-    <col>
-    <col>
-  </colgroup>
+  <colgroup><col><col><col><col></colgroup>
   <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
   <tr>
-    <td>
-      麻辣底料包<br>
-      <small>(2人份)</small>
-    </td>
+    <td>麻辣底料包<br><small>(2人份)</small></td>
     <td>$320</td>
     <td><input type="number" id="qty1" min="0" value="0" onchange="calculate()"></td>
     <td id="sub1">$0</td>
@@ -202,12 +191,7 @@ table small {
 </table>
 
 <table>
-  <colgroup>
-    <col>
-    <col>
-    <col>
-    <col>
-  </colgroup>
+  <colgroup><col><col><col><col></colgroup>
   <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
   <tr>
     <td>711超商取貨</td>
@@ -233,8 +217,9 @@ table small {
   <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
   
   <p class="account-link">
-    <span>匯款完成後，煩請填寫詳細訂購資料</span> 🔗&nbsp;
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview" target="_blank" rel="noopener noreferrer">表單</a>
+    匯款完成後，請填寫訂購資料 🔗
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview"
+       target="_blank" rel="noopener noreferrer">表單</a>
   </p>
 </div>
 
