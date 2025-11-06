@@ -33,7 +33,6 @@ p, .section-title {
   margin-bottom: 8px;
 }
 
-/* 訂購人姓名/電話區 */
 .input-container {
   max-width: 500px;
   margin: 0 auto 15px;
@@ -57,7 +56,7 @@ p, .section-title {
 #customerName { width: 120px; }
 #customerPhone { width: 180px; }
 
-.input-group input {
+.input-group input, .input-group select {
   height: 28px;
   font-size: 14px;
   padding: 4px 8px;
@@ -70,7 +69,6 @@ p, .section-title {
   border-color: #e74c3c !important;
 }
 
-/* 表格樣式 */
 table {
   width: 100%;
   max-width: 500px;
@@ -100,28 +98,16 @@ th, td {
 
 th { background-color: #7f9bb3; color: #ffffff; }
 
-/* 數字框完全無黑點 */
-.qty-input {
-  width: 40px;
-  height: 28px;
-  font-size: 14px;
-  text-align: center;
-  border: 1px solid #b0bec5;
-  border-radius: 6px;
-}
-
-/* checkbox */
 input[type='checkbox'] { transform: scale(1.2); }
 
 .total { font-size: 20px; font-weight: bold; color: #1e4f7b; margin-top: 20px; }
 
-/* 匯款帳戶資訊 */
 .account-box {
   width: 80%;
   max-width: 350px;
   margin: 15px auto;
   background: #cfd2d4;
-  color: #333333; /* 深灰 */
+  color: #333333;
   padding: 10px;
   border-radius: 10px;
   word-wrap: break-word;
@@ -151,7 +137,6 @@ input[type='checkbox'] { transform: scale(1.2); }
 
 #formReminder { font-size: 14px; color: #555; margin-top: 10px; }
 
-/* 響應式設定 */
 @media (max-width: 480px) {
   table { font-size: 14px; }
   h2 { font-size: 48px; }
@@ -165,7 +150,8 @@ input[type='checkbox'] { transform: scale(1.2); }
 
   #customerName { width: 120px !important; }
   #customerPhone { width: 180px !important; }
-  .input-group input:not(#customerName):not(#customerPhone) { width: 100%; }
+  .input-group input:not(#customerName):not(#customerPhone),
+  .input-group select { width: 100%; }
 }
 </style>
 </head>
@@ -195,13 +181,14 @@ input[type='checkbox'] { transform: scale(1.2); }
     <td>麻辣底料包<br><small>(2人份)</small></td>
     <td>$320</td>
     <td>
-      <input type="tel" 
-             class="qty-input" 
-             id="qty1" 
-             value="0" 
-             pattern="[0-9]*" 
-             inputmode="numeric"
-             oninput="this.value=this.value.replace(/[^0-9]/g,''); calculate()">
+      <select id="qty1" onchange="calculate()">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
     </td>
     <td id="sub1">$0</td>
   </tr>
@@ -291,18 +278,14 @@ function goToForm() {
 
   nameInput.classList.remove('input-error');
   phoneInput.classList.remove('input-error');
-  document.getElementById('qty1').classList.remove('input-error');
 
   let errorMsg = '';
   if (!name) { errorMsg += '請輸入訂購人姓名！\n'; nameInput.classList.add('input-error'); }
   if (!phone) { errorMsg += '請輸入訂購人電話！\n'; phoneInput.classList.add('input-error'); }
-  if (qty <= 0) { errorMsg += '請選擇購買數量！\n'; document.getElementById('qty1').classList.add('input-error'); }
+  if (qty <= 0) { errorMsg += '請選擇購買數量！\n'; }
   if (!ship711 && !shipPost) { errorMsg += '請選擇寄送方式！'; }
 
-  if (errorMsg) {
-    alert('訂單填寫不完整:\n' + errorMsg);
-    return;
-  }
+  if (errorMsg) { alert('訂單填寫不完整:\n' + errorMsg); return; }
 
   const ship = ship711 ? '711超商取貨' : '郵局宅配';
   const total = qty * 320 + (ship711 ? 60 : 120);
