@@ -208,9 +208,7 @@ input[type='checkbox'] { transform: scale(1.2); }
       <tr>
         <td>麻辣底料包<br><small>(2人份)</small></td>
         <td>$320</td>
-        <td>
-          <select id="qty1" onchange="calculate()"></select>
-        </td>
+        <td><select id="qty1" onchange="calculate()"></select></td>
         <td id="sub1">$0</td>
       </tr>
     </table>
@@ -238,15 +236,17 @@ input[type='checkbox'] { transform: scale(1.2); }
 </main>
 
 <script>
-/* === 自動產生數量選單 === */
+/* === 自動產生數量選單 (0～35) === */
 window.addEventListener('DOMContentLoaded', () => {
   const select = document.getElementById('qty1');
-  for (let i = 1; i <= 35; i++) {
+  for (let i = 0; i <= 35; i++) {
     const opt = document.createElement('option');
     opt.value = i;
     opt.textContent = i;
     select.appendChild(opt);
   }
+  select.value = "0"; // 預設是0
+  calculate();        // 初始化金額
 
   /* === 開場動畫 === */
   const intro = document.getElementById('intro');
