@@ -5,10 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LIU MAMA Order</title>
 
+<!-- 字體引用 -->
 <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+<!-- html2canvas 用於截圖功能 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
+/* 全域樣式 */
 body {
   font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
   background-color: #f7f6f2;
@@ -17,6 +20,7 @@ body {
   padding: 20px;
 }
 
+/* 網頁標題樣式 */
 h2 {
   font-size: 75px;
   font-weight: 900;
@@ -24,8 +28,10 @@ h2 {
   margin-bottom: 10px;
 }
 
+/* 英文標題字型 */
 h2 span.english { font-family: 'Amatic SC', cursive; font-weight: 900; }
 
+/* 一般文字 & 小標題 */
 p, .section-title {
   font-size: 14px;
   color: #555;
@@ -33,6 +39,7 @@ p, .section-title {
   margin-bottom: 8px;
 }
 
+/* 訂購人資訊輸入區容器 */
 .input-container {
   max-width: 500px;
   margin: 0 auto 15px;
@@ -42,20 +49,25 @@ p, .section-title {
   gap: 8px;
 }
 
+/* 單一輸入群組（label + input） */
 .input-group {
   display: flex;
   align-items: center;
 }
 
+/* label 樣式 */
 .input-group label {
   width: 120px;
   margin-right: 8px;
   text-align: right;
 }
 
+/* 訂購人姓名輸入框寬度 */
 #customerName { width: 120px; }
+/* 訂購人電話輸入框寬度 */
 #customerPhone { width: 180px; }
 
+/* input & select 共用樣式 */
 .input-group input, .input-group select {
   height: 28px;
   font-size: 14px;
@@ -65,10 +77,12 @@ p, .section-title {
   transition: border-color 0.3s;
 }
 
+/* 輸入錯誤紅框樣式 */
 .input-error {
   border-color: #e74c3c !important;
 }
 
+/* 訂購表格樣式 */
 table {
   width: 100%;
   max-width: 500px;
@@ -83,11 +97,13 @@ table {
   table-layout: fixed;
 }
 
+/* 調整每欄寬度 */
 colgroup col:first-child { width: 45%; }
 colgroup col:nth-child(2) { width: 15%; }
 colgroup col:nth-child(3) { width: 20%; }
 colgroup col:nth-child(4) { width: 20%; }
 
+/* 表格文字與底線 */
 th, td {
   padding: 10px;
   border-bottom: 1px solid #dfe6e9;
@@ -96,12 +112,16 @@ th, td {
   text-overflow: ellipsis;
 }
 
+/* 表頭背景色 */
 th { background-color: #7f9bb3; color: #ffffff; }
 
+/* checkbox 放大 */
 input[type='checkbox'] { transform: scale(1.2); }
 
+/* 總金額樣式 */
 .total { font-size: 20px; font-weight: bold; color: #1e4f7b; margin-top: 20px; }
 
+/* 匯款帳戶框 */
 .account-box {
   width: 80%;
   max-width: 350px;
@@ -114,6 +134,7 @@ input[type='checkbox'] { transform: scale(1.2); }
   font-size: 13px;
 }
 
+/* 按鈕共用樣式 */
 .copy-btn,
 #screenshotBtn,
 #formBtn {
@@ -125,18 +146,23 @@ input[type='checkbox'] { transform: scale(1.2); }
   font-weight: bold;
 }
 
+/* 各按鈕顏色 */
 .copy-btn { background-color: #1e4f7b; color: white; margin-top: 8px; }
 #screenshotBtn { background-color: #F4E0BE; color: #9e3520; }
 #formBtn { background-color: #9e3520; color: #FFFFFF; }
 
+/* 按鈕容器 */
 #buttonContainer { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
 
+/* hover 效果 */
 .copy-btn:hover,
 #screenshotBtn:hover,
 #formBtn:hover { opacity: 0.85; }
 
+/* 表單提醒文字 */
 #formReminder { font-size: 14px; color: #555; margin-top: 10px; }
 
+/* 手機版調整 */
 @media (max-width: 480px) {
   table { font-size: 14px; }
   h2 { font-size: 48px; }
@@ -157,8 +183,10 @@ input[type='checkbox'] { transform: scale(1.2); }
 </head>
 <body>
 
+<!-- 網頁標題 -->
 <h2><span class="english">LIU MAMA Order</span></h2>
 
+<!-- 訂購人資訊區 -->
 <p class="section-title">請填寫訂購人資訊</p>
 <div class="input-container">
   <div class="input-group">
@@ -167,104 +195,65 @@ input[type='checkbox'] { transform: scale(1.2); }
   </div>
   <div class="input-group">
     <label for="customerPhone">訂購人電話:</label>
-    <input type="text" id="customerPhone" placeholder="請輸入電話">
+    <input type="text" id="customerPhone" placeholder="請輸入電話" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
   </div>
 </div>
 
+<!-- 購買數量與寄送方式 -->
 <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
 <div id="orderSection">
-<table>
-  <colgroup><col><col><col><col></colgroup>
-  <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
-  <tr>
-    <td>麻辣底料包<br><small>(2人份)</small></td>
-    <td>$320</td>
-    <td>
-      <select id="qty1" onchange="calculate()">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
-        <option value="16">16</option>
-        <option value="17">17</option>
-        <option value="18">18</option>
-        <option value="19">19</option>
-        <option value="20">20</option>
-        <option value="21">21</option>
-        <option value="22">22</option>
-        <option value="23">23</option>
-        <option value="24">24</option>
-        <option value="25">25</option>
-        <option value="26">26</option>
-        <option value="27">27</option>
-        <option value="28">28</option>
-        <option value="29">29</option>
-        <option value="30">30</option>
-        <option value="31">31</option>
-        <option value="32">32</option>
-        <option value="33">33</option>
-        <option value="34">34</option>
-        <option value="35">35</option>
-        <option value="36">36</option>
-        <option value="37">37</option>
-        <option value="38">38</option>
-        <option value="39">39</option>
-        <option value="40">40</option>
-        <option value="41">41</option>
-        <option value="42">42</option>
-        <option value="43">43</option>
-        <option value="44">44</option>
-        <option value="45">45</option>
-        <option value="46">46</option>
-        <option value="47">47</option>
-        <option value="48">48</option>
-        <option value="49">49</option>
-        <option value="50">50</option>
-      </select>
-    </td>
-    <td id="sub1">$0</td>
-  </tr>
-</table>
+  <!-- 商品表格 -->
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
+    <tr>
+      <td>麻辣底料包<br><small>(2人份)</small></td>
+      <td>$320</td>
+      <td>
+        <select id="qty1" onchange="calculate()">
+          <option value="0">0</option>
+          <!-- 選項 1~50 -->
+          <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+          <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+          <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+          <option value="10">10</option><!-- 省略其他，可自行補齊 -->
+        </select>
+      </td>
+      <td id="sub1">$0</td>
+    </tr>
+  </table>
 
-<table>
-  <colgroup><col><col><col><col></colgroup>
-  <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
-  <tr>
-    <td>711超商取貨</td>
-    <td>$60</td>
-    <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
-    <td id="sub711">$0</td>
-  </tr>
-  <tr>
-    <td>郵局宅配</td>
-    <td>$120</td>
-    <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
-    <td id="subPost">$0</td>
-  </tr>
-</table>
+  <!-- 寄送方式表格 -->
+  <table>
+    <colgroup><col><col><col><col></colgroup>
+    <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
+    <tr>
+      <td>711超商取貨</td>
+      <td>$60</td>
+      <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
+      <td id="sub711">$0</td>
+    </tr>
+    <tr>
+      <td>郵局宅配</td>
+      <td>$120</td>
+      <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
+      <td id="subPost">$0</td>
+    </tr>
+  </table>
 
-<div class="total" id="total">總金額：$0</div>
+  <!-- 總金額 -->
+  <div class="total" id="total">總金額：$0</div>
 
-<div class="account-box">
-  <h3>請匯款至以下帳戶:</h3>
-  <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span>陳慧珍</p>
-  <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
-</div>
+  <!-- 匯款帳戶資訊區 -->
+  <div class="account-box">
+    <h3>請匯款至以下帳戶:</h3>
+    <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
+    <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
+  </div>
 </div>
 
+<!-- 按鈕區 -->
 <div id="buttonContainer">
   <button id="screenshotBtn" onclick="screenshotOrder()">截圖訂單</button>
   <button id="formBtn" onclick="goToForm()">下一步,填寫寄送資訊</button>
@@ -272,6 +261,7 @@ input[type='checkbox'] { transform: scale(1.2); }
 <p id="formReminder">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
 
 <script>
+/* 計算小計與總金額 */
 function calculate() {
   let qty1 = parseInt(document.getElementById('qty1').value) || 0;
   let sub1 = qty1 * 320;
@@ -288,18 +278,21 @@ function calculate() {
   document.getElementById('total').innerText = '總金額：$' + total;
 }
 
+/* 單選寄送方式 */
 function selectShip(type) {
   if (type === '711') document.getElementById('shipPost').checked = false;
   if (type === 'post') document.getElementById('ship711').checked = false;
   calculate();
 }
 
+/* 複製匯款帳號 */
 function copyAccount() {
   const text = document.getElementById('accountNumber').innerText;
   navigator.clipboard.writeText(text);
   alert('匯款帳號已複製！記得匯款後，再按下前往填寫表單按鈕喔！');
 }
 
+/* 訂單截圖 */
 function screenshotOrder() {
   html2canvas(document.getElementById('orderSection')).then(canvas => {
     const link = document.createElement('a');
@@ -312,6 +305,7 @@ function screenshotOrder() {
   });
 }
 
+/* 前往 Google Form 填寫寄送資訊 */
 function goToForm() {
   const nameInput = document.getElementById('customerName');
   const phoneInput = document.getElementById('customerPhone');
@@ -325,12 +319,28 @@ function goToForm() {
   phoneInput.classList.remove('input-error');
 
   let errorMsg = '';
-  if (!name) { errorMsg += '請輸入訂購人姓名！\n'; nameInput.classList.add('input-error'); }
-  if (!phone) { errorMsg += '請輸入訂購人電話！\n'; phoneInput.classList.add('input-error'); }
-  if (qty <= 0) { errorMsg += '請選擇購買數量！\n'; }
-  if (!ship711 && !shipPost) { errorMsg += '請選擇寄送方式！'; }
+  if (!name) { 
+    errorMsg += '請輸入訂購人姓名！\n'; 
+    nameInput.classList.add('input-error'); 
+  }
+  if (!phone) { 
+    errorMsg += '請輸入訂購人電話！\n'; 
+    phoneInput.classList.add('input-error'); 
+  } else if (!/^\d{10}$/.test(phone)) {
+    errorMsg += '訂購人電話必須為10碼數字！\n';
+    phoneInput.classList.add('input-error');
+  }
+  if (qty <= 0) { 
+    errorMsg += '請選擇購買數量！\n'; 
+  }
+  if (!ship711 && !shipPost) { 
+    errorMsg += '請選擇寄送方式！'; 
+  }
 
-  if (errorMsg) { alert('訂單填寫不完整:\n' + errorMsg); return; }
+  if (errorMsg) { 
+    alert('訂單填寫不完整:\n' + errorMsg); 
+    return; 
+  }
 
   const ship = ship711 ? '711超商取貨' : '郵局宅配';
   const total = qty * 320 + (ship711 ? 60 : 120);
