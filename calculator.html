@@ -14,7 +14,8 @@ body {
   background-color: #f7f6f2;
   color: #2c3e50;
   text-align: center;
-  padding: 20px 20px 20px 20px;
+  padding: 20px;
+  overflow-x: hidden;
 }
 
 /* 淡入動畫基礎 */
@@ -25,6 +26,21 @@ body {
 .title-animate { opacity: 0; transform: scale(0.5) translateX(-50px); transition: all 1s ease; }
 .title-animate.show { opacity: 1; transform: scale(1) translateX(0); }
 
+/* Logo淡入 */
+#logo { width: 200px; opacity: 0; transition: opacity 1.2s ease; margin: 40px auto; }
+#logo.show { opacity: 1; }
+
+/* 打字文字效果 */
+#introText { font-size: 18px; line-height: 1.8; color: #555; max-width: 600px; margin: 30px auto; min-height: 120px; white-space: pre-wrap; }
+
+/* 開始訂購按鈕 */
+#startBtn { display: none; margin-top: 30px; padding: 10px 25px; font-size: 18px; background-color: #1e4f7b; color: #fff; border: none; border-radius: 12px; cursor: pointer; }
+#startBtn:hover { opacity: 0.85; }
+
+/* 原訂購表單區塊，初始隱藏 */
+#orderSectionWrapper { display: none; }
+
+/* --- 你的原本訂購表格樣式保留 --- */
 h2 {
   font-size: 90px;
   font-weight: 900;
@@ -35,25 +51,12 @@ h2 span.english { font-family: 'Amatic SC', cursive; font-weight: 900; }
 
 p, .section-title { font-size: 14px; color: #555; text-align: center; margin-bottom: 8px; }
 
-/* 訂購人姓名/電話調整 */
-.input-container, .input-container input, .input-container select {
-  font-size: 16px !important; /* 跟表格一致，可改14px */
-  margin-bottom: 0 !important;
-}
-.input-container { gap: 4px !important; margin-bottom: 5px !important; }
-
+.input-container { max-width: 500px; margin: 0 auto 15px; text-align: left; display: flex; flex-direction: column; gap: 8px; }
 .input-group { display: flex; align-items: center; }
 .input-group label { width: 120px; margin-right: 8px; text-align: right; }
 #customerName { width: 120px; }
 #customerPhone { width: 180px; }
-
-.input-group input, .input-group select { 
-  height: 28px; 
-  padding: 4px 8px; 
-  border: 1px solid #b0bec5; 
-  border-radius: 6px; 
-  transition: border-color 0.3s; 
-}
+.input-group input, .input-group select { height: 28px; font-size: 14px; padding: 4px 8px; border: 1px solid #b0bec5; border-radius: 6px; transition: border-color 0.3s; }
 .input-error { border-color: #e74c3c !important; }
 
 table { width: 100%; max-width: 500px; margin: 15px auto; border-collapse: separate; border-spacing: 0; background: #ffffff; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 16px; table-layout: fixed; }
@@ -64,35 +67,22 @@ colgroup col:nth-child(4) { width: 20%; }
 th, td { padding: 10px; border-bottom: 1px solid #dfe6e9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 th { background-color: #7f9bb3; color: #ffffff; }
 input[type='checkbox'] { transform: scale(1.2); }
+.total { font-size: 20px; font-weight: bold; color: #1e4f7b; margin-top: 20px; }
 
-/* 表格後區塊上移 */
-.total { font-size: 20px; font-weight: bold; color: #1e4f7b; margin-top: 10px !important; }
-.account-box { 
-  width: 80%; 
-  max-width: 350px; 
-  margin: 10px auto !important; 
-  background: #cfd2d4; 
-  color: #333333; 
-  padding: 10px; 
-  border-radius: 10px; 
-  word-wrap: break-word; 
-  font-size: 13px; 
-}
+.account-box { width: 80%; max-width: 350px; margin: 15px auto; background: #cfd2d4; color: #333333; padding: 10px; border-radius: 10px; word-wrap: break-word; font-size: 13px; }
 
 .copy-btn, #screenshotBtn, #formBtn { border: none; padding: 8px 16px; border-radius: 12px; font-size: 16px; cursor: pointer; font-weight: bold; }
 .copy-btn { background-color: #1e4f7b; color: white; margin-top: 8px; }
 #screenshotBtn { background-color: #F4E0BE; color: #9e3520; }
 #formBtn { background-color: #9e3520; color: #FFFFFF; }
-#buttonContainer { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 10px !important; }
+#buttonContainer { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
 .copy-btn:hover, #screenshotBtn:hover, #formBtn:hover { opacity: 0.85; }
-#formReminder { font-size: 14px; color: #555; margin-top: 5px !important; }
 
 @media (max-width: 480px) {
   table { font-size: 14px; }
   h2 { font-size: 60px; }
   #screenshotBtn, #formBtn { font-size: 14px; padding: 6px 12px; }
   .account-box { font-size: 12px; width: 90%; max-width: 300px; }
-  #formReminder { font-size: 14px; }
   .input-container { flex-direction: column; }
   .input-group { flex-direction: column; align-items: flex-start; }
   .input-group label { text-align: left; width: 100%; margin-bottom: 4px; }
@@ -104,106 +94,160 @@ input[type='checkbox'] { transform: scale(1.2); }
 </head>
 <body>
 
-<h2 class="title-animate"><span class="english">LIU MAMA Order</span></h2>
+<!-- --- 開場動畫 --- -->
+<img id="logo" src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/logo.png" alt="LIU MAMA Logo">
+<div id="introText"></div>
+<button id="startBtn">開始訂購</button>
 
-<p class="section-title fade-block">請填寫訂購人資訊</p>
-<div class="input-container fade-block">
-  <div class="input-group">
-    <label for="customerName">訂購人姓名:</label>
-    <input type="text" id="customerName" placeholder="請輸入姓名">
+<!-- --- 原本訂購表單 --- -->
+<div id="orderSectionWrapper">
+  <h2 class="title-animate"><span class="english">LIU MAMA Order</span></h2>
+
+  <p class="section-title fade-block">請填寫訂購人資訊</p>
+  <div class="input-container fade-block">
+    <div class="input-group">
+      <label for="customerName">訂購人姓名:</label>
+      <input type="text" id="customerName" placeholder="請輸入姓名">
+    </div>
+    <div class="input-group">
+      <label for="customerPhone">訂購人電話:</label>
+      <input type="text" id="customerPhone" placeholder="請輸入電話" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+    </div>
   </div>
-  <div class="input-group">
-    <label for="customerPhone">訂購人電話:</label>
-    <input type="text" id="customerPhone" placeholder="請輸入電話" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+
+  <p class="section-title fade-block">請選擇購買數量與寄送方式，系統將自動計算金額</p>
+
+  <div id="orderSection">
+    <table class="fade-block" id="productTable">
+      <colgroup><col><col><col><col></colgroup>
+      <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
+      <tr>
+        <td>麻辣底料包<br><small>(2人份)</small></td>
+        <td>$320</td>
+        <td>
+          <select id="qty1" onchange="calculate()">
+            <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+            <option value="8">8</option><option value="9">9</option><option value="10">10</option>
+            <option value="11">11</option><option value="12">12</option><option value="13">13</option>
+            <option value="14">14</option><option value="15">15</option><option value="16">16</option>
+            <option value="17">17</option><option value="18">18</option><option value="19">19</option>
+            <option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
+            <option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option>
+            <option value="28">28</option><option value="29">29</option><option value="30">30</option>
+            <option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option>
+            <option value="35">35</option>
+          </select>
+        </td>
+        <td id="sub1">$0</td>
+      </tr>
+    </table>
+
+    <table class="fade-block" id="shippingTable">
+      <colgroup><col><col><col><col></colgroup>
+      <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
+      <tr>
+        <td>711超商取貨</td>
+        <td>$60</td>
+        <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
+        <td id="sub711">$0</td>
+      </tr>
+      <tr>
+        <td>郵局宅配</td>
+        <td>$120</td>
+        <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
+        <td id="subPost">$0</td>
+      </tr>
+    </table>
+
+    <div class="total fade-block" id="total">總金額：$0</div>
+
+    <div class="account-box fade-block">
+      <h3>請匯款至以下帳戶:</h3>
+      <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
+      <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
+    </div>
   </div>
-</div>
 
-<p class="section-title fade-block">請選擇購買數量與寄送方式，系統將自動計算金額</p>
-
-<div id="orderSection">
-  <table class="fade-block" id="productTable">
-    <colgroup><col><col><col><col></colgroup>
-    <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
-    <tr>
-      <td>麻辣底料包<br><small>(2人份)</small></td>
-      <td>$320</td>
-      <td>
-        <select id="qty1" onchange="calculate()">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
-          <option value="13">13</option>
-          <option value="14">14</option>
-          <option value="15">15</option>
-          <option value="16">16</option>
-          <option value="17">17</option>
-          <option value="18">18</option>
-          <option value="19">19</option>
-          <option value="20">20</option>
-          <option value="21">21</option>
-          <option value="22">22</option>
-          <option value="23">23</option>
-          <option value="24">24</option>
-          <option value="25">25</option>
-          <option value="26">26</option>
-          <option value="27">27</option>
-          <option value="28">28</option>
-          <option value="29">29</option>
-          <option value="30">30</option>
-          <option value="31">31</option>
-          <option value="32">32</option>
-          <option value="33">33</option>
-          <option value="34">34</option>
-          <option value="35">35</option>
-        </select>
-      </td>
-      <td id="sub1">$0</td>
-    </tr>
-  </table>
-
-  <table class="fade-block" id="shippingTable">
-    <colgroup><col><col><col><col></colgroup>
-    <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
-    <tr>
-      <td>711超商取貨</td>
-      <td>$60</td>
-      <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
-      <td id="sub711">$0</td>
-    </tr>
-    <tr>
-      <td>郵局宅配</td>
-      <td>$120</td>
-      <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
-      <td id="subPost">$0</td>
-    </tr>
-  </table>
-
-  <div class="total fade-block" id="total">總金額：$0</div>
-
-  <div class="account-box fade-block">
-    <h3>請匯款至以下帳戶:</h3>
-    <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
-    <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
+  <div id="buttonContainer" class="fade-block">
+    <button id="screenshotBtn" onclick="screenshotOrder()">截圖訂單</button>
+    <button id="formBtn" onclick="goToForm()">下一步,填寫寄送資訊</button>
   </div>
+  <p id="formReminder" class="fade-block">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
 </div>
-
-<div id="buttonContainer" class="fade-block">
-  <button id="screenshotBtn" onclick="screenshotOrder()">截圖訂單</button>
-  <button id="formBtn" onclick="goToForm()">下一步,填寫寄送資訊</button>
-</div>
-<p id="formReminder" class="fade-block">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
 
 <script>
+/* --- 開場動畫 --- */
+const introText = `2015年，劉嘛麻遠赴四川，只為學最正宗麻辣鍋底。
+每鍋湯底，皆手工慢炒、香氣濃郁。
+嚴選中藥材與多種辣椒，熬出可喝的麻辣湯。
+在家也能享火鍋店級滋味。
+劉嘛麻，初心麻辣，溫暖每一餐。`;
+
+function typeWriter(text, element, speed=40, callback){
+  let i = 0;
+  function typing(){
+    if(i < text.length){
+      element.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typing, speed);
+    } else if(callback){
+      callback();
+    }
+  }
+  typing();
+}
+
+/* Logo淡入後打字 */
+window.addEventListener('DOMContentLoaded', ()=>{
+  const logo = document.getElementById('logo');
+  const startBtn = document.getElementById('startBtn');
+  const orderWrapper = document.getElementById('orderSectionWrapper');
+  const textEl = document.getElementById('introText');
+
+  // Logo淡入
+  setTimeout(()=>{ logo.classList.add('show'); }, 300);
+
+  // 文字逐字打
+  setTimeout(()=>{
+    typeWriter(introText, textEl, 40, ()=>{
+      startBtn.style.display = 'inline-block';
+    });
+  }, 1500);
+
+  // 開始訂購按鈕點擊事件
+  startBtn.addEventListener('click', ()=>{
+    document.getElementById('logo').style.display='none';
+    document.getElementById('introText').style.display='none';
+    startBtn.style.display='none';
+    orderWrapper.style.display='block';
+
+    // 原本淡入效果
+    const blocks = [
+      document.querySelector('h2.title-animate'),
+      document.querySelector('.input-container'),
+      document.querySelector('.section-title'),
+      document.querySelector('#productTable'),
+      document.querySelector('#shippingTable'),
+      document.querySelector('.total'),
+      document.querySelector('.account-box'),
+      document.querySelector('#buttonContainer'),
+      document.querySelector('#formReminder')
+    ];
+    blocks.forEach((el,index)=>{
+      if(!el) return;
+      setTimeout(()=>{el.classList.add('show');}, 100+index*300);
+    });
+
+    const trs = [...document.querySelectorAll('#productTable tr, #shippingTable tr')];
+    trs.forEach((tr,i)=>{
+      tr.classList.add('fade-block');
+      setTimeout(()=>{tr.classList.add('show');}, 200+i*250);
+    });
+  });
+});
+
+/* --- 原本訂購JS功能保留 --- */
 function calculate() {
   let qty1 = parseInt(document.getElementById('qty1').value)||0;
   document.getElementById('sub1').innerText = '$'+(qty1*320);
@@ -259,36 +303,6 @@ function goToForm(){
                 `&entry.1351577488=${total}`;
   window.open(formUrl,'_blank');
 }
-
-/* 頁面加載後淡入效果 */
-window.addEventListener('DOMContentLoaded', () => {
-  // 標題動畫
-  const title = document.querySelector('h2.title-animate');
-  setTimeout(()=>{title.classList.add('show');}, 300);
-
-  // 其他區塊淡入
-  const blocks = [
-    document.querySelector('.input-container'),
-    document.querySelector('.section-title'),
-    document.querySelector('#productTable'),
-    document.querySelector('#shippingTable'),
-    document.querySelector('.total'),
-    document.querySelector('.account-box'),
-    document.querySelector('#buttonContainer'),
-    document.querySelector('#formReminder')
-  ];
-  blocks.forEach((el,index)=>{
-    if(!el) return;
-    setTimeout(()=>{el.classList.add('show');}, 600+index*400);
-  });
-
-  // 表格每一列交錯淡入
-  const trs = [...document.querySelectorAll('#productTable tr, #shippingTable tr')];
-  trs.forEach((tr,i)=>{
-    tr.classList.add('fade-block');
-    setTimeout(()=>{tr.classList.add('show');}, 800+i*350);
-  });
-});
 </script>
 
 </body>
