@@ -5,31 +5,100 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LIU MAMA Order</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+<!-- 字體引用 -->
+<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 body {
-  font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+  margin: 0;
   background-color: #f7f6f2;
+  font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
   color: #2c3e50;
   text-align: center;
-  padding: 20px 20px 20px 20px; /* 上方空白縮短 */
+  overflow-x: hidden;
 }
 
-/* 淡入動畫基礎 */
+/* ===== 開場動畫區塊 ===== */
+#intro {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100vh;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 1s ease;
+}
+#intro.fade-out { opacity: 0; pointer-events: none; }
+
+#intro-logo {
+  width: 40%;
+  max-width: 300px;
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+#intro-logo.show { opacity: 1; }
+
+#intro-text {
+  font-family: 'ZCOOL KuaiLe', 'Noto Serif TC', serif;
+  font-size: 20px;
+  color: #333;
+  max-width: 80%;
+  line-height: 1.8;
+  white-space: pre-line;
+  opacity: 0;
+  margin-top: 30px;
+}
+#intro-text.show { opacity: 1; }
+
+#startBtn {
+  margin-top: 40px;
+  padding: 12px 40px;
+  font-size: 32px;
+  font-family: 'Amatic SC', cursive;
+  letter-spacing: 2px;
+  background-color: rgba(30,79,123,0.8);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.6s ease;
+}
+#startBtn.show { opacity: 1; }
+#startBtn:hover { background-color: rgba(30,79,123,1); transform: scale(1.05); }
+
+/* 擦拭轉場效果 */
+#wipe {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: #f7f6f2;
+  z-index: 9998;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 1.2s ease-in-out;
+}
+#wipe.active { transform: scaleX(1); }
+
+/* ===== 表單區塊 ===== */
+main { opacity: 0; transition: opacity 1s ease; }
+main.show { opacity: 1; }
+
 .fade-block { opacity: 0; transform: translateY(10px); transition: opacity 0.8s ease, transform 0.8s ease; }
 .fade-block.show { opacity: 1; transform: translateY(0); }
 
-/* 標題特殊動畫：放大+左右滑入 */
 .title-animate { opacity: 0; transform: scale(0.5) translateX(-50px); transition: all 1s ease; }
 .title-animate.show { opacity: 1; transform: scale(1) translateX(0); }
 
 h2 {
-  font-size: 90px; /* 標題更大 */
+  font-size: 90px;
   font-weight: 900;
   color: #1e4f7b;
-  margin: 20px 0 10px 0; /* 上下間距調整 */
+  margin: 20px 0 10px 0;
 }
 h2 span.english { font-family: 'Amatic SC', cursive; font-weight: 900; }
 
@@ -72,98 +141,147 @@ input[type='checkbox'] { transform: scale(1.2); }
   .input-container { flex-direction: column; }
   .input-group { flex-direction: column; align-items: flex-start; }
   .input-group label { text-align: left; width: 100%; margin-bottom: 4px; }
-  #customerName { width: 120px !important; }
-  #customerPhone { width: 180px !important; }
-  .input-group input:not(#customerName):not(#customerPhone), .input-group select { width: 100%; }
 }
 </style>
 </head>
 <body>
 
-<h2 class="title-animate"><span class="english">LIU MAMA Order</span></h2>
-
-<p class="section-title fade-block">請填寫訂購人資訊</p>
-<div class="input-container fade-block">
-  <div class="input-group">
-    <label for="customerName">訂購人姓名:</label>
-    <input type="text" id="customerName" placeholder="請輸入姓名">
-  </div>
-  <div class="input-group">
-    <label for="customerPhone">訂購人電話:</label>
-    <input type="text" id="customerPhone" placeholder="請輸入電話" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-  </div>
+<!-- ===================== 開場動畫 ===================== -->
+<div id="intro">
+  <img id="intro-logo" src="https://github.com/b02279437-crypto/liu-mama-calculator/blob/main/logo.png?raw=true" alt="LIU MAMA Logo">
+  <div id="intro-text"></div>
+  <button id="startBtn">Start Order</button>
 </div>
+<div id="wipe"></div>
 
-<p class="section-title fade-block">請選擇購買數量與寄送方式，系統將自動計算金額</p>
-
-<div id="orderSection">
-  <table class="fade-block" id="productTable">
-    <colgroup><col><col><col><col></colgroup>
-    <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
-    <tr>
-      <td>麻辣底料包<br><small>(2人份)</small></td>
-      <td>$320</td>
-      <td>
-        <select id="qty1" onchange="calculate()">
-          <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
-          <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
-          <option value="8">8</option><option value="9">9</option><option value="10">10</option>
-          <option value="11">11</option><option value="12">12</option><option value="13">13</option>
-          <option value="14">14</option><option value="15">15</option><option value="16">16</option>
-          <option value="17">17</option><option value="18">18</option><option value="19">19</option>
-          <option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
-          <option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option>
-          <option value="28">28</option><option value="29">29</option><option value="30">30</option>
-          <option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option>
-          <option value="35">35</option>
-        </select>
-      </td>
-      <td id="sub1">$0</td>
-    </tr>
-  </table>
-
-  <table class="fade-block" id="shippingTable">
-    <colgroup><col><col><col><col></colgroup>
-    <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
-    <tr>
-      <td>711超商取貨</td>
-      <td>$60</td>
-      <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
-      <td id="sub711">$0</td>
-    </tr>
-    <tr>
-      <td>郵局宅配</td>
-      <td>$120</td>
-      <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
-      <td id="subPost">$0</td>
-    </tr>
-  </table>
-
-  <div class="total fade-block" id="total">總金額：$0</div>
-
-  <div class="account-box fade-block">
-    <h3>請匯款至以下帳戶:</h3>
-    <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
-    <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
+<!-- ===================== 主內容（訂購表單） ===================== -->
+<main id="mainContent">
+  <h2 class="title-animate"><span class="english">LIU MAMA Order</span></h2>
+  <p class="section-title fade-block">請填寫訂購人資訊</p>
+  <div class="input-container fade-block">
+    <div class="input-group">
+      <label for="customerName">訂購人姓名:</label>
+      <input type="text" id="customerName" placeholder="請輸入姓名">
+    </div>
+    <div class="input-group">
+      <label for="customerPhone">訂購人電話:</label>
+      <input type="text" id="customerPhone" placeholder="請輸入電話" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+    </div>
   </div>
-</div>
 
-<div id="buttonContainer" class="fade-block">
-  <button id="screenshotBtn" onclick="screenshotOrder()">截圖訂單</button>
-  <button id="formBtn" onclick="goToForm()">下一步,填寫寄送資訊</button>
-</div>
-<p id="formReminder" class="fade-block">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
+  <p class="section-title fade-block">請選擇購買數量與寄送方式，系統將自動計算金額</p>
+
+  <div id="orderSection">
+    <table class="fade-block" id="productTable">
+      <colgroup><col><col><col><col></colgroup>
+      <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
+      <tr>
+        <td>麻辣底料包<br><small>(2人份)</small></td>
+        <td>$320</td>
+        <td>
+          <select id="qty1" onchange="calculate()">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </td>
+        <td id="sub1">$0</td>
+      </tr>
+    </table>
+
+    <table class="fade-block" id="shippingTable">
+      <colgroup><col><col><col><col></colgroup>
+      <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
+      <tr>
+        <td>711超商取貨</td>
+        <td>$60</td>
+        <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
+        <td id="sub711">$0</td>
+      </tr>
+      <tr>
+        <td>郵局宅配</td>
+        <td>$120</td>
+        <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
+        <td id="subPost">$0</td>
+      </tr>
+    </table>
+
+    <div class="total fade-block" id="total">總金額：$0</div>
+
+    <div class="account-box fade-block">
+      <h3>請匯款至以下帳戶:</h3>
+      <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
+      <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
+    </div>
+  </div>
+
+  <div id="buttonContainer" class="fade-block">
+    <button id="screenshotBtn" onclick="screenshotOrder()">截圖訂單</button>
+    <button id="formBtn" onclick="goToForm()">下一步,填寫寄送資訊</button>
+  </div>
+  <p id="formReminder" class="fade-block">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
+</main>
 
 <script>
-function calculate() {
-  let qty1 = parseInt(document.getElementById('qty1').value)||0;
-  document.getElementById('sub1').innerText = '$'+(qty1*320);
-  let ship = 0;
-  if(document.getElementById('ship711').checked) ship = 60;
-  if(document.getElementById('shipPost').checked) ship = 120;
-  document.getElementById('sub711').innerText = document.getElementById('ship711').checked?'$60':'$0';
-  document.getElementById('subPost').innerText = document.getElementById('shipPost').checked?'$120':'$0';
-  document.getElementById('total').innerText = '總金額：$'+(qty1*320+ship);
+/* ====== 開場動畫腳本 ====== */
+const introText = `2015年遠赴四川成都，學習正宗麻辣鍋底與紅油煉製。
+每一鍋湯底，皆以手工慢炒堆疊香氣，濃郁而不膩。
+嚴選十三味中藥材與多種花椒辣椒。
+劉嘛麻，以初心熬香氣，溫暖每一餐。`;
+
+window.addEventListener('DOMContentLoaded', () => {
+  const logo = document.getElementById('intro-logo');
+  const textBox = document.getElementById('intro-text');
+  const startBtn = document.getElementById('startBtn');
+  const wipe = document.getElementById('wipe');
+  const main = document.getElementById('mainContent');
+  const intro = document.getElementById('intro');
+
+  // 1. Logo 淡入淡出
+  setTimeout(()=>logo.classList.add('show'), 200);
+  setTimeout(()=>logo.classList.remove('show'), 5200);
+
+  // 2. 打字機文字
+  setTimeout(()=>{
+    textBox.classList.add('show');
+    let i=0;
+    const interval=setInterval(()=>{
+      textBox.textContent=introText.substring(0,i++);
+      if(i>introText.length) clearInterval(interval);
+    },70);
+  },5800);
+
+  // 3. 顯示 Start Order 按鈕
+  setTimeout(()=>startBtn.classList.add('show'), 12000);
+
+  // 4. 10 秒後自動進入表單
+  setTimeout(triggerTransition, 22000);
+
+  startBtn.addEventListener('click', triggerTransition);
+
+  function triggerTransition(){
+    if(intro.classList.contains('fade-out')) return;
+    wipe.classList.add('active');
+    setTimeout(()=>{
+      intro.classList.add('fade-out');
+      main.classList.add('show');
+    },1000);
+  }
+});
+
+/* ====== 表單功能保持原樣 ====== */
+function calculate(){
+  let qty1=parseInt(document.getElementById('qty1').value)||0;
+  document.getElementById('sub1').innerText='$'+(qty1*320);
+  let ship=0;
+  if(document.getElementById('ship711').checked) ship=60;
+  if(document.getElementById('shipPost').checked) ship=120;
+  document.getElementById('sub711').innerText=document.getElementById('ship711').checked?'$60':'$0';
+  document.getElementById('subPost').innerText=document.getElementById('shipPost').checked?'$120':'$0';
+  document.getElementById('total').innerText='總金額：$'+(qty1*320+ship);
 }
 function selectShip(type){
   if(type==='711') document.getElementById('shipPost').checked=false;
@@ -210,37 +328,6 @@ function goToForm(){
                 `&entry.1351577488=${total}`;
   window.open(formUrl,'_blank');
 }
-
-/* 頁面加載後淡入效果 */
-window.addEventListener('DOMContentLoaded', () => {
-  // 標題動畫
-  const title = document.querySelector('h2.title-animate');
-  setTimeout(()=>{title.classList.add('show');}, 300);
-
-  // 其他區塊淡入
-  const blocks = [
-    document.querySelector('.input-container'),
-    document.querySelector('.section-title'),
-    document.querySelector('#productTable'),
-    document.querySelector('#shippingTable'),
-    document.querySelector('.total'),
-    document.querySelector('.account-box'),
-    document.querySelector('#buttonContainer'),
-    document.querySelector('#formReminder')
-  ];
-  blocks.forEach((el,index)=>{
-    if(!el) return;
-    setTimeout(()=>{el.classList.add('show');}, 600+index*400);
-  });
-
-  // 表格每一列交錯淡入
-  const trs = [...document.querySelectorAll('#productTable tr, #shippingTable tr')];
-  trs.forEach((tr,i)=>{
-    tr.classList.add('fade-block');
-    setTimeout(()=>{tr.classList.add('show');}, 800+i*350);
-  });
-});
 </script>
-
 </body>
 </html>
