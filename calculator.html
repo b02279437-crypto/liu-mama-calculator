@@ -54,7 +54,6 @@ p, .section-title {
   text-align: right;
 }
 
-/* 姓名/電話輸入框寬度 */
 #customerName { width: 120px; }
 #customerPhone { width: 180px; }
 
@@ -101,8 +100,8 @@ th, td {
 
 th { background-color: #7f9bb3; color: #ffffff; }
 
-/* 數字框改用 text 並去掉黑點 */
-input.qty-input {
+/* 數字框完全無黑點 */
+.qty-input {
   width: 40px;
   height: 28px;
   font-size: 14px;
@@ -111,18 +110,18 @@ input.qty-input {
   border-radius: 6px;
 }
 
-/* 其他控制 */
+/* checkbox */
 input[type='checkbox'] { transform: scale(1.2); }
 
 .total { font-size: 20px; font-weight: bold; color: #1e4f7b; margin-top: 20px; }
 
-/* 匯款資訊改樣式 */
+/* 匯款帳戶資訊 */
 .account-box {
   width: 80%;
-  max-width: 360px;
+  max-width: 350px;
   margin: 15px auto;
-  background: #dcdcdc;
-  color: #333333;
+  background: #cfd2d4;
+  color: #333333; /* 深灰 */
   padding: 10px;
   border-radius: 10px;
   word-wrap: break-word;
@@ -157,7 +156,7 @@ input[type='checkbox'] { transform: scale(1.2); }
   table { font-size: 14px; }
   h2 { font-size: 48px; }
   #screenshotBtn, #formBtn { font-size: 14px; padding: 6px 12px; }
-  .account-box { width: 90%; font-size: 12px; }
+  .account-box { font-size: 12px; width: 90%; max-width: 300px; }
   #formReminder { font-size: 14px; }
 
   .input-container { flex-direction: column; }
@@ -195,7 +194,15 @@ input[type='checkbox'] { transform: scale(1.2); }
   <tr>
     <td>麻辣底料包<br><small>(2人份)</small></td>
     <td>$320</td>
-    <td><input type="text" class="qty-input" id="qty1" value="0" oninput="this.value=this.value.replace(/[^0-9]/g,''); calculate()"></td>
+    <td>
+      <input type="tel" 
+             class="qty-input" 
+             id="qty1" 
+             value="0" 
+             pattern="[0-9]*" 
+             inputmode="numeric"
+             oninput="this.value=this.value.replace(/[^0-9]/g,''); calculate()">
+    </td>
     <td id="sub1">$0</td>
   </tr>
 </table>
