@@ -5,14 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LIU MAMA Order</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+<!-- Google 毛筆風格字體 -->
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 body {
-  font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+  font-family: 'ZCOOL QingKe HuangYou', cursive, 'Noto Sans TC', sans-serif;
   background-color: #f7f6f2;
-  color: #2c3e50;
+  color: #000;
   text-align: center;
   padding: 20px;
   overflow-x: hidden;
@@ -27,20 +28,20 @@ body {
 .title-animate.show { opacity: 1; transform: scale(1) translateX(0); }
 
 /* Logo淡入 */
-#logo { width: 200px; opacity: 0; transition: opacity 1.2s ease; margin: 40px auto; }
+#logo { width: 300px; opacity: 0; transition: opacity 1.2s ease; margin: 50px auto; display: block; }
 #logo.show { opacity: 1; }
 
 /* 打字文字效果 */
-#introText { font-size: 18px; line-height: 1.8; color: #555; max-width: 600px; margin: 30px auto; min-height: 120px; white-space: pre-wrap; }
+#introText { font-size: 18px; line-height: 1.8; color: #000; max-width: 600px; margin: 30px auto; min-height: 150px; white-space: pre-wrap; }
 
 /* 開始訂購按鈕 */
-#startBtn { display: none; margin-top: 30px; padding: 10px 25px; font-size: 18px; background-color: #1e4f7b; color: #fff; border: none; border-radius: 12px; cursor: pointer; }
-#startBtn:hover { opacity: 0.85; }
+#startBtn { display: none; margin-top: 30px; padding: 12px 30px; font-size: 18px; background-color: rgba(30,79,123,0.8); color: #fff; border: none; border-radius: 12px; cursor: pointer; transition: opacity 0.3s; }
+#startBtn:hover { opacity: 0.7; }
 
 /* 原訂購表單區塊，初始隱藏 */
 #orderSectionWrapper { display: none; }
 
-/* --- 你的原本訂購表格樣式保留 --- */
+/* --- 原本訂購表格樣式保留 --- */
 h2 {
   font-size: 90px;
   font-weight: 900;
@@ -101,83 +102,12 @@ input[type='checkbox'] { transform: scale(1.2); }
 
 <!-- --- 原本訂購表單 --- -->
 <div id="orderSectionWrapper">
-  <h2 class="title-animate"><span class="english">LIU MAMA Order</span></h2>
-
-  <p class="section-title fade-block">請填寫訂購人資訊</p>
-  <div class="input-container fade-block">
-    <div class="input-group">
-      <label for="customerName">訂購人姓名:</label>
-      <input type="text" id="customerName" placeholder="請輸入姓名">
-    </div>
-    <div class="input-group">
-      <label for="customerPhone">訂購人電話:</label>
-      <input type="text" id="customerPhone" placeholder="請輸入電話" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-    </div>
-  </div>
-
-  <p class="section-title fade-block">請選擇購買數量與寄送方式，系統將自動計算金額</p>
-
-  <div id="orderSection">
-    <table class="fade-block" id="productTable">
-      <colgroup><col><col><col><col></colgroup>
-      <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
-      <tr>
-        <td>麻辣底料包<br><small>(2人份)</small></td>
-        <td>$320</td>
-        <td>
-          <select id="qty1" onchange="calculate()">
-            <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
-            <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
-            <option value="8">8</option><option value="9">9</option><option value="10">10</option>
-            <option value="11">11</option><option value="12">12</option><option value="13">13</option>
-            <option value="14">14</option><option value="15">15</option><option value="16">16</option>
-            <option value="17">17</option><option value="18">18</option><option value="19">19</option>
-            <option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
-            <option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option>
-            <option value="28">28</option><option value="29">29</option><option value="30">30</option>
-            <option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option>
-            <option value="35">35</option>
-          </select>
-        </td>
-        <td id="sub1">$0</td>
-      </tr>
-    </table>
-
-    <table class="fade-block" id="shippingTable">
-      <colgroup><col><col><col><col></colgroup>
-      <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
-      <tr>
-        <td>711超商取貨</td>
-        <td>$60</td>
-        <td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td>
-        <td id="sub711">$0</td>
-      </tr>
-      <tr>
-        <td>郵局宅配</td>
-        <td>$120</td>
-        <td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td>
-        <td id="subPost">$0</td>
-      </tr>
-    </table>
-
-    <div class="total fade-block" id="total">總金額：$0</div>
-
-    <div class="account-box fade-block">
-      <h3>請匯款至以下帳戶:</h3>
-      <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
-      <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
-    </div>
-  </div>
-
-  <div id="buttonContainer" class="fade-block">
-    <button id="screenshotBtn" onclick="screenshotOrder()">截圖訂單</button>
-    <button id="formBtn" onclick="goToForm()">下一步,填寫寄送資訊</button>
-  </div>
-  <p id="formReminder" class="fade-block">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
+  <!-- 保留原本訂購表單 HTML -->
+  ... （請保持你原本的完整表單區塊，跟你提供的一樣）
 </div>
 
 <script>
-/* --- 開場動畫 --- */
+/* --- 打字效果文字 --- */
 const introText = `2015年，劉嘛麻遠赴四川，只為學最正宗麻辣鍋底。
 每鍋湯底，皆手工慢炒、香氣濃郁。
 嚴選中藥材與多種辣椒，熬出可喝的麻辣湯。
@@ -198,7 +128,7 @@ function typeWriter(text, element, speed=40, callback){
   typing();
 }
 
-/* Logo淡入後打字 */
+/* --- 開場動畫 --- */
 window.addEventListener('DOMContentLoaded', ()=>{
   const logo = document.getElementById('logo');
   const startBtn = document.getElementById('startBtn');
@@ -210,10 +140,10 @@ window.addEventListener('DOMContentLoaded', ()=>{
 
   // 文字逐字打
   setTimeout(()=>{
-    typeWriter(introText, textEl, 40, ()=>{
+    typeWriter(introText, textEl, 50, ()=>{
       startBtn.style.display = 'inline-block';
     });
-  }, 1500);
+  }, 1800);
 
   // 開始訂購按鈕點擊事件
   startBtn.addEventListener('click', ()=>{
@@ -248,61 +178,11 @@ window.addEventListener('DOMContentLoaded', ()=>{
 });
 
 /* --- 原本訂購JS功能保留 --- */
-function calculate() {
-  let qty1 = parseInt(document.getElementById('qty1').value)||0;
-  document.getElementById('sub1').innerText = '$'+(qty1*320);
-  let ship = 0;
-  if(document.getElementById('ship711').checked) ship = 60;
-  if(document.getElementById('shipPost').checked) ship = 120;
-  document.getElementById('sub711').innerText = document.getElementById('ship711').checked?'$60':'$0';
-  document.getElementById('subPost').innerText = document.getElementById('shipPost').checked?'$120':'$0';
-  document.getElementById('total').innerText = '總金額：$'+(qty1*320+ship);
-}
-function selectShip(type){
-  if(type==='711') document.getElementById('shipPost').checked=false;
-  if(type==='post') document.getElementById('ship711').checked=false;
-  calculate();
-}
-function copyAccount(){
-  navigator.clipboard.writeText(document.getElementById('accountNumber').innerText);
-  alert('匯款帳號已複製！記得匯款後，再按下前往填寫表單按鈕喔！');
-}
-function screenshotOrder(){
-  html2canvas(document.getElementById('orderSection')).then(canvas=>{
-    const link=document.createElement('a');
-    link.href=canvas.toDataURL('image/png');
-    link.download='liu_mama_order.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    alert('截圖已下載！記得填寫表單喔！');
-  });
-}
-function goToForm(){
-  const name=document.getElementById('customerName').value.trim();
-  const phone=document.getElementById('customerPhone').value.trim();
-  const qty=parseInt(document.getElementById('qty1').value)||0;
-  const ship711=document.getElementById('ship711').checked;
-  const shipPost=document.getElementById('shipPost').checked;
-  document.getElementById('customerName').classList.remove('input-error');
-  document.getElementById('customerPhone').classList.remove('input-error');
-  let err='';
-  if(!name){ err+='請輸入訂購人姓名！\n'; document.getElementById('customerName').classList.add('input-error'); }
-  if(!phone){ err+='請輸入訂購人電話！\n'; document.getElementById('customerPhone').classList.add('input-error'); }
-  else if(!/^\d{10}$/.test(phone)){ err+='訂購人電話必須為10碼數字！\n'; document.getElementById('customerPhone').classList.add('input-error'); }
-  if(qty<=0) err+='請選擇購買數量！\n';
-  if(!ship711 && !shipPost) err+='請選擇寄送方式！';
-  if(err){ alert('訂單填寫不完整:\n'+err); return; }
-  const ship=ship711?'711超商取貨':'郵局宅配';
-  const total=qty*320+(ship711?60:120);
-  const formUrl=`https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url`+
-                `&entry.1152845848=${encodeURIComponent(name)}`+
-                `&entry.178268335=${encodeURIComponent(phone)}`+
-                `&entry.1732058404=${qty}`+
-                `&entry.509305715=${encodeURIComponent(ship)}`+
-                `&entry.1351577488=${total}`;
-  window.open(formUrl,'_blank');
-}
+function calculate() { /* ... */ }
+function selectShip(type){ /* ... */ }
+function copyAccount(){ /* ... */ }
+function screenshotOrder(){ /* ... */ }
+function goToForm(){ /* ... */ }
 </script>
 
 </body>
