@@ -101,38 +101,32 @@ th, td {
 
 th { background-color: #7f9bb3; color: #ffffff; }
 
-/* 數字框縮短到40px，去掉上下箭頭 */
-input[type='number'] {
+/* 數字框改用 text 並去掉黑點 */
+input.qty-input {
   width: 40px;
   height: 28px;
   font-size: 14px;
   text-align: center;
   border: 1px solid #b0bec5;
   border-radius: 6px;
-  -moz-appearance: textfield;
-  -webkit-appearance: none;
-  appearance: none;
 }
 
-input[type='number']::-webkit-outer-spin-button,
-input[type='number']::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
+/* 其他控制 */
 input[type='checkbox'] { transform: scale(1.2); }
 
 .total { font-size: 20px; font-weight: bold; color: #1e4f7b; margin-top: 20px; }
 
+/* 匯款資訊改樣式 */
 .account-box {
-  width: 90%;
-  max-width: 420px;
+  width: 80%;
+  max-width: 360px;
   margin: 15px auto;
-  background: #cfd2d4;
-  color: #000000;
-  padding: 12px;
-  border-radius: 12px;
+  background: #dcdcdc;
+  color: #333333;
+  padding: 10px;
+  border-radius: 10px;
   word-wrap: break-word;
+  font-size: 13px;
 }
 
 .copy-btn,
@@ -163,24 +157,16 @@ input[type='checkbox'] { transform: scale(1.2); }
   table { font-size: 14px; }
   h2 { font-size: 48px; }
   #screenshotBtn, #formBtn { font-size: 14px; padding: 6px 12px; }
-  .account-box p { word-break: break-all; }
+  .account-box { width: 90%; font-size: 12px; }
   #formReminder { font-size: 14px; }
 
   .input-container { flex-direction: column; }
   .input-group { flex-direction: column; align-items: flex-start; }
   .input-group label { text-align: left; width: 100%; margin-bottom: 4px; }
 
-  /* 姓名/電話固定寬度，其他 input 100% */
   #customerName { width: 120px !important; }
   #customerPhone { width: 180px !important; }
   .input-group input:not(#customerName):not(#customerPhone) { width: 100%; }
-
-  /* 確保數字框在手機也去掉箭頭 */
-  input[type='number'] {
-    -webkit-appearance: none;
-    -moz-appearance: textfield;
-    appearance: none;
-  }
 }
 </style>
 </head>
@@ -209,7 +195,7 @@ input[type='checkbox'] { transform: scale(1.2); }
   <tr>
     <td>麻辣底料包<br><small>(2人份)</small></td>
     <td>$320</td>
-    <td><input type="number" id="qty1" min="0" value="0" onchange="calculate()"></td>
+    <td><input type="text" class="qty-input" id="qty1" value="0" oninput="this.value=this.value.replace(/[^0-9]/g,''); calculate()"></td>
     <td id="sub1">$0</td>
   </tr>
 </table>
@@ -234,7 +220,7 @@ input[type='checkbox'] { transform: scale(1.2); }
 <div class="total" id="total">總金額：$0</div>
 
 <div class="account-box">
-  <h3>匯款帳戶資訊</h3>
+  <h3>請匯款至以下帳戶:</h3>
   <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span>　戶名：陳慧珍</p>
   <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
 </div>
