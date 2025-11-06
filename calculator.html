@@ -26,7 +26,12 @@ h2 {
 
 h2 span.english { font-family: 'Amatic SC', cursive; font-weight: 900; }
 
-p { font-size: 14px; color: #555; }
+p, .section-title {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 8px;
+}
 
 /* 訂購人姓名/電話區 */
 .input-container {
@@ -34,7 +39,7 @@ p { font-size: 14px; color: #555; }
   margin: 0 auto 15px;
   text-align: left;
   display: flex;
-  flex-direction: column; /* 垂直排列 */
+  flex-direction: column;
   gap: 8px;
 }
 
@@ -49,8 +54,11 @@ p { font-size: 14px; color: #555; }
   text-align: right;
 }
 
+/* 單獨設定姓名和電話寬度 */
+#customerName { width: 120px; }
+#customerPhone { width: 180px; }
+
 .input-group input {
-  width: 150px; /* 姓名/電話框縮短到150px */
   height: 28px;
   font-size: 14px;
   padding: 4px 8px;
@@ -166,6 +174,7 @@ input[type='checkbox'] { transform: scale(1.2); }
 
 <h2><span class="english">LIU MAMA Order</span></h2>
 
+<p class="section-title">請填寫訂購人資訊</p>
 <div class="input-container">
   <div class="input-group">
     <label for="customerName">訂購人姓名:</label>
@@ -177,7 +186,7 @@ input[type='checkbox'] { transform: scale(1.2); }
   </div>
 </div>
 
-<p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
+<p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
 <div id="orderSection">
 <table>
