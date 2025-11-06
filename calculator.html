@@ -35,26 +35,24 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* 原本是 center 改成上方開始 */
-  padding-top: 20vh; /* 往下移置中感覺 */
+  justify-content: flex-start;
+  padding-top: 20vh;
   z-index: 9999;
   opacity: 1;
   transition: opacity 1s ease;
 }
 #intro.fade-out { opacity: 0; pointer-events: none; }
 
-/* logo 調整 */
 #intro-logo {
-  width: 80vw;          /* 放大 */
+  width: 80vw;
   max-width: 550px;
   opacity: 0;
   transform: scale(1);
   transition: opacity 1.8s ease, transform 2s ease;
 }
-#intro-logo.show { opacity: 1; transform: scale(1.08); } /* 放大時淡入 */
-#intro-logo.hide { opacity: 0; transform: scale(1.08); transition: opacity 1.8s ease; } /* 淡出時不縮小 */
+#intro-logo.show { opacity: 1; transform: scale(1.08); }
+#intro-logo.hide { opacity: 0; transform: scale(1.08); transition: opacity 1.8s ease; }
 
-/* 介紹文字 */
 #intro-text {
   font-family: 'Noto Serif TC', serif;
   font-weight: 500;
@@ -63,7 +61,7 @@ html, body {
   line-height: 2.2;
   opacity: 0;
   white-space: pre-line;
-  margin-top: 40px; /* 原 -80 改成正值讓排版更自然 */
+  margin-top: 40px;
   letter-spacing: 0.5px;
   transition: opacity 1.8s ease;
 }
@@ -126,7 +124,6 @@ p, .section-title { font-size: 14px; color: #555; text-align: center; margin-bot
 }
 .input-error { border-color: #e74c3c !important; }
 
-/* === 表格樣式 === */
 table {
   width: 90%;
   max-width: 500px;
@@ -142,7 +139,7 @@ table {
 }
 th, td { padding: 10px; border-bottom: 1px solid #dfe6e9; text-overflow: ellipsis; overflow: hidden; }
 th { background-color: #7f9bb3; color: #ffffff; }
-select { width: 100%; } /* 讓數字下拉選單不被壓縮 */
+select { width: 100%; }
 input[type='checkbox'] { transform: scale(1.2); }
 
 .total { font-size: 20px; font-weight: bold; color: var(--navy); margin-top: 20px; }
@@ -159,7 +156,6 @@ input[type='checkbox'] { transform: scale(1.2); }
 .copy-btn:hover, #screenshotBtn:hover, #formBtn:hover { opacity: 0.85; }
 #formReminder { font-size: 14px; color: #555; margin-top: 10px; }
 
-/* === 手機優化 === */
 @media (max-width: 480px) {
   h2 { font-size: 60px; }
   table { font-size: 14px; width: 95%; }
@@ -213,9 +209,7 @@ input[type='checkbox'] { transform: scale(1.2); }
         <td>麻辣底料包<br><small>(2人份)</small></td>
         <td>$320</td>
         <td>
-          <select id="qty1" onchange="calculate()">
-            ${Array.from({length: 36}, (_, i) => `<option value="${i}">${i}</option>`).join('')}
-          </select>
+          <select id="qty1" onchange="calculate()"></select>
         </td>
         <td id="sub1">$0</td>
       </tr>
@@ -244,6 +238,44 @@ input[type='checkbox'] { transform: scale(1.2); }
 </main>
 
 <script>
+/* === 自動產生數量選單 === */
+window.addEventListener('DOMContentLoaded', () => {
+  const select = document.getElementById('qty1');
+  for (let i = 1; i <= 35; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = i;
+    select.appendChild(opt);
+  }
+
+  /* === 開場動畫 === */
+  const intro = document.getElementById('intro');
+  const logo = document.getElementById('intro-logo');
+  const text = document.getElementById('intro-text');
+  const btn = document.getElementById('startBtn');
+  const main = document.getElementById('mainContent');
+
+  setTimeout(() => logo.classList.add('show'), 300);
+  setTimeout(() => logo.classList.add('hide'), 2800);
+  setTimeout(() => {
+    logo.style.display = 'none';
+    text.classList.add('show');
+  }, 4500);
+  setTimeout(() => btn.classList.add('show'), 7000);
+
+  btn.addEventListener('click', () => {
+    intro.classList.add('fade-out');
+    setTimeout(() => {
+      intro.style.display = 'none';
+      main.classList.add('show');
+      const title = document.querySelector('h2.title-animate');
+      setTimeout(()=>{title.classList.add('show');}, 300);
+      const blocks = document.querySelectorAll('.fade-block');
+      blocks.forEach((el,index)=>setTimeout(()=>el.classList.add('show'),600+index*400));
+    }, 1000);
+  });
+});
+
 /* === 訂單計算 === */
 function calculate() {
   let qty1 = parseInt(document.getElementById('qty1').value)||0;
@@ -300,36 +332,6 @@ function goToForm(){
                 `&entry.1351577488=${total}`;
   window.open(formUrl,'_blank');
 }
-
-/* === 開場動畫 === */
-window.addEventListener('DOMContentLoaded', () => {
-  const intro = document.getElementById('intro');
-  const logo = document.getElementById('intro-logo');
-  const text = document.getElementById('intro-text');
-  const btn = document.getElementById('startBtn');
-  const main = document.getElementById('mainContent');
-
-  setTimeout(() => logo.classList.add('show'), 300);
-  setTimeout(() => logo.classList.add('hide'), 2800);
-  setTimeout(() => {
-    logo.style.display = 'none';
-    text.classList.add('show');
-  }, 4500);
-  setTimeout(() => btn.classList.add('show'), 7000);
-
-  btn.addEventListener('click', () => {
-    intro.classList.add('fade-out');
-    setTimeout(() => {
-      intro.style.display = 'none';
-      main.classList.add('show');
-      const title = document.querySelector('h2.title-animate');
-      setTimeout(()=>{title.classList.add('show');}, 300);
-      const blocks = document.querySelectorAll('.fade-block');
-      blocks.forEach((el,index)=>setTimeout(()=>el.classList.add('show'),600+index*400));
-    }, 1000);
-  });
-});
 </script>
-
 </body>
 </html>
