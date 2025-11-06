@@ -182,12 +182,9 @@ input[type='checkbox'] { transform: scale(1.2); }
     <td>$320</td>
     <td>
       <select id="qty1" onchange="calculate()">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
+        <option value="0">0 – 請選擇</option>
+        <!-- 1~100 選項 -->
+        ${[...Array(100)].map((_, i) => `<option value="${i+1}">${i+1}</option>`).join('')}
       </select>
     </td>
     <td id="sub1">$0</td>
