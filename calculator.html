@@ -54,7 +54,7 @@ p, .section-title {
   text-align: right;
 }
 
-/* 單獨設定姓名和電話寬度 */
+/* 姓名/電話輸入框寬度 */
 #customerName { width: 120px; }
 #customerPhone { width: 180px; }
 
@@ -110,6 +110,8 @@ input[type='number'] {
   border: 1px solid #b0bec5;
   border-radius: 6px;
   -moz-appearance: textfield;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 input[type='number']::-webkit-outer-spin-button,
@@ -172,6 +174,13 @@ input[type='checkbox'] { transform: scale(1.2); }
   #customerName { width: 120px !important; }
   #customerPhone { width: 180px !important; }
   .input-group input:not(#customerName):not(#customerPhone) { width: 100%; }
+
+  /* 確保數字框在手機也去掉箭頭 */
+  input[type='number'] {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: none;
+  }
 }
 </style>
 </head>
@@ -297,4 +306,24 @@ function goToForm() {
   if (qty <= 0) { errorMsg += '請選擇購買數量！\n'; document.getElementById('qty1').classList.add('input-error'); }
   if (!ship711 && !shipPost) { errorMsg += '請選擇寄送方式！'; }
 
-  if
+  if (errorMsg) {
+    alert('訂單填寫不完整:\n' + errorMsg);
+    return;
+  }
+
+  const ship = ship711 ? '711超商取貨' : '郵局宅配';
+  const total = qty * 320 + (ship711 ? 60 : 120);
+
+  const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url` +
+                  `&entry.1152845848=${encodeURIComponent(name)}` +
+                  `&entry.178268335=${encodeURIComponent(phone)}` +
+                  `&entry.1732058404=${qty}` +
+                  `&entry.509305715=${encodeURIComponent(ship)}` +
+                  `&entry.1351577488=${total}`;
+
+  window.open(formUrl, '_blank');
+}
+</script>
+
+</body>
+</html>
