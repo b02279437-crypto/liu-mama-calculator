@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -81,11 +84,11 @@ html, body {
   cursor: pointer;
   opacity: 0;
   transform: translateY(10px);
-  transition: opacity 1.2s ease, transform 0.6s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  transition: opacity 1.2s ease, transform 0.6s ease, box-shadow 0.3s ease;
 }
 #startBtn.show { opacity: 1; transform: translateY(0); }
 #startBtn:hover {
-  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
   transform: translateY(-2px) scale(1.03);
 }
 
@@ -109,7 +112,7 @@ h2 span.english { font-family: 'Amatic SC', cursive; font-weight: 900; }
 
 p, .section-title { font-size: 14px; color: #555; text-align: center; margin-bottom: 8px; }
 
-.input-container { max-width: 500px; margin: 0 auto 20px; text-align: left; display: flex; flex-direction: column; gap: 8px; padding: 0 30px; }
+.input-container { max-width: 500px; margin: 0 auto 15px; text-align: left; display: flex; flex-direction: column; gap: 8px; }
 .input-group { display: flex; align-items: center; flex-wrap: wrap; }
 .input-group label { width: 120px; margin-right: 8px; text-align: right; }
 .input-group input, .input-group select {
@@ -147,36 +150,24 @@ input[type='checkbox'] { transform: scale(1.2); }
 .account-box { width: 85%; max-width: 350px; margin: 15px auto; background: #cfd2d4; color: #333333; padding: 10px; border-radius: 10px; font-size: 13px; }
 
 .copy-btn, #screenshotBtn, #formBtn {
-  border: none;
-  padding: 14px 40px;
-  border-radius: 999px;
-  font-size: 20px;
-  font-family: 'Amatic SC', cursive;
-  letter-spacing: 1.5px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: none; padding: 10px 18px; border-radius: 12px; font-size: 16px; cursor: pointer; font-weight: bold;
 }
 .copy-btn { background-color: var(--navy); color: white; margin-top: 8px; }
-#screenshotBtn { background-color: var(--milk); color: #9e3520; }
+#screenshotBtn { background-color: #F4E0BE; color: #9e3520; }
 #formBtn { background-color: #9e3520; color: #FFFFFF; }
-#buttonContainer { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-top: 25px; }
-.copy-btn:hover, #screenshotBtn:hover, #formBtn:hover {
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-  transform: translateY(-2px) scale(1.03);
-}
+#buttonContainer { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+.copy-btn:hover, #screenshotBtn:hover, #formBtn:hover { opacity: 0.85; }
 #formReminder { font-size: 14px; color: #555; margin-top: 10px; }
 
-/* === 手機優化 === */
 @media (max-width: 480px) {
-  body { padding: 0 10px; }
   h2 { font-size: 60px; }
   table { font-size: 14px; width: 95%; }
-  .input-container { width: 100%; padding: 0 20px; }
-  .account-box { width: 90%; }
-  #buttonContainer { flex-direction: column; align-items: center; gap: 15px; }
-  #screenshotBtn, #formBtn { width: 90%; font-size: 18px; padding: 12px 0; }
+  #screenshotBtn, #formBtn { font-size: 14px; padding: 8px 12px; }
+  .account-box { font-size: 12px; width: 95%; }
+  .input-container { width: 90%; }
+  .input-group { flex-direction: column; align-items: flex-start; }
+  .input-group label { text-align: left; width: 100%; margin-bottom: 4px; }
+  select, input { font-size: 15px !important; }
 }
 </style>
 </head>
@@ -257,8 +248,8 @@ window.addEventListener('DOMContentLoaded', () => {
     opt.textContent = i;
     select.appendChild(opt);
   }
-  select.value = "0";
-  calculate();
+  select.value = "0"; // 預設是0
+  calculate();        // 初始化金額
 
   /* === 開場動畫 === */
   const intro = document.getElementById('intro');
