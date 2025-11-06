@@ -35,15 +35,12 @@ h2 span.english { font-family: 'Amatic SC', cursive; font-weight: 900; }
 
 p, .section-title { font-size: 14px; color: #555; text-align: center; margin-bottom: 8px; }
 
-/* 調整訂購人姓名、電話字體大小與間距 */
-.input-container { 
-  max-width: 500px; 
-  margin: 0 auto 5px; /* 下方空白減少 */
-  text-align: left; 
-  display: flex; 
-  flex-direction: column; 
-  gap: 4px; /* 姓名電話距離縮小 */
+/* 訂購人姓名/電話調整 */
+.input-container, .input-container input, .input-container select {
+  font-size: 16px !important; /* 跟表格一致，可改14px */
+  margin-bottom: 0 !important;
 }
+.input-container { gap: 4px !important; margin-bottom: 5px !important; }
 
 .input-group { display: flex; align-items: center; }
 .input-group label { width: 120px; margin-right: 8px; text-align: right; }
@@ -52,7 +49,6 @@ p, .section-title { font-size: 14px; color: #555; text-align: center; margin-bot
 
 .input-group input, .input-group select { 
   height: 28px; 
-  font-size: 14px; /* 跟表格文字一致 */
   padding: 4px 8px; 
   border: 1px solid #b0bec5; 
   border-radius: 6px; 
@@ -69,12 +65,12 @@ th, td { padding: 10px; border-bottom: 1px solid #dfe6e9; white-space: nowrap; o
 th { background-color: #7f9bb3; color: #ffffff; }
 input[type='checkbox'] { transform: scale(1.2); }
 
-/* 表格後的區塊整體往上移 */
-.total { font-size: 20px; font-weight: bold; color: #1e4f7b; margin-top: 10px; }
+/* 表格後區塊上移 */
+.total { font-size: 20px; font-weight: bold; color: #1e4f7b; margin-top: 10px !important; }
 .account-box { 
   width: 80%; 
   max-width: 350px; 
-  margin: 10px auto; 
+  margin: 10px auto !important; 
   background: #cfd2d4; 
   color: #333333; 
   padding: 10px; 
@@ -82,13 +78,14 @@ input[type='checkbox'] { transform: scale(1.2); }
   word-wrap: break-word; 
   font-size: 13px; 
 }
+
 .copy-btn, #screenshotBtn, #formBtn { border: none; padding: 8px 16px; border-radius: 12px; font-size: 16px; cursor: pointer; font-weight: bold; }
 .copy-btn { background-color: #1e4f7b; color: white; margin-top: 8px; }
 #screenshotBtn { background-color: #F4E0BE; color: #9e3520; }
 #formBtn { background-color: #9e3520; color: #FFFFFF; }
-#buttonContainer { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 10px; }
+#buttonContainer { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 10px !important; }
 .copy-btn:hover, #screenshotBtn:hover, #formBtn:hover { opacity: 0.85; }
-#formReminder { font-size: 14px; color: #555; margin-top: 5px; }
+#formReminder { font-size: 14px; color: #555; margin-top: 5px !important; }
 
 @media (max-width: 480px) {
   table { font-size: 14px; }
@@ -132,16 +129,41 @@ input[type='checkbox'] { transform: scale(1.2); }
       <td>$320</td>
       <td>
         <select id="qty1" onchange="calculate()">
-          <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
-          <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
-          <option value="8">8</option><option value="9">9</option><option value="10">10</option>
-          <option value="11">11</option><option value="12">12</option><option value="13">13</option>
-          <option value="14">14</option><option value="15">15</option><option value="16">16</option>
-          <option value="17">17</option><option value="18">18</option><option value="19">19</option>
-          <option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
-          <option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option>
-          <option value="28">28</option><option value="29">29</option><option value="30">30</option>
-          <option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option>
+          <option value="24">24</option>
+          <option value="25">25</option>
+          <option value="26">26</option>
+          <option value="27">27</option>
+          <option value="28">28</option>
+          <option value="29">29</option>
+          <option value="30">30</option>
+          <option value="31">31</option>
+          <option value="32">32</option>
+          <option value="33">33</option>
+          <option value="34">34</option>
           <option value="35">35</option>
         </select>
       </td>
