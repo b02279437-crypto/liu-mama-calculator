@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LIU MAMA Order</title>
 
+<!-- 中國風毛筆字 -->
 <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
@@ -18,48 +20,54 @@ body {
   overflow-x: hidden;
 }
 
-/* 開場 Logo 動畫 */
-#logoOverlay {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: #f7f6f2;
-  display: flex; justify-content: center; align-items: center;
-  z-index: 9999;
-}
-#logoOverlay img {
-  width: 200px;
+/* --- Logo & 打字文字 --- */
+#logo {
+  width: 250px;
   opacity: 0;
-  transition: opacity 2s ease;
+  margin: 150px auto 20px auto;
+  display: block;
+  transition: opacity 3s ease;
 }
-
-/* 文字打字效果 */
 #introText {
   font-family: 'Ma Shan Zheng', cursive;
-  font-size: 60px;
-  color: #1e4f7b;
+  font-size: 26px;
+  color: #2c3e50;
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 50px auto;
+  min-height: 150px;
+  white-space: pre-wrap;
   opacity: 0;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  white-space: nowrap;
 }
 
-/* 淡入動畫基礎 */
+/* 開始訂購按鈕 */
+#startBtn {
+  display: none;
+  margin-top: 30px;
+  padding: 12px 30px;
+  font-size: 20px;
+  background-color: rgba(30, 79, 123, 0.85);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+#startBtn:hover { opacity: 0.85; }
+
+/* --- 淡入動畫 --- */
 .fade-block { opacity: 0; transform: translateY(10px); transition: opacity 0.8s ease, transform 0.8s ease; }
 .fade-block.show { opacity: 1; transform: translateY(0); }
 
-/* 標題特殊動畫：放大+左右滑入 */
-.title-animate { opacity: 0; transform: scale(0.5) translateX(-50px); transition: all 1s ease; }
-.title-animate.show { opacity: 1; transform: scale(1) translateX(0); }
+/* 標題動畫 */
+h2.title-animate { opacity: 0; transform: scale(0.5) translateX(-50px); transition: all 1s ease; }
+h2.title-animate.show { opacity: 1; transform: scale(1) translateX(0); }
 
-/* 文字樣式 */
+/* 表單樣式 */
 h2 { font-size: 90px; font-weight: 900; color: #1e4f7b; margin: 20px 0 10px 0; }
 h2 span.english { font-family: 'Amatic SC', cursive; font-weight: 900; }
 
 p, .section-title { font-size: 14px; color: #555; text-align: center; margin-bottom: 8px; }
 
-/* 表單區域 */
 .input-container { max-width: 500px; margin: 0 auto 15px; text-align: left; display: flex; flex-direction: column; gap: 8px; }
 .input-group { display: flex; align-items: center; }
 .input-group label { width: 120px; margin-right: 8px; text-align: right; }
@@ -105,14 +113,13 @@ input[type='checkbox'] { transform: scale(1.2); }
 </head>
 <body>
 
-<!-- 開場 Logo -->
-<div id="logoOverlay">
-  <img src="https://i.imgur.com/0G4V6Qx.png" alt="LIU MAMA Logo" id="logoImage">
-  <div id="introText"></div>
-</div>
+<!-- 開場動畫 -->
+<img id="logo" src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/logo.png" alt="LIU MAMA Logo">
+<div id="introText"></div>
+<button id="startBtn">開始訂購</button>
 
-<!-- 原本表單內容 -->
-<h2 class="title-animate"><span class="english">LIU MAMA Order</span></h2>
+<!-- 原本訂單表單 -->
+<h2 class="title-animate fade-block"><span class="english">LIU MAMA Order</span></h2>
 
 <p class="section-title fade-block">請填寫訂購人資訊</p>
 <div class="input-container fade-block">
@@ -137,17 +144,7 @@ input[type='checkbox'] { transform: scale(1.2); }
       <td>$320</td>
       <td>
         <select id="qty1" onchange="calculate()">
-          <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
-          <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
-          <option value="8">8</option><option value="9">9</option><option value="10">10</option>
-          <option value="11">11</option><option value="12">12</option><option value="13">13</option>
-          <option value="14">14</option><option value="15">15</option><option value="16">16</option>
-          <option value="17">17</option><option value="18">18</option><option value="19">19</option>
-          <option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
-          <option value="24">24</option><option value="25">25</option><option value="26">26</option>
-          <option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option>
-          <option value="31">31</option><option value="32">32</option><option value="33">33</option>
-          <option value="34">34</option><option value="35">35</option>
+          ${Array.from({length:36}, (_,i)=>`<option value="${i}">${i}</option>`).join('')}
         </select>
       </td>
       <td id="sub1">$0</td>
@@ -187,7 +184,75 @@ input[type='checkbox'] { transform: scale(1.2); }
 <p id="formReminder" class="fade-block">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
 
 <script>
-/* 計算與表單功能 */
+// 打字文字內容
+const introText = `2015年，劉嘛麻遠赴四川，只為學最正宗麻辣鍋底。
+每鍋湯底，皆手工慢炒、香氣濃郁。
+嚴選中藥材與多種辣椒，熬出可喝的麻辣湯。
+在家也能享火鍋店級滋味。
+劉嘛麻，初心麻辣，溫暖每一餐。`;
+
+function typeWriter(text, element, speed=50, callback){
+  let i=0;
+  function typing(){
+    if(i<text.length){
+      element.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typing,speed);
+    }else if(callback){callback();}
+  }
+  typing();
+}
+
+/* Logo → 文字 → 按鈕 */
+window.addEventListener('DOMContentLoaded', ()=>{
+  const logo = document.getElementById('logo');
+  const textEl = document.getElementById('introText');
+  const startBtn = document.getElementById('startBtn');
+
+  // Logo淡入
+  setTimeout(()=>{ logo.style.opacity=1; }, 300);
+
+  // Logo停留3秒後淡出
+  setTimeout(()=>{
+    logo.style.transition='opacity 3s ease';
+    logo.style.opacity=0;
+  }, 6000);
+
+  // 打字文字
+  setTimeout(()=>{
+    textEl.style.transition='opacity 3s ease';
+    textEl.style.opacity=1;
+    typeWriter(introText,textEl,50, ()=>{
+      startBtn.style.display='inline-block';
+    });
+  }, 9000);
+
+  // 訂單區塊淡入
+  const blocks = [
+    document.querySelector('h2.title-animate'),
+    document.querySelector('.input-container'),
+    document.querySelector('.section-title'),
+    document.querySelector('#productTable'),
+    document.querySelector('#shippingTable'),
+    document.querySelector('.total'),
+    document.querySelector('.account-box'),
+    document.querySelector('#buttonContainer'),
+    document.querySelector('#formReminder')
+  ];
+  blocks.forEach((el,index)=>{
+    if(!el) return;
+    setTimeout(()=>{el.classList.add('show');}, 12000+index*400);
+  });
+
+  // 表格每一列交錯淡入
+  const trs = [...document.querySelectorAll('#productTable tr, #shippingTable tr')];
+  trs.forEach((tr,i)=>{
+    tr.classList.add('fade-block');
+    setTimeout(()=>{tr.classList.add('show');}, 12400+i*350);
+  });
+});
+
+// --- 訂單功能 JS 保留 ---
 function calculate() {
   let qty1 = parseInt(document.getElementById('qty1').value)||0;
   document.getElementById('sub1').innerText = '$'+(qty1*320);
@@ -243,59 +308,6 @@ function goToForm(){
                 `&entry.1351577488=${total}`;
   window.open(formUrl,'_blank');
 }
-
-/* 頁面加載動畫 */
-window.addEventListener('DOMContentLoaded', () => {
-  const logo = document.getElementById('logoImage');
-  const intro = document.getElementById('introText');
-  const logoOverlay = document.getElementById('logoOverlay');
-  
-  // Logo 慢慢淡入
-  setTimeout(()=>{ logo.style.opacity = 1; }, 100);
-  // 停留 3 秒後淡出
-  setTimeout(()=>{
-    logo.style.opacity = 0;
-  }, 3100);
-  // 文字逐字打出
-  setTimeout(()=>{
-    logoOverlay.style.background = 'transparent';
-    const text = "LIU MAMA Order";
-    intro.style.opacity = 1;
-    let i=0;
-    const interval = setInterval(()=>{
-      if(i<text.length){
-        intro.innerHTML += text[i];
-        i++;
-      } else { clearInterval(interval); showForm(); }
-    }, 150);
-  }, 3600);
-
-  // 顯示表單區塊
-  function showForm(){
-    logoOverlay.style.display = 'none';
-    const blocks = [
-      document.querySelector('.input-container'),
-      document.querySelector('.section-title'),
-      document.querySelector('#productTable'),
-      document.querySelector('#shippingTable'),
-      document.querySelector('.total'),
-      document.querySelector('.account-box'),
-      document.querySelector('#buttonContainer'),
-      document.querySelector('#formReminder')
-    ];
-    blocks.forEach((el,index)=>{
-      if(!el) return;
-      setTimeout(()=>{el.classList.add('show');}, 100+index*300);
-    });
-
-    // 表格每一列交錯淡入
-    const trs = [...document.querySelectorAll('#productTable tr, #shippingTable tr')];
-    trs.forEach((tr,i)=>{
-      tr.classList.add('fade-block');
-      setTimeout(()=>{tr.classList.add('show');}, 200+i*200);
-    });
-  }
-});
 </script>
 
 </body>
