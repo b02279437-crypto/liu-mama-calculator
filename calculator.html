@@ -9,239 +9,145 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-:root {
-  --milk: #E8D9C4;
-  --navy: #1E4F7B;
-  --bg: #f7f6f2;
+:root{
+  --milk:#E8D9C4;
+  --navy:#1E4F7B;
+  --bg:#f7f6f2;
+  --gray-blue:#7f9bb3;
+  --red:#9e3520;
 }
 
-/* === 全域 === */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background-color: var(--bg);
-  color: #2c3e50;
-  font-family: 'Noto Serif TC', 'Microsoft JhengHei', serif;
-  text-align: center;
-  overflow-x: hidden;
+/* ===== 全域 ===== */
+html,body{
+  margin:0; padding:0; height:100%;
+  background-color:var(--bg); color:#2c3e50;
+  font-family:'Noto Serif TC','Microsoft JhengHei',serif;
+  text-align:center; overflow-x:hidden;
 }
 
-/* === 開場動畫 === */
-#intro {
-  position: fixed;
-  inset: 0;
-  background-color: var(--bg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 20vh;
-  z-index: 9999;
-  opacity: 1;
-  transition: opacity 1s ease;
+/* ===== 開場動畫層 ===== */
+#intro{
+  position:fixed; inset:0; background-color:var(--bg);
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+  padding-top:20vh; z-index:9999; opacity:1; transition:opacity 1s ease;
 }
-#intro.fade-out { opacity: 0; pointer-events: none; }
+#intro.fade-out{opacity:0; pointer-events:none;}
 
-#intro-logo {
-  width: 80vw;
-  max-width: 550px;
-  opacity: 0;
-  transform: scale(1);
-  transition: opacity 1.8s ease, transform 2s ease;
+#intro-logo{
+  width:80vw; max-width:550px; opacity:0; transform:scale(1);
+  transition:opacity 1.8s ease, transform 2s ease;
 }
-#intro-logo.show { opacity: 1; transform: scale(1.08); }
-#intro-logo.hide { opacity: 0; transform: scale(1.08); transition: opacity 1.8s ease; }
+#intro-logo.show{opacity:1; transform:scale(1.08);}
+#intro-logo.hide{opacity:0; transform:scale(1.08); transition:opacity 1.8s ease;}
 
-#intro-text {
-  font-weight: 500;
-  color: #333;
-  font-size: 15px;
-  line-height: 2.2;
-  opacity: 0;
-  white-space: pre-line;
-  margin-top: 40px;
-  letter-spacing: 0.5px;
-  transition: opacity 1.8s ease;
+#intro-text{
+  font-weight:500; color:#333; font-size:15px; line-height:2.2;
+  opacity:0; white-space:pre-line; margin-top:40px; letter-spacing:0.5px;
+  transition:opacity 1.8s ease;
 }
-#intro-text.show { opacity: 1; }
+#intro-text.show{opacity:1;}
 
-#startBtn {
-  margin-top: 60px;
-  padding: 14px 46px;
-  font-size: 30px;
-  font-family: 'Amatic SC', cursive;
-  letter-spacing: 2px;
-  background-color: var(--milk);
-  color: var(--navy);
-  border: none;
-  border-radius: 999px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  cursor: pointer;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 1.2s ease, transform 0.6s ease, box-shadow 0.3s ease;
+#startBtn{
+  margin-top:60px; padding:14px 46px; font-size:30px;
+  font-family:'Amatic SC',cursive; letter-spacing:2px;
+  background-color:rgba(232,217,196,0.85); color:var(--navy);
+  border:none; border-radius:999px; cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  opacity:0; transform:translateY(10px);
+  transition:opacity 1.2s ease, transform .6s ease, box-shadow .3s ease, background .3s ease;
 }
-#startBtn.show { opacity: 1; transform: translateY(0); }
-#startBtn:hover {
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-  transform: translateY(-2px) scale(1.03);
+#startBtn.show{opacity:1; transform:translateY(0);}
+#startBtn:hover{background-color:rgba(232,217,196,0.95); box-shadow:0 6px 18px rgba(0,0,0,0.15); transform:translateY(-2px) scale(1.03);}
+
+/* ===== 主內容入場 ===== */
+main{opacity:0; visibility:hidden; transition:opacity 1.2s ease;}
+main.show{opacity:1; visibility:visible;}
+.fade-block{opacity:0; transform:translateY(10px); transition:opacity .8s ease, transform .8s ease;}
+.fade-block.show{opacity:1; transform:translateY(0);}
+.title-animate{opacity:0; transform:scale(.5) translateX(-50px); transition:all 1s ease;}
+.title-animate.show{opacity:1; transform:scale(1) translateX(0);}
+
+/* ===== 標題 ===== */
+h2{
+  font-size:90px; font-weight:900; color:var(--navy);
+  margin:20px 0 10px 0;
 }
+h2 span.english{font-family:'Amatic SC',cursive; font-weight:900;}
+p,.section-title{font-size:14px; color:#555; text-align:center; margin-bottom:8px;}
 
-/* === 表單 === */
-main { opacity: 0; visibility: hidden; transition: opacity 1.2s ease; }
-main.show { opacity: 1; visibility: visible; }
-
-.fade-block { opacity: 0; transform: translateY(10px); transition: opacity 0.8s ease, transform 0.8s ease; }
-.fade-block.show { opacity: 1; transform: translateY(0); }
-
-.title-animate { opacity: 0; transform: scale(0.5) translateX(-50px); transition: all 1s ease; }
-.title-animate.show { opacity: 1; transform: scale(1) translateX(0); }
-
-h2 {
-  font-size: 90px;
-  font-weight: 900;
-  color: var(--navy);
-  margin: 20px 0 10px 0;
+/* ===== 訂購人資訊卡 ===== */
+.input-container{
+  max-width:500px; margin:0 auto 30px; text-align:left;
+  background:#fff; padding:25px 28px; border-radius:16px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.05);
 }
-h2 span.english { font-family: 'Amatic SC', cursive; font-weight: 900; }
+.input-group{display:flex; flex-direction:column; gap:5px; margin-bottom:18px;}
+.input-group label{font-size:14px; color:#333;}
+.input-group input{
+  font-size:14px; padding:8px 10px; border:1px solid #ccc; border-radius:8px; background:#fafafa;
+  transition:all .3s ease;
+}
+.input-group input:focus{border-color:#5F93C2; background:#fff; box-shadow:0 0 6px rgba(95,147,194,.25);}
+.input-error{border-color:#e74c3c !important;}
 
-p, .section-title {
-  font-size: 14px;
-  color: #555;
-  text-align: center;
-  margin-bottom: 8px;
+/* ===== 表格 ===== */
+table{
+  width:90%; max-width:500px; margin:15px auto;
+  border-collapse:separate; border-spacing:0; background:#fff; border-radius:14px; overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,.1); font-size:15px; table-layout:fixed;
 }
+th,td{padding:10px; border-bottom:1px solid #dfe6e9; text-overflow:ellipsis; overflow:hidden;}
+th{background-color:var(--gray-blue); color:#fff;}
+select{width:100%; font-size:14px; padding:5px 6px; border-radius:6px; border:1px solid #ccc;}
+input[type='checkbox']{transform:scale(1.2);}
 
-/* === 表單輸入區（優化） === */
-.input-container {
-  max-width: 500px;
-  margin: 0 auto 25px;
-  text-align: left;
-  background: #fff;
-  padding: 20px 25px;
-  border-radius: 14px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
+/* ===== 總金額 ===== */
+.total{font-size:20px; font-weight:bold; color:var(--navy); margin-top:20px;}
 
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-bottom: 15px;
+/* ===== 匯款帳戶：霧面玻璃 ===== */
+.account-box{
+  width:85%; max-width:350px; margin:25px auto;
+  background:rgba(255,255,255,0.45);
+  backdrop-filter:blur(12px) brightness(1.05);
+  border:1px solid rgba(255,255,255,0.4);
+  color:#333; padding:16px; border-radius:16px; font-size:13px;
+  box-shadow:0 6px 18px rgba(30,79,123,0.1), inset 0 0 20px rgba(255,255,255,0.3);
+  position:relative;
 }
+.account-box::before{
+  content:""; position:absolute; inset:0; border-radius:16px;
+  background:radial-gradient(120% 60% at 0% 0%, rgba(255,255,255,.35), transparent 55%);
+  pointer-events:none;
+}
+.account-box h3{margin:8px 0; color:var(--navy); font-weight:600;}
 
-.input-group label {
-  font-size: 14px;
-  color: #333;
+/* ===== 按鈕（與開場一致的半透明浮起） ===== */
+.copy-btn,#screenshotBtn,#formBtn{
+  border:none; padding:12px 20px; border-radius:999px; font-size:16px; cursor:pointer; font-weight:bold;
+  transition:all .3s ease; box-shadow:0 4px 10px rgba(0,0,0,.1);
+  background-color:rgba(232,217,196,0.85); color:var(--navy);
 }
+.copy-btn:hover,#screenshotBtn:hover,#formBtn:hover{
+  background-color:rgba(232,217,196,0.95); transform:translateY(-2px);
+  box-shadow:0 6px 15px rgba(0,0,0,.15);
+}
+#buttonContainer{display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin-top:25px;}
+#formReminder{font-size:14px; color:#555; margin-top:10px;}
 
-.input-group input {
-  font-size: 14px;
-  padding: 8px 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-sizing: border-box;
-  transition: all 0.3s ease;
-  background-color: #fafafa;
-}
-.input-group input:focus {
-  border-color: #5F93C2;
-  background-color: #fff;
-  box-shadow: 0 0 6px rgba(95,147,194,0.25);
-}
-
-/* === 商品表格 === */
-table {
-  width: 90%;
-  max-width: 500px;
-  margin: 15px auto;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: #ffffff;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  font-size: 15px;
-  table-layout: fixed;
-}
-th, td {
-  padding: 10px;
-  border-bottom: 1px solid #dfe6e9;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-th { background-color: #5F93C2; color: #ffffff; }
-select {
-  width: 100%;
-  font-size: 14px;
-  padding: 5px 6px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-input[type='checkbox'] { transform: scale(1.2); }
-
-/* === 小計與帳戶區 === */
-.total {
-  font-size: 20px;
-  font-weight: bold;
-  color: var(--navy);
-  margin-top: 20px;
-}
-
-.account-box {
-  width: 85%;
-  max-width: 350px;
-  margin: 20px auto;
-  background: #f0f0f0;
-  color: #333333;
-  padding: 12px;
-  border-radius: 10px;
-  font-size: 13px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-}
-
-/* === 按鈕 === */
-.copy-btn, #screenshotBtn, #formBtn {
-  border: none;
-  padding: 10px 18px;
-  border-radius: 12px;
-  font-size: 15px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-}
-.copy-btn { background-color: var(--navy); color: white; margin-top: 8px; }
-#screenshotBtn { background-color: #F4E0BE; color: #9e3520; }
-#formBtn { background-color: #9e3520; color: #FFFFFF; }
-#buttonContainer { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 25px; }
-.copy-btn:hover, #screenshotBtn:hover, #formBtn:hover { opacity: 0.85; }
-
-#formReminder { font-size: 14px; color: #555; margin-top: 10px; }
-
-/* === 手機版優化 === */
-@media (max-width: 480px) {
-  h2 { font-size: 58px; }
-  table { font-size: 13.5px; width: 95%; }
-  .input-container {
-    width: 90%;
-    padding: 15px 18px;
-    margin-bottom: 20px;
-  }
-  .input-group input {
-    font-size: 13.5px;
-    padding: 7px 9px;
-  }
-  label { font-size: 13.5px; }
-  #screenshotBtn, #formBtn { font-size: 13.5px; padding: 8px 14px; }
-  .account-box { font-size: 12.5px; width: 90%; }
-  .total { font-size: 18px; }
+/* ===== 手機優化 ===== */
+@media (max-width:480px){
+  h2{font-size:60px;}
+  table{font-size:13.5px; width:95%;}
+  .input-container{width:90%; padding:18px 18px;}
+  .input-group input{font-size:13.5px; padding:7px 9px;}
+  .account-box{font-size:12.5px; width:90%;}
+  .copy-btn,#screenshotBtn,#formBtn{font-size:14px; padding:10px 18px;}
 }
 </style>
 </head>
 
 <body>
-<!-- === 開場動畫 === -->
+<!-- ===== 開場動畫 ===== -->
 <div id="intro">
   <img id="intro-logo" src="https://github.com/b02279437-crypto/liu-mama-calculator/blob/main/logo.png?raw=true" alt="Logo">
   <div id="intro-text">
@@ -254,7 +160,7 @@ input[type='checkbox'] { transform: scale(1.2); }
   <button id="startBtn">Start Order</button>
 </div>
 
-<!-- === 主內容 === -->
+<!-- ===== 主內容 ===== -->
 <main id="mainContent">
   <h2 class="title-animate"><span class="english">LIU MAMA Order</span></h2>
   <p class="section-title fade-block">請填寫訂購人資訊</p>
@@ -306,53 +212,48 @@ input[type='checkbox'] { transform: scale(1.2); }
 </main>
 
 <script>
-/* === 數量選單 === */
-window.addEventListener('DOMContentLoaded', () => {
-  const select = document.getElementById('qty1');
-  for (let i = 0; i <= 35; i++) {
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.textContent = i;
-    select.appendChild(opt);
-  }
-  select.value = "0";
-  calculate();
+window.addEventListener('DOMContentLoaded',()=>{
+  const select=document.getElementById('qty1');
+  for(let i=0;i<=35;i++){const opt=document.createElement('option');opt.value=i;opt.textContent=i;select.appendChild(opt);}
+  select.value="0"; calculate();
 
-  /* === 開場動畫 === */
-  const intro = document.getElementById('intro');
-  const logo = document.getElementById('intro-logo');
-  const text = document.getElementById('intro-text');
-  const btn = document.getElementById('startBtn');
-  const main = document.getElementById('mainContent');
+  const intro=document.getElementById('intro');
+  const logo=document.getElementById('intro-logo');
+  const text=document.getElementById('intro-text');
+  const btn=document.getElementById('startBtn');
+  const main=document.getElementById('mainContent');
 
-  setTimeout(() => logo.classList.add('show'), 300);
-  setTimeout(() => logo.classList.add('hide'), 2800);
-  setTimeout(() => { logo.style.display = 'none'; text.classList.add('show'); }, 4500);
-  setTimeout(() => btn.classList.add('show'), 7000);
+  setTimeout(()=>logo.classList.add('show'),300);
+  setTimeout(()=>logo.classList.add('hide'),2800);
+  setTimeout(()=>{logo.style.display='none'; text.classList.add('show');},4500);
+  setTimeout(()=>btn.classList.add('show'),6700); // 原本7000 改為6700
 
-  btn.addEventListener('click', () => {
+
+```html
+  btn.addEventListener('click',()=>{
     intro.classList.add('fade-out');
-    setTimeout(() => {
-      intro.style.display = 'none';
+    setTimeout(()=>{
+      intro.style.display='none';
       main.classList.add('show');
-      const title = document.querySelector('h2.title-animate');
-      setTimeout(()=>{title.classList.add('show');}, 300);
-      const blocks = document.querySelectorAll('.fade-block');
-      blocks.forEach((el,index)=>setTimeout(()=>el.classList.add('show'),600+index*400));
-    }, 1000);
+      const title=document.querySelector('h2.title-animate');
+      setTimeout(()=>{title.classList.add('show');},300);
+      const blocks=document.querySelectorAll('.fade-block');
+      blocks.forEach((el,i)=>setTimeout(()=>el.classList.add('show'),600+i*400));
+    },1000);
   });
 });
 
-/* === 計算金額 === */
-function calculate() {
-  let qty1 = parseInt(document.getElementById('qty1').value)||0;
-  document.getElementById('sub1').innerText = '$'+(qty1*320);
-  let ship = 0;
-  if(document.getElementById('ship711').checked) ship = 60;
-  if(document.getElementById('shipPost').checked) ship = 120;
-  document.getElementById('sub711').innerText = document.getElementById('ship711').checked?'$60':'$0';
-  document.getElementById('subPost').innerText = document.getElementById('shipPost').checked?'$120':'$0';
-  document.getElementById('total').innerText = '總金額：$'+(qty1*320+ship);
+function calculate(){
+  const qty1=parseInt(document.getElementById('qty1').value)||0;
+  document.getElementById('sub1').innerText='$'+(qty1*320);
+  let ship=0;
+  const c711=document.getElementById('ship711').checked;
+  const cPost=document.getElementById('shipPost').checked;
+  if(c711) ship=60;
+  if(cPost) ship=120;
+  document.getElementById('sub711').innerText=c711?'$60':'$0';
+  document.getElementById('subPost').innerText=cPost?'$120':'$0';
+  document.getElementById('total').innerText='總金額：$'+(qty1*320+ship);
 }
 function selectShip(type){
   if(type==='711') document.getElementById('shipPost').checked=false;
@@ -391,12 +292,12 @@ function goToForm(){
   if(err){ alert('訂單填寫不完整:\n'+err); return; }
   const ship=ship711?'711超商取貨':'郵局宅配';
   const total=qty*320+(ship711?60:120);
-  const formUrl=`https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url`+
-                `&entry.1152845848=${encodeURIComponent(name)}`+
-                `&entry.178268335=${encodeURIComponent(phone)}`+
-                `&entry.1732058404=${qty}`+
-                `&entry.509305715=${encodeURIComponent(ship)}`+
-                `&entry.1351577488=${total}`;
+  const formUrl=`https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url`
+    +`&entry.1152845848=${encodeURIComponent(name)}`
+    +`&entry.178268335=${encodeURIComponent(phone)}`
+    +`&entry.1732058404=${qty}`
+    +`&entry.509305715=${encodeURIComponent(ship)}`
+    +`&entry.1351577488=${total}`;
   window.open(formUrl,'_blank');
 }
 </script>
