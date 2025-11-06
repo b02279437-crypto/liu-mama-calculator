@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LIU MAMA Order</title>
 
-<!-- 字體：標題用 Amatic SC、正文用 Noto Serif TC（精品宋體風） -->
 <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Noto+Serif+TC:wght@500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -48,26 +47,20 @@ html, body {
   transform: scale(1);
   transition: opacity 1.8s ease, transform 2.2s ease;
 }
-#intro-logo.show {
-  opacity: 1;
-  transform: scale(1.05);
-}
-#intro-logo.hide {
-  opacity: 0;
-  transform: scale(1);
-  transition: opacity 1.8s ease;
-}
+#intro-logo.show { opacity: 1; transform: scale(1.05); }
+#intro-logo.hide { opacity: 0; transform: scale(1); transition: opacity 1.8s ease; }
 
 #intro-text {
   font-family: 'Noto Serif TC', serif;
   font-weight: 500;
   color: #333;
   font-size: 15px;
-  line-height: 2;
+  line-height: 2.2;
   opacity: 0;
   white-space: pre-line;
-  margin-top: -80px;
-  transition: opacity 1.5s ease;
+  margin-top: -100px;
+  letter-spacing: 0.5px;
+  transition: opacity 1.8s ease;
 }
 #intro-text.show { opacity: 1; }
 
@@ -87,25 +80,15 @@ html, body {
   transform: translateY(10px);
   transition: opacity 1.2s ease, transform 0.6s ease, box-shadow 0.3s ease;
 }
-#startBtn.show {
-  opacity: 1;
-  transform: translateY(0);
-}
+#startBtn.show { opacity: 1; transform: translateY(0); }
 #startBtn:hover {
   box-shadow: 0 6px 18px rgba(0,0,0,0.15);
   transform: translateY(-2px) scale(1.03);
 }
 
-/* ====== 表單區塊（完全保留你原本的設計） ====== */
-main {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 1s ease;
-}
-main.show {
-  opacity: 1;
-  visibility: visible;
-}
+/* ====== 表單區塊 ====== */
+main { opacity: 0; visibility: hidden; transition: opacity 1s ease; }
+main.show { opacity: 1; visibility: visible; }
 
 .fade-block { opacity: 0; transform: translateY(10px); transition: opacity 0.8s ease, transform 0.8s ease; }
 .fade-block.show { opacity: 1; transform: translateY(0); }
@@ -173,7 +156,7 @@ input[type='checkbox'] { transform: scale(1.2); }
 </head>
 
 <body>
-<!-- ====== 開場動畫區 ====== -->
+<!-- ====== 開場動畫 ====== -->
 <div id="intro">
   <img id="intro-logo" src="https://github.com/b02279437-crypto/liu-mama-calculator/blob/main/logo.png?raw=true" alt="Logo">
   <div id="intro-text">
@@ -186,10 +169,9 @@ input[type='checkbox'] { transform: scale(1.2); }
   <button id="startBtn">Start Order</button>
 </div>
 
-<!-- ====== 主要內容（表單） ====== -->
+<!-- ====== 表單區塊（原版） ====== -->
 <main id="mainContent">
-  <!-- 你的表單原始碼照舊（保留功能） -->
-  <!-- 👇此處請貼上你提供的表單區塊，完全相同即可 -->
+  <!-- ⚠️ 這裡貼上你的完整表單內容 -->
 </main>
 
 <script>
@@ -200,27 +182,19 @@ window.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('startBtn');
   const main = document.getElementById('mainContent');
 
-  // 初始隱藏文字與按鈕
-  text.style.display = 'none';
-  btn.style.display = 'none';
+  text.style.opacity = 0;
+  btn.style.opacity = 0;
 
-  // LOGO 淡入放大
   setTimeout(() => logo.classList.add('show'), 300);
-  // LOGO 停留後淡出
   setTimeout(() => logo.classList.add('hide'), 3000);
-  // LOGO 完全消失後顯示文字
   setTimeout(() => {
     logo.style.display = 'none';
-    text.style.display = 'block';
     text.classList.add('show');
   }, 4800);
-  // 文字淡入後顯示按鈕
   setTimeout(() => {
-    btn.style.display = 'inline-block';
     btn.classList.add('show');
   }, 7200);
 
-  // 點擊按鈕 → 淡出開場 → 顯示表單
   btn.addEventListener('click', () => {
     intro.classList.add('fade-out');
     setTimeout(() => {
