@@ -28,6 +28,44 @@ h2 span.english { font-family: 'Amatic SC', cursive; font-weight: 900; }
 
 p { font-size: 14px; color: #555; }
 
+.input-container {
+  max-width: 500px;
+  margin: 0 auto 15px;
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  flex: 1 1 100%;
+}
+
+.input-group label {
+  width: 120px;
+  margin-right: 8px;
+  text-align: right;
+}
+
+.input-group input {
+  flex: 1;
+  height: 28px;
+  font-size: 14px;
+  padding: 4px 8px;
+  border: 1px solid #b0bec5;
+  border-radius: 6px;
+  transition: border-color 0.3s;
+}
+
+.input-error {
+  border-color: #e74c3c !important;
+}
+
+/* 表格樣式 */
 table {
   width: 100%;
   max-width: 500px;
@@ -67,21 +105,11 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
-/* 移除數字輸入框的上下箭頭 */
 input[type='number']::-webkit-outer-spin-button,
-input[type='number']::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
+input[type='number']::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 input[type='checkbox'] { transform: scale(1.2); }
 
-.total {
-  font-size: 20px;
-  font-weight: bold;
-  color: #1e4f7b;
-  margin-top: 20px;
-}
+.total { font-size: 20px; font-weight: bold; color: #1e4f7b; margin-top: 20px; }
 
 .account-box {
   width: 90%;
@@ -94,52 +122,28 @@ input[type='checkbox'] { transform: scale(1.2); }
   word-wrap: break-word;
 }
 
-.copy-btn {
-  background-color: #1e4f7b;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  cursor: pointer;
-  margin-top: 8px;
-}
-
-#buttonContainer {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin-top: 20px;
-}
-
-#screenshotBtn {
-  background-color: #F4E0BE;
-  color: #9e3520;
-  font-size: 16px;
-  padding: 8px 16px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
-
+.copy-btn,
+#screenshotBtn,
 #formBtn {
-  background-color: #9e3520;
-  color: #FFFFFF;
-  font-size: 16px;
+  border: none;
   padding: 8px 16px;
   border-radius: 12px;
-  border: none;
+  font-size: 16px;
   cursor: pointer;
   font-weight: bold;
 }
 
-#formReminder {
-  font-size: 14px;
-  color: #555;
-  margin-top: 10px;
-}
+.copy-btn { background-color: #1e4f7b; color: white; margin-top: 8px; }
+#screenshotBtn { background-color: #F4E0BE; color: #9e3520; }
+#formBtn { background-color: #9e3520; color: #FFFFFF; }
+
+#buttonContainer { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+
+.copy-btn:hover,
+#screenshotBtn:hover,
+#formBtn:hover { opacity: 0.85; }
+
+#formReminder { font-size: 14px; color: #555; margin-top: 10px; }
 
 @media (max-width: 480px) {
   table { font-size: 14px; }
@@ -147,12 +151,29 @@ input[type='checkbox'] { transform: scale(1.2); }
   #screenshotBtn, #formBtn { font-size: 14px; padding: 6px 12px; }
   .account-box p { word-break: break-all; }
   #formReminder { font-size: 14px; }
+
+  /* 小螢幕時改為上下排列 */
+  .input-group { flex-direction: column; align-items: flex-start; }
+  .input-group label { text-align: left; width: 100%; margin-bottom: 4px; }
+  .input-group input { width: 100%; }
 }
 </style>
 </head>
 <body>
 
 <h2><span class="english">LIU MAMA Order</span></h2>
+
+<div class="input-container">
+  <div class="input-group">
+    <label for="customerName">訂購人姓名:</label>
+    <input type="text" id="customerName" placeholder="請輸入姓名">
+  </div>
+  <div class="input-group">
+    <label for="customerPhone">訂購人電話:</label>
+    <input type="text" id="customerPhone" placeholder="請輸入電話">
+  </div>
+</div>
+
 <p>請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
 <div id="orderSection">
@@ -195,7 +216,7 @@ input[type='checkbox'] { transform: scale(1.2); }
 
 <div id="buttonContainer">
   <button id="screenshotBtn" onclick="screenshotOrder()">截圖訂單</button>
-  <button id="formBtn" onclick="goToForm()">下一步,填寫訂購資訊</button>
+  <button id="formBtn" onclick="goToForm()">下一步,填寫寄送資訊</button>
 </div>
 <p id="formReminder">煩請一定要填寫訂購表單!</p>
 
@@ -225,7 +246,7 @@ function selectShip(type) {
 function copyAccount() {
   const text = document.getElementById('accountNumber').innerText;
   navigator.clipboard.writeText(text);
-  alert('匯款帳號已複製！記得匯款後，再按下前往填寫表格按鈕喔！');
+  alert('匯款帳號已複製！記得匯款後，再按下前往填寫表單按鈕喔！');
 }
 
 function screenshotOrder() {
@@ -241,7 +262,40 @@ function screenshotOrder() {
 }
 
 function goToForm() {
-  window.open('https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=preview', '_blank');
+  const nameInput = document.getElementById('customerName');
+  const phoneInput = document.getElementById('customerPhone');
+  const name = nameInput.value.trim();
+  const phone = phoneInput.value.trim();
+  const qty = parseInt(document.getElementById('qty1').value) || 0;
+  const ship711 = document.getElementById('ship711').checked;
+  const shipPost = document.getElementById('shipPost').checked;
+
+  nameInput.classList.remove('input-error');
+  phoneInput.classList.remove('input-error');
+  document.getElementById('qty1').classList.remove('input-error');
+
+  let errorMsg = '';
+  if (!name) { errorMsg += '請輸入訂購人姓名！\n'; nameInput.classList.add('input-error'); }
+  if (!phone) { errorMsg += '請輸入訂購人電話！\n'; phoneInput.classList.add('input-error'); }
+  if (qty <= 0) { errorMsg += '請選擇購買數量！\n'; document.getElementById('qty1').classList.add('input-error'); }
+  if (!ship711 && !shipPost) { errorMsg += '請選擇寄送方式！'; }
+
+  if (errorMsg) {
+    alert('訂單填寫不完整:\n' + errorMsg);
+    return;
+  }
+
+  const ship = ship711 ? '711超商取貨' : '郵局宅配';
+  const total = qty * 320 + (ship711 ? 60 : 120);
+
+  const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url` +
+                  `&entry.1152845848=${encodeURIComponent(name)}` +
+                  `&entry.178268335=${encodeURIComponent(phone)}` +
+                  `&entry.1732058404=${qty}` +
+                  `&entry.509305715=${encodeURIComponent(ship)}` +
+                  `&entry.1351577488=${total}`;
+
+  window.open(formUrl, '_blank');
 }
 </script>
 
