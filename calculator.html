@@ -156,6 +156,7 @@ input[type='checkbox'] { transform: scale(1.2); }
 
 #formReminder { font-size: 14px; color: #555; margin-top: 10px; }
 
+/* 響應式設定 */
 @media (max-width: 480px) {
   table { font-size: 14px; }
   h2 { font-size: 48px; }
@@ -166,7 +167,11 @@ input[type='checkbox'] { transform: scale(1.2); }
   .input-container { flex-direction: column; }
   .input-group { flex-direction: column; align-items: flex-start; }
   .input-group label { text-align: left; width: 100%; margin-bottom: 4px; }
-  .input-group input { width: 100%; }
+
+  /* 姓名/電話固定寬度，其他 input 100% */
+  #customerName { width: 120px !important; }
+  #customerPhone { width: 180px !important; }
+  .input-group input:not(#customerName):not(#customerPhone) { width: 100%; }
 }
 </style>
 </head>
@@ -292,24 +297,4 @@ function goToForm() {
   if (qty <= 0) { errorMsg += '請選擇購買數量！\n'; document.getElementById('qty1').classList.add('input-error'); }
   if (!ship711 && !shipPost) { errorMsg += '請選擇寄送方式！'; }
 
-  if (errorMsg) {
-    alert('訂單填寫不完整:\n' + errorMsg);
-    return;
-  }
-
-  const ship = ship711 ? '711超商取貨' : '郵局宅配';
-  const total = qty * 320 + (ship711 ? 60 : 120);
-
-  const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url` +
-                  `&entry.1152845848=${encodeURIComponent(name)}` +
-                  `&entry.178268335=${encodeURIComponent(phone)}` +
-                  `&entry.1732058404=${qty}` +
-                  `&entry.509305715=${encodeURIComponent(ship)}` +
-                  `&entry.1351577488=${total}`;
-
-  window.open(formUrl, '_blank');
-}
-</script>
-
-</body>
-</html>
+  if
