@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -7,6 +10,7 @@
 
 <!-- 字體引用 -->
 <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+<!-- html2canvas 用於截圖功能 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
@@ -19,14 +23,6 @@ body {
   padding: 20px;
 }
 
-/* 淡入動畫 */
-@keyframes fadeInUp {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-.fade-block { opacity: 0; }
-.animate { animation: fadeInUp 0.8s forwards; }
-
 /* 網頁標題樣式 */
 h2 {
   font-size: 75px;
@@ -34,8 +30,11 @@ h2 {
   color: #1e4f7b;
   margin-bottom: 10px;
 }
+
+/* 英文標題字型 */
 h2 span.english { font-family: 'Amatic SC', cursive; font-weight: 900; }
 
+/* 一般文字 & 小標題 */
 p, .section-title {
   font-size: 14px;
   color: #555;
@@ -43,70 +42,156 @@ p, .section-title {
   margin-bottom: 8px;
 }
 
-/* 訂購人資訊輸入區 */
-.input-container { max-width: 500px; margin: 0 auto 15px; text-align: left; display: flex; flex-direction: column; gap: 8px; }
-.input-group { display: flex; align-items: center; }
-.input-group label { width: 120px; margin-right: 8px; text-align: right; }
-#customerName { width: 120px; }
-#customerPhone { width: 180px; }
-.input-group input, .input-group select {
-  height: 28px; font-size: 14px; padding: 4px 8px;
-  border: 1px solid #b0bec5; border-radius: 6px; transition: border-color 0.3s;
+/* 訂購人資訊輸入區容器 */
+.input-container {
+  max-width: 500px;
+  margin: 0 auto 15px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-.input-error { border-color: #e74c3c !important; }
 
-/* 表格樣式 */
-table {
-  width: 100%; max-width: 500px; margin: 15px auto;
-  border-collapse: separate; border-spacing: 0; background: #ffffff;
-  border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  font-size: 16px; table-layout: fixed;
+/* 單一輸入群組（label + input） */
+.input-group {
+  display: flex;
+  align-items: center;
 }
+
+/* label 樣式 */
+.input-group label {
+  width: 120px;
+  margin-right: 8px;
+  text-align: right;
+}
+
+/* 訂購人姓名輸入框寬度 */
+#customerName { width: 120px; }
+/* 訂購人電話輸入框寬度 */
+#customerPhone { width: 180px; }
+
+/* input & select 共用樣式 */
+.input-group input, .input-group select {
+  height: 28px;
+  font-size: 14px;
+  padding: 4px 8px;
+  border: 1px solid #b0bec5;
+  border-radius: 6px;
+  transition: border-color 0.3s;
+}
+
+/* 輸入錯誤紅框樣式 */
+.input-error {
+  border-color: #e74c3c !important;
+}
+
+/* 訂購表格樣式 */
+table {
+  width: 100%;
+  max-width: 500px;
+  margin: 15px auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-size: 16px;
+  table-layout: fixed;
+}
+
+/* 調整每欄寬度 */
 colgroup col:first-child { width: 45%; }
 colgroup col:nth-child(2) { width: 15%; }
 colgroup col:nth-child(3) { width: 20%; }
 colgroup col:nth-child(4) { width: 20%; }
-th, td { padding: 10px; border-bottom: 1px solid #dfe6e9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* 表格文字與底線 */
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #dfe6e9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 表頭背景色 */
 th { background-color: #7f9bb3; color: #ffffff; }
+
+/* checkbox 放大 */
 input[type='checkbox'] { transform: scale(1.2); }
+
+/* 總金額樣式 */
 .total { font-size: 20px; font-weight: bold; color: #1e4f7b; margin-top: 20px; }
 
 /* 匯款帳戶框 */
-.account-box { width: 80%; max-width: 350px; margin: 15px auto; background: #cfd2d4; color: #333333; padding: 10px; border-radius: 10px; word-wrap: break-word; font-size: 13px; }
-
-/* 按鈕 */
-.copy-btn, #screenshotBtn, #formBtn {
-  border: none; padding: 8px 16px; border-radius: 12px; font-size: 16px; cursor: pointer; font-weight: bold;
+.account-box {
+  width: 80%;
+  max-width: 350px;
+  margin: 15px auto;
+  background: #cfd2d4;
+  color: #333333;
+  padding: 10px;
+  border-radius: 10px;
+  word-wrap: break-word;
+  font-size: 13px;
 }
+
+/* 按鈕共用樣式 */
+.copy-btn,
+#screenshotBtn,
+#formBtn {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* 各按鈕顏色 */
 .copy-btn { background-color: #1e4f7b; color: white; margin-top: 8px; }
 #screenshotBtn { background-color: #F4E0BE; color: #9e3520; }
 #formBtn { background-color: #9e3520; color: #FFFFFF; }
+
+/* 按鈕容器 */
 #buttonContainer { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
-.copy-btn:hover, #screenshotBtn:hover, #formBtn:hover { opacity: 0.85; }
+
+/* hover 效果 */
+.copy-btn:hover,
+#screenshotBtn:hover,
+#formBtn:hover { opacity: 0.85; }
+
+/* 表單提醒文字 */
 #formReminder { font-size: 14px; color: #555; margin-top: 10px; }
 
-/* 手機版 */
+/* 手機版調整 */
 @media (max-width: 480px) {
   table { font-size: 14px; }
   h2 { font-size: 48px; }
   #screenshotBtn, #formBtn { font-size: 14px; padding: 6px 12px; }
   .account-box { font-size: 12px; width: 90%; max-width: 300px; }
   #formReminder { font-size: 14px; }
+
   .input-container { flex-direction: column; }
   .input-group { flex-direction: column; align-items: flex-start; }
   .input-group label { text-align: left; width: 100%; margin-bottom: 4px; }
+
   #customerName { width: 120px !important; }
   #customerPhone { width: 180px !important; }
-  .input-group input:not(#customerName):not(#customerPhone), .input-group select { width: 100%; }
+  .input-group input:not(#customerName):not(#customerPhone),
+  .input-group select { width: 100%; }
 }
 </style>
 </head>
 <body>
 
-<h2 class="fade-block"><span class="english">LIU MAMA Order</span></h2>
+<!-- 網頁標題 -->
+<h2><span class="english">LIU MAMA Order</span></h2>
 
-<p class="section-title fade-block">請填寫訂購人資訊</p>
-<div class="input-container fade-block">
+<!-- 訂購人資訊區 -->
+<p class="section-title">請填寫訂購人資訊</p>
+<div class="input-container">
   <div class="input-group">
     <label for="customerName">訂購人姓名:</label>
     <input type="text" id="customerName" placeholder="請輸入姓名">
@@ -117,10 +202,12 @@ input[type='checkbox'] { transform: scale(1.2); }
   </div>
 </div>
 
-<p class="section-title fade-block">請選擇購買數量與寄送方式，系統將自動計算金額</p>
+<!-- 購買數量與寄送方式 -->
+<p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
 <div id="orderSection">
-  <table class="fade-block">
+  <!-- 商品表格 -->
+  <table>
     <colgroup><col><col><col><col></colgroup>
     <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
     <tr>
@@ -128,14 +215,50 @@ input[type='checkbox'] { transform: scale(1.2); }
       <td>$320</td>
       <td>
         <select id="qty1" onchange="calculate()">
-          ${Array.from({length:36},(_,i)=>`<option value="${i}">${i}</option>`).join('')}
-        </select>
+  <option value="0">0</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+  <option value="6">6</option>
+  <option value="7">7</option>
+  <option value="8">8</option>
+  <option value="9">9</option>
+  <option value="10">10</option>
+  <option value="11">11</option>
+  <option value="12">12</option>
+  <option value="13">13</option>
+  <option value="14">14</option>
+  <option value="15">15</option>
+  <option value="16">16</option>
+  <option value="17">17</option>
+  <option value="18">18</option>
+  <option value="19">19</option>
+  <option value="20">20</option>
+  <option value="21">21</option>
+  <option value="22">22</option>
+  <option value="23">23</option>
+  <option value="24">24</option>
+  <option value="25">25</option>
+  <option value="26">26</option>
+  <option value="27">27</option>
+  <option value="28">28</option>
+  <option value="29">29</option>
+  <option value="30">30</option>
+  <option value="31">31</option>
+  <option value="32">32</option>
+  <option value="33">33</option>
+  <option value="34">34</option>
+  <option value="35">35</option>
+</select>
       </td>
       <td id="sub1">$0</td>
     </tr>
   </table>
 
-  <table class="fade-block">
+  <!-- 寄送方式表格 -->
+  <table>
     <colgroup><col><col><col><col></colgroup>
     <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
     <tr>
@@ -152,95 +275,119 @@ input[type='checkbox'] { transform: scale(1.2); }
     </tr>
   </table>
 
-  <div class="total fade-block" id="total">總金額：$0</div>
+  <!-- 總金額 -->
+  <div class="total" id="total">總金額：$0</div>
 
-  <div class="account-box fade-block">
+  <!-- 匯款帳戶資訊區 -->
+  <div class="account-box">
     <h3>請匯款至以下帳戶:</h3>
     <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
     <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
   </div>
 </div>
 
-<div id="buttonContainer" class="fade-block">
+<!-- 按鈕區 -->
+<div id="buttonContainer">
   <button id="screenshotBtn" onclick="screenshotOrder()">截圖訂單</button>
   <button id="formBtn" onclick="goToForm()">下一步,填寫寄送資訊</button>
 </div>
-<p id="formReminder" class="fade-block">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
+<p id="formReminder">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
 
 <script>
+/* 計算小計與總金額 */
 function calculate() {
-  let qty1 = parseInt(document.getElementById('qty1').value)||0;
-  document.getElementById('sub1').innerText = '$'+(qty1*320);
+  let qty1 = parseInt(document.getElementById('qty1').value) || 0;
+  let sub1 = qty1 * 320;
+  document.getElementById('sub1').innerText = '$' + sub1;
+
   let ship = 0;
-  if(document.getElementById('ship711').checked) ship = 60;
-  if(document.getElementById('shipPost').checked) ship = 120;
-  document.getElementById('sub711').innerText = document.getElementById('ship711').checked?'$60':'$0';
-  document.getElementById('subPost').innerText = document.getElementById('shipPost').checked?'$120':'$0';
-  document.getElementById('total').innerText = '總金額：$'+(qty1*320+ship);
+  if (document.getElementById('ship711').checked) ship = 60;
+  if (document.getElementById('shipPost').checked) ship = 120;
+
+  document.getElementById('sub711').innerText = document.getElementById('ship711').checked ? '$60' : '$0';
+  document.getElementById('subPost').innerText = document.getElementById('shipPost').checked ? '$120' : '$0';
+
+  let total = sub1 + ship;
+  document.getElementById('total').innerText = '總金額：$' + total;
 }
-function selectShip(type){
-  if(type==='711') document.getElementById('shipPost').checked=false;
-  if(type==='post') document.getElementById('ship711').checked=false;
+
+/* 單選寄送方式 */
+function selectShip(type) {
+  if (type === '711') document.getElementById('shipPost').checked = false;
+  if (type === 'post') document.getElementById('ship711').checked = false;
   calculate();
 }
-function copyAccount(){
-  navigator.clipboard.writeText(document.getElementById('accountNumber').innerText);
+
+/* 複製匯款帳號 */
+function copyAccount() {
+  const text = document.getElementById('accountNumber').innerText;
+  navigator.clipboard.writeText(text);
   alert('匯款帳號已複製！記得匯款後，再按下前往填寫表單按鈕喔！');
 }
-function screenshotOrder(){
-  html2canvas(document.getElementById('orderSection')).then(canvas=>{
-    const link=document.createElement('a');
-    link.href=canvas.toDataURL('image/png');
-    link.download='liu_mama_order.png';
+
+/* 訂單截圖 */
+function screenshotOrder() {
+  html2canvas(document.getElementById('orderSection')).then(canvas => {
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png');
+    link.download = 'liu_mama_order.png';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     alert('截圖已下載！記得填寫表單喔！');
   });
 }
-function goToForm(){
-  const name=document.getElementById('customerName').value.trim();
-  const phone=document.getElementById('customerPhone').value.trim();
-  const qty=parseInt(document.getElementById('qty1').value)||0;
-  const ship711=document.getElementById('ship711').checked;
-  const shipPost=document.getElementById('shipPost').checked;
-  document.getElementById('customerName').classList.remove('input-error');
-  document.getElementById('customerPhone').classList.remove('input-error');
-  let err='';
-  if(!name){ err+='請輸入訂購人姓名！\n'; document.getElementById('customerName').classList.add('input-error'); }
-  if(!phone){ err+='請輸入訂購人電話！\n'; document.getElementById('customerPhone').classList.add('input-error'); }
-  else if(!/^\d{10}$/.test(phone)){ err+='訂購人電話必須為10碼數字！\n'; document.getElementById('customerPhone').classList.add('input-error'); }
-  if(qty<=0) err+='請選擇購買數量！\n';
-  if(!ship711 && !shipPost) err+='請選擇寄送方式！';
-  if(err){ alert('訂單填寫不完整:\n'+err); return; }
-  const ship=ship711?'711超商取貨':'郵局宅配';
-  const total=qty*320+(ship711?60:120);
-  const formUrl=`https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url`+
-                `&entry.1152845848=${encodeURIComponent(name)}`+
-                `&entry.178268335=${encodeURIComponent(phone)}`+
-                `&entry.1732058404=${qty}`+
-                `&entry.509305715=${encodeURIComponent(ship)}`+
-                `&entry.1351577488=${total}`;
-  window.open(formUrl,'_blank');
-}
 
-/* 頁面加載後依序淡入 */
-window.addEventListener('DOMContentLoaded', () => {
-  const blocks = [
-    document.querySelector('h2'),
-    document.querySelector('.input-container'),
-    document.querySelector('#orderSection table:first-child'),
-    document.querySelector('#orderSection table:last-child'),
-    document.querySelector('.total'),
-    document.querySelector('.account-box'),
-    document.querySelector('#buttonContainer'),
-    document.querySelector('#formReminder')
-  ];
-  blocks.forEach((el,index)=>{
-    if(!el) return;
-    setTimeout(()=>{el.classList.add('animate');}, index*300);
-  });
-});
+/* 前往 Google Form 填寫寄送資訊 */
+function goToForm() {
+  const nameInput = document.getElementById('customerName');
+  const phoneInput = document.getElementById('customerPhone');
+  const name = nameInput.value.trim();
+  const phone = phoneInput.value.trim();
+  const qty = parseInt(document.getElementById('qty1').value) || 0;
+  const ship711 = document.getElementById('ship711').checked;
+  const shipPost = document.getElementById('shipPost').checked;
+
+  nameInput.classList.remove('input-error');
+  phoneInput.classList.remove('input-error');
+
+  let errorMsg = '';
+  if (!name) { 
+    errorMsg += '請輸入訂購人姓名！\n'; 
+    nameInput.classList.add('input-error'); 
+  }
+  if (!phone) { 
+    errorMsg += '請輸入訂購人電話！\n'; 
+    phoneInput.classList.add('input-error'); 
+  } else if (!/^\d{10}$/.test(phone)) {
+    errorMsg += '訂購人電話必須為10碼數字！\n';
+    phoneInput.classList.add('input-error');
+  }
+  if (qty <= 0) { 
+    errorMsg += '請選擇購買數量！\n'; 
+  }
+  if (!ship711 && !shipPost) { 
+    errorMsg += '請選擇寄送方式！'; 
+  }
+
+  if (errorMsg) { 
+    alert('訂單填寫不完整:\n' + errorMsg); 
+    return; 
+  }
+
+  const ship = ship711 ? '711超商取貨' : '郵局宅配';
+  const total = qty * 320 + (ship711 ? 60 : 120);
+
+  const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url` +
+                  `&entry.1152845848=${encodeURIComponent(name)}` +
+                  `&entry.178268335=${encodeURIComponent(phone)}` +
+                  `&entry.1732058404=${qty}` +
+                  `&entry.509305715=${encodeURIComponent(ship)}` +
+                  `&entry.1351577488=${total}`;
+
+  window.open(formUrl, '_blank');
+}
 </script>
+
 </body>
 </html>
