@@ -14,7 +14,7 @@ body {
   background-color: #f7f6f2;
   color: #2c3e50;
   text-align: center;
-  padding: 20px 20px 20px 20px; /* 上方空白縮短 */
+  padding: 20px 20px 20px 20px;
 }
 
 /* 淡入動畫基礎 */
@@ -26,21 +26,38 @@ body {
 .title-animate.show { opacity: 1; transform: scale(1) translateX(0); }
 
 h2 {
-  font-size: 90px; /* 標題更大 */
+  font-size: 90px;
   font-weight: 900;
   color: #1e4f7b;
-  margin: 20px 0 10px 0; /* 上下間距調整 */
+  margin: 20px 0 10px 0;
 }
 h2 span.english { font-family: 'Amatic SC', cursive; font-weight: 900; }
 
 p, .section-title { font-size: 14px; color: #555; text-align: center; margin-bottom: 8px; }
 
-.input-container { max-width: 500px; margin: 0 auto 15px; text-align: left; display: flex; flex-direction: column; gap: 8px; }
+/* 調整訂購人姓名、電話字體大小與間距 */
+.input-container { 
+  max-width: 500px; 
+  margin: 0 auto 5px; /* 下方空白減少 */
+  text-align: left; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 4px; /* 姓名電話距離縮小 */
+}
+
 .input-group { display: flex; align-items: center; }
 .input-group label { width: 120px; margin-right: 8px; text-align: right; }
 #customerName { width: 120px; }
 #customerPhone { width: 180px; }
-.input-group input, .input-group select { height: 28px; font-size: 14px; padding: 4px 8px; border: 1px solid #b0bec5; border-radius: 6px; transition: border-color 0.3s; }
+
+.input-group input, .input-group select { 
+  height: 28px; 
+  font-size: 14px; /* 跟表格文字一致 */
+  padding: 4px 8px; 
+  border: 1px solid #b0bec5; 
+  border-radius: 6px; 
+  transition: border-color 0.3s; 
+}
 .input-error { border-color: #e74c3c !important; }
 
 table { width: 100%; max-width: 500px; margin: 15px auto; border-collapse: separate; border-spacing: 0; background: #ffffff; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 16px; table-layout: fixed; }
@@ -51,17 +68,27 @@ colgroup col:nth-child(4) { width: 20%; }
 th, td { padding: 10px; border-bottom: 1px solid #dfe6e9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 th { background-color: #7f9bb3; color: #ffffff; }
 input[type='checkbox'] { transform: scale(1.2); }
-.total { font-size: 20px; font-weight: bold; color: #1e4f7b; margin-top: 20px; }
 
-.account-box { width: 80%; max-width: 350px; margin: 15px auto; background: #cfd2d4; color: #333333; padding: 10px; border-radius: 10px; word-wrap: break-word; font-size: 13px; }
-
+/* 表格後的區塊整體往上移 */
+.total { font-size: 20px; font-weight: bold; color: #1e4f7b; margin-top: 10px; }
+.account-box { 
+  width: 80%; 
+  max-width: 350px; 
+  margin: 10px auto; 
+  background: #cfd2d4; 
+  color: #333333; 
+  padding: 10px; 
+  border-radius: 10px; 
+  word-wrap: break-word; 
+  font-size: 13px; 
+}
 .copy-btn, #screenshotBtn, #formBtn { border: none; padding: 8px 16px; border-radius: 12px; font-size: 16px; cursor: pointer; font-weight: bold; }
 .copy-btn { background-color: #1e4f7b; color: white; margin-top: 8px; }
 #screenshotBtn { background-color: #F4E0BE; color: #9e3520; }
 #formBtn { background-color: #9e3520; color: #FFFFFF; }
-#buttonContainer { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+#buttonContainer { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 10px; }
 .copy-btn:hover, #screenshotBtn:hover, #formBtn:hover { opacity: 0.85; }
-#formReminder { font-size: 14px; color: #555; margin-top: 10px; }
+#formReminder { font-size: 14px; color: #555; margin-top: 5px; }
 
 @media (max-width: 480px) {
   table { font-size: 14px; }
