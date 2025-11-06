@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>LIU MAMA Order</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Noto+Serif+TC:wght@500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 
 <style>
 :root{
@@ -23,6 +23,7 @@ html,body{
   background-color:var(--bg); color:#2c3e50;
   font-family:'Noto Serif TC','Microsoft JhengHei',serif;
   text-align:center; overflow-x:hidden;
+  transition:background-color 1s ease;
 }
 
 /* ===== 開場動畫層 ===== */
@@ -42,7 +43,7 @@ html,body{
 
 #intro-text{
   font-weight:500; color:#333; font-size:15px; line-height:2.2;
-  opacity:0; white-space:pre-line; margin-top:40px; letter-spacing:0.5px;
+  opacity:0; white-space:pre-line; margin-top:40px; letter-spacing:.5px;
   transition:opacity 1.8s ease;
 }
 #intro-text.show{opacity:1;}
@@ -52,34 +53,49 @@ html,body{
   font-family:'Amatic SC',cursive; letter-spacing:2px;
   background-color:rgba(232,217,196,0.85); color:var(--navy);
   border:none; border-radius:999px; cursor:pointer;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  box-shadow:0 4px 12px rgba(0,0,0,.1);
   opacity:0; transform:translateY(10px);
   transition:opacity 1.2s ease, transform .6s ease, box-shadow .3s ease, background .3s ease;
 }
 #startBtn.show{opacity:1; transform:translateY(0);}
-#startBtn:hover{background-color:rgba(232,217,196,0.95); box-shadow:0 6px 18px rgba(0,0,0,0.15); transform:translateY(-2px) scale(1.03);}
+#startBtn:hover{background-color:rgba(232,217,196,0.95); box-shadow:0 6px 18px rgba(0,0,0,.15); transform:translateY(-2px) scale(1.03);}
 
-/* ===== 主內容入場 ===== */
+/* ===== 主內容（初始隱藏） ===== */
 main{opacity:0; visibility:hidden; transition:opacity 1.2s ease;}
 main.show{opacity:1; visibility:visible;}
-.fade-block{opacity:0; transform:translateY(10px); transition:opacity .8s ease, transform .8s ease;}
+
+/* ===== 基礎淡入 ===== */
+.fade-block{opacity:0; transform:translateY(20px); transition:opacity 1s ease, transform 1s ease;}
 .fade-block.show{opacity:1; transform:translateY(0);}
-.title-animate{opacity:0; transform:scale(.5) translateX(-50px); transition:all 1s ease;}
-.title-animate.show{opacity:1; transform:scale(1) translateX(0);}
+
+/* ===== 高級表單進場動畫（按下 Start 後） ===== */
+.main-enter{animation:mainFadeIn 2s ease forwards;}
+@keyframes mainFadeIn{
+  0%{background-color:var(--bg);}
+  100%{background-color:#faf8f4;}
+}
+.title-animate{
+  opacity:0; transform:scale(.8) translateY(-30px); transition:all 1s ease;
+}
+.title-animate.show{opacity:1; transform:scale(1) translateY(0);}
+
+/* ===== Scroll 觸發動畫 ===== */
+.scroll-fade{opacity:0; transform:translateY(25px); transition:opacity 1s ease, transform 1s ease;}
+.scroll-fade.visible{opacity:1; transform:translateY(0);}
 
 /* ===== 標題 ===== */
 h2{
   font-size:90px; font-weight:900; color:var(--navy);
   margin:20px 0 10px 0;
 }
-h2 span.english{font-family:'Amatic SC',cursive; font-weight:900;}
-p,.section-title{font-size:14px; color:#555; text-align:center; margin-bottom:8px;}
+h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
+.section-title{font-size:14px; color:#555; margin:10px 0 8px;}
 
-/* ===== 訂購人資訊卡 ===== */
+/* ===== 訂購人資訊（高級卡片） ===== */
 .input-container{
   max-width:500px; margin:0 auto 30px; text-align:left;
   background:#fff; padding:25px 28px; border-radius:16px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.05);
+  box-shadow:0 6px 20px rgba(0,0,0,.05);
 }
 .input-group{display:flex; flex-direction:column; gap:5px; margin-bottom:18px;}
 .input-group label{font-size:14px; color:#333;}
@@ -96,7 +112,7 @@ table{
   border-collapse:separate; border-spacing:0; background:#fff; border-radius:14px; overflow:hidden;
   box-shadow:0 2px 8px rgba(0,0,0,.1); font-size:15px; table-layout:fixed;
 }
-th,td{padding:10px; border-bottom:1px solid #dfe6e9; text-overflow:ellipsis; overflow:hidden;}
+th,td{padding:10px; border-bottom:1px solid #dfe6e9;}
 th{background-color:var(--gray-blue); color:#fff;}
 select{width:100%; font-size:14px; padding:5px 6px; border-radius:6px; border:1px solid #ccc;}
 input[type='checkbox']{transform:scale(1.2);}
@@ -104,7 +120,7 @@ input[type='checkbox']{transform:scale(1.2);}
 /* ===== 總金額 ===== */
 .total{font-size:20px; font-weight:bold; color:var(--navy); margin-top:20px;}
 
-/* ===== 匯款帳戶：霧面玻璃 ===== */
+/* ===== 匯款帳戶（霧面玻璃） ===== */
 .account-box{
   width:85%; max-width:350px; margin:25px auto;
   background:rgba(255,255,255,0.45);
@@ -138,7 +154,7 @@ input[type='checkbox']{transform:scale(1.2);}
 @media (max-width:480px){
   h2{font-size:60px;}
   table{font-size:13.5px; width:95%;}
-  .input-container{width:90%; padding:18px 18px;}
+  .input-container{width:90%; padding:18px;}
   .input-group input{font-size:13.5px; padding:7px 9px;}
   .account-box{font-size:12.5px; width:90%;}
   .copy-btn,#screenshotBtn,#formBtn{font-size:14px; padding:10px 18px;}
@@ -163,9 +179,9 @@ input[type='checkbox']{transform:scale(1.2);}
 <!-- ===== 主內容 ===== -->
 <main id="mainContent">
   <h2 class="title-animate"><span class="english">LIU MAMA Order</span></h2>
-  <p class="section-title fade-block">請填寫訂購人資訊</p>
 
-  <div class="input-container fade-block">
+  <p class="section-title fade-block scroll-fade">請填寫訂購人資訊</p>
+  <div class="input-container fade-block scroll-fade">
     <div class="input-group">
       <label for="customerName">訂購人姓名</label>
       <input type="text" id="customerName" placeholder="請輸入姓名">
@@ -176,10 +192,10 @@ input[type='checkbox']{transform:scale(1.2);}
     </div>
   </div>
 
-  <p class="section-title fade-block">請選擇購買數量與寄送方式，系統將自動計算金額</p>
+  <p class="section-title fade-block scroll-fade">請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
   <div id="orderSection">
-    <table class="fade-block" id="productTable">
+    <table class="fade-block scroll-fade" id="productTable">
       <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
       <tr>
         <td>麻辣底料包<br><small>(2人份)</small></td>
@@ -189,34 +205,37 @@ input[type='checkbox']{transform:scale(1.2);}
       </tr>
     </table>
 
-    <table class="fade-block" id="shippingTable">
+    <table class="fade-block scroll-fade" id="shippingTable">
       <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
       <tr><td>711超商取貨</td><td>$60</td><td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td><td id="sub711">$0</td></tr>
       <tr><td>郵局宅配</td><td>$120</td><td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td><td id="subPost">$0</td></tr>
     </table>
 
-    <div class="total fade-block" id="total">總金額：$0</div>
+    <div class="total fade-block scroll-fade" id="total">總金額：$0</div>
 
-    <div class="account-box fade-block">
+    <div class="account-box fade-block scroll-fade">
       <h3>請匯款至以下帳戶:</h3>
       <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
       <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
     </div>
   </div>
 
-  <div id="buttonContainer" class="fade-block">
+  <div id="buttonContainer" class="fade-block scroll-fade">
     <button id="screenshotBtn" onclick="screenshotOrder()">截圖訂單</button>
     <button id="formBtn" onclick="goToForm()">下一步,填寫寄送資訊</button>
   </div>
-  <p id="formReminder" class="fade-block">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
+  <p id="formReminder" class="fade-block scroll-fade">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
 </main>
 
 <script>
+/* ===== DOM 就緒 ===== */
 window.addEventListener('DOMContentLoaded',()=>{
+  // 數量 0～35
   const select=document.getElementById('qty1');
-  for(let i=0;i<=35;i++){const opt=document.createElement('option');opt.value=i;opt.textContent=i;select.appendChild(opt);}
+  for(let i=0;i<=35;i++){const opt=document.createElement('option'); opt.value=i; opt.textContent=i; select.appendChild(opt);}
   select.value="0"; calculate();
 
+  // Intro 動畫節奏（Start 提前 0.3s）
   const intro=document.getElementById('intro');
   const logo=document.getElementById('intro-logo');
   const text=document.getElementById('intro-text');
@@ -226,23 +245,32 @@ window.addEventListener('DOMContentLoaded',()=>{
   setTimeout(()=>logo.classList.add('show'),300);
   setTimeout(()=>logo.classList.add('hide'),2800);
   setTimeout(()=>{logo.style.display='none'; text.classList.add('show');},4500);
-  setTimeout(()=>btn.classList.add('show'),6700); // 原本7000 改為6700
+  setTimeout(()=>btn.classList.add('show'),6700);
 
-
-```html
+  // Start → 高級表單進場
   btn.addEventListener('click',()=>{
     intro.classList.add('fade-out');
     setTimeout(()=>{
       intro.style.display='none';
+      document.body.classList.add('main-enter');  // 背景柔光亮化
       main.classList.add('show');
       const title=document.querySelector('h2.title-animate');
-      setTimeout(()=>{title.classList.add('show');},300);
-      const blocks=document.querySelectorAll('.fade-block');
-      blocks.forEach((el,i)=>setTimeout(()=>el.classList.add('show'),600+i*400));
-    },1000);
+      setTimeout(()=>title.classList.add('show'),400);
+      const blocks=[...document.querySelectorAll('.fade-block')];
+      blocks.forEach((el,i)=>setTimeout(()=>el.classList.add('show'),800+i*400));
+    },800);
   });
+
+  // Scroll 觸發
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  },{threshold:0.2});
+  document.querySelectorAll('.scroll-fade').forEach(el=>observer.observe(el));
 });
 
+/* ===== 計算 ===== */
 function calculate(){
   const qty1=parseInt(document.getElementById('qty1').value)||0;
   document.getElementById('sub1').innerText='$'+(qty1*320);
@@ -255,15 +283,18 @@ function calculate(){
   document.getElementById('subPost').innerText=cPost?'$120':'$0';
   document.getElementById('total').innerText='總金額：$'+(qty1*320+ship);
 }
+/* ===== 寄送互斥 ===== */
 function selectShip(type){
   if(type==='711') document.getElementById('shipPost').checked=false;
   if(type==='post') document.getElementById('ship711').checked=false;
   calculate();
 }
+/* ===== 複製帳號 ===== */
 function copyAccount(){
   navigator.clipboard.writeText(document.getElementById('accountNumber').innerText);
   alert('匯款帳號已複製！記得匯款後，再按下前往填寫表單按鈕喔！');
 }
+/* ===== 截圖 ===== */
 function screenshotOrder(){
   html2canvas(document.getElementById('orderSection')).then(canvas=>{
     const link=document.createElement('a');
@@ -275,23 +306,29 @@ function screenshotOrder(){
     alert('截圖已下載！記得填寫表單喔！');
   });
 }
+/* ===== 前往 Google 表單（帶參數） ===== */
 function goToForm(){
   const name=document.getElementById('customerName').value.trim();
   const phone=document.getElementById('customerPhone').value.trim();
   const qty=parseInt(document.getElementById('qty1').value)||0;
   const ship711=document.getElementById('ship711').checked;
   const shipPost=document.getElementById('shipPost').checked;
+
   document.getElementById('customerName').classList.remove('input-error');
   document.getElementById('customerPhone').classList.remove('input-error');
+
   let err='';
   if(!name){ err+='請輸入訂購人姓名！\n'; document.getElementById('customerName').classList.add('input-error'); }
   if(!phone){ err+='請輸入訂購人電話！\n'; document.getElementById('customerPhone').classList.add('input-error'); }
   else if(!/^\d{10}$/.test(phone)){ err+='訂購人電話必須為10碼數字！\n'; document.getElementById('customerPhone').classList.add('input-error'); }
   if(qty<=0) err+='請選擇購買數量！\n';
   if(!ship711 && !shipPost) err+='請選擇寄送方式！';
+
   if(err){ alert('訂單填寫不完整:\n'+err); return; }
+
   const ship=ship711?'711超商取貨':'郵局宅配';
   const total=qty*320+(ship711?60:120);
+
   const formUrl=`https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url`
     +`&entry.1152845848=${encodeURIComponent(name)}`
     +`&entry.178268335=${encodeURIComponent(phone)}`
