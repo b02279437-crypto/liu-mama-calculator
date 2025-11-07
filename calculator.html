@@ -19,7 +19,7 @@
   --milk-solid:#e9e3d7;
 }
 
-/* ===== 全域 ===== */
+/* ===== 全域樣式 ===== */
 html,body{
   margin:0; padding:0; height:100%;
   background-color:var(--bg); color:#2c3e50;
@@ -58,7 +58,7 @@ html,body{
 #startBtn.show{opacity:1; transform:translateY(0);}
 #startBtn:hover{background-color:#e7dfd2; transform:translateY(-2px);}
 
-/* ===== 主內容 ===== */
+/* ===== 主內容動畫 ===== */
 main{opacity:0; visibility:hidden; transition:opacity 1s ease;}
 main.show{opacity:1; visibility:visible;}
 h2{
@@ -74,11 +74,11 @@ h2{
 h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 .section-title{font-size:14px; color:#555; margin:10px 0 8px;}
 
-/* ===== 區塊進場 ===== */
+/* ===== 區塊進場動畫 ===== */
 .reveal{opacity:0; transform:translateY(34px); transition:all .9s;}
 .reveal.in{opacity:1; transform:translateY(0);}
 
-/* ===== 表單卡 ===== */
+/* ===== 訂購資訊卡片 ===== */
 .input-container{
   max-width:500px; margin:0 auto 30px; text-align:left;
   background:#fff; padding:25px 28px; border-radius:16px;
@@ -92,7 +92,7 @@ h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 .input-group input:focus{border-color:var(--navy); background:#fff; box-shadow:0 0 6px rgba(30,79,123,.25);}
 .input-error{border-color:#e74c3c !important;}
 
-/* ===== 表格 ===== */
+/* ===== 表格（圓角） ===== */
 table{
   width:90%;
   max-width:500px;
@@ -110,7 +110,7 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 select{width:100%; font-size:14px; padding:5px 6px; border-radius:6px; border:1px solid #ccc;}
 input[type='checkbox']{transform:scale(1.2);}
 
-/* ===== Total Amount (蠟筆底+動畫) ===== */
+/* ===== Total Amount ===== */
 .total{
   font-family:'Amatic SC', cursive;
   font-size:30px;
@@ -141,15 +141,14 @@ input[type='checkbox']{transform:scale(1.2);}
   z-index:-1;
   filter:blur(1px) saturate(1.1);
 }
-/* 更新動畫效果 */
+
+/* 更新動畫（柔和版） */
 @keyframes totalUpdate {
   0% {transform:scale(1); filter:brightness(1);}
-  50% {transform:scale(1.15); filter:brightness(1.4);}
+  50% {transform:scale(1.07); filter:brightness(1.15);}
   100% {transform:scale(1); filter:brightness(1);}
 }
-.total.animate{
-  animation: totalUpdate 0.6s ease;
-}
+.total.animate{animation: totalUpdate 0.8s ease;}
 
 /* ===== 匯款帳戶 ===== */
 .account-box{
@@ -177,7 +176,7 @@ input[type='checkbox']{transform:scale(1.2);}
 #formReminder{font-size:14px; color:#555; margin-top:10px; opacity:0; transform:translateY(14px); transition:all .8s;}
 #formReminder.in{opacity:1; transform:translateY(0);}
 
-/* ===== 手機 ===== */
+/* ===== 手機優化 ===== */
 @media (max-width:480px){
   h2{font-size:60px;}
   table{font-size:13.5px; width:95%;}
@@ -263,7 +262,11 @@ input[type='checkbox']{transform:scale(1.2);}
 <script>
 window.addEventListener('DOMContentLoaded',()=>{
   const select=document.getElementById('qty1');
-  for(let i=0;i<=35;i++){const opt=document.createElement('option');opt.value=i;opt.textContent=i;select.appendChild(opt);}
+  for(let i=0;i<=35;i++){
+    const opt=document.createElement('option');
+    opt.value=i; opt.textContent=i;
+    select.appendChild(opt);
+  }
   select.value="0"; calculate();
 
   const intro=document.getElementById('intro');
