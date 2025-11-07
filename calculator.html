@@ -5,21 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>LIU MAMA Order</title>
 
+<!-- 字體 -->
 <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Noto+Serif+TC:wght@500;600&display=swap" rel="stylesheet">
+<!-- 截圖功能 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 
 <style>
 :root{
-  --milk:#E8D9C4;        /* 奶茶 */
-  --navy:#1E4F7B;        /* 靛藍（標題） */
-  --bg:#f7f6f2;          /* 背景 */
-  --gray-blue:#7f9bb3;   /* 表頭灰藍 */
-  --primary:#5F93C2;     /* 主藍（下一步） */
-  --milk-solid:#e9e3d7;  /* 奶茶純色按鈕 */
-  --deep:#2f4151;        /* 深灰藍（文字/hover 陰影感） */
+  --milk:#E8D9C4;       /* 奶茶 */
+  --navy:#1E4F7B;       /* 靛藍 */
+  --bg:#f7f6f2;         /* 背景 */
+  --gray-blue:#7f9bb3;  /* 表頭灰藍 */
+  --milk-solid:#e9e3d7; /* 奶茶按鈕 */
 }
 
-/* ===== 全域 ===== */
+/* ===== 全域樣式 ===== */
 html,body{
   margin:0; padding:0; height:100%;
   background-color:var(--bg); color:#2c3e50;
@@ -27,7 +27,7 @@ html,body{
   text-align:center; overflow-x:hidden; scroll-behavior:smooth;
 }
 
-/* ===== 開場 ===== */
+/* ===== 開場動畫 ===== */
 #intro{
   position:fixed; inset:0; background-color:var(--bg);
   display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
@@ -49,7 +49,7 @@ html,body{
 #startBtn{
   margin-top:60px; padding:14px 46px; font-size:30px;
   font-family:'Amatic SC',cursive; letter-spacing:2px;
-  background-color:#ddd5c7; color:#2c3e50; /* 純色，無漸層 */
+  background-color:#ddd5c7; color:#2c3e50;
   border:none; border-radius:999px; cursor:pointer;
   box-shadow:0 3px 10px rgba(0,0,0,.08);
   opacity:0; transform:translateY(10px);
@@ -58,37 +58,27 @@ html,body{
 #startBtn.show{opacity:1; transform:translateY(0);}
 #startBtn:hover{background-color:#e7dfd2; transform:translateY(-2px);}
 
-/* ===== 主內容 ===== */
+/* ===== 主內容動畫 ===== */
 main{opacity:0; visibility:hidden; transition:opacity 1s ease;}
 main.show{opacity:1; visibility:visible;}
-.main-enter{animation:mainFadeIn 1.8s ease forwards;}
-@keyframes mainFadeIn{from{background:#f7f6f2;} to{background:#faf8f4;}}
-
-/* ===== 標題動畫（高級淡入＋微放大） ===== */
 h2{
   font-size:90px; font-weight:900; color:var(--navy);
   margin:28px 0 10px 0;
-  opacity:0; transform:translateY(8px) scale(0.985);
-  transition:transform 900ms cubic-bezier(.22,.61,.36,1), opacity 900ms ease;
-  will-change:transform, opacity;
+  animation:titleFade 1.8s ease forwards;
 }
-h2.in{opacity:1; transform:translateY(0) scale(1);}
+@keyframes titleFade {
+  0% {opacity: 0; transform: translateY(12px) scale(0.95);}
+  50% {opacity: 0.7; transform: translateY(4px) scale(1.01);}
+  100% {opacity: 1; transform: translateY(0) scale(1);}
+}
 h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 .section-title{font-size:14px; color:#555; margin:10px 0 8px;}
 
-/* ===== 區塊：交錯進場（左/右） ===== */
-.reveal{
-  opacity:0; transform:translateY(34px);
-  transition:transform 950ms cubic-bezier(.22,.61,.36,1), opacity 900ms ease;
-  will-change:transform, opacity;
-}
+/* ===== 區塊進場動畫 ===== */
+.reveal{opacity:0; transform:translateY(34px); transition:all .9s;}
 .reveal.in{opacity:1; transform:translateY(0);}
-.reveal.left{transform:translateY(34px) translateX(-14px);}
-.reveal.left.in{transform:translateY(0) translateX(0);}
-.reveal.right{transform:translateY(34px) translateX(14px);}
-.reveal.right.in{transform:translateY(0) translateX(0);}
 
-/* ===== 訂購人資訊卡片 ===== */
+/* ===== 訂購資訊卡片 ===== */
 .input-container{
   max-width:500px; margin:0 auto 30px; text-align:left;
   background:#fff; padding:25px 28px; border-radius:16px;
@@ -98,26 +88,23 @@ h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 .input-group label{font-size:14px; color:#333;}
 .input-group input{
   font-size:14px; padding:8px 10px; border:1px solid #ccc; border-radius:8px; background:#fafafa;
-  transition:all .25s ease;
 }
-.input-group input:focus{border-color:var(--primary); background:#fff; box-shadow:0 0 6px rgba(95,147,194,.25);}
+.input-group input:focus{border-color:var(--navy); background:#fff; box-shadow:0 0 6px rgba(30,79,123,.25);}
 .input-error{border-color:#e74c3c !important;}
 
 /* ===== 表格 ===== */
 table{
   width:90%; max-width:500px; margin:15px auto;
-  border-collapse:separate; border-spacing:0; background:#fff; border-radius:14px; overflow:hidden;
-  box-shadow:0 2px 10px rgba(0,0,0,.08); font-size:15px; table-layout:fixed;
+  border-collapse:separate; border-spacing:0; background:#fff; border-radius:14px;
+  box-shadow:0 2px 10px rgba(0,0,0,.08); font-size:15px;
 }
 th,td{padding:10px; border-bottom:1px solid #e9eef2;}
 th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 select{width:100%; font-size:14px; padding:5px 6px; border-radius:6px; border:1px solid #ccc;}
 input[type='checkbox']{transform:scale(1.2);}
-
-/* ===== 總金額 ===== */
 .total{font-size:20px; font-weight:600; color:var(--navy); margin-top:20px;}
 
-/* ===== 匯款帳戶（霧面玻璃） ===== */
+/* ===== 匯款帳戶 ===== */
 .account-box{
   width:85%; max-width:350px; margin:25px auto;
   background:rgba(255,255,255,0.5);
@@ -125,42 +112,31 @@ input[type='checkbox']{transform:scale(1.2);}
   border:1px solid rgba(255,255,255,0.4);
   color:#333; padding:16px; border-radius:16px; font-size:13px;
   box-shadow:0 8px 24px rgba(0,0,0,0.07);
-  position:relative;
 }
-.account-box::before{
-  content:""; position:absolute; inset:0; border-radius:16px;
-  background:radial-gradient(120% 60% at 0% 0%, rgba(255,255,255,.35), transparent 55%);
-  pointer-events:none;
+.account-box h3{
+  margin:8px 0;
+  font-weight:600;
+  font-size:15px;
+  color:#44566C; /* 奶灰藍 */
+  letter-spacing:0.5px;
 }
-.account-box h3{margin:8px 0; color:var(--navy); font-weight:600;}
 
-/* ===== 按鈕（純色｜無漸層） ===== */
+/* ===== 按鈕 ===== */
 .copy-btn,#screenshotBtn,#formBtn{
   border:none; padding:12px 22px; border-radius:999px;
-  font-size:16px; cursor:pointer; font-weight:500; letter-spacing:0.4px;
-  transition:transform .2s ease, box-shadow .2s ease, background-color .15s ease, color .15s ease;
+  font-size:16px; cursor:pointer; font-weight:500;
+  transition:.25s;
   box-shadow:0 3px 10px rgba(0,0,0,0.08);
 }
-/* 次要：奶茶純色 */
-.copy-btn,#screenshotBtn{
-  background-color:var(--milk-solid); color:#1f2a33;
-}
-.copy-btn:hover,#screenshotBtn:hover{
-  background-color:#e4ddcf; transform:translateY(-2px);
-  box-shadow:0 6px 16px rgba(0,0,0,0.12);
-}
-/* 主要：品牌藍純色 */
+.copy-btn,#screenshotBtn{background-color:var(--milk-solid); color:#1f2a33;}
+.copy-btn:hover,#screenshotBtn:hover{background-color:#e4ddcf; transform:translateY(-2px);}
 #formBtn{
-  background-color:var(--primary); color:#fff;
-  box-shadow:0 4px 12px rgba(95,147,194,0.35);
+  background-color:var(--navy); color:#fff;
+  box-shadow:0 4px 14px rgba(30,79,123,0.35);
 }
-#formBtn:hover{
-  background-color:#4b86b4; transform:translateY(-2px);
-  box-shadow:0 6px 18px rgba(95,147,194,0.45);
-}
-
+#formBtn:hover{background-color:#245c91; transform:translateY(-2px);}
 #buttonContainer{display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin-top:25px;}
-#formReminder{font-size:14px; color:#555; margin-top:10px; opacity:0; transform:translateY(14px); transition:all .8s ease;}
+#formReminder{font-size:14px; color:#555; margin-top:10px; opacity:0; transform:translateY(14px); transition:all .8s;}
 #formReminder.in{opacity:1; transform:translateY(0);}
 
 /* ===== 手機優化 ===== */
@@ -168,7 +144,6 @@ input[type='checkbox']{transform:scale(1.2);}
   h2{font-size:60px;}
   table{font-size:13.5px; width:95%;}
   .input-container{width:90%; padding:18px;}
-  .input-group input{font-size:13.5px; padding:7px 9px;}
   .account-box{font-size:12.5px; width:90%;}
   .copy-btn,#screenshotBtn,#formBtn{font-size:14px; padding:10px 18px;}
 }
@@ -247,11 +222,9 @@ input[type='checkbox']{transform:scale(1.2);}
 </main>
 
 <script>
-/* ===== 初始與開場 ===== */
 window.addEventListener('DOMContentLoaded',()=>{
-  // 數量 0～35
   const select=document.getElementById('qty1');
-  for(let i=0;i<=35;i++){const opt=document.createElement('option'); opt.value=i; opt.textContent=i; select.appendChild(opt);}
+  for(let i=0;i<=35;i++){const opt=document.createElement('option');opt.value=i;opt.textContent=i;select.appendChild(opt);}
   select.value="0"; calculate();
 
   const intro=document.getElementById('intro');
@@ -259,54 +232,23 @@ window.addEventListener('DOMContentLoaded',()=>{
   const text=document.getElementById('intro-text');
   const btn=document.getElementById('startBtn');
   const main=document.getElementById('mainContent');
-  const title=document.getElementById('pageTitle');
 
-  // 開場節奏
   setTimeout(()=>logo.classList.add('show'),300);
   setTimeout(()=>logo.classList.add('hide'),2500);
   setTimeout(()=>{logo.style.display='none'; text.classList.add('show');},3900);
   setTimeout(()=>btn.classList.add('show'),5700);
 
-  // Start → 進場
   btn.addEventListener('click',()=>{
     intro.classList.add('fade-out');
     setTimeout(()=>{
       intro.style.display='none';
-      document.body.classList.add('main-enter');
       main.classList.add('show');
-
-      // 標題先入場
-      setTimeout(()=>title.classList.add('in'), 260);
-
-      // 分區交錯（依 data-delay）
-      document.querySelectorAll('.reveal').forEach((el)=>{
-        const d=parseFloat(el.dataset.delay||0);
-        setTimeout(()=>el.classList.add('in'), d*1000);
-      });
-
-      // 提醒字
-      setTimeout(()=>document.getElementById('formReminder').classList.add('in'), 1400);
-
-      // 啟用滾動 reveal
-      initObserver();
+      document.querySelectorAll('.reveal').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*200));
+      setTimeout(()=>document.getElementById('formReminder').classList.add('in'),1400);
     },700);
   });
 });
 
-/* ===== 滾動 reveal（進到視窗再淡入） ===== */
-function initObserver(){
-  const io=new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.classList.add('in');
-        io.unobserve(e.target);
-      }
-    });
-  },{threshold:0.18});
-  document.querySelectorAll('.reveal, #pageTitle, #formReminder').forEach(el=>io.observe(el));
-}
-
-/* ===== 計算 ===== */
 function calculate(){
   const qty1=parseInt(document.getElementById('qty1').value)||0;
   document.getElementById('sub1').innerText='$'+(qty1*320);
@@ -319,18 +261,15 @@ function calculate(){
   document.getElementById('subPost').innerText=cPost?'$120':'$0';
   document.getElementById('total').innerText='總金額：$'+(qty1*320+ship);
 }
-/* ===== 寄送互斥 ===== */
 function selectShip(type){
   if(type==='711') document.getElementById('shipPost').checked=false;
   if(type==='post') document.getElementById('ship711').checked=false;
   calculate();
 }
-/* ===== 複製帳號 ===== */
 function copyAccount(){
   navigator.clipboard.writeText(document.getElementById('accountNumber').innerText);
-  alert('匯款帳號已複製！記得匯款後，再按下前往填寫表單按鈕喔！');
+  alert('匯款帳號已複製！記得匯款後再按下一步填寫寄送資訊！');
 }
-/* ===== 截圖 ===== */
 function screenshotOrder(){
   html2canvas(document.getElementById('mainContent')).then(canvas=>{
     const link=document.createElement('a');
@@ -342,7 +281,6 @@ function screenshotOrder(){
     alert('截圖已下載！記得填寫表單喔！');
   });
 }
-/* ===== 前往 Google 表單（帶參數） ===== */
 function goToForm(){
   const name=document.getElementById('customerName').value.trim();
   const phone=document.getElementById('customerPhone').value.trim();
