@@ -92,7 +92,7 @@ h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 .input-group input:focus{border-color:var(--navy); background:#fff; box-shadow:0 0 6px rgba(30,79,123,.25);}
 .input-error{border-color:#e74c3c !important;}
 
-/* ===== 表格（圓角） ===== */
+/* ===== 表格 ===== */
 table{
   width:90%;
   max-width:500px;
@@ -125,10 +125,7 @@ input[type='checkbox']{transform:scale(1.2);}
   transform:translateY(10px) scale(0.96);
   transition:opacity 1.2s ease, transform 1.2s ease;
 }
-.total.show{
-  opacity:1;
-  transform:translateY(0) scale(1);
-}
+.total.show{opacity:1; transform:translateY(0) scale(1);}
 .total::before{
   content:"";
   position:absolute;
@@ -141,14 +138,6 @@ input[type='checkbox']{transform:scale(1.2);}
   z-index:-1;
   filter:blur(1px) saturate(1.1);
 }
-
-/* 更新動畫（柔和版） */
-@keyframes totalUpdate {
-  0% {transform:scale(1); filter:brightness(1);}
-  50% {transform:scale(1.07); filter:brightness(1.15);}
-  100% {transform:scale(1); filter:brightness(1);}
-}
-.total.animate{animation: totalUpdate 0.8s ease;}
 
 /* ===== 匯款帳戶 ===== */
 .account-box{
@@ -176,6 +165,17 @@ input[type='checkbox']{transform:scale(1.2);}
 #formReminder{font-size:14px; color:#555; margin-top:10px; opacity:0; transform:translateY(14px); transition:all .8s;}
 #formReminder.in{opacity:1; transform:translateY(0);}
 
+/* ===== 去背 LOGO 放大淡入 ===== */
+#form-logo{
+  width:280px;
+  margin:28px auto 12px;
+  opacity:0;
+  transform:translateY(30px);
+  transition:opacity 1.2s ease, transform 1.2s ease;
+  filter:drop-shadow(0 10px 14px rgba(0,0,0,0.2));
+}
+#form-logo.show{opacity:1; transform:translateY(0);}
+
 /* ===== 手機優化 ===== */
 @media (max-width:480px){
   h2{font-size:60px;}
@@ -183,6 +183,7 @@ input[type='checkbox']{transform:scale(1.2);}
   .input-container{width:90%; padding:18px;}
   .account-box{font-size:12.5px; width:90%;}
   .copy-btn,#screenshotBtn,#formBtn{font-size:14px; padding:10px 18px;}
+  #form-logo{width:200px;}
 }
 </style>
 </head>
@@ -256,24 +257,31 @@ input[type='checkbox']{transform:scale(1.2);}
       <button id="formBtn" onclick="goToForm()">下一步,填寫寄送資訊</button>
     </div>
     <p id="formReminder">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
+
+    <!-- 去背 LOGO -->
+    <img id="form-logo" src="https://github.com/b02279437-crypto/liu-mama-calculator/blob/main/LOGO2-removebg-preview.png?raw=true" alt="Liu Mama Logo">
   </section>
 </main>
 
 <script>
 window.addEventListener('DOMContentLoaded',()=>{
+  // 初始化數量選單
   const select=document.getElementById('qty1');
   for(let i=0;i<=35;i++){
     const opt=document.createElement('option');
     opt.value=i; opt.textContent=i;
     select.appendChild(opt);
   }
-  select.value="0"; calculate();
+  select.value="0";
+  calculate();
 
+  // 開場動畫控制
   const intro=document.getElementById('intro');
   const logo=document.getElementById('intro-logo');
   const text=document.getElementById('intro-text');
   const btn=document.getElementById('startBtn');
   const main=document.getElementById('mainContent');
+  const formLogo=document.getElementById('form-logo');
 
   setTimeout(()=>logo.classList.add('show'),300);
   setTimeout(()=>logo.classList.add('hide'),2500);
@@ -285,45 +293,69 @@ window.addEventListener('DOMContentLoaded',()=>{
     setTimeout(()=>{
       intro.style.display='none';
       main.classList.add('show');
-      document.querySelectorAll('.reveal').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*200));
+      document.querySelectorAll('.reveal').forEach((el,i)=>{
+        setTimeout(()=>el.classList.add('in'), i*200);
+      });
       setTimeout(()=>document.querySelector('.total').classList.add('show'),1300);
       setTimeout(()=>document.getElementById('formReminder').classList.add('in'),1400);
+      setTimeout(()=>formLogo.classList.add('show'),1800);
     },700);
   });
 });
 
+// 計算金額
 function calculate(){
   const qty1=parseInt(document.getElementById('qty1').value)||0;
   document.getElementById('sub1').innerText='$'+(qty1*320);
+
   let ship=0;
   const c711=document.getElementById('ship711').checked;
   const cPost=document.getElementById('shipPost').checked;
   if(c711) ship=60;
   if(cPost) ship=120;
+
   document.getElementById('sub711').innerText=c711?'$60':'$0';
   document.getElementById('subPost').innerText=cPost?'$120':'$0';
+
   const totalText='Total Amount: $'+(qty1*320+ship);
   const totalEl=document.getElementById('total');
   totalEl.innerText=totalText;
   totalEl.classList.add('show');
+  // 重新觸發柔和縮放動畫
   totalEl.classList.remove('animate');
-  void totalEl.offsetWidth; // reset animation
+  void totalEl.offsetWidth;
   totalEl.classList.add('animate');
 }
 
+// 運送方式互斥
 function selectShip(type){
   if(type==='711') document.getElementById('shipPost').checked=false;
   if(type==='post') document.getElementById('ship711').checked=false;
   calculate();
 }
 
+// 複製匯款帳號
 function copyAccount(){
-  navigator.clipboard.writeText(document.getElementById('accountNumber').innerText);
-  alert('匯款帳號已複製！記得匯款後再按下一步填寫寄送資訊！');
+  const acct=document.getElementById('accountNumber').innerText;
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(acct).then(()=>alert('匯款帳號已複製！記得匯款後再按下一步填寫寄送資訊！'));
+  }else{
+    // 後備方案
+    const ta=document.createElement('textarea');
+    ta.value=acct; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    alert('匯款帳號已複製！記得匯款後再按下一步填寫寄送資訊！');
+  }
 }
 
+// 截圖訂單
 function screenshotOrder(){
-  html2canvas(document.getElementById('mainContent')).then(canvas=>{
+  const target=document.getElementById('mainContent');
+  if(typeof html2canvas==='undefined'){
+    alert('截圖功能庫尚未載入，請稍後再試或檢查網路連線。');
+    return;
+  }
+  html2canvas(target).then(canvas=>{
     const link=document.createElement('a');
     link.href=canvas.toDataURL('image/png');
     link.download='liu_mama_order.png';
@@ -334,6 +366,7 @@ function screenshotOrder(){
   });
 }
 
+// 前往 Google 表單（帶參數）
 function goToForm(){
   const name=document.getElementById('customerName').value.trim();
   const phone=document.getElementById('customerPhone').value.trim();
