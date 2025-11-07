@@ -31,46 +31,25 @@ html,body{
 }
 :focus-visible{ outline:2px solid rgba(30,79,123,.5); outline-offset:3px; }
 
-/* 統一數字精緻度 */
+/* 數字精緻 */
 table, .total, select, input, .account-box, #buttonContainer, .toast{
-  font-variant-numeric: lining-nums tabular-nums;
-  letter-spacing:.2px;
+  font-variant-numeric: lining-nums tabular-nums; letter-spacing:.2px;
 }
 
 /* ===== 開場動畫 ===== */
-#intro{
-  position:fixed; inset:0; background-color:var(--bg);
-  display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
-  padding-top:14vh; z-index:9999; opacity:1; transition:opacity .9s var(--ease);
-}
+#intro{ position:fixed; inset:0; background-color:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:14vh; z-index:9999; opacity:1; transition:opacity .9s var(--ease); }
 #intro.fade-out{opacity:0; pointer-events:none;}
-#intro-logo{
-  width:80vw; max-width:550px; opacity:0; transform:scale(0.99);
-  transition:opacity 1.2s var(--ease), transform 1.6s var(--ease);
-}
+#intro-logo{ width:80vw; max-width:550px; opacity:0; transform:scale(0.99); transition:opacity 1.2s var(--ease), transform 1.6s var(--ease); }
 #intro-logo.show{opacity:1; transform:scale(1.03);}
 #intro-logo.hide{opacity:0; transform:scale(1.03); transition:opacity 1.1s var(--ease);}
-#intro-hero{
-  width:clamp(260px, 60vw, 380px);
-  opacity:0; transform:translateY(8px);
-  transition:opacity 1.1s var(--ease), transform 1.1s var(--ease);
-  margin:18px auto -72px;
-  filter:drop-shadow(0 10px 14px rgba(0,0,0,0.15));
-}
+#intro-hero{ width:clamp(260px, 60vw, 380px); opacity:0; transform:translateY(8px); transition:opacity 1.1s var(--ease), transform 1.1s var(--ease); margin:18px auto -72px; filter:drop-shadow(0 10px 14px rgba(0,0,0,0.15)); }
 #intro-hero.show{opacity:1; transform:translateY(0);}
-#intro-text{
-  font-weight:500; color:#333; font-size:15px; line-height:1.9;
-  opacity:0; white-space:pre-line; margin-top:-38px;
-  letter-spacing:.5px;
-  transition:opacity 1.1s var(--ease);
-}
+#intro-text{ font-weight:500; color:#333; font-size:15px; line-height:1.9; opacity:0; white-space:pre-line; margin-top:-38px; letter-spacing:.5px; transition:opacity 1.1s var(--ease); }
 #intro-text.show{opacity:1;}
 #startBtn{
-  position:relative; overflow:hidden;
-  margin-top:14px; padding:14px 46px; font-size:30px;
-  font-family:'Amatic SC',cursive; letter-spacing:2px;
-  background-color:#ddd5c7; color:#2c3e50; border:none; border-radius:999px; cursor:pointer;
-  box-shadow:0 3px 10px rgba(0,0,0,.08);
+  position:relative; overflow:hidden; margin-top:14px; padding:14px 46px; font-size:30px;
+  font-family:'Amatic SC',cursive; letter-spacing:2px; background-color:#ddd5c7; color:#2c3e50;
+  border:none; border-radius:999px; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.08);
   opacity:0; transform:translateY(10px);
   transition:opacity .9s var(--ease), transform .5s var(--ease), background-color .2s var(--ease);
 }
@@ -82,10 +61,7 @@ table, .total, select, input, .account-box, #buttonContainer, .toast{
 /* ===== 主內容 ===== */
 main{opacity:0; visibility:hidden; transition:opacity 1s var(--ease);}
 main.show{opacity:1; visibility:visible;}
-h2{
-  font-size:90px; font-weight:900; color:var(--navy);
-  margin:28px 0 10px 0; animation:titleFade 1.4s var(--ease) forwards;
-}
+h2{ font-size:90px; font-weight:900; color:var(--navy); margin:28px 0 10px 0; animation:titleFade 1.4s var(--ease) forwards; }
 @keyframes titleFade{ 0%{opacity:0; transform:translateY(12px) scale(.96);} 60%{opacity:.85; transform:translateY(2px) scale(1.01);} 100%{opacity:1; transform:translateY(0) scale(1);} }
 h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 .section-title{font-size:14px; color:#555; margin:10px 0 8px;}
@@ -93,30 +69,17 @@ h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 .reveal.in{opacity:1; transform:translateY(0);}
 
 /* ===== 訂購資訊卡片 ===== */
-.input-container{
-  max-width:500px; margin:0 auto 30px; text-align:left;
-  background:#fff; padding:25px 28px; border-radius:16px;
-  box-shadow:0 6px 22px rgba(0,0,0,.05);
-}
+.input-container{ max-width:500px; margin:0 auto 30px; text-align:left; background:#fff; padding:25px 28px; border-radius:16px; box-shadow:0 6px 22px rgba(0,0,0,.05); }
 .input-group{display:flex; flex-direction:column; gap:6px; margin-bottom:18px;}
 .input-group label{font-size:14px; color:#333;}
-.input-group input{
-  font-size:14px; padding:8px 10px; border:1px solid #ccc; border-radius:8px; background:#fafafa;
-  font-variant-numeric: tabular-nums lining-nums; letter-spacing:.2px;
-}
+.input-group input{ font-size:14px; padding:8px 10px; border:1px solid #ccc; border-radius:8px; background:#fafafa; font-variant-numeric: tabular-nums lining-nums; letter-spacing:.2px; }
 .input-group input:focus{border-color:var(--navy); background:#fff; box-shadow:0 0 6px rgba(30,79,123,.25);}
 .input-error{border-color:#e74c3c !important;}
 .error-msg{display:none; font-size:12px; color:#b23; margin-top:2px;}
 .error-msg.show{display:block;}
 
 /* ===== 商品表格 ===== */
-table{
-  width:90%; max-width:500px; margin:15px auto;
-  border-collapse:separate; border-spacing:0;
-  background:#fff; border-radius:16px; overflow:hidden;
-  box-shadow:0 2px 10px rgba(0,0,0,.08);
-  font-size:15px; table-layout:fixed; text-align:center;
-}
+table{ width:90%; max-width:500px; margin:15px auto; border-collapse:separate; border-spacing:0; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.08); font-size:15px; table-layout:fixed; text-align:center; }
 th,td{ padding:10px; border-bottom:1px solid #e9eef2; vertical-align:middle; overflow:visible; white-space:nowrap; }
 th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 #productTable td:nth-child(2), #productTable td:nth-child(4),
@@ -125,7 +88,7 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 .col-price{width:90px;} .col-action{width:100px;} .col-sub{width:110px;}
 #productTable{ margin:15px auto 28px; }
 
-/* ===== 寄送方式：膠囊「並排可點」版 ===== */
+/* ===== 寄送方式：膠囊「並排可點＋單行不換行」 ===== */
 #shippingTable{ width:96%; margin:10px auto 18px; display:block; background:transparent; box-shadow:none; border-radius:0; border-spacing:0; }
 #shippingTable tr:first-child{ display:none; } /* 隱藏表頭 */
 #shippingTable tr{
@@ -141,23 +104,22 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 #shippingTable tr:hover{ box-shadow:0 10px 24px rgba(0,0,0,.08); transform:translateY(-1px); }
 
 #shippingTable td{ border:0; background:transparent; white-space:normal; display:inline-flex; align-items:center; }
-#shippingTable td:nth-child(1){ flex:1 1 auto; text-align:left; }
-#shippingTable td:nth-child(2), #shippingTable td:nth-child(4){ display:none; } /* 價格＆小計隱藏但保留給 JS */
-/* 把 checkbox 視覺隱藏但保留在 DOM（交互靠 JS 控制） */
-#shippingTable input[type='checkbox']{
-  position:absolute; opacity:0; pointer-events:none; width:0; height:0; margin:0;
+#shippingTable td:nth-child(1){
+  flex:1 1 auto; text-align:left; white-space:nowrap; gap:8px; /* 關鍵：不換行＋間距 */
 }
+#shippingTable td:nth-child(2), #shippingTable td:nth-child(4){ display:none; } /* 價格＆小計隱藏但保留給 JS */
+#shippingTable input[type='checkbox']{ position:absolute; opacity:0; pointer-events:none; width:0; height:0; margin:0; }
 #shippingTable td:nth-child(3){ flex:0 0 auto; }
 
-/* 兩行文案（價錢深藍） */
-#shippingTable tr:nth-child(2) td:first-child,
-#shippingTable tr:nth-child(3) td:first-child{ position:relative; color:transparent; line-height:1.1; }
-#shippingTable tr:nth-child(2) td:first-child::before{ content:"711取貨"; display:block; color:#263445; font-weight:600; letter-spacing:.2px; }
-#shippingTable tr:nth-child(2) td:first-child::after{ content:"+60"; display:block; margin-top:4px; font-family:'Amatic SC', cursive; font-weight:900; font-size:18px; color:var(--navy); }
-#shippingTable tr:nth-child(3) td:first-child::before{ content:"郵寄"; display:block; color:#263445; font-weight:600; letter-spacing:.2px; }
-#shippingTable tr:nth-child(3) td:first-child::after{ content:"+120"; display:block; margin-top:4px; font-family:'Amatic SC', cursive; font-weight:900; font-size:18px; color:var(--navy); }
+/* 文案（單行，價錢深藍） */
+#shippingTable tr:nth-child(2) td:first-child{ position:relative; color:transparent; line-height:1; }
+#shippingTable tr:nth-child(3) td:first-child{ position:relative; color:transparent; line-height:1; }
+#shippingTable tr:nth-child(2) td:first-child::before{ content:"711取貨"; display:inline; color:#263445; font-weight:600; letter-spacing:.2px; }
+#shippingTable tr:nth-child(2) td:first-child::after{ content:"+60"; display:inline; margin-left:8px; font-family:'Amatic SC', cursive; font-weight:900; font-size:18px; color:var(--navy); }
+#shippingTable tr:nth-child(3) td:first-child::before{ content:"郵寄"; display:inline; color:#263445; font-weight:600; letter-spacing:.2px; }
+#shippingTable tr:nth-child(3) td:first-child::after{ content:"+120"; display:inline; margin-left:8px; font-family:'Amatic SC', cursive; font-weight:900; font-size:18px; color:var(--navy); }
 
-/* 選取狀態（使用 :has 支援） */
+/* 被選取的膠囊狀態 */
 #shippingTable tr:has(input:checked){
   border-color:rgba(30,79,123,.35);
   background:linear-gradient(180deg, rgba(224,234,242,.9), rgba(214,226,238,.9));
@@ -188,16 +150,9 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 .total.glow::before{ animation: glowPulse 1.4s var(--ease); }
 
 /* ===== 匯款資訊 & 按鈕 ===== */
-.account-box{
-  width:85%; max-width:350px; margin:25px auto 0; background:rgba(255,255,255,0.5);
-  backdrop-filter:blur(12px) brightness(1.05); border:1px solid rgba(255,255,255,0.4);
-  color:#333; padding:16px; border-radius:16px; font-size:13px; box-shadow:0 8px 24px rgba(0,0,0,0.07);
-}
+.account-box{ width:85%; max-width:350px; margin:25px auto 0; background:rgba(255,255,255,0.5); backdrop-filter:blur(12px) brightness(1.05); border:1px solid rgba(255,255,255,0.4); color:#333; padding:16px; border-radius:16px; font-size:13px; box-shadow:0 8px 24px rgba(0,0,0,0.07); }
 .account-box h3{margin:8px 0; font-weight:600; font-size:15px; color:#44566C; letter-spacing:.5px;}
-.copy-btn,#screenshotBtn,#formBtn{
-  border:none; padding:12px 22px; border-radius:999px; font-size:16px; cursor:pointer; font-weight:500;
-  transition:.25s var(--ease); box-shadow:0 3px 10px rgba(0,0,0,0.08);
-}
+.copy-btn,#screenshotBtn,#formBtn{ border:none; padding:12px 22px; border-radius:999px; font-size:16px; cursor:pointer; font-weight:500; transition:.25s var(--ease); box-shadow:0 3px 10px rgba(0,0,0,0.08); }
 .copy-btn,#screenshotBtn{background-color:var(--milk-solid); color:#1f2a33;}
 .copy-btn:hover,#screenshotBtn:hover{background-color:#e4ddcf; transform:translateY(-2px);}
 #formBtn{background-color:var(--navy); color:#fff; box-shadow:0 4px 14px rgba(30,79,123,0.35);}
@@ -207,13 +162,7 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 #formReminder.in{opacity:1; transform:translateY(0);}
 
 /* Toast */
-.toast{
-  position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px);
-  background:rgba(15,26,36,.92); color:#fff; padding:10px 14px; border-radius:10px;
-  box-shadow:0 8px 24px rgba(0,0,0,.22); font-size:14px; opacity:0;
-  transition:opacity .35s var(--ease), transform .35s var(--ease);
-  pointer-events:none; z-index:99999;
-}
+.toast{ position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px); background:rgba(15,26,36,.92); color:#fff; padding:10px 14px; border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.22); font-size:14px; opacity:0; transition:opacity .35s var(--ease), transform .35s var(--ease); pointer-events:none; z-index:99999; }
 .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 
 /* 動畫減量 */
@@ -391,7 +340,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     },700);
   });
 
-  // 膠囊整顆可點（不改 DOM；用 JS 控制 checkbox）
+  // 膠囊整顆可點
   const row711 = document.querySelector('#shippingTable tr:nth-child(2)');
   const rowPost = document.querySelector('#shippingTable tr:nth-child(3)');
   row711.addEventListener('click', (ev)=>{
@@ -427,7 +376,7 @@ function animateNumber(el, from, to, duration=800){
   requestAnimationFrame(frame);
 }
 
-/* ===== 計算金額（柔光＋數字滾動） ===== */
+/* ===== 計算金額 ===== */
 function calculate(skipRoll){
   const qty1=parseInt(document.getElementById('qty1').value)||0;
   document.getElementById('sub1').innerText='$'+(qty1*320);
@@ -455,7 +404,7 @@ function calculate(skipRoll){
   totalWrap.classList.add('animate','glow');
 }
 
-/* 運送方式互斥（保留原有 API） */
+/* 運送方式互斥（保留原函式） */
 function selectShip(type){
   if(type==='711') document.getElementById('shipPost').checked=false;
   if(type==='post') document.getElementById('ship711').checked=false;
