@@ -17,6 +17,7 @@
   --bg:#f7f6f2;
   --gray-blue:#7f9bb3;
   --milk-solid:#e9e3d7;
+  --morandi-blue:#c9d7e1; /* Morandi light blue */
   --easing:cubic-bezier(.22,.61,.36,1);
 }
 
@@ -126,7 +127,7 @@ h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 .input-error{border-color:#e74c3c !important;}
 .input-hint{font-size:12px; color:#b23a3a; margin-top:2px; display:none;}
 
-/* ===== 表格：強制對齊 ===== */
+/* ===== 商品表：強制對齊 ===== */
 table{
   width:90%; max-width:500px; margin:15px auto;
   border-collapse:separate; border-spacing:0; background:#fff;
@@ -142,10 +143,6 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 .col-price { width:90px; }
 .col-sub   { width:110px; }
 
-/* 第一張、第二張表格的間距 */
-#productTable{ margin:15px auto 28px; }
-#shippingTable{ margin:10px auto 18px; }
-
 /* 數量下拉：寬固定 70px */
 select{
   width:70px; box-sizing:border-box;
@@ -153,36 +150,30 @@ select{
   border-radius:6px; border:1px solid #ccc; background:#fff; max-width:100%;
 }
 
-/* ===== 分段式寄送選擇（segmented control） ===== */
-.segmented{
-  display:inline-flex; gap:4px; padding:4px;
-  background:rgba(255,255,255,.6);
-  border:1px solid rgba(30,79,123,.1);
-  border-radius:999px; backdrop-filter:blur(10px) brightness(1.05);
+/* ===== 分段式寄送卡片（無表格） ===== */
+.ship-cards{
+  display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin:10px auto 4px;
+}
+.ship-card{
+  position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  min-width: 160px; padding:14px 16px; border-radius:16px; cursor:pointer; user-select:none;
+  background:rgba(255,255,255,.7); border:1px solid rgba(30,79,123,.12);
   box-shadow:0 6px 18px rgba(0,0,0,.06);
-  margin:8px auto 6px;
+  transition: transform .18s var(--easing), box-shadow .2s var(--easing), background-color .2s var(--easing);
+  backdrop-filter: blur(10px) brightness(1.03);
 }
-.segmented input{ display:none; }
-.segmented label{
-  padding:8px 14px; border-radius:999px; cursor:pointer; user-select:none;
-  transition: background-color .25s var(--easing), transform .2s var(--easing), box-shadow .25s var(--easing);
-  font-size:14px; color:#2c3e50;
-}
-.segmented input:checked + label{
-  background:rgba(30,79,123,.08); color:#102030;
-  box-shadow: inset 0 0 0 1px rgba(30,79,123,.18);
-}
-.segmented label:active{ transform:translateY(1px); }
-
-/* 更好的系統元件色彩 */
-input[type="checkbox"], input[type="radio"]{ accent-color: var(--navy); }
+.ship-card:hover{ transform: translateY(-2px); }
+.ship-input{ display:none; }
+.ship-title{ font-size:14px; color:#263445; letter-spacing:.2px; }
+.ship-price{ font-family:'Amatic SC', cursive; color:var(--navy); font-weight:900; font-size:38px; line-height:1; margin-top:8px; }
+.ship-input:checked + label.ship-card{ box-shadow: inset 0 0 0 2px rgba(30,79,123,.25), 0 8px 22px rgba(0,0,0,.08); background: rgba(255,255,255,.9); }
 
 /* ===== Total Amount（含柔光顯現＋數字緩動） ===== */
 .mono-num{ font-variant-numeric: tabular-nums lining-nums; }
 .total{
   font-family:'Amatic SC', cursive;
   font-size:30px; font-weight:900; letter-spacing:2.5px; color:var(--navy);
-  margin-top:25px; position:relative; display:inline-block;
+  margin-top:22px; position:relative; display:inline-block;
   padding:6px 18px; opacity:0; transform:translateY(10px) scale(0.96);
   transition:opacity 1.2s var(--easing), transform 1.2s var(--easing);
   z-index:0; isolation:isolate; will-change:transform,opacity;
@@ -192,10 +183,10 @@ input[type="checkbox"], input[type="radio"]{ accent-color: var(--navy); }
   content:""; position:absolute; left:0; top:50%;
   width:100%; height:60%;
   transform:translateY(-50%) rotate(-1.5deg) scale(1);
-  background:conic-gradient(from 220deg, rgba(255,227,186,.85), rgba(255,215,160,.65) 40%, rgba(255,235,200,.6));
+  background:linear-gradient(120deg, rgba(201,215,225,.92), rgba(188,205,219,.82)); /* Morandi light blue */
   border-radius:12px; z-index:-1;
   filter:blur(1.2px) saturate(1.05);
-  opacity:.55; mix-blend-mode:multiply;
+  opacity:.6; mix-blend-mode:normal; /* avoid over-darken */
   transition: opacity .8s var(--easing), transform .8s var(--easing);
 }
 @keyframes totalUpdate{ 0%{transform:scale(1);} 30%{transform:scale(1.03);} 100%{transform:scale(1);} }
@@ -229,7 +220,7 @@ input[type="checkbox"], input[type="radio"]{ accent-color: var(--navy); }
 .copy-btn:hover,#screenshotBtn:hover{background-color:#e4ddcf; transform:translateY(-2px);}
 #formBtn{background-color:var(--navy); color:#fff; box-shadow:0 4px 14px rgba(30,79,123,0.35);}
 #formBtn:hover{background-color:#245c91; transform:translateY(-2px);}
-#buttonContainer{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:32px;}
+#buttonContainer{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:26px;}
 #formReminder{font-size:14px; color:#555; margin-top:16px; opacity:0; transform:translateY(14px); transition:all .8s var(--easing);}
 #formReminder.in{opacity:1; transform:translateY(0);}
 
@@ -258,9 +249,7 @@ input[type="checkbox"], input[type="radio"]{ accent-color: var(--navy); }
   #intro-text{margin-top:-34px; line-height:1.9;}
   #startBtn{margin-top:12px;}
 
-  #productTable{ margin:14px auto 26px; }
-  #shippingTable{ margin:10px auto 18px; }
-  #buttonContainer{ margin-top:36px; }
+  #buttonContainer{ margin-top:30px; }
 }
 
 /* 動態敏感度：若使用者偏好低動態，全面降噪 */
@@ -300,24 +289,7 @@ input[type="checkbox"], input[type="radio"]{ accent-color: var(--navy); }
   <h2 id="pageTitle"><span class="english">LIU MAMA Order</span></h2>
 
   <section class="reveal left">
-    <p class="section-title">請填寫訂購人資訊</p>
-    <div class="input-container">
-      <div class="input-group">
-        <label for="customerName">訂購人姓名</label>
-        <input type="text" id="customerName" placeholder="請輸入姓名">
-      </div>
-      <div class="input-group">
-        <label for="customerPhone">訂購人電話</label>
-        <input type="text" id="customerPhone" placeholder="請輸入電話" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-        <small id="phoneHint" class="input-hint">請輸入 10 碼數字</small>
-      </div>
-    </div>
-  </section>
-
-  <section class="reveal right">
-    <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
-
-    <!-- 商品表 -->
+    <p class="section-title">請選擇數量</p>
     <table id="productTable">
       <colgroup>
         <col><col class="col-price"><col><col class="col-sub">
@@ -330,24 +302,25 @@ input[type="checkbox"], input[type="radio"]{ accent-color: var(--navy); }
         <td id="sub1">$0</td>
       </tr>
     </table>
+  </section>
 
-    <!-- 分段式寄送選擇 -->
-    <div class="segmented" role="tablist" aria-label="選擇寄送方式">
-      <input type="radio" id="ship711" name="ship" value="711" aria-controls="shippingTable">
-      <label for="ship711">711超商取貨</label>
-      <input type="radio" id="shipPost" name="ship" value="post" aria-controls="shippingTable">
-      <label for="shipPost">郵局宅配</label>
+  <section class="reveal right">
+    <p class="section-title">請選擇寄送方式</p>
+
+    <!-- 分段式寄送（無表格） -->
+    <div class="ship-cards">
+      <input class="ship-input" type="radio" id="ship711" name="ship" value="711">
+      <label class="ship-card" for="ship711" role="button" aria-label="711 超商取貨 加 60 元">
+        <span class="ship-title">711超商取貨</span>
+        <span class="ship-price">+60</span>
+      </label>
+
+      <input class="ship-input" type="radio" id="shipPost" name="ship" value="post">
+      <label class="ship-card" for="shipPost" role="button" aria-label="郵局宅配 加 120 元">
+        <span class="ship-title">郵局宅配</span>
+        <span class="ship-price">+120</span>
+      </label>
     </div>
-
-    <!-- 寄送表（保留小計對齊） -->
-    <table id="shippingTable">
-      <colgroup>
-        <col><col class="col-price"><col class="col-sub">
-      </colgroup>
-      <tr><th>寄送方式</th><th>價格</th><th>小計</th></tr>
-      <tr><td>711超商取貨</td><td>$60</td><td id="sub711">$0</td></tr>
-      <tr><td>郵局宅配</td><td>$120</td><td id="subPost">$0</td></tr>
-    </table>
 
     <div class="total mono-num" id="total" aria-live="polite">Total Amount: $0</div>
   </section>
@@ -429,15 +402,15 @@ window.addEventListener('DOMContentLoaded',()=>{
   const main=document.getElementById('mainContent');
 
   setTimeout(()=>logo.classList.add('show'),300);
-  setTimeout(()=>logo.classList.add('hide'),2400); // 微調 0.1s
+  setTimeout(()=>logo.classList.add('hide'),2400);
   setTimeout(()=>{
     logo.style.display='none';
     hero.classList.add('show');
     text.classList.add('show');
-  },3780); // 微調快 0.12s
+  },3780);
   setTimeout(()=>btn.classList.add('show'),5520);
 
-  // 分段式寄送選擇 → 即時計算
+  // 寄送變更時即時計算
   document.querySelectorAll('input[name="ship"]').forEach(r=>r.addEventListener('change', calculate));
 
   btn.addEventListener('click',()=>{
@@ -446,13 +419,13 @@ window.addEventListener('DOMContentLoaded',()=>{
       intro.style.display='none';
       main.classList.add('show');
       document.querySelectorAll('.reveal').forEach((el,i)=>setTimeout(()=>el.classList.add('in'), i*200));
-      setTimeout(()=>document.querySelector('.total').classList.add('show'),1100);
-      setTimeout(()=>document.getElementById('formReminder').classList.add('in'),1200);
+      setTimeout(()=>document.querySelector('.total').classList.add('show'),1000);
+      setTimeout(()=>document.getElementById('formReminder').classList.add('in'),1100);
     },700);
   });
 });
 
-/* 計算金額（含縮放 + 柔光 + 數字緩動） */
+/* 計算金額（無寄送表，使用分段卡片） */
 function calculate(){
   const qty1=parseInt(document.getElementById('qty1').value)||0;
   document.getElementById('sub1').innerText='$'+(qty1*320);
@@ -462,20 +435,16 @@ function calculate(){
   if(checked){
     shipCost = (checked.value==='711') ? 60 : 120;
   }
-  // 更新寄送小計列
-  document.getElementById('sub711').innerText = (checked && checked.value==='711') ? '$60'  : '$0';
-  document.getElementById('subPost').innerText= (checked && checked.value==='post')? '$120' : '$0';
 
   const totalEl=document.getElementById('total');
   const prev = Number(totalEl.getAttribute('data-prev') || 0);
   const next = qty1*320 + shipCost;
 
-  // 數字緩動＋柔光
   animateCount(totalEl, prev, next);
   totalEl.setAttribute('data-prev', next);
   totalEl.classList.add('show');
   totalEl.classList.remove('animate','glow');
-  void totalEl.offsetWidth;             // 強制重排，保證能再次觸發
+  void totalEl.offsetWidth;
   totalEl.classList.add('animate','glow');
 }
 
