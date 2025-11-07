@@ -84,119 +84,67 @@ th,td{ padding:10px; border-bottom:1px solid #e9eef2; vertical-align:middle; ove
 th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 #productTable{ margin:15px auto 28px; }
 
-/* ===== 寄送方式：高質感膠囊版（僅樣式升級，結構/JS 不變） ===== */
-#shippingTable{
-  width:96%; margin:10px auto 18px; display:block;
-  background:transparent; box-shadow:none; border-radius:0; border-spacing:0;
-}
-#shippingTable tr:first-child{ display:none; } /* 隱藏表頭 */
+/* ===== 寄送方式：高質感膠囊（相容性強，真實文字顯示） ===== */
+#shippingTable{ width:96%; margin:10px auto 18px; display:block; background:transparent; box-shadow:none; border-radius:0; border-spacing:0; }
+#shippingTable tr:first-child{ display:none; }
 
-/* 每顆膠囊＝一列 tr（保留兩欄並排） */
 #shippingTable tr{
   position:relative; isolation:isolate;
   display:inline-flex; align-items:center; justify-content:center;
   width:calc(50% - 10px); margin:0 10px 12px 0;
   padding:16px 22px; border-radius:999px; cursor:pointer; white-space:nowrap;
-
-  /* 立體感：柔和漸層 + 內外高光/陰影 */
-  background: linear-gradient(180deg,#ffffff 0%, #f7f7f7 100%);
+  background:linear-gradient(180deg,#ffffff 0%, #f7f7f7 100%);
   border:1px solid rgba(30,79,123,.14);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.9) inset,
-    0 .5px 0 rgba(0,0,0,.04) inset,
-    0 10px 26px rgba(20,32,44,.07);
-  transition:
-    background .28s var(--ease),
-    border-color .28s var(--ease),
-    box-shadow .28s var(--ease),
-    transform .18s var(--ease);
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 .5px 0 rgba(0,0,0,.04) inset, 0 10px 26px rgba(20,32,44,.07);
+  transition:background .28s var(--ease), border-color .28s var(--ease), box-shadow .28s var(--ease), transform .18s var(--ease);
 }
+#shippingTable tr:nth-child(3){ margin-right:0; }
 
-/* 光澤層 */
 #shippingTable tr::before{
   content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
-  background:
-    radial-gradient(120% 120% at 10% 0%, rgba(255,255,255,.65) 0%, rgba(255,255,255,0) 60%),
-    linear-gradient(120deg, rgba(255,255,255,.12), rgba(255,255,255,0) 40%);
+  background:radial-gradient(120% 120% at 10% 0%, rgba(255,255,255,.65) 0%, rgba(255,255,255,0) 60%), linear-gradient(120deg, rgba(255,255,255,.12), rgba(255,255,255,0) 40%);
   mix-blend-mode:soft-light; opacity:.9;
 }
-
-/* 右側「打勾圓點」 */
 #shippingTable tr::after{
-  content:"\2713";
+  content:"✓";
   position:absolute; right:12px; top:50%; transform:translateY(-50%) scale(.6);
   width:28px; height:28px; border-radius:999px; display:flex; align-items:center; justify-content:center;
   background:linear-gradient(180deg,#eaf2f8,#dbe8f2);
-  color:#1f2a33; font-weight:700; letter-spacing:0;
+  color:#1f2a33; font-weight:700;
   box-shadow:0 1px 0 #fff inset, 0 6px 14px rgba(0,0,0,.08);
   opacity:0; transition:opacity .28s var(--ease), transform .28s var(--ease), background .28s var(--ease);
 }
+#shippingTable tr:hover{ transform:translateY(-1px); box-shadow:0 14px 30px rgba(20,32,44,.10), 0 1px 0 rgba(255,255,255,.9) inset; }
+#shippingTable tr:active{ transform:translateY(0) scale(.997); }
 
-/* Hover / Press 回饋 */
-#shippingTable tr:hover{
-  transform:translateY(-1px);
-  box-shadow:0 14px 30px rgba(20,32,44,.10), 0 1px 0 rgba(255,255,255,.9) inset;
-}
-#shippingTable tr:active{
-  transform:translateY(0) scale(.997);
-}
-
-/* 內層欄位排版（不改你的資料來源） */
-#shippingTable td{
-  border:0; background:transparent; display:inline-flex; align-items:center;
-}
+#shippingTable td{ border:0; background:transparent; display:inline-flex; align-items:center; }
 #shippingTable td:nth-child(1){
-  flex:1 1 auto; justify-content:center; gap:6px;
-  padding-right:42px;  /* 讓右側打勾圓點不壓到文字 */
+  flex:1 1 auto; justify-content:center; gap:6px; padding-right:42px;
+  color:#263445; font-weight:600; letter-spacing:.2px; /* 真實文字顯示 */
 }
-#shippingTable td:nth-child(2),
-#shippingTable td:nth-child(4){ display:none; } /* 價格&小計隱藏，留下 ID 給 JS */
+#shippingTable td:nth-child(2), #shippingTable td:nth-child(4){ display:none; } /* 保留給 JS 計算 */
 #shippingTable input[type='checkbox']{ position:absolute; opacity:0; pointer-events:none; width:0; height:0; margin:0; }
 #shippingTable td:nth-child(3){ flex:0 0 auto; }
 
-/* 顯示文案（維持你原本的 ::before / ::after 方式） */
-#shippingTable tr:nth-child(2) td:first-child{ position:relative; color:transparent; }
-#shippingTable tr:nth-child(2) td:first-child::before{
-  content:"711取貨"; display:inline; color:#263445; font-weight:600; letter-spacing:.2px;
-}
-#shippingTable tr:nth-child(2) td:first-child::after{
-  content:"+60"; display:inline; margin-left:6px; font-family:'Amatic SC', cursive; font-weight:900; font-size:18px; color:var(--navy);
-}
-
-#shippingTable tr:nth-child(3) td:first-child{ position:relative; color:transparent; }
-#shippingTable tr:nth-child(3) td:first-child::before{
-  content:"郵寄"; display:inline; color:#263445; font-weight:600; letter-spacing:.2px;
-}
-#shippingTable tr:nth-child(3) td:first-child::after{
-  content:"+120"; display:inline; margin-left:6px; font-family:'Amatic SC', cursive; font-weight:900; font-size:18px; color:var(--navy);
+/* +金額小徽章（由 JS 動態插入） */
+.ship-price{
+  display:inline-flex; align-items:center; justify-content:center;
+  margin-left:6px; padding:0 8px; height:22px; border-radius:999px;
+  font-family:'Amatic SC', cursive; font-weight:900; font-size:18px; letter-spacing:0;
+  color:var(--navy); background:rgba(30,79,123,.08); box-shadow:0 1px 0 rgba(255,255,255,.9) inset;
 }
 
-/* 選擇狀態（支援 :has 與 .selected 兩種） */
-#shippingTable tr:has(input:checked),
+/* 選中狀態（不用 :has，靠 .selected 提升相容性） */
 #shippingTable tr.selected{
   background:linear-gradient(180deg,#214b77 0%, #1d426a 100%);
   border-color:rgba(30,79,123,.55);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.25) inset,
-    0 10px 28px rgba(30,79,123,.28);
+  box-shadow:0 1px 0 rgba(255,255,255,.25) inset, 0 10px 28px rgba(30,79,123,.28);
 }
-#shippingTable tr:has(input:checked)::after,
-#shippingTable tr.selected::after{
-  opacity:1; transform:translateY(-50%) scale(1);
-  background:linear-gradient(180deg,#cfe2f1,#bdd2e3);
-  color:#0f1a24;
-}
-#shippingTable tr:has(input:checked) td:first-child::before,
-#shippingTable tr:has(input:checked) td:first-child::after,
-#shippingTable tr.selected td:first-child::before,
-#shippingTable tr.selected td:first-child::after{
-  color:#fff;  /* 選中時白字 */
-}
+#shippingTable tr.selected::after{ opacity:1; transform:translateY(-50%) scale(1); background:linear-gradient(180deg,#cfe2f1,#bdd2e3); color:#0f1a24; }
+#shippingTable tr.selected td:first-child, #shippingTable tr.selected .ship-price{ color:#fff; }
 
 /* 鍵盤可及性 */
-#shippingTable tr:focus-within{
-  outline:2px solid rgba(30,79,123,.45); outline-offset:2px;
-}
+#shippingTable tr:focus-within{ outline:2px solid rgba(30,79,123,.45); outline-offset:2px; }
 
 /* ===== Total（莫蘭迪淺藍＋柔光） ===== */
 .total{
@@ -240,7 +188,7 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 /* 動畫減量 */
 @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
 
-/* 手機優化（仍維持左右並排；窄螢幕自動換行） */
+/* 手機優化 */
 @media (max-width:480px){
   h2{font-size:60px;}
   table{font-size:13.5px; width:96%;}
@@ -408,7 +356,10 @@ window.addEventListener('DOMContentLoaded',()=>{
     },700);
   });
 
-  // 點整顆膠囊即可切換；並同步 .selected（做為 :has 的後備）
+  /* ===== 修正：由 JS 將價格以 "+數字" 形式插入第一欄，避免偽元素顯示失敗 ===== */
+  initShippingBadges();
+
+  // 點整顆膠囊即可切換；同步 .selected
   const row711 = document.querySelector('#shippingTable tr:nth-child(2)');
   const rowPost = document.querySelector('#shippingTable tr:nth-child(3)');
   row711.addEventListener('click', (ev)=>{
@@ -434,9 +385,34 @@ window.addEventListener('DOMContentLoaded',()=>{
   updateCapsuleSelected();
 });
 
+function initShippingBadges(){
+  const rows=[2,3]; // 711 與 郵寄兩列
+  rows.forEach(n=>{
+    const row=document.querySelector(`#shippingTable tr:nth-child(${n})`);
+    if(!row) return;
+    const labelCell=row.querySelector('td:nth-child(1)');
+    const priceCell=row.querySelector('td:nth-child(2)');
+    if(!labelCell || !priceCell) return;
+
+    // 已插入就略過
+    if(labelCell.querySelector('.ship-price')) return;
+
+    // 從 $60 / $120 擷取數字
+    const m=priceCell.textContent.match(/\d+/);
+    const p=m?m[0]:null;
+    if(!p) return;
+
+    const span=document.createElement('span');
+    span.className='ship-price';
+    span.textContent='+'+p;
+    labelCell.appendChild(span);
+  });
+}
+
 function updateCapsuleSelected(){
   const row711 = document.querySelector('#shippingTable tr:nth-child(2)');
   const rowPost = document.querySelector('#shippingTable tr:nth-child(3)');
+  if(!row711 || !rowPost) return;
   row711.classList.toggle('selected', document.getElementById('ship711').checked);
   rowPost.classList.toggle('selected', document.getElementById('shipPost').checked);
 }
