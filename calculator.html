@@ -92,7 +92,7 @@ h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 .input-group input:focus{border-color:var(--navy); background:#fff; box-shadow:0 0 6px rgba(30,79,123,.25);}
 .input-error{border-color:#e74c3c !important;}
 
-/* ===== 表格：強制對齊 ===== */
+/* ===== 表格：強制對齊（用 colgroup 固定像素） ===== */
 table{
   width:90%;
   max-width:500px;
@@ -101,28 +101,34 @@ table{
   border-spacing:0;
   background:#fff;
   border-radius:16px;
-  overflow:hidden;
+  overflow:hidden;              /* 保持圓角 */
   box-shadow:0 2px 10px rgba(0,0,0,.08);
   font-size:15px;
-  table-layout:fixed;
+  table-layout:fixed;           /* 依 colgroup 寬度 */
   text-align:center;
 }
 th,td{
   padding:10px; border-bottom:1px solid #e9eef2; vertical-align:middle;
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  overflow:visible;             /* 避免剪掉 select 邊框/下拉 */
+  white-space:nowrap;
 }
 th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
-/* 兩表共用欄寬（46/16/18/20） */
-.col-name { width:46%; }
-.col-price{ width:16%; }
-.col-action{width:18%; }
-.col-sub  { width:20%; }
 
-/* 數量欄寬固定 70px */
+/* 四欄固定寬度（兩表共用，手機也不會擠壓掉 select） */
+.col-name  { /* 留白自動撐開 */ }
+.col-price { width:90px; }
+.col-action{ width:100px; }     /* 數量欄：保證容納 70px select + 內邊距 */
+.col-sub   { width:110px; }
+
+/* 讓第3欄（數量/勾選）內距略小，空間給 select/checkbox */
+#productTable td:nth-child(3),
+#shippingTable td:nth-child(3){ padding:8px 6px; }
+
+/* 數量下拉：寬固定 70px（需求），並確保不被擠壓 */
 select{
-  width:70px; text-align:center;
-  font-size:14px; padding:5px 6px;
-  border-radius:6px; border:1px solid #ccc; background:#fff;
+  width:70px; box-sizing:border-box;
+  text-align:center; font-size:14px; padding:5px 6px;
+  border-radius:6px; border:1px solid #ccc; background:#fff; max-width:100%;
 }
 input[type='checkbox']{transform:scale(1.2);}
 
@@ -149,7 +155,7 @@ input[type='checkbox']{transform:scale(1.2);}
 }
 .total.animate{animation: totalUpdate 0.8s ease;}
 
-/* ===== 匯款帳戶（貼齊 LOGO） ===== */
+/* ===== 匯款資訊 → 圖片 → 按鈕 ===== */
 .account-box{
   width:85%; max-width:350px; margin:25px auto 0;
   background:rgba(255,255,255,0.5);
@@ -160,17 +166,17 @@ input[type='checkbox']{transform:scale(1.2);}
 }
 .account-box h3{margin:8px 0; font-weight:600; font-size:15px; color:#44566C; letter-spacing:0.5px;}
 
-/* ===== LOGO（更貼 & 放大） ===== */
+/* LOGO：再更貼（-10px 微重疊） */
 #form-logo{
-  display:block; width:320px;          /* 放大 */
-  margin:-6px auto 0;                  /* 更貼：微重疊 -6px */
+  display:block; width:320px;
+  margin:-10px auto 8px;   /* 上負距讓它貼著匯款框 */
   opacity:0; transform:translateY(16px);
   transition:opacity 1s ease, transform 1s ease;
   filter:drop-shadow(0 10px 14px rgba(0,0,0,0.2));
 }
 #form-logo.show{opacity:1; transform:translateY(0);}
 
-/* ===== 按鈕 ===== */
+/* 按鈕 */
 .copy-btn,#screenshotBtn,#formBtn{
   border:none; padding:12px 22px; border-radius:999px;
   font-size:16px; cursor:pointer; font-weight:500;
@@ -181,18 +187,22 @@ input[type='checkbox']{transform:scale(1.2);}
 .copy-btn:hover,#screenshotBtn:hover{background-color:#e4ddcf; transform:translateY(-2px);}
 #formBtn{background-color:var(--navy); color:#fff; box-shadow:0 4px 14px rgba(30,79,123,0.35);}
 #formBtn:hover{background-color:#245c91; transform:translateY(-2px);}
-#buttonContainer{display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin-top:18px;}
-#formReminder{font-size:14px; color:#555; margin-top:10px; opacity:0; transform:translateY(14px); transition:all .8s;}
+#buttonContainer{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:4px;}
+#formReminder{font-size:14px; color:#555; margin-top:8px; opacity:0; transform:translateY(14px); transition:all .8s;}
 #formReminder.in{opacity:1; transform:translateY(0);}
 
 /* ===== 手機優化 ===== */
 @media (max-width:480px){
   h2{font-size:60px;}
-  table{font-size:13.5px; width:95%;}
+  table{font-size:13.5px; width:96%;}
+  /* 手機欄寬微調：保證 select 70px 不被吃 */
+  .col-price { width:80px; }
+  .col-action{ width:100px; }
+  .col-sub   { width:96px; }
   .input-container{width:90%; padding:18px;}
   .account-box{font-size:12.5px; width:90%;}
   .copy-btn,#screenshotBtn,#formBtn{font-size:14px; padding:10px 18px;}
-  #form-logo{width:220px; margin:-6px auto 0;}  /* 手機也放大 + 更貼 */
+  #form-logo{width:220px; margin:-10px auto 8px;}
 }
 </style>
 </head>
@@ -233,7 +243,6 @@ input[type='checkbox']{transform:scale(1.2);}
   <section class="reveal right">
     <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
     <table id="productTable">
-      <!-- 強制對齊：與下表共用欄寬 -->
       <colgroup>
         <col class="col-name"><col class="col-price"><col class="col-action"><col class="col-sub">
       </colgroup>
@@ -249,7 +258,6 @@ input[type='checkbox']{transform:scale(1.2);}
 
   <section class="reveal left">
     <table id="shippingTable">
-      <!-- 強制對齊：與上表共用欄寬 -->
       <colgroup>
         <col class="col-name"><col class="col-price"><col class="col-action"><col class="col-sub">
       </colgroup>
@@ -260,6 +268,7 @@ input[type='checkbox']{transform:scale(1.2);}
     <div class="total" id="total">Total Amount: $0</div>
   </section>
 
+  <!-- 正確順序：匯款資訊 → 圖片 → 按鈕 -->
   <section class="reveal right">
     <div class="account-box">
       <h3>請匯款至以下帳戶:</h3>
@@ -267,11 +276,8 @@ input[type='checkbox']{transform:scale(1.2);}
       <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
     </div>
 
-    <!-- LOGO：更貼 & 放大 -->
     <img id="form-logo" src="https://github.com/b02279437-crypto/liu-mama-calculator/blob/main/LOGO2-removebg-preview.png?raw=true" alt="Liu Mama Logo">
-  </section>
 
-  <section class="reveal left">
     <div id="buttonContainer">
       <button id="screenshotBtn" onclick="screenshotOrder()">截圖訂單</button>
       <button id="formBtn" onclick="goToForm()">下一步,填寫寄送資訊</button>
@@ -289,7 +295,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     opt.value=i; opt.textContent=i;
     select.appendChild(opt);
   }
-  select.value="0";
+  select.value="0"; 
   calculate();
 
   // 開場動畫控制
@@ -313,7 +319,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       document.querySelectorAll('.reveal').forEach((el,i)=>setTimeout(()=>el.classList.add('in'), i*200));
       setTimeout(()=>document.querySelector('.total').classList.add('show'),1300);
       setTimeout(()=>document.getElementById('formReminder').classList.add('in'),1400);
-      setTimeout(()=>formLogo.classList.add('show'),1600);
+      setTimeout(()=>formLogo.classList.add('show'),1600); // LOGO 跟上匯款框
     },700);
   });
 });
