@@ -82,54 +82,52 @@ h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 table{ width:90%; max-width:500px; margin:15px auto; border-collapse:separate; border-spacing:0; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.08); font-size:15px; table-layout:fixed; text-align:center; }
 th,td{ padding:10px; border-bottom:1px solid #e9eef2; vertical-align:middle; overflow:visible; white-space:nowrap; }
 th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
-#productTable td:nth-child(2), #productTable td:nth-child(4),
-#shippingTable td:nth-child(2), #shippingTable td:nth-child(4),
-.total{ font-variant-numeric: tabular-nums lining-nums; letter-spacing:.3px; }
-.col-price{width:90px;} .col-action{width:100px;} .col-sub{width:110px;}
 #productTable{ margin:15px auto 28px; }
 
-/* ===== 寄送方式：膠囊「並排可點＋單行緊湊」 ===== */
+/* ===== 寄送方式：一長條膠囊（左右並排；選擇樣式） ===== */
 #shippingTable{ width:96%; margin:10px auto 18px; display:block; background:transparent; box-shadow:none; border-radius:0; border-spacing:0; }
 #shippingTable tr:first-child{ display:none; } /* 隱藏表頭 */
+
+/* 每顆膠囊就是一列（tr） */
 #shippingTable tr{
-  display:inline-flex; align-items:center; gap:10px; cursor:pointer;
-  width:calc(50% - 8px); margin:0 8px 12px 0; vertical-align:top;
-  background:rgba(255,255,255,.95);
-  border:1px solid rgba(30,79,123,.14);
-  border-radius:999px; padding:12px 16px;
+  display:inline-flex; align-items:center; justify-content:center;
+  width:calc(50% - 10px); margin:0 10px 12px 0; /* 並排 */
+  padding:14px 20px; border-radius:999px;
+  background:#fff; border:1.5px solid rgba(30,79,123,.18);
   box-shadow:0 6px 18px rgba(0,0,0,.06);
-  transition:box-shadow .25s var(--ease), transform .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
+  cursor:pointer; white-space:nowrap;
+  transition:background .25s var(--ease), border-color .25s var(--ease), box-shadow .25s var(--ease), transform .2s var(--ease);
 }
 #shippingTable tr:nth-child(3){ margin-right:0; }
-#shippingTable tr:hover{ box-shadow:0 10px 24px rgba(0,0,0,.08); transform:translateY(-1px); }
+#shippingTable tr:hover{ transform:translateY(-1px); box-shadow:0 10px 24px rgba(0,0,0,.08); }
 
-#shippingTable td{ border:0; background:transparent; white-space:normal; display:inline-flex; align-items:center; }
-#shippingTable td:nth-child(1){
-  flex:1 1 auto; text-align:left; white-space:nowrap;
-}
-#shippingTable td:nth-child(2), #shippingTable td:nth-child(4){ display:none; } /* 價格＆小計隱藏但保留給 JS */
+#shippingTable td{ border:0; background:transparent; display:inline-flex; align-items:center; }
+#shippingTable td:nth-child(1){ flex:1 1 auto; justify-content:center; gap:6px; } /* 文字與價格緊貼 */
+#shippingTable td:nth-child(2), #shippingTable td:nth-child(4){ display:none; } /* 價格＆小計隱藏但保留 ID 給 JS */
 #shippingTable input[type='checkbox']{ position:absolute; opacity:0; pointer-events:none; width:0; height:0; margin:0; }
 #shippingTable td:nth-child(3){ flex:0 0 auto; }
 
-/* 文案單行、價格更靠近（極緊湊） */
-#shippingTable tr:nth-child(2) td:first-child,
-#shippingTable tr:nth-child(3) td:first-child{ position:relative; color:transparent; }
+/* 單行文案（價錢深藍；緊貼） */
+#shippingTable tr:nth-child(2) td:first-child{ position:relative; color:transparent; }
 #shippingTable tr:nth-child(2) td:first-child::before{ content:"711取貨"; display:inline; color:#263445; font-weight:600; letter-spacing:.2px; }
-#shippingTable tr:nth-child(2) td:first-child::after{
-  content:"+60"; display:inline; margin-left:4px; /* 關鍵：變更為 4px 超近距 */
-  font-family:'Amatic SC', cursive; font-weight:900; font-size:17px; color:var(--navy); letter-spacing:0;
-}
-#shippingTable tr:nth-child(3) td:first-child::before{ content:"郵寄"; display:inline; color:#263445; font-weight:600; letter-spacing:.2px; }
-#shippingTable tr:nth-child(3) td:first-child::after{
-  content:"+120"; display:inline; margin-left:4px; /* 關鍵：變更為 4px 超近距 */
-  font-family:'Amatic SC', cursive; font-weight:900; font-size:17px; color:var(--navy); letter-spacing:0;
-}
+#shippingTable tr:nth-child(2) td:first-child::after{ content:"+60"; display:inline; margin-left:6px; font-family:'Amatic SC', cursive; font-weight:900; font-size:18px; color:var(--navy); letter-spacing:0; }
 
-/* 被選取的膠囊狀態 */
-#shippingTable tr:has(input:checked){
-  border-color:rgba(30,79,123,.35);
-  background:linear-gradient(180deg, rgba(224,234,242,.9), rgba(214,226,238,.9));
-  box-shadow:0 8px 22px rgba(30,79,123,.12);
+#shippingTable tr:nth-child(3) td:first-child{ position:relative; color:transparent; }
+#shippingTable tr:nth-child(3) td:first-child::before{ content:"郵寄"; display:inline; color:#263445; font-weight:600; letter-spacing:.2px; }
+#shippingTable tr:nth-child(3) td:first-child::after{ content:"+120"; display:inline; margin-left:6px; font-family:'Amatic SC', cursive; font-weight:900; font-size:18px; color:var(--navy); letter-spacing:0; }
+
+/* 選擇樣式（:has 與 .selected 兩種都支援） */
+#shippingTable tr:has(input:checked),
+#shippingTable tr.selected{
+  background:var(--navy);
+  border-color:var(--navy);
+  box-shadow:0 8px 22px rgba(30,79,123,.18);
+}
+#shippingTable tr:has(input:checked) td:first-child::before,
+#shippingTable tr:has(input:checked) td:first-child::after,
+#shippingTable tr.selected td:first-child::before,
+#shippingTable tr.selected td:first-child::after{
+  color:#fff; /* 選中時白字（可讀性） */
 }
 
 /* ===== Total（莫蘭迪淺藍＋柔光） ===== */
@@ -174,17 +172,10 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 /* 動畫減量 */
 @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
 
-/* 超小螢幕時自動隱藏價格避免擠爆（可移除） */
-@media (max-width:340px){
-  #shippingTable tr:nth-child(2) td:first-child::after,
-  #shippingTable tr:nth-child(3) td:first-child::after{ display:none; }
-}
-
-/* 手機優化（並排仍成立） */
+/* 手機優化（仍維持左右並排；窄螢幕自動換行） */
 @media (max-width:480px){
   h2{font-size:60px;}
   table{font-size:13.5px; width:96%;}
-  .col-price{width:80px;} .col-action{width:100px;} .col-sub{width:96px;}
   .input-container{width:90%; padding:18px;}
   .account-box{font-size:12.5px; width:90%;}
   .copy-btn,#screenshotBtn,#formBtn{font-size:14px; padding:10px 18px;}
@@ -192,10 +183,7 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
   #intro-text{margin-top:-34px; line-height:1.9;}
   #startBtn{margin-top:12px;}
   #productTable{ margin:14px auto 26px; }
-  #shippingTable{ margin:10px auto 18px; }
-  #shippingTable tr{ width:calc(50% - 6px); margin:0 6px 12px 0; }
-  #shippingTable tr:nth-child(3){ margin-right:0; }
-  #buttonContainer{ margin-top:36px; }
+  #shippingTable tr{ width:calc(50% - 8px); }
 }
 </style>
 </head>
@@ -352,7 +340,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     },700);
   });
 
-  // 膠囊整顆可點（不改 DOM；用 JS 控制 checkbox）
+  // 點整顆膠囊即可切換；並同步 .selected（做為 :has 的後備）
   const row711 = document.querySelector('#shippingTable tr:nth-child(2)');
   const rowPost = document.querySelector('#shippingTable tr:nth-child(3)');
   row711.addEventListener('click', (ev)=>{
@@ -362,6 +350,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     const willCheck=!cb711.checked;
     cb711.checked=willCheck;
     if(willCheck) cbPost.checked=false;
+    updateCapsuleSelected();
     calculate();
   });
   rowPost.addEventListener('click', (ev)=>{
@@ -371,9 +360,18 @@ window.addEventListener('DOMContentLoaded',()=>{
     const willCheck=!cbPost.checked;
     cbPost.checked=willCheck;
     if(willCheck) cb711.checked=false;
+    updateCapsuleSelected();
     calculate();
   });
+  updateCapsuleSelected();
 });
+
+function updateCapsuleSelected(){
+  const row711 = document.querySelector('#shippingTable tr:nth-child(2)');
+  const rowPost = document.querySelector('#shippingTable tr:nth-child(3)');
+  row711.classList.toggle('selected', document.getElementById('ship711').checked);
+  rowPost.classList.toggle('selected', document.getElementById('shipPost').checked);
+}
 
 /* ===== 平滑數字滾動 ===== */
 function animateNumber(el, from, to, duration=800){
@@ -416,10 +414,11 @@ function calculate(skipRoll){
   totalWrap.classList.add('animate','glow');
 }
 
-/* 運送方式互斥（保留原函式） */
+/* 運送方式互斥（沿用你的函式） */
 function selectShip(type){
   if(type==='711') document.getElementById('shipPost').checked=false;
   if(type==='post') document.getElementById('ship711').checked=false;
+  updateCapsuleSelected();
   calculate();
 }
 
