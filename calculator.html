@@ -152,16 +152,36 @@ input[type='checkbox']{transform:scale(1.2);}
   margin-top:25px; position:relative; display:inline-block;
   padding:6px 18px; opacity:0; transform:translateY(10px) scale(0.96);
   transition:opacity 1.2s ease, transform 1.2s ease;
+  z-index:0;             /* 建立疊層脈絡，避免 ::before 被整頁壓掉 */
+  isolation:isolate;     /* 確保負 z-index 只在本層內作用 */
 }
 .total.show{opacity:1; transform:translateY(0) scale(1);}
+
 .total::before{
   content:""; position:absolute; left:0; top:50%;
-  width:100%; height:60%; transform:translateY(-50%) rotate(-1.5deg);
+  width:100%; height:60%;
+  transform:translateY(-50%) rotate(-1.5deg) scale(1);
   background:linear-gradient(120deg, rgba(255,229,185,0.9) 0%, rgba(255,215,160,0.7) 100%);
-  border-radius:12px; z-index:-1; filter:blur(1px) saturate(1.1);
+  border-radius:12px; z-index:-1;
+  filter:blur(1px) saturate(1.1);
+  opacity:.7;
 }
-@keyframes totalUpdate { 0%{transform:scale(1)} 50%{transform:scale(1.07)} 100%{transform:scale(1)} }
-.total.animate{animation: totalUpdate 0.8s ease;}
+
+/* 總額數字的微縮放 */
+@keyframes totalUpdate {
+  0%   { transform:scale(1); }
+  50%  { transform:scale(1.07); }
+  100% { transform:scale(1); }
+}
+.total.animate{ animation: totalUpdate .8s ease; }
+
+/* 柔光脈衝（畫在 ::before 上） */
+@keyframes glowPulse {
+  0%   { opacity:.35; transform:translateY(-50%) rotate(-1.5deg) scale(1);    filter:blur(1px)  saturate(1.1) brightness(1); }
+  45%  { opacity:1;   transform:translateY(-50%) rotate(-1.5deg) scale(1.06); filter:blur(2px)  saturate(1.25) brightness(1.15); }
+  100% { opacity:.6;  transform:translateY(-50%) rotate(-1.5deg) scale(1);    filter:blur(1px)  saturate(1.1) brightness(1); }
+}
+.total.glow::before{ animation: glowPulse .9s ease; }
 
 /* ===== 匯款資訊 → 按鈕 ===== */
 .account-box{
@@ -335,7 +355,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   });
 });
 
-// 計算金額
+// 計算金額（含觸發柔光動畫）
 function calculate(){
   const qty1=parseInt(document.getElementById('qty1').value)||0;
   document.getElementById('sub1').innerText='$'+(qty1*320);
@@ -354,9 +374,10 @@ function calculate(){
   totalEl.innerText=totalText;
   totalEl.classList.add('show');
 
-  totalEl.classList.remove('animate');
-  void totalEl.offsetWidth;
-  totalEl.classList.add('animate');
+  // 重新觸發縮放 + 柔光兩種動畫
+  totalEl.classList.remove('animate','glow');
+  void totalEl.offsetWidth;             // 強制重排，保證能再次觸發
+  totalEl.classList.add('animate','glow');
 }
 
 // 運送方式互斥
