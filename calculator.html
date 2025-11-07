@@ -104,7 +104,7 @@ table{
   overflow:hidden;
   box-shadow:0 2px 10px rgba(0,0,0,.08);
   font-size:15px;
-  table-layout:fixed; /* 固定布局，欄寬一致 */
+  table-layout:fixed;
   text-align:center;
 }
 th,td{
@@ -149,9 +149,9 @@ input[type='checkbox']{transform:scale(1.2);}
 }
 .total.animate{animation: totalUpdate 0.8s ease;}
 
-/* ===== 匯款帳戶（做法 A：0px 無縫貼齊） ===== */
+/* ===== 匯款帳戶（貼齊 LOGO） ===== */
 .account-box{
-  width:85%; max-width:350px; margin:25px auto 0; /* ← 底部 0，讓 LOGO 貼齊 */
+  width:85%; max-width:350px; margin:25px auto 0;
   background:rgba(255,255,255,0.5);
   backdrop-filter:blur(12px) brightness(1.05);
   border:1px solid rgba(255,255,255,0.4);
@@ -160,10 +160,10 @@ input[type='checkbox']{transform:scale(1.2);}
 }
 .account-box h3{margin:8px 0; font-weight:600; font-size:15px; color:#44566C; letter-spacing:0.5px;}
 
-/* ===== LOGO（無縫貼齊匯款資訊） ===== */
+/* ===== LOGO（更貼 & 放大） ===== */
 #form-logo{
-  display:block; width:280px;
-  margin:0 auto 0;         /* ← 0px 無縫 */
+  display:block; width:320px;          /* 放大 */
+  margin:-6px auto 0;                  /* 更貼：微重疊 -6px */
   opacity:0; transform:translateY(16px);
   transition:opacity 1s ease, transform 1s ease;
   filter:drop-shadow(0 10px 14px rgba(0,0,0,0.2));
@@ -192,7 +192,7 @@ input[type='checkbox']{transform:scale(1.2);}
   .input-container{width:90%; padding:18px;}
   .account-box{font-size:12.5px; width:90%;}
   .copy-btn,#screenshotBtn,#formBtn{font-size:14px; padding:10px 18px;}
-  #form-logo{width:200px; margin:0 auto 0;} /* 手機也無縫 */
+  #form-logo{width:220px; margin:-6px auto 0;}  /* 手機也放大 + 更貼 */
 }
 </style>
 </head>
@@ -267,7 +267,7 @@ input[type='checkbox']{transform:scale(1.2);}
       <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
     </div>
 
-    <!-- LOGO：無縫貼齊匯款資訊 -->
+    <!-- LOGO：更貼 & 放大 -->
     <img id="form-logo" src="https://github.com/b02279437-crypto/liu-mama-calculator/blob/main/LOGO2-removebg-preview.png?raw=true" alt="Liu Mama Logo">
   </section>
 
@@ -282,14 +282,14 @@ input[type='checkbox']{transform:scale(1.2);}
 
 <script>
 window.addEventListener('DOMContentLoaded',()=>{
-  // 初始化數量選單 0–35
+  // 初始化數量 0–35
   const select=document.getElementById('qty1');
   for(let i=0;i<=35;i++){
     const opt=document.createElement('option');
     opt.value=i; opt.textContent=i;
     select.appendChild(opt);
   }
-  select.value="0"; 
+  select.value="0";
   calculate();
 
   // 開場動畫控制
@@ -313,7 +313,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       document.querySelectorAll('.reveal').forEach((el,i)=>setTimeout(()=>el.classList.add('in'), i*200));
       setTimeout(()=>document.querySelector('.total').classList.add('show'),1300);
       setTimeout(()=>document.getElementById('formReminder').classList.add('in'),1400);
-      setTimeout(()=>formLogo.classList.add('show'),1600); // LOGO 無縫貼齊匯款框
+      setTimeout(()=>formLogo.classList.add('show'),1600);
     },700);
   });
 });
@@ -339,7 +339,7 @@ function calculate(){
 
   // 重新觸發柔光顯現動畫
   totalEl.classList.remove('animate');
-  void totalEl.offsetWidth; // reset animation
+  void totalEl.offsetWidth;
   totalEl.classList.add('animate');
 }
 
