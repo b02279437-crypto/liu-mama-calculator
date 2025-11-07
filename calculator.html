@@ -88,7 +88,7 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 .col-price{width:90px;} .col-action{width:100px;} .col-sub{width:110px;}
 #productTable{ margin:15px auto 28px; }
 
-/* ===== 寄送方式：膠囊「並排可點＋單行不換行」 ===== */
+/* ===== 寄送方式：膠囊「並排可點＋單行緊湊」 ===== */
 #shippingTable{ width:96%; margin:10px auto 18px; display:block; background:transparent; box-shadow:none; border-radius:0; border-spacing:0; }
 #shippingTable tr:first-child{ display:none; } /* 隱藏表頭 */
 #shippingTable tr{
@@ -105,19 +105,25 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 
 #shippingTable td{ border:0; background:transparent; white-space:normal; display:inline-flex; align-items:center; }
 #shippingTable td:nth-child(1){
-  flex:1 1 auto; text-align:left; white-space:nowrap; gap:8px; /* 關鍵：不換行＋間距 */
+  flex:1 1 auto; text-align:left; white-space:nowrap;
 }
 #shippingTable td:nth-child(2), #shippingTable td:nth-child(4){ display:none; } /* 價格＆小計隱藏但保留給 JS */
 #shippingTable input[type='checkbox']{ position:absolute; opacity:0; pointer-events:none; width:0; height:0; margin:0; }
 #shippingTable td:nth-child(3){ flex:0 0 auto; }
 
-/* 文案（單行，價錢深藍） */
-#shippingTable tr:nth-child(2) td:first-child{ position:relative; color:transparent; line-height:1; }
-#shippingTable tr:nth-child(3) td:first-child{ position:relative; color:transparent; line-height:1; }
+/* 文案單行、價格更靠近（極緊湊） */
+#shippingTable tr:nth-child(2) td:first-child,
+#shippingTable tr:nth-child(3) td:first-child{ position:relative; color:transparent; }
 #shippingTable tr:nth-child(2) td:first-child::before{ content:"711取貨"; display:inline; color:#263445; font-weight:600; letter-spacing:.2px; }
-#shippingTable tr:nth-child(2) td:first-child::after{ content:"+60"; display:inline; margin-left:8px; font-family:'Amatic SC', cursive; font-weight:900; font-size:18px; color:var(--navy); }
+#shippingTable tr:nth-child(2) td:first-child::after{
+  content:"+60"; display:inline; margin-left:4px; /* 關鍵：變更為 4px 超近距 */
+  font-family:'Amatic SC', cursive; font-weight:900; font-size:17px; color:var(--navy); letter-spacing:0;
+}
 #shippingTable tr:nth-child(3) td:first-child::before{ content:"郵寄"; display:inline; color:#263445; font-weight:600; letter-spacing:.2px; }
-#shippingTable tr:nth-child(3) td:first-child::after{ content:"+120"; display:inline; margin-left:8px; font-family:'Amatic SC', cursive; font-weight:900; font-size:18px; color:var(--navy); }
+#shippingTable tr:nth-child(3) td:first-child::after{
+  content:"+120"; display:inline; margin-left:4px; /* 關鍵：變更為 4px 超近距 */
+  font-family:'Amatic SC', cursive; font-weight:900; font-size:17px; color:var(--navy); letter-spacing:0;
+}
 
 /* 被選取的膠囊狀態 */
 #shippingTable tr:has(input:checked){
@@ -167,6 +173,12 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 
 /* 動畫減量 */
 @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+
+/* 超小螢幕時自動隱藏價格避免擠爆（可移除） */
+@media (max-width:340px){
+  #shippingTable tr:nth-child(2) td:first-child::after,
+  #shippingTable tr:nth-child(3) td:first-child::after{ display:none; }
+}
 
 /* 手機優化（並排仍成立） */
 @media (max-width:480px){
@@ -340,7 +352,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     },700);
   });
 
-  // 膠囊整顆可點
+  // 膠囊整顆可點（不改 DOM；用 JS 控制 checkbox）
   const row711 = document.querySelector('#shippingTable tr:nth-child(2)');
   const rowPost = document.querySelector('#shippingTable tr:nth-child(3)');
   row711.addEventListener('click', (ev)=>{
