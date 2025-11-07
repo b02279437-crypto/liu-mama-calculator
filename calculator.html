@@ -92,7 +92,7 @@ h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 .input-group input:focus{border-color:var(--navy); background:#fff; box-shadow:0 0 6px rgba(30,79,123,.25);}
 .input-error{border-color:#e74c3c !important;}
 
-/* ===== 表格（圓角） ===== */
+/* ===== 表格：強制對齊 ===== */
 table{
   width:90%;
   max-width:500px;
@@ -104,45 +104,44 @@ table{
   overflow:hidden;
   box-shadow:0 2px 10px rgba(0,0,0,.08);
   font-size:15px;
+  table-layout:fixed; /* 固定布局，欄寬一致 */
+  text-align:center;
 }
-th,td{padding:10px; border-bottom:1px solid #e9eef2;}
+th,td{
+  padding:10px; border-bottom:1px solid #e9eef2; vertical-align:middle;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
 th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
-select{width:100%; font-size:14px; padding:5px 6px; border-radius:6px; border:1px solid #ccc;}
+/* 兩表共用欄寬（46/16/18/20） */
+.col-name { width:46%; }
+.col-price{ width:16%; }
+.col-action{width:18%; }
+.col-sub  { width:20%; }
+
+/* 數量欄寬固定 70px */
+select{
+  width:70px; text-align:center;
+  font-size:14px; padding:5px 6px;
+  border-radius:6px; border:1px solid #ccc; background:#fff;
+}
 input[type='checkbox']{transform:scale(1.2);}
 
-/* ===== Total Amount ===== */
+/* ===== Total Amount（含柔光顯現） ===== */
 .total{
   font-family:'Amatic SC', cursive;
-  font-size:30px;
-  font-weight:900;
-  letter-spacing:2.5px;
-  color:var(--navy);
-  margin-top:25px;
-  position:relative;
-  display:inline-block;
-  padding:6px 18px;
-  opacity:0;
-  transform:translateY(10px) scale(0.96);
+  font-size:30px; font-weight:900; letter-spacing:2.5px; color:var(--navy);
+  margin-top:25px; position:relative; display:inline-block;
+  padding:6px 18px; opacity:0; transform:translateY(10px) scale(0.96);
   transition:opacity 1.2s ease, transform 1.2s ease;
 }
-.total.show{
-  opacity:1;
-  transform:translateY(0) scale(1);
-}
+.total.show{opacity:1; transform:translateY(0) scale(1);}
 .total::before{
-  content:"";
-  position:absolute;
-  left:0; top:50%;
-  width:100%;
-  height:60%;
-  transform:translateY(-50%) rotate(-1.5deg);
+  content:""; position:absolute; left:0; top:50%;
+  width:100%; height:60%; transform:translateY(-50%) rotate(-1.5deg);
   background:linear-gradient(120deg, rgba(255,229,185,0.9) 0%, rgba(255,215,160,0.7) 100%);
-  border-radius:12px;
-  z-index:-1;
-  filter:blur(1px) saturate(1.1);
+  border-radius:12px; z-index:-1; filter:blur(1px) saturate(1.1);
 }
-
-/* 更新動畫（柔和版） */
+/* 柔光顯現動畫 */
 @keyframes totalUpdate {
   0% {transform:scale(1); filter:brightness(1);}
   50% {transform:scale(1.07); filter:brightness(1.15);}
@@ -150,9 +149,9 @@ input[type='checkbox']{transform:scale(1.2);}
 }
 .total.animate{animation: totalUpdate 0.8s ease;}
 
-/* ===== 匯款帳戶 ===== */
+/* ===== 匯款帳戶（做法 A：0px 無縫貼齊） ===== */
 .account-box{
-  width:85%; max-width:350px; margin:25px auto;
+  width:85%; max-width:350px; margin:25px auto 0; /* ← 底部 0，讓 LOGO 貼齊 */
   background:rgba(255,255,255,0.5);
   backdrop-filter:blur(12px) brightness(1.05);
   border:1px solid rgba(255,255,255,0.4);
@@ -160,6 +159,16 @@ input[type='checkbox']{transform:scale(1.2);}
   box-shadow:0 8px 24px rgba(0,0,0,0.07);
 }
 .account-box h3{margin:8px 0; font-weight:600; font-size:15px; color:#44566C; letter-spacing:0.5px;}
+
+/* ===== LOGO（無縫貼齊匯款資訊） ===== */
+#form-logo{
+  display:block; width:280px;
+  margin:0 auto 0;         /* ← 0px 無縫 */
+  opacity:0; transform:translateY(16px);
+  transition:opacity 1s ease, transform 1s ease;
+  filter:drop-shadow(0 10px 14px rgba(0,0,0,0.2));
+}
+#form-logo.show{opacity:1; transform:translateY(0);}
 
 /* ===== 按鈕 ===== */
 .copy-btn,#screenshotBtn,#formBtn{
@@ -172,7 +181,7 @@ input[type='checkbox']{transform:scale(1.2);}
 .copy-btn:hover,#screenshotBtn:hover{background-color:#e4ddcf; transform:translateY(-2px);}
 #formBtn{background-color:var(--navy); color:#fff; box-shadow:0 4px 14px rgba(30,79,123,0.35);}
 #formBtn:hover{background-color:#245c91; transform:translateY(-2px);}
-#buttonContainer{display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin-top:25px;}
+#buttonContainer{display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin-top:18px;}
 #formReminder{font-size:14px; color:#555; margin-top:10px; opacity:0; transform:translateY(14px); transition:all .8s;}
 #formReminder.in{opacity:1; transform:translateY(0);}
 
@@ -183,6 +192,7 @@ input[type='checkbox']{transform:scale(1.2);}
   .input-container{width:90%; padding:18px;}
   .account-box{font-size:12.5px; width:90%;}
   .copy-btn,#screenshotBtn,#formBtn{font-size:14px; padding:10px 18px;}
+  #form-logo{width:200px; margin:0 auto 0;} /* 手機也無縫 */
 }
 </style>
 </head>
@@ -223,6 +233,10 @@ input[type='checkbox']{transform:scale(1.2);}
   <section class="reveal right">
     <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
     <table id="productTable">
+      <!-- 強制對齊：與下表共用欄寬 -->
+      <colgroup>
+        <col class="col-name"><col class="col-price"><col class="col-action"><col class="col-sub">
+      </colgroup>
       <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
       <tr>
         <td>麻辣底料包<br><small>(2人份)</small></td>
@@ -235,7 +249,11 @@ input[type='checkbox']{transform:scale(1.2);}
 
   <section class="reveal left">
     <table id="shippingTable">
-      <tr><th>寄送方式</th><th>價格</th><th>請勾選</th><th>小計</th></tr>
+      <!-- 強制對齊：與上表共用欄寬 -->
+      <colgroup>
+        <col class="col-name"><col class="col-price"><col class="col-action"><col class="col-sub">
+      </colgroup>
+      <tr><th>寄送方式</th><th>價格</th><th>勾選</th><th>小計</th></tr>
       <tr><td>711超商取貨</td><td>$60</td><td><input type="checkbox" id="ship711" onchange="selectShip('711')"></td><td id="sub711">$0</td></tr>
       <tr><td>郵局宅配</td><td>$120</td><td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td><td id="subPost">$0</td></tr>
     </table>
@@ -248,6 +266,9 @@ input[type='checkbox']{transform:scale(1.2);}
       <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
       <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
     </div>
+
+    <!-- LOGO：無縫貼齊匯款資訊 -->
+    <img id="form-logo" src="https://github.com/b02279437-crypto/liu-mama-calculator/blob/main/LOGO2-removebg-preview.png?raw=true" alt="Liu Mama Logo">
   </section>
 
   <section class="reveal left">
@@ -261,19 +282,23 @@ input[type='checkbox']{transform:scale(1.2);}
 
 <script>
 window.addEventListener('DOMContentLoaded',()=>{
+  // 初始化數量選單 0–35
   const select=document.getElementById('qty1');
   for(let i=0;i<=35;i++){
     const opt=document.createElement('option');
     opt.value=i; opt.textContent=i;
     select.appendChild(opt);
   }
-  select.value="0"; calculate();
+  select.value="0"; 
+  calculate();
 
+  // 開場動畫控制
   const intro=document.getElementById('intro');
   const logo=document.getElementById('intro-logo');
   const text=document.getElementById('intro-text');
   const btn=document.getElementById('startBtn');
   const main=document.getElementById('mainContent');
+  const formLogo=document.getElementById('form-logo');
 
   setTimeout(()=>logo.classList.add('show'),300);
   setTimeout(()=>logo.classList.add('hide'),2500);
@@ -285,45 +310,67 @@ window.addEventListener('DOMContentLoaded',()=>{
     setTimeout(()=>{
       intro.style.display='none';
       main.classList.add('show');
-      document.querySelectorAll('.reveal').forEach((el,i)=>setTimeout(()=>el.classList.add('in'),i*200));
+      document.querySelectorAll('.reveal').forEach((el,i)=>setTimeout(()=>el.classList.add('in'), i*200));
       setTimeout(()=>document.querySelector('.total').classList.add('show'),1300);
       setTimeout(()=>document.getElementById('formReminder').classList.add('in'),1400);
+      setTimeout(()=>formLogo.classList.add('show'),1600); // LOGO 無縫貼齊匯款框
     },700);
   });
 });
 
+// 計算金額（含柔光顯現）
 function calculate(){
   const qty1=parseInt(document.getElementById('qty1').value)||0;
   document.getElementById('sub1').innerText='$'+(qty1*320);
+
   let ship=0;
   const c711=document.getElementById('ship711').checked;
   const cPost=document.getElementById('shipPost').checked;
   if(c711) ship=60;
   if(cPost) ship=120;
+
   document.getElementById('sub711').innerText=c711?'$60':'$0';
   document.getElementById('subPost').innerText=cPost?'$120':'$0';
+
   const totalText='Total Amount: $'+(qty1*320+ship);
   const totalEl=document.getElementById('total');
   totalEl.innerText=totalText;
   totalEl.classList.add('show');
+
+  // 重新觸發柔光顯現動畫
   totalEl.classList.remove('animate');
   void totalEl.offsetWidth; // reset animation
   totalEl.classList.add('animate');
 }
 
+// 運送方式互斥
 function selectShip(type){
   if(type==='711') document.getElementById('shipPost').checked=false;
   if(type==='post') document.getElementById('ship711').checked=false;
   calculate();
 }
 
+// 複製匯款帳號
 function copyAccount(){
-  navigator.clipboard.writeText(document.getElementById('accountNumber').innerText);
-  alert('匯款帳號已複製！記得匯款後再按下一步填寫寄送資訊！');
+  const acct=document.getElementById('accountNumber').innerText;
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(acct).then(()=>alert('匯款帳號已複製！記得匯款後再按下一步填寫寄送資訊！'));
+  }else{
+    const ta=document.createElement('textarea');
+    ta.value=acct; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    alert('匯款帳號已複製！記得匯款後再按下一步填寫寄送資訊！');
+  }
 }
 
+// 截圖訂單
 function screenshotOrder(){
-  html2canvas(document.getElementById('mainContent')).then(canvas=>{
+  const target=document.getElementById('mainContent');
+  if(typeof html2canvas==='undefined'){
+    alert('截圖功能庫尚未載入，請稍後再試或檢查網路連線。');
+    return;
+  }
+  html2canvas(target).then(canvas=>{
     const link=document.createElement('a');
     link.href=canvas.toDataURL('image/png');
     link.download='liu_mama_order.png';
@@ -334,6 +381,7 @@ function screenshotOrder(){
   });
 }
 
+// 前往 Google 表單（帶參數）
 function goToForm(){
   const name=document.getElementById('customerName').value.trim();
   const phone=document.getElementById('customerPhone').value.trim();
@@ -366,4 +414,4 @@ function goToForm(){
 }
 </script>
 </body>
-</html>  
+</html>
