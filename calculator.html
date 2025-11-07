@@ -125,12 +125,11 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 .col-price{width:90px;} .col-action{width:100px;} .col-sub{width:110px;}
 #productTable{ margin:15px auto 28px; }
 
-/* ===== 寄送方式：膠囊「並排」版（純 CSS，不改 JS/DOM） ===== */
+/* ===== 寄送方式：膠囊「並排可點」版 ===== */
 #shippingTable{ width:96%; margin:10px auto 18px; display:block; background:transparent; box-shadow:none; border-radius:0; border-spacing:0; }
-#shippingTable tr:first-child{ display:none; } /* 隱藏原表頭 */
-/* 兩顆膠囊並排 */
+#shippingTable tr:first-child{ display:none; } /* 隱藏表頭 */
 #shippingTable tr{
-  display:inline-flex; align-items:center; gap:10px;
+  display:inline-flex; align-items:center; gap:10px; cursor:pointer;
   width:calc(50% - 8px); margin:0 8px 12px 0; vertical-align:top;
   background:rgba(255,255,255,.95);
   border:1px solid rgba(30,79,123,.14);
@@ -144,6 +143,10 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 #shippingTable td{ border:0; background:transparent; white-space:normal; display:inline-flex; align-items:center; }
 #shippingTable td:nth-child(1){ flex:1 1 auto; text-align:left; }
 #shippingTable td:nth-child(2), #shippingTable td:nth-child(4){ display:none; } /* 價格＆小計隱藏但保留給 JS */
+/* 把 checkbox 視覺隱藏但保留在 DOM（交互靠 JS 控制） */
+#shippingTable input[type='checkbox']{
+  position:absolute; opacity:0; pointer-events:none; width:0; height:0; margin:0;
+}
 #shippingTable td:nth-child(3){ flex:0 0 auto; }
 
 /* 兩行文案（價錢深藍） */
@@ -154,7 +157,7 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 #shippingTable tr:nth-child(3) td:first-child::before{ content:"郵寄"; display:block; color:#263445; font-weight:600; letter-spacing:.2px; }
 #shippingTable tr:nth-child(3) td:first-child::after{ content:"+120"; display:block; margin-top:4px; font-family:'Amatic SC', cursive; font-weight:900; font-size:18px; color:var(--navy); }
 
-/* 勾選樣式：選到就加強膠囊狀態（使用 :has 支援） */
+/* 選取狀態（使用 :has 支援） */
 #shippingTable tr:has(input:checked){
   border-color:rgba(30,79,123,.35);
   background:linear-gradient(180deg, rgba(224,234,242,.9), rgba(214,226,238,.9));
@@ -193,7 +196,7 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 .account-box h3{margin:8px 0; font-weight:600; font-size:15px; color:#44566C; letter-spacing:.5px;}
 .copy-btn,#screenshotBtn,#formBtn{
   border:none; padding:12px 22px; border-radius:999px; font-size:16px; cursor:pointer; font-weight:500;
-  transition:.25s var(--ease); box-shadow:0 3px 10px rgba(0,0,0,.08);
+  transition:.25s var(--ease); box-shadow:0 3px 10px rgba(0,0,0,0.08);
 }
 .copy-btn,#screenshotBtn{background-color:var(--milk-solid); color:#1f2a33;}
 .copy-btn:hover,#screenshotBtn:hover{background-color:#e4ddcf; transform:translateY(-2px);}
@@ -300,7 +303,6 @@ th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
       <tr><td>郵局宅配</td><td>$120</td><td><input type="checkbox" id="shipPost" onchange="selectShip('post')"></td><td id="subPost">$0</td></tr>
     </table>
 
-    <!-- 總額（保留滾動數字） -->
     <div class="total" id="total" role="status" aria-live="polite" aria-atomic="true">
       Total Amount: $<span id="totalNum">0</span>
     </div>
@@ -388,6 +390,28 @@ window.addEventListener('DOMContentLoaded',()=>{
       setTimeout(()=>document.getElementById('formReminder').classList.add('in'),1400);
     },700);
   });
+
+  // 膠囊整顆可點（不改 DOM；用 JS 控制 checkbox）
+  const row711 = document.querySelector('#shippingTable tr:nth-child(2)');
+  const rowPost = document.querySelector('#shippingTable tr:nth-child(3)');
+  row711.addEventListener('click', (ev)=>{
+    if(ev.target.tagName.toLowerCase()==='input') return;
+    const cb711=document.getElementById('ship711');
+    const cbPost=document.getElementById('shipPost');
+    const willCheck=!cb711.checked;
+    cb711.checked=willCheck;
+    if(willCheck) cbPost.checked=false;
+    calculate();
+  });
+  rowPost.addEventListener('click', (ev)=>{
+    if(ev.target.tagName.toLowerCase()==='input') return;
+    const cb711=document.getElementById('ship711');
+    const cbPost=document.getElementById('shipPost');
+    const willCheck=!cbPost.checked;
+    cbPost.checked=willCheck;
+    if(willCheck) cb711.checked=false;
+    calculate();
+  });
 });
 
 /* ===== 平滑數字滾動 ===== */
@@ -431,7 +455,7 @@ function calculate(skipRoll){
   totalWrap.classList.add('animate','glow');
 }
 
-/* 運送方式互斥（功能保留） */
+/* 運送方式互斥（保留原有 API） */
 function selectShip(type){
   if(type==='711') document.getElementById('shipPost').checked=false;
   if(type==='post') document.getElementById('ship711').checked=false;
