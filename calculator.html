@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -137,9 +134,9 @@ th,td{ padding:10px; border-bottom:1px solid #e9eef2; vertical-align:middle; whi
 th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 
 /* 明確設定三欄寬度：縮小品項與價格，放大數量 */
-.col-item  { width:auto; }        /* 自動分配 */
-.col-price { width:90px; }        /* 價格較窄即可 */
-.col-action{ width:148px; }       /* 數量加大，避免擠爆 */
+.col-item  { width:auto; }
+.col-price { width:90px; }
+.col-action{ width:148px; }
 
 /* 為了容納 Stepper，減少數量欄左右 padding */
 #productTable td:nth-child(3), #productTable th:nth-child(3){
@@ -155,7 +152,6 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 .qty-stepper{
   display:inline-flex; align-items:center; height:var(--control-h);
   border:1px solid #ccc; border-radius:8px; background:#fff;
-  /* 固定寬度 = 左右按鈕 + 中間輸入 + 外框 2px */
   width: calc(var(--qty-btn-w)*2 + var(--qty-disp-w) + 2px);
   max-width:100%;
 }
@@ -248,8 +244,44 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 #formBtn{background-color:#1E4F7B; color:#fff; box-shadow:0 4px 14px rgba(30,79,123,.35);}
 #formBtn:hover{background-color:#245c91; transform:translateY(-2px);}
 #buttonContainer{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:32px;}
-#formReminder{font-size:14px; color:#555; margin-top:16px; opacity:0; transform:translateY(14px); transition:opacity .8s var(--ease), transform .8s var(--ease);}
-#formReminder.in{opacity:1; transform:translateY(0);}
+
+/* ===== 提示欄（改成透明淺藍＋深藍字、玻璃質感） ===== */
+#formReminder{
+  font-size:14px;
+  color:#1E4F7B; /* 深藍字 */
+  background: linear-gradient(180deg,
+              rgba(206,225,245,.42),
+              rgba(190,215,238,.32)); /* 透明淺藍 */
+  border:1px solid rgba(30,79,123,.24);
+  border-radius:999px;
+  padding:10px 16px;
+  display:inline-block;
+
+  -webkit-backdrop-filter: blur(8px) saturate(1.02);
+  backdrop-filter: blur(8px) saturate(1.02);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.6),
+    0 8px 20px rgba(30,79,123,.10);
+
+  margin-top:16px;
+  opacity:0;
+  transform:translateY(14px);
+  transition:opacity .8s var(--ease), transform .8s var(--ease), box-shadow .4s var(--ease);
+}
+#formReminder::before{
+  content:"i";
+  font-weight:700;
+  display:inline-flex; align-items:center; justify-content:center;
+  width:18px; height:18px; margin-right:8px;
+  border-radius:50%;
+  background:rgba(30,79,123,.95);
+  color:#fff;
+  box-shadow:0 1px 2px rgba(0,0,0,.12);
+}
+#formReminder.in{
+  opacity:1;
+  transform:translateY(0);
+}
 
 /* ===== Toast ===== */
 .toast{
@@ -270,7 +302,6 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   }
   h2{font-size:60px;}
   table{font-size:13.5px; width:96%;}
-  /* 手機：再把數量欄放大、價錢欄微縮，並降低數量欄 padding */
   .col-price { width:86px; }
   .col-action{ width:130px; }
   #productTable td:nth-child(3), #productTable th:nth-child(3){ padding-left:4px; padding-right:4px; }
@@ -513,9 +544,9 @@ function buildQty(){
     const step=()=> syncTo(Number(select.value)+delta);
     const start=()=>{
       if(running) return; running=true;
-      step(); // 立即一步
-      t1=setTimeout(()=>{ // 500ms 後開始連續
-        step(); t2=setInterval(step, 70); // 連續加速
+      step();
+      t1=setTimeout(()=>{
+        step(); t2=setInterval(step, 70);
       }, 500);
     };
     const stop=()=>{ running=false; clearTimeout(t1); clearInterval(t2); };
