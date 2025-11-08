@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -7,171 +10,290 @@
 
 <!-- 字體 -->
 <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Noto+Serif+TC:wght@500;600&display=swap" rel="stylesheet">
+<!-- 截圖功能 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
-
-<!-- 預載圖片 -->
-<link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/logo.png">
-<link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/LOGO2-removebg-preview.png">
 
 <style>
 :root{
-  --milk:#E8D9C4; --navy:#1E4F7B; --bg:#f7f6f2; --gray-blue:#7f9bb3; --milk-solid:#e9e3d7;
-  --ease:cubic-bezier(.22,.61,.36,1); --ease-soft:cubic-bezier(.2,.7,.2,1);
-  --t-fast:.24s; --t-base:.6s; --t-slow:1.2s;
-  --control-h:44px;
-  --qty-btn-w:36px; --qty-disp-w:56px;
+  --milk:#E8D9C4;
+  --navy:#1E4F7B;
+  --bg:#f7f6f2;
+  --gray-blue:#7f9bb3;
+  --milk-solid:#e9e3d7;
+
+  /* 動畫節奏與統一曲線（沉穩） */
+  --ease: cubic-bezier(.22,.61,.36,1);       /* elegant ease-out */
+  --ease-soft: cubic-bezier(.2,.7,.2,1);     /* 更柔和 */
+  --t-fast: .24s;
+  --t-base: .6s;
+  --t-slow: 1.2s;
 }
 
-/* ===== 全域 ===== */
+/* ===== 全域樣式（不動排版，只優化視覺） ===== */
 html,body{
-  margin:0;padding:0;height:100%;
-  background:var(--bg);color:#2c3e50;
+  margin:0; padding:0; height:100%;
+  background-color:var(--bg); color:#2c3e50;
   font-family:'Noto Serif TC','Microsoft JhengHei',serif;
-  text-align:center;overflow-x:hidden;scroll-behavior:smooth;
+  text-align:center; overflow-x:hidden; scroll-behavior:smooth;
 }
-button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
 
-/* ===== 開場動畫 ===== */
-#intro{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:14vh;z-index:9999;transition:opacity var(--t-slow) var(--ease);}
-#intro.fade-out{opacity:0;pointer-events:none;}
-#intro-logo{width:80vw;max-width:550px;opacity:0;transform:scale(.99);transition:opacity calc(var(--t-slow)*1.1),transform calc(var(--t-slow)*1.3);}
-#intro-logo.show{opacity:1;transform:scale(1.03);}
-#intro-logo.hide{opacity:0;}
-#intro-hero{width:clamp(260px,60vw,380px);opacity:0;transform:translateY(8px);transition:opacity var(--t-base),transform var(--t-base);margin:18px auto -72px;filter:drop-shadow(0 10px 14px rgba(0,0,0,0.15));}
-#intro-hero.show{opacity:1;transform:translateY(0);}
-#intro-text{font-weight:500;color:#333;font-size:15px;line-height:1.9;opacity:0;white-space:pre-line;margin-top:-38px;transition:opacity var(--t-base);}
+/* 等寬數字＋微字距：表格、金額、數量 */
+table td, table th, .total, #sub1, #sub711, #subPost, #qty1, #formReminder{
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1,"lnum" 1;
+  letter-spacing: .02em;
+}
+
+/* ===== 開場動畫（節奏調整＋ripple） ===== */
+#intro{
+  position:fixed; inset:0; background-color:var(--bg);
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+  padding-top:14vh; z-index:9999; opacity:1; transition:opacity var(--t-slow) var(--ease);
+}
+#intro.fade-out{opacity:0; pointer-events:none;}
+#intro-logo{
+  width:80vw; max-width:550px; opacity:0; transform:scale(.99);
+  transition:opacity calc(var(--t-slow)*1.1) var(--ease), transform calc(var(--t-slow)*1.3) var(--ease);
+}
+#intro-logo.show{opacity:1; transform:scale(1.03);}
+#intro-logo.hide{opacity:0; transform:scale(1.03); transition:opacity var(--t-base) var(--ease);}
+
+/* 主圖更貼（維持排版） */
+#intro-hero{
+  width:clamp(260px, 60vw, 380px);
+  opacity:0; transform:translateY(8px);
+  transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
+  margin:18px auto -72px;
+  filter:drop-shadow(0 10px 14px rgba(0,0,0,0.15));
+}
+#intro-hero.show{opacity:1; transform:translateY(0);}
+
+/* 文字上移（維持排版） */
+#intro-text{
+  font-weight:500; color:#333; font-size:15px; line-height:1.9;
+  opacity:0; white-space:pre-line; margin-top:-38px;
+  letter-spacing:.5px;
+  transition:opacity var(--t-base) var(--ease);
+}
 #intro-text.show{opacity:1;}
+
+/* Start Order：墨暈 Ripple */
 #startBtn{
-  margin-top:14px;padding:14px 46px;font-size:30px;
-  font-family:'Amatic SC',cursive;letter-spacing:2px;
-  background-color:#ddd5c7;color:#2c3e50;border:none;border-radius:999px;cursor:pointer;
+  margin-top:14px;
+  padding:14px 46px; font-size:30px;
+  font-family:'Amatic SC',cursive; letter-spacing:2px;
+  background-color:#ddd5c7; color:#2c3e50;
+  border:none; border-radius:999px; cursor:pointer;
   box-shadow:0 3px 10px rgba(0,0,0,.08);
-  opacity:0;transform:translateY(10px);
-  transition:opacity var(--t-base),transform var(--t-fast),background-color .2s;
-  position:relative;overflow:hidden;
+  opacity:0; transform:translateY(10px);
+  transition:opacity var(--t-base) var(--ease), transform var(--t-fast) var(--ease), background-color .2s;
+  position:relative; overflow:hidden; /* 讓墨暈留在按鈕內 */
+  isolation:isolate;
 }
-#startBtn.show{opacity:1;transform:translateY(0);}
-#startBtn:hover{background-color:#e7dfd2;transform:translateY(-2px);}
-#startBtn::after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle,rgba(30,79,123,.18)0%,rgba(30,79,123,0)70%);transform:translate(-50%,-50%) scale(1);opacity:0;}
-#startBtn.rippling::after{left:var(--rx);top:var(--ry);animation:rippleInk .8s var(--ease-soft);}
-@keyframes rippleInk{0%{opacity:.35;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(35);}}
+#startBtn.show{opacity:1; transform:translateY(0);}
+#startBtn:hover{background-color:#e7dfd2; transform:translateY(-2px);}
 
-/* ===== 主內容 ===== */
-main{opacity:0;visibility:hidden;transition:opacity var(--t-slow);}
-main.show{opacity:1;visibility:visible;}
-h2{font-size:90px;font-weight:900;color:#1E4F7B;margin:28px 0 10px;}
-h2 .english{font-family:'Amatic SC',cursive;font-weight:900;}
-.section-title{font-size:14px;color:#555;margin:10px 0 8px;}
-.reveal{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
-.reveal.in{opacity:1;transform:translateY(0);}
+/* Ripple 用 pseudo 元件 */
+#startBtn::after{
+  content:""; position:absolute; inset:auto;
+  width:10px; height:10px; border-radius:50%;
+  background: radial-gradient(circle, rgba(30,79,123,.18) 0%, rgba(30,79,123,0) 70%);
+  transform:translate(-50%,-50%) scale(1);
+  opacity:0; pointer-events:none;
+}
+#startBtn.rippling::after{
+  left:var(--rx); top:var(--ry);
+  animation:rippleInk .8s var(--ease-soft);
+}
+@keyframes rippleInk{
+  0% {opacity:.35; transform:translate(-50%,-50%) scale(1);}
+  100%{opacity:0; transform:translate(-50%,-50%) scale(35);}
+}
 
-/* ===== 表格比例優化 ===== */
+/* ===== 主內容動畫（更沉穩） ===== */
+main{opacity:0; visibility:hidden; transition:opacity var(--t-slow) var(--ease);}
+main.show{opacity:1; visibility:visible;}
+h2{
+  font-size:90px; font-weight:900; color:var(--navy);
+  margin:28px 0 10px 0;
+  animation:titleFade 1.4s var(--ease) forwards;
+}
+@keyframes titleFade {
+  0% {opacity:0; transform: translateY(12px) scale(.98);}
+  60%{opacity:.8; transform: translateY(2px)  scale(1.01);}
+  100%{opacity:1; transform: translateY(0)    scale(1);}
+}
+h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
+.section-title{font-size:14px; color:#555; margin:10px 0 8px;}
+
+/* 區塊進場 */
+.reveal{opacity:0; transform:translateY(34px); transition:opacity .9s var(--ease), transform .9s var(--ease);}
+.reveal.in{opacity:1; transform:translateY(0);}
+
+/* ===== 訂購資訊卡片 ===== */
+.input-container{
+  max-width:500px; margin:0 auto 30px; text-align:left;
+  background:#fff; padding:25px 28px; border-radius:16px;
+  box-shadow:0 6px 22px rgba(0,0,0,.05);
+}
+.input-group{display:flex; flex-direction:column; gap:5px; margin-bottom:18px;}
+.input-group label{font-size:14px; color:#333;}
+.input-group input{
+  font-size:14px; padding:8px 10px; border:1px solid #ccc; border-radius:8px; background:#fafafa;
+  transition:border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.input-group input:focus{border-color:var(--navy); background:#fff; box-shadow:0 0 6px rgba(30,79,123,.2);}
+.input-error{border-color:#e74c3c !important;}
+.error-hint{font-size:12px; color:#c0392b; margin-top:2px;}
+
+/* ===== 表格：維持排版，專注在對齊與質感 ===== */
 table{
-  width:90%;max-width:500px;margin:15px auto;
-  border-collapse:separate;border-spacing:0;
-  background:#fff;border-radius:16px;overflow:hidden;
+  width:90%;
+  max-width:500px;
+  margin:15px auto;
+  border-collapse:separate;
+  border-spacing:0;
+  background:#fff;
+  border-radius:16px;
+  overflow:hidden;
   box-shadow:0 2px 10px rgba(0,0,0,.08);
-  font-size:15px;text-align:center;table-layout:fixed;
+  font-size:15px;
+  table-layout:fixed;
+  text-align:center;
 }
-th,td{padding:10px;border-bottom:1px solid #e9eef2;vertical-align:middle;white-space:nowrap;}
-th{background-color:var(--gray-blue);color:#fff;font-weight:500;}
-.col-item{width:50%;}
-.col-price{width:20%;}
-.col-action{width:30%;}
+th,td{
+  padding:10px; border-bottom:1px solid #e9eef2; vertical-align:middle;
+  overflow:visible; white-space:nowrap;
+}
+th{background-color:var(--gray-blue); color:#fff; font-weight:500;}
 
-/* ===== 高質感 Stepper ===== */
-.qty-stepper{
-  display:inline-flex;align-items:center;justify-content:center;
-  height:42px;border-radius:10px;
-  border:1px solid rgba(30,79,123,0.15);
-  background:rgba(255,255,255,0.75);
-  backdrop-filter:blur(6px) saturate(1.2);
-  box-shadow:inset 0 1px 2px rgba(255,255,255,0.5),
-              0 2px 8px rgba(30,79,123,0.1);
-  transition:box-shadow .3s var(--ease),border-color .3s var(--ease);
-}
-.qty-stepper:hover{
-  box-shadow:inset 0 1px 3px rgba(255,255,255,0.6),
-              0 4px 16px rgba(30,79,123,0.18);
-  border-color:rgba(30,79,123,0.25);
-}
-.qty-btn{
-  width:34px;height:100%;border:none;
-  background:linear-gradient(to bottom,#f9f9f9,#f1f1f1);
-  font-size:18px;font-weight:600;color:#44566C;
-  cursor:pointer;user-select:none;
-  transition:all .25s var(--ease);
-  border-radius:8px;
-}
-.qty-btn:hover{
-  background:linear-gradient(to bottom,#ffffff,#f3f3f3);
-  transform:translateY(-1px);
-  box-shadow:0 2px 5px rgba(30,79,123,0.1);
-}
-.qty-btn:active{transform:translateY(0);background:#e6eaf0;}
-.qty-input{
-  width:56px;height:100%;border:none;
-  border-left:1px solid rgba(30,79,123,0.1);
-  border-right:1px solid rgba(30,79,123,0.1);
-  text-align:center;font-family:'Noto Serif TC',serif;
-  font-size:15px;font-weight:500;
-  background:rgba(255,255,255,0.7);
-  color:#1E4F7B;
-  letter-spacing:.05em;
-  transition:background-color .3s ease;
-}
-.qty-input:focus{background:#fff;outline:none;}
-.qty-stepper:focus-within{
-  box-shadow:0 0 0 4px rgba(30,79,123,0.12),
-              inset 0 1px 4px rgba(255,255,255,0.6);
-  border-color:rgba(30,79,123,0.25);
-}
+.col-price { width:90px; }
+.col-action{ width:100px; }
+.col-sub   { width:110px; }
 
-/* ===== 柔光總額 ===== */
+/* 表格間距微調 */
+#productTable{ margin:15px auto 28px; }
+#shippingTable{ margin:10px auto 18px; }
+
+/* 數量下拉固定 70px + 統一 accent 色 */
+select{
+  width:70px; box-sizing:border-box;
+  text-align:center; font-size:14px; padding:5px 6px;
+  border-radius:6px; border:1px solid #ccc; background:#fff; max-width:100%;
+  transition: border-color var(--t-fast) var(--ease);
+  accent-color: var(--navy);
+}
+select:focus{border-color:var(--navy); outline:none;}
+input[type='checkbox']{transform:scale(1.2); accent-color:var(--navy);}
+
+/* ===== Total Amount（blend 疊色＋慢脈衝） ===== */
 .total{
-  font-family:'Amatic SC',cursive;font-size:32px;font-weight:900;
-  letter-spacing:2.8px;color:#1E4F7B;
-  margin-top:18px;position:relative;display:inline-block;
-  padding:6px 20px;opacity:0;transform:translateY(10px) scale(.96);
-  transition:opacity var(--t-slow),transform var(--t-slow);
+  font-family:'Amatic SC', cursive;
+  font-size:30px; font-weight:900; letter-spacing:2.5px; color:var(--navy);
+  margin-top:25px; position:relative; display:inline-block;
+  padding:6px 18px; opacity:0; transform:translateY(10px) scale(.96);
+  transition:opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
+  z-index:0; isolation:isolate;
 }
-.total.show{opacity:1;transform:translateY(0) scale(1);}
-.total::before{
-  content:"";position:absolute;left:0;top:50%;width:100%;height:70%;
-  transform:translateY(-50%) rotate(-1deg);
-  background:linear-gradient(120deg,rgba(255,236,205,.9)0%,rgba(255,215,160,.7)100%);
-  border-radius:14px;z-index:-1;
-  filter:blur(1.6px)saturate(1.25)brightness(1.1);
-  opacity:.75;mix-blend-mode:soft-light;
-}
-@keyframes totalUpdate{0%{transform:scale(1);}50%{transform:scale(1.05);}100%{transform:scale(1);}}
-.total.animate{animation:totalUpdate .9s var(--ease);}
-@keyframes glowPulse{
-  0%{opacity:.6;filter:blur(1px)brightness(1);}
-  50%{opacity:.9;filter:blur(2.3px)brightness(1.15);}
-  100%{opacity:.7;filter:blur(1px)brightness(1);}
-}
-.total.glow::before{animation:glowPulse 1.8s var(--ease) 1;}
+.total.show{opacity:1; transform:translateY(0) scale(1);}
 
-/* ===== 手機適配 ===== */
+/* 底色改為混合模式，亮度克制 */
+.total::before{
+  content:""; position:absolute; left:0; top:50%;
+  width:100%; height:64%;
+  transform:translateY(-50%) rotate(-1.2deg) scale(1);
+  background:linear-gradient(120deg, rgba(255,229,185,.65) 0%, rgba(255,215,160,.5) 100%);
+  border-radius:12px; z-index:-1;
+  filter:blur(1px) saturate(1.05);
+  opacity:.55; mix-blend-mode:soft-light; /* 疊加感 */
+}
+
+/* 輕微縮放（克制） */
+@keyframes totalUpdate {
+  0%   { transform:scale(1); }
+  50%  { transform:scale(1.04); }
+  100% { transform:scale(1); }
+}
+.total.animate{ animation: totalUpdate .8s var(--ease); }
+
+/* 柔光脈衝：更慢、更淡 */
+@keyframes glowPulse {
+  0%   { opacity:.4;  transform:translateY(-50%) rotate(-1.2deg) scale(1);   filter:blur(1px)  saturate(1.05) brightness(1); }
+  50%  { opacity:.85; transform:translateY(-50%) rotate(-1.2deg) scale(1.04);filter:blur(1.6px) saturate(1.15) brightness(1.08); }
+  100% { opacity:.5;  transform:translateY(-50%) rotate(-1.2deg) scale(1);   filter:blur(1px)  saturate(1.05) brightness(1); }
+}
+.total.glow::before{ animation: glowPulse 1.8s var(--ease) 1; }
+
+/* ===== 匯款資訊 → 按鈕 ===== */
+.account-box{
+  width:85%; max-width:350px; margin:25px auto 0;
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(12px) brightness(1.05);
+  border:1px solid rgba(255,255,255,0.4);
+  color:#333; padding:16px; border-radius:16px; font-size:13px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.07);
+}
+.account-box h3{margin:8px 0; font-weight:600; font-size:15px; color:#44566C; letter-spacing:.5px;}
+
+.copy-btn,#screenshotBtn,#formBtn{
+  border:none; padding:12px 22px; border-radius:999px;
+  font-size:16px; cursor:pointer; font-weight:500;
+  transition: transform var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease), opacity var(--t-fast);
+  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+.copy-btn,#screenshotBtn{background-color:var(--milk-solid); color:#1f2a33;}
+.copy-btn:hover,#screenshotBtn:hover{background-color:#e4ddcf; transform:translateY(-2px);}
+#formBtn{background-color:var(--navy); color:#fff; box-shadow:0 4px 14px rgba(30,79,123,.35);}
+#formBtn:hover{background-color:#245c91; transform:translateY(-2px);}
+#buttonContainer{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:32px;}
+#formReminder{font-size:14px; color:#555; margin-top:16px; opacity:0; transform:translateY(14px); transition:opacity .8s var(--ease), transform .8s var(--ease);}
+#formReminder.in{opacity:1; transform:translateY(0);}
+
+/* ===== Toast（自家） ===== */
+.toast{
+  position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(20px);
+  min-width:240px; max-width:86vw;
+  background:rgba(30,79,123,.92); color:#fff; padding:12px 16px;
+  border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.18);
+  font-size:14px; opacity:0; pointer-events:none; z-index:99999;
+  transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
+}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+/* ===== 手機優化 ===== */
 @media (max-width:480px){
-  .col-item{width:58%;}
-  .col-price{width:20%;}
-  .col-action{width:22%;}
-  .qty-stepper{height:38px;}
-  .qty-btn{width:30px;font-size:16px;}
-  .qty-input{width:46px;font-size:14px;}
-  .total{font-size:28px;}
+  h2{font-size:60px;}
+  table{font-size:13.5px; width:96%;}
+  .col-price { width:80px; }
+  .col-action{ width:100px; }
+  .col-sub   { width:96px; }
+  .input-container{width:90%; padding:18px;}
+  .account-box{font-size:12.5px; width:90%;}
+  .copy-btn,#screenshotBtn,#formBtn{font-size:14px; padding:10px 18px;}
+  #intro-hero{width:clamp(240px, 68vw, 360px); margin:14px auto -66px;}
+  #intro-text{margin-top:-34px; line-height:1.9;}
+  #startBtn{margin-top:12px;}
+  #productTable{ margin:14px auto 26px; }
+  #shippingTable{ margin:10px auto 18px; }
+  #buttonContainer{ margin-top:36px; }
+}
+
+/* ===== 無動化偏好 ===== */
+@media (prefers-reduced-motion: reduce){
+  *{ animation: none !important; transition: none !important; }
+  #startBtn::after{ display:none !important; }
 }
 </style>
 </head>
 
 <body>
+<!-- ===== 開場動畫（維持原結構） ===== -->
 <div id="intro">
-  <img id="intro-logo" src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/logo.png" alt="logo">
-  <img id="intro-hero" src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/LOGO2-removebg-preview.png" alt="hero">
+  <img id="intro-logo" src="https://github.com/b02279437-crypto/liu-mama-calculator/blob/main/logo.png?raw=true" alt="Logo">
+  <img id="intro-hero" src="https://github.com/b02279437-crypto/liu-mama-calculator/blob/main/LOGO2-removebg-preview.png?raw=true" alt="Liu Mama Secondary Logo">
+
   <div id="intro-text">
-2015年遠赴四川成都，
+2015年遠赴四川成都， 
 學習正宗麻辣鍋底與紅油煉製。
 手工慢炒堆疊香氣，濃郁而不膩。
 
@@ -181,100 +303,299 @@ th{background-color:var(--gray-blue);color:#fff;font-weight:500;}
   <button id="startBtn">Start Order</button>
 </div>
 
-<main id="mainContent">
-  <h2><span class="english">LIU MAMA Order</span></h2>
+<!-- ===== 主內容 ===== -->
+<main id="mainContent" aria-describedby="formReminder">
+  <h2 id="pageTitle"><span class="english">LIU MAMA Order</span></h2>
 
-  <section class="reveal">
+  <section class="reveal left">
     <p class="section-title">請填寫訂購人資訊</p>
     <div class="input-container">
-      <div class="input-group"><label>訂購人姓名</label><input id="customerName" type="text" placeholder="請輸入姓名"></div>
-      <div class="input-group"><label>訂購人電話</label><input id="customerPhone" type="text" placeholder="請輸入電話" maxlength="10"></div>
+      <div class="input-group">
+        <label for="customerName">訂購人姓名</label>
+        <input type="text" id="customerName" placeholder="請輸入姓名" aria-invalid="false">
+        <small class="error-hint" id="errName" hidden></small>
+      </div>
+      <div class="input-group">
+        <label for="customerPhone">訂購人電話</label>
+        <input type="text" id="customerPhone" placeholder="請輸入電話" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')" aria-invalid="false">
+        <small class="error-hint" id="errPhone" hidden></small>
+      </div>
     </div>
   </section>
 
-  <section class="reveal">
-    <p class="section-title">請選擇購買數量與寄送方式</p>
+  <section class="reveal right">
+    <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
     <table id="productTable">
-      <colgroup><col class="col-item"><col class="col-price"><col class="col-action"></colgroup>
-      <tr><th>品項</th><th>價格</th><th>數量</th></tr>
+      <colgroup>
+        <col><col class="col-price"><col class="col-action"><col class="col-sub">
+      </colgroup>
+      <tr><th>品項</th><th>價格</th><th>數量</th><th>小計</th></tr>
       <tr>
         <td>麻辣底料包<br><small>(2人份)</small></td>
         <td>$320</td>
-        <td>
-          <div class="qty-stepper"><button id="qtyMinus">−</button><input id="qtyInput" type="text" value="0" maxlength="2"><button id="qtyPlus">＋</button></div>
-          <select id="qty1" hidden></select>
-        </td>
+        <td><select id="qty1" onchange="calculate()" aria-label="數量"></select></td>
+        <td id="sub1">$0</td>
       </tr>
     </table>
   </section>
 
-  <section class="reveal">
-    <div class="ship-wrap">
-      <label class="ship-card"><input type="radio" name="shipMethod" value="711"><div class="ship-title">711超商取貨</div><div class="ship-price">$60</div></label>
-      <label class="ship-card"><input type="radio" name="shipMethod" value="post"><div class="ship-title">郵局宅配</div><div class="ship-price">$120</div></label>
+  <section class="reveal left">
+    <table id="shippingTable">
+      <colgroup>
+        <col><col class="col-price"><col class="col-action"><col class="col-sub">
+      </colgroup>
+      <tr><th>寄送方式</th><th>價格</th><th>勾選</th><th>小計</th></tr>
+      <tr><td>711超商取貨</td><td>$60</td><td><input type="checkbox" id="ship711" onchange="selectShip('711')" aria-label="711超商取貨"></td><td id="sub711">$0</td></tr>
+      <tr><td>郵局宅配</td><td>$120</td><td><input type="checkbox" id="shipPost" onchange="selectShip('post')" aria-label="郵局宅配"></td><td id="subPost">$0</td></tr>
+    </table>
+    <div class="total" id="total" role="status" aria-live="polite" aria-atomic="true">Total Amount: $0</div>
+  </section>
+
+  <!-- 匯款資訊 + 按鈕 -->
+  <section class="reveal right">
+    <div class="account-box">
+      <h3>請匯款至以下帳戶:</h3>
+      <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
+      <button class="copy-btn" onclick="copyAccount()">複製匯款帳號</button>
     </div>
-    <div class="total" id="total">Total Amount: $0</div>
+
+    <div id="buttonContainer">
+      <button id="screenshotBtn" onclick="screenshotOrder()">截圖訂單</button>
+      <button id="formBtn" onclick="goToForm()">下一步,填寫寄送資訊</button>
+    </div>
+    <p id="formReminder">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
   </section>
 </main>
 
+<!-- Toast 容器（alert 的優雅替代，仍保留 fallback） -->
+<div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
+
 <script>
-function imgReady(el){if(el.complete){if('decode' in el){return el.decode().catch(()=>{});}return Promise.resolve();}return new Promise(r=>{el.addEventListener('load',r,{once:true});el.addEventListener('error',r,{once:true});});}
-async function startIntroSequence(){
+/* ===== 初始化：數量、開場節奏、進場 ===== */
+window.addEventListener('DOMContentLoaded',()=>{
+  // 初始化數量 0–35
+  const select=document.getElementById('qty1');
+  for(let i=0;i<=35;i++){
+    const opt=document.createElement('option');
+    opt.value=i; opt.textContent=i;
+    select.appendChild(opt);
+  }
+  select.value="0"; 
+  calculate(true); // 初始不觸發動畫
+
+  // 開場動畫控制
+  const intro=document.getElementById('intro');
   const logo=document.getElementById('intro-logo');
   const hero=document.getElementById('intro-hero');
   const text=document.getElementById('intro-text');
   const btn=document.getElementById('startBtn');
-  const maxWait=new Promise(r=>setTimeout(r,4000));
-  await Promise.race([Promise.all([imgReady(logo),imgReady(hero)]),maxWait]);
-  requestAnimationFrame(()=>{
-    logo.classList.add('show');
-    setTimeout(()=>logo.classList.add('hide'),2000);
-    setTimeout(()=>{logo.style.display='none';hero.classList.add('show');text.classList.add('show');},3200);
-    setTimeout(()=>btn.classList.add('show'),4800);
-  });
-}
-function triggerRipple(e){
-  const btn=e.currentTarget,rect=btn.getBoundingClientRect();
-  btn.style.setProperty('--rx',(e.clientX-rect.left)+'px');
-  btn.style.setProperty('--ry',(e.clientY-rect.top)+'px');
-  btn.classList.remove('rippling');void btn.offsetWidth;btn.classList.add('rippling');
-}
-window.addEventListener('DOMContentLoaded',()=>{
-  const intro=document.getElementById('intro');
-  const btn=document.getElementById('startBtn');
   const main=document.getElementById('mainContent');
-  startIntroSequence();
+
+  setTimeout(()=>logo.classList.add('show'),300);
+  setTimeout(()=>logo.classList.add('hide'),2300);
+  setTimeout(()=>{
+    logo.style.display='none';
+    hero.classList.add('show');
+    text.classList.add('show');
+  },3600);
+  setTimeout(()=>btn.classList.add('show'),5200);
+
+  // Start Order 墨暈 ripple + 推進
   btn.addEventListener('click',(e)=>{
     triggerRipple(e);
     intro.classList.add('fade-out');
-    setTimeout(()=>{intro.style.display='none';main.classList.add('show');},800);
+    setTimeout(()=>{
+      intro.style.display='none';
+      main.classList.add('show');
+      document.querySelectorAll('.reveal').forEach((el,i)=>setTimeout(()=>el.classList.add('in'), i*180));
+      setTimeout(()=>document.querySelector('.total').classList.add('show'),1000);
+      setTimeout(()=>document.getElementById('formReminder').classList.add('in'),1100);
+    },600);
   });
-  buildQty();calculate();
 });
-function buildQty(){
-  const select=document.getElementById('qty1');
-  for(let i=0;i<=35;i++){const o=document.createElement('option');o.value=i;o.textContent=i;select.appendChild(o);}
-  const minus=document.getElementById('qtyMinus'),plus=document.getElementById('qtyPlus'),input=document.getElementById('qtyInput');
-  const clamp=n=>Math.min(35,Math.max(0,parseInt(n)||0));
-  const sync=v=>{v=clamp(v);input.value=v;select.value=v;calculate();};
-  minus.onclick=()=>sync(input.value-1);
-  plus.onclick=()=>sync(input.value+1);
-  input.oninput=()=>sync(input.value);
+
+/* ===== 墨暈 Ripple ===== */
+function triggerRipple(e){
+  const btn=e.currentTarget;
+  const rect=btn.getBoundingClientRect();
+  const x=(e.clientX-rect.left)+'px';
+  const y=(e.clientY-rect.top)+'px';
+  btn.style.setProperty('--rx', x);
+  btn.style.setProperty('--ry', y);
+  btn.classList.remove('rippling');
+  // 強制回流以重新觸發動畫
+  void btn.offsetWidth;
+  btn.classList.add('rippling');
 }
+
+/* ===== Toast（帶 fallback） ===== */
+function showToast(msg){
+  const el=document.getElementById('toast');
+  if(!el){ alert(msg); return; }  // fallback
+  el.textContent=msg;
+  el.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t=setTimeout(()=>el.classList.remove('show'), 2200);
+}
+
+/* ===== 計算金額（含數字滾動＋柔光） ===== */
 let lastTotal=0;
-function calculate(){
+function calculate(isInit){
+  const qty1=parseInt(document.getElementById('qty1').value)||0;
+  document.getElementById('sub1').innerText='$'+(qty1*320);
+
+  let ship=0;
+  const c711=document.getElementById('ship711').checked;
+  const cPost=document.getElementById('shipPost').checked;
+  if(c711) ship=60;
+  if(cPost) ship=120;
+
+  document.getElementById('sub711').innerText=c711?'$60':'$0';
+  document.getElementById('subPost').innerText=cPost?'$120':'$0';
+
+  const newTotal=qty1*320+ship;
+  animateTotal(newTotal, !!isInit);
+}
+
+/* 數字滾動（低亮度、克制節奏） */
+function animateTotal(target, isInit){
+  const totalEl=document.getElementById('total');
+  if(isInit){
+    lastTotal=target;
+    totalEl.textContent='Total Amount: $'+target;
+    totalEl.classList.add('show');
+    return;
+  }
+
+  // 觸發克制縮放＋柔光
+  totalEl.classList.remove('animate','glow');
+  void totalEl.offsetWidth;
+  totalEl.classList.add('animate','glow');
+
+  // prefers-reduced-motion：直接跳值
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){
+    lastTotal=target;
+    totalEl.textContent='Total Amount: $'+target;
+    return;
+  }
+
+  const duration=900; // ms
+  const start=performance.now();
+  const from=lastTotal;
+  const delta=target-from;
+
+  function ease(t){ // easeOutCubic 對應 CSS 節奏
+    return 1-Math.pow(1-t,3);
+  }
+
+  function frame(now){
+    const p=Math.min(1,(now-start)/duration);
+    const v=Math.round(from + delta*ease(p));
+    totalEl.textContent='Total Amount: $'+v;
+    if(p<1){ requestAnimationFrame(frame); }
+    else { lastTotal=target; }
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ===== 運送方式互斥 ===== */
+function selectShip(type){
+  if(type==='711') document.getElementById('shipPost').checked=false;
+  if(type==='post') document.getElementById('ship711').checked=false;
+  calculate();
+}
+
+/* ===== 複製匯款帳號（Toast + fallback） ===== */
+function copyAccount(){
+  const acct=document.getElementById('accountNumber').innerText;
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(acct).then(()=>{
+      showToast('匯款帳號已複製，完成匯款後請按下一步填寫寄送資訊。');
+    }).catch(()=>alert('匯款帳號已複製！'));
+  }else{
+    const ta=document.createElement('textarea');
+    ta.value=acct; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    showToast('匯款帳號已複製，完成匯款後請按下一步填寫寄送資訊。');
+  }
+}
+
+/* ===== 截圖訂單（Toast + fallback） ===== */
+function screenshotOrder(){
+  const target=document.getElementById('mainContent');
+  if(typeof html2canvas==='undefined'){
+    alert('截圖功能庫尚未載入，請稍後再試或檢查網路連線。');
+    return;
+  }
+  html2canvas(target).then(canvas=>{
+    const link=document.createElement('a');
+    link.href=canvas.toDataURL('image/png');
+    link.download='liu_mama_order.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('截圖已下載！記得填寫表單喔。');
+  }).catch(()=>alert('截圖失敗，請再試一次'));
+}
+
+/* ===== 表單送出（錯誤提示小字 + 無障礙） ===== */
+function setFieldError(el, msgId, message){
+  const hint=document.getElementById(msgId);
+  if(message){
+    el.classList.add('input-error');
+    el.setAttribute('aria-invalid','true');
+    hint.textContent=message; hint.hidden=false;
+  }else{
+    el.classList.remove('input-error');
+    el.setAttribute('aria-invalid','false');
+    hint.textContent=''; hint.hidden=true;
+  }
+}
+
+function goToForm(){
+  const name=document.getElementById('customerName');
+  const phone=document.getElementById('customerPhone');
   const qty=parseInt(document.getElementById('qty1').value)||0;
-  const method=document.querySelector('input[name="shipMethod"]:checked');
-  let ship=0;if(method){ship=(method.value==='711')?60:120;}
-  const newTotal=qty*320+ship;
-  animateTotal(newTotal);
+  const ship711=document.getElementById('ship711').checked;
+  const shipPost=document.getElementById('shipPost').checked;
+
+  let ok=true;
+  setFieldError(name,'errName','');
+  setFieldError(phone,'errPhone','');
+
+  if(!name.value.trim()){ setFieldError(name,'errName','請輸入訂購人姓名'); ok=false; }
+  if(!phone.value.trim()){ setFieldError(phone,'errPhone','請輸入訂購人電話'); ok=false; }
+  else if(!/^\d{10}$/.test(phone.value.trim())){ setFieldError(phone,'errPhone','電話需為 10 碼數字'); ok=false; }
+  if(qty<=0){ showToast('請選擇購買數量'); ok=false; }
+  if(!ship711 && !shipPost){ showToast('請選擇寄送方式'); ok=false; }
+
+  if(!ok) return; // 有 Toast 與欄位小字提示，避免跳 alert
+
+  const ship=ship711?'711超商取貨':'郵局宅配';
+  const total=qty*320+(ship711?60:120);
+
+  const formUrl=`https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url`
+    +`&entry.1152845848=${encodeURIComponent(name.value.trim())}`
+    +`&entry.178268335=${encodeURIComponent(phone.value.trim())}`
+    +`&entry.1732058404=${qty}`
+    +`&entry.509305715=${encodeURIComponent(ship)}`
+    +`&entry.1351577488=${total}`;
+  window.open(formUrl,'_blank');
 }
-function animateTotal(target){
-  const el=document.getElementById('total');
-  el.classList.remove('animate','glow');void el.offsetWidth;
-  el.classList.add('animate','glow');
-  el.textContent='Total Amount: $'+target;
-}
+
+/* ===== 讓鍵盤操作也能觸發 Ripple（可選） ===== */
+document.addEventListener('keydown', (e)=>{
+  if(e.key==='Enter'){
+    const btn=document.getElementById('startBtn');
+    if(document.activeElement===btn){
+      const rect=btn.getBoundingClientRect();
+      // 模擬中心位置 ripple
+      const fakeEvent={currentTarget:btn, clientX:rect.left+rect.width/2, clientY:rect.top+rect.height/2};
+      triggerRipple(fakeEvent);
+    }
+  }
+});
 </script>
 </body>
 </html>
