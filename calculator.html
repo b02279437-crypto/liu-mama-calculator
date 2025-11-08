@@ -27,10 +27,10 @@
   --qty-btn-w: 36px;   /* 每個 +/- 按鈕寬 */
   --qty-disp-w: 56px;  /* 中間輸入欄寬 */
 
-  /* 新增：色票（莫蘭迪灰藍系） */
+  /* 色票（莫蘭迪灰藍系） */
   --crayon-blue:#54677C;           /* 蠟筆塊底主色（灰藍） */
   --crayon-blue-ink:#3C5168;       /* 蠟筆描邊 */
-  --water-blue: rgba(173,203,230,.36); /* 水彩暈染淺藍（無漸層） */
+  --water-blue: rgba(173,203,230,.42); /* 水彩暈染淺藍（無漸層） */
 }
 
 html{-webkit-text-size-adjust:100%;}
@@ -58,7 +58,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   padding-top:12vh; z-index:9999; opacity:1; transition:opacity var(--t-slow) var(--ease);
 }
 #intro.fade-out{opacity:0; pointer-events:none;}
-/* 放大 LOGO（原本 80vw/550px → 提高到 92vw/700px） */
+/* 放大 LOGO（原 80vw/550px → 92vw/700px） */
 #intro-logo{
   width:clamp(360px, 92vw, 700px);
   opacity:0; transform:scale(.99);
@@ -80,7 +80,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 }
 #intro-text.show{opacity:1;}
 
-/* Start Order：水彩暈染（不規則，無漸層）＋墨暈 ripple */
+/* Start Order：不規則「水彩暈染」＋ 墨暈 ripple（無漸層、深藍字） */
 #startBtn{
   margin-top:18px; padding:14px 46px; font-size:30px;
   font-family:'Amatic SC',cursive; letter-spacing:2px;
@@ -90,18 +90,18 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   transition:opacity var(--t-base) var(--ease), transform var(--t-fast) var(--ease);
   position:relative; overflow:visible; isolation:isolate; z-index:0;
 }
-/* 水彩塊（不規則形狀，非漸層） */
+/* 使用多層 radial-gradient 做不規則水彩塊（邊緣柔化） */
 #startBtn::before{
-  content:""; position:absolute; inset:-6px -16px -10px -16px;
-  background:var(--water-blue);
-  /* 不規則外形：略歪斜的有機形狀 */
-  clip-path: polygon(4% 22%, 94% 10%, 96% 72%, 8% 90%);
-  filter: blur(.6px);
-  border-radius:24px;
-  box-shadow:
-    0 0 0 12px rgba(173,203,230,.06),
-    0 10px 24px rgba(30,79,123,.16);
-  z-index:-1;
+  content:""; position:absolute; inset:-18px -36px -20px -36px; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(140px 100px at 18% 55%, var(--water-blue), transparent 62%),
+    radial-gradient(200px 120px at 82% 44%, rgba(173,203,230,.40), transparent 64%),
+    radial-gradient(240px 160px at 52% 64%, rgba(173,203,230,.46), transparent 66%),
+    radial-gradient(320px 200px at 48% 40%, rgba(173,203,230,.18), transparent 70%);
+  filter: blur(4px) saturate(1.02);
+  border-radius:28px;
+  box-shadow:0 12px 28px rgba(30,79,123,.16);
+  opacity:.98;
 }
 #startBtn.show{opacity:1; transform:translateY(0);}
 #startBtn:hover{ transform:translateY(-2px); }
@@ -194,7 +194,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 .qty-stepper:focus-within{ box-shadow:0 0 0 3px rgba(30,79,123,.15); border-color:#9bb7d3; }
 .qty-btn:focus-visible, .qty-input:focus-visible{ outline:2px solid rgba(30,79,123,.6); outline-offset:2px; }
 
-/* ===== 寄送方式：方案 A 玻璃磨砂＋柔光陰影（字體與表格一致：15px） ===== */
+/* ===== 寄送方式：玻璃磨砂卡片（保持） ===== */
 .ship-wrap{ width:90%; max-width:500px; margin:8px auto 12px; display:flex; gap:12px; }
 .ship-card{
   --glow: rgba(30,79,123,.14);
@@ -206,18 +206,12 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   border:1px solid rgba(255,255,255,.55);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.75), 0 8px 22px rgba(20,40,60,.12);
   padding:14px 12px; cursor:pointer; user-select:none;
-  transition:
-    transform var(--t-fast) var(--ease),
-    box-shadow var(--t-base) var(--ease),
-    border-color var(--t-fast) var(--ease),
-    filter var(--t-fast) var(--ease);
+  transition: transform var(--t-fast) var(--ease), box-shadow var(--t-base) var(--ease), border-color var(--t-fast) var(--ease), filter var(--t-fast) var(--ease);
   display:flex; flex-direction:column; align-items:center; gap:6px;
   font-family:'Noto Serif TC','Microsoft JhengHei',serif;
 }
 .ship-card:hover{ transform:translateY(-1px); filter:brightness(1.02); }
 .ship-card:active{ transform:translateY(0); }
-
-/* 玻璃光澤層 */
 .ship-card::after{
   content:""; position:absolute; inset:0; pointer-events:none; border-radius:inherit;
   background:
@@ -225,35 +219,19 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
     radial-gradient(120% 90% at 50% 120%, var(--glow), transparent 60%);
   opacity:.18; transition:opacity var(--t-fast) var(--ease);
 }
-
-/* 隱藏原生 radio */
 .ship-card input{ position:absolute; opacity:0; inset:0; pointer-events:none; }
-
-/* 文字（與表格一致） */
-.ship-title,.ship-price{
-  font-size:15px; line-height:1.35; letter-spacing:.2px;
-  color:#2d3b4a;
-}
+.ship-title,.ship-price{ font-size:15px; line-height:1.35; letter-spacing:.2px; color:#2d3b4a; }
 .ship-title{ font-weight:600; }
 .ship-price{ font-weight:500; color:#4f5f70; }
-
-/* 選中狀態：邊框加深＋柔光外陰影＋品牌色文字 */
-.ship-card:has(input:checked),
-.ship-card.selected{
+.ship-card:has(input:checked), .ship-card.selected{
   border-color:rgba(30,79,123,.55);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.75),
-    0 12px 32px rgba(30,79,123,.18),
-    0 0 0 6px rgba(30,79,123,.06);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.75), 0 12px 32px rgba(30,79,123,.18), 0 0 0 6px rgba(30,79,123,.06);
   filter:brightness(1.06);
 }
 .ship-card:has(input:checked)::after{ opacity:.28; }
-.ship-card input:checked ~ .ship-title,
-.ship-card input:checked ~ .ship-price{
-  color:#1E4F7B; text-shadow:0 0 1px rgba(30,79,123,.06);
-}
+.ship-card input:checked ~ .ship-title, .ship-card input:checked ~ .ship-price{ color:#1E4F7B; text-shadow:0 0 1px rgba(30,79,123,.06); }
 
-/* ===== Total（保留原本 Amatic SC 與柔光脈衝） ===== */
+/* ===== Total（保留） ===== */
 .total{
   font-family:'Amatic SC', cursive;
   font-size:30px; font-weight:900; letter-spacing:2.5px; color:#1E4F7B;
@@ -280,6 +258,18 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 }
 .total.glow::before{ animation: glowPulse 1.8s var(--ease) 1; }
 
+/* ===== 匯款資訊卡片（恢復原本玻璃背景） ===== */
+.account-box{
+  width:85%; max-width:350px; margin:25px auto 0;
+  background:rgba(255,255,255,0.55);
+  -webkit-backdrop-filter:blur(12px) brightness(1.05);
+  backdrop-filter:blur(12px) brightness(1.05);
+  border:1px solid rgba(255,255,255,0.4);
+  color:#333; padding:16px; border-radius:16px; font-size:13px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.07);
+}
+.account-box h3{margin:8px 0; font-weight:600; font-size:15px; color:#44566C; letter-spacing:.5px;}
+
 /* ===== 按鈕樣式（蠟筆塊底／手繪描邊） ===== */
 .btn{
   display:inline-flex; align-items:center; gap:8px;
@@ -303,7 +293,6 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 }
 .btn-crayon::before{
   content:""; position:absolute; inset:0; opacity:.18; pointer-events:none;
-  /* 細微蠟筆紋理（低對比） */
   background:
     repeating-linear-gradient(12deg, rgba(255,255,255,.08) 0 2px, rgba(255,255,255,0) 2px 6px),
     repeating-linear-gradient(-8deg, rgba(0,0,0,.04) 0 1px, rgba(0,0,0,0) 1px 5px);
@@ -319,7 +308,6 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   position:relative;
 }
 .btn-sketch::after{
-  /* 模擬手繪第二條線 */
   content:""; position:absolute; inset:3px; border-radius:inherit;
   border:1px dashed rgba(30,79,123,.45); pointer-events:none;
 }
@@ -476,7 +464,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 
     <div id="buttonContainer" style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:32px;">
       <button id="screenshotBtn" class="btn btn-sketch" onclick="screenshotOrder()">保存訂單截圖</button>
-      <button id="formBtn" class="btn btn-crayon" onclick="goToForm()">前往填寫寄送資訊</button>
+      <button id="formBtn" class="btn btn-crayon" onclick="goToForm()">下一步：填寫寄送資訊</button>
     </div>
     <p id="formReminder">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
   </section>
