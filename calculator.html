@@ -23,9 +23,9 @@
   /* 表單控件統一高度 */
   --control-h: 44px;
 
-  /* Stepper 寬度（桌機） */
-  --qty-btn-w: 34px;   /* 每個 +/- 按鈕寬 */
-  --qty-disp-w: 50px;  /* 中間輸入欄寬 */
+  /* Stepper 尺寸（桌機） */
+  --qty-btn-w: 36px;   /* 每個 +/- 按鈕寬 */
+  --qty-disp-w: 56px;  /* 中間輸入欄寬 */
 }
 
 html{-webkit-text-size-adjust:100%;}
@@ -97,7 +97,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 main{opacity:0; visibility:hidden; transition:opacity var(--t-slow) var(--ease);}
 main.show{opacity:1; visibility:visible;}
 h2{
-  font-size:90px; font-weight:900; color:var(--navy);
+  font-size:90px; font-weight:900; color:#1E4F7B;
   margin:28px 0 10px 0; animation:titleFade 1.4s var(--ease) forwards;
 }
 @keyframes titleFade{ 0%{opacity:0; transform:translateY(12px) scale(.98);} 60%{opacity:.8; transform:translateY(2px) scale(1.01);} 100%{opacity:1; transform:translateY(0) scale(1);} }
@@ -120,7 +120,7 @@ h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
   padding:0 12px; border:1px solid #ccc; border-radius:8px; background:#fafafa;
   transition:border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
 }
-.input-group input:focus{border-color:var(--navy); background:#fff; box-shadow:0 0 6px rgba(30,79,123,.2);}
+.input-group input:focus{border-color:#1E4F7B; background:#fff; box-shadow:0 0 6px rgba(30,79,123,.2);}
 .input-error{border-color:#e74c3c !important;}
 .error-hint{font-size:12px; color:#c0392b; margin-top:2px;}
 
@@ -132,17 +132,29 @@ table{
 }
 th,td{ padding:10px; border-bottom:1px solid #e9eef2; vertical-align:middle; white-space:nowrap; }
 th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
-.col-price{ width:110px; }
-.col-action{ width:120px; } /* 桌機：容納 Stepper */
+
+/* 明確設定三欄寬度：縮小品項與價格，放大數量 */
+.col-item  { width:auto; }        /* 自動分配 */
+.col-price { width:90px; }        /* 價格較窄即可 */
+.col-action{ width:148px; }       /* 數量加大，避免擠爆 */
+
+/* 為了容納 Stepper，減少數量欄左右 padding */
+#productTable td:nth-child(3), #productTable th:nth-child(3){
+  padding-left:6px; padding-right:6px;
+}
+
 #productTable{ margin:15px auto 28px; }
 
-/* 原生 select（保留流程，同步用） */
+/* 隱藏原生 select（流程保留、同步用） */
 #qty1[hidden]{ display:none !important; }
 
-/* ===== Stepper 數量控制（可按可輸入） ===== */
+/* ===== Stepper（可按可輸入） ===== */
 .qty-stepper{
-  display:inline-flex; align-items:center; gap:0; height:var(--control-h);
+  display:inline-flex; align-items:center; height:var(--control-h);
   border:1px solid #ccc; border-radius:8px; background:#fff;
+  /* 固定寬度 = 左右按鈕 + 中間輸入 + 外框 2px */
+  width: calc(var(--qty-btn-w)*2 + var(--qty-disp-w) + 2px);
+  max-width:100%;
 }
 .qty-btn{
   width:var(--qty-btn-w); height:100%;
@@ -188,7 +200,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 /* ===== Total（保留原本 Amatic SC 與柔光脈衝） ===== */
 .total{
   font-family:'Amatic SC', cursive;
-  font-size:30px; font-weight:900; letter-spacing:2.5px; color:var(--navy);
+  font-size:30px; font-weight:900; letter-spacing:2.5px; color:#1E4F7B;
   margin-top:16px; position:relative; display:inline-block;
   padding:6px 18px; opacity:0; transform:translateY(10px) scale(.96);
   transition:opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
@@ -230,7 +242,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 }
 .copy-btn,#screenshotBtn{background-color:var(--milk-solid); color:#1f2a33;}
 .copy-btn:hover,#screenshotBtn:hover{background-color:#e4ddcf; transform:translateY(-2px);}
-#formBtn{background-color:var(--navy); color:#fff; box-shadow:0 4px 14px rgba(30,79,123,.35);}
+#formBtn{background-color:#1E4F7B; color:#fff; box-shadow:0 4px 14px rgba(30,79,123,.35);}
 #formBtn:hover{background-color:#245c91; transform:translateY(-2px);}
 #buttonContainer{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:32px;}
 #formReminder{font-size:14px; color:#555; margin-top:16px; opacity:0; transform:translateY(14px); transition:opacity .8s var(--ease), transform .8s var(--ease);}
@@ -241,7 +253,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(20px);
   min-width:240px; max-width:86vw;
   background:rgba(30,79,123,.92); color:#fff; padding:12px 16px;
-  border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.18);
+  border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.18);
   font-size:14px; opacity:0; pointer-events:none; z-index:99999;
   transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
 }
@@ -255,8 +267,11 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   }
   h2{font-size:60px;}
   table{font-size:13.5px; width:96%;}
-  .col-price{width:100px;}
-  .col-action{width:108px;} /* 手機：更窄也不爆版 */
+  /* 手機：再把數量欄放大、價錢欄微縮，並降低數量欄 padding */
+  .col-price { width:86px; }
+  .col-action{ width:130px; }
+  #productTable td:nth-child(3), #productTable th:nth-child(3){ padding-left:4px; padding-right:4px; }
+
   .input-container{width:90%; padding:18px;}
   .account-box{font-size:12.5px; width:90%;}
   .copy-btn,#screenshotBtn,#formBtn{font-size:16px;}
@@ -318,7 +333,9 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   <section class="reveal right">
     <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
     <table id="productTable">
-      <colgroup><col><col class="col-price"><col class="col-action"></colgroup>
+      <colgroup>
+        <col class="col-item"><col class="col-price"><col class="col-action">
+      </colgroup>
       <tr><th>品項</th><th>價格</th><th>數量</th></tr>
       <tr>
         <td>麻辣底料包<br><small>(2人份)</small></td>
@@ -521,7 +538,6 @@ function buildQty(){
   input.addEventListener('input', ()=>{
     input.value = input.value.replace(/[^0-9]/g,'').slice(0,2);
     const v = input.value==='' ? 0 : clamp(input.value);
-    // 即時同步但不要抖動
     syncTo(v, true);
   });
 
