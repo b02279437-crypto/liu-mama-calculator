@@ -27,9 +27,9 @@
   --qty-btn-w: 36px;   /* 每個 +/- 按鈕寬 */
   --qty-disp-w: 56px;  /* 中間輸入欄寬 */
 
-  /* 色票（莫蘭迪灰藍系） */
-  --crayon-blue:#54677C;           /* 蠟筆塊底主色（灰藍） */
-  --crayon-blue-ink:#3C5168;       /* 蠟筆描邊 */
+  /* 莫蘭迪灰藍系（供蠟筆/描邊按鈕使用） */
+  --crayon-blue:#54677C;
+  --crayon-blue-ink:#3C5168;
 }
 
 html{-webkit-text-size-adjust:100%;}
@@ -79,32 +79,28 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 }
 #intro-text.show{opacity:1;}
 
-/* Start Order：白底玻璃感（高級、透明感、小一號）＋ ripple */
+/* Start Order：白底玻璃感（高級、透明、略小）＋ ripple */
 #startBtn{
   margin-top:16px;
-  padding:12px 34px;                       /* 小一號 */
-  font-size:26px;                           /* 小一號 */
+  padding:12px 34px;
+  font-size:26px; /* 較小 */
   font-family:'Amatic SC',cursive; letter-spacing:2px;
   color:var(--navy);
 
-  background:rgba(255,255,255,.62);         /* 透明白玻璃 */
+  background:rgba(255,255,255,.62);
   border:1px solid rgba(255,255,255,.70);
   border-radius:999px;
   -webkit-backdrop-filter:blur(14px) saturate(1.06);
   backdrop-filter:blur(14px) saturate(1.06);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.65),
-    0 10px 24px rgba(30,79,123,.14);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 10px 24px rgba(30,79,123,.14);
 
   cursor:pointer; position:relative; isolation:isolate;
   opacity:0; transform:translateY(10px);
-  transition:opacity var(--t-base) var(--ease), transform var(--t-fast) var(--ease),
-             filter .25s var(--ease);
+  transition:opacity var(--t-base) var(--ease), transform var(--t-fast) var(--ease), filter .25s var(--ease);
 }
 #startBtn.show{opacity:1; transform:translateY(0);}
 #startBtn:hover{ transform:translateY(-2px); filter:brightness(1.03); }
 #startBtn:active{ transform:translateY(-1px); }
-
 /* Ripple 墨暈 */
 #startBtn::after{
   content:""; position:absolute; inset:auto; width:10px; height:10px; border-radius:50%;
@@ -160,7 +156,9 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 .col-action{ width:148px; }
 
 /* 為了容納 Stepper，減少數量欄左右 padding */
-#productTable td:nth-child(3), #productTable th:nth-child(3){ padding-left:6px; padding-right:6px; }
+#productTable td:nth-child(3), #productTable th:nth-child(3){
+  padding-left:6px; padding-right:6px;
+}
 
 #productTable{ margin:15px auto 28px; }
 
@@ -361,7 +359,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 
 /* ===== 無動化偏好 ===== */
 @media (prefers-reduced-motion: reduce){
-  *{ animation:none !important; transition:none !important; }
+  *{ animation:none !important; transition:none !重要; }
   #startBtn::after{ display:none !important; } /* ripple 關閉 */
 }
 </style>
@@ -560,7 +558,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   });
 });
 
-/* ===== Stepper：可按可輸入 ===== */
+/* ===== Stepper：可按可輸入（0–35、每次±1） ===== */
 function buildQty(){
   const MIN=0, MAX=35;
   const select = document.getElementById('qty1');
@@ -568,17 +566,21 @@ function buildQty(){
   const plus   = document.getElementById('qtyPlus');
   const input  = document.getElementById('qtyInput');
 
-  function clamp(n){ n = Number(n); if(Number.isNaN(n)) n=0; return Math.min(MAX, Math.max(MIN, n|0)); }
+  function clamp(n){
+    n = Number(n);
+    if(Number.isNaN(n)) n = 0;
+    return Math.min(MAX, Math.max(MIN, n|0));
+  }
 
   function syncTo(val, trigger=true){
     const v = clamp(val);
-    if(select.value !== String(v)){ select.value = String(v); }
-    if(input.value !== String(v)){ input.value = String(v); }
+    if(select.value !== String(v)) select.value = String(v);
+    if(input.value  !== String(v)) input.value  = String(v);
     input.setAttribute('aria-valuenow', String(v));
     if(trigger) calculate();
   }
 
-  // 點擊
+  // 點擊：每次 ±1
   minus.addEventListener('click', ()=> syncTo(Number(select.value)-1));
   plus .addEventListener('click', ()=> syncTo(Number(select.value)+1));
 
@@ -590,7 +592,7 @@ function buildQty(){
       if(running) return; running=true;
       step(); // 立即一步
       t1=setTimeout(()=>{ // 500ms 後開始連續
-        step(); t2=setInterval(step, 70); // 連續加速
+        step(); t2=setInterval(step, 70);
       }, 500);
     };
     const stop=()=>{ running=false; clearTimeout(t1); clearInterval(t2); };
@@ -601,7 +603,7 @@ function buildQty(){
   }
   hold(minus,-1); hold(plus,1);
 
-  // 鍵盤：聚焦在輸入框時也可用
+  // 鍵盤：↑→= +1；↓←= -1；PageUp/Down = ±5；Home/End = 0/35
   input.addEventListener('keydown', (e)=>{
     const v = Number(select.value);
     if(['ArrowUp','ArrowRight'].includes(e.key)){ e.preventDefault(); syncTo(v+1); }
