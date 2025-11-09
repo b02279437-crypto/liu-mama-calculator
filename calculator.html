@@ -458,8 +458,9 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
     </div>
 
     <div id="buttonContainer" style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:32px;">
-      <button id="screenshotBtn" class="btn btn-sketch" onclick="screenshotOrder()">保存訂單截圖</button>
-      <button id="formBtn" class="btn btn-crayon" onclick="goToForm()">下一步：填寫寄送資訊</button>
+      <!-- 已對調樣式：截圖=蠟筆塊底、下一步=手繪描邊 -->
+      <button id="screenshotBtn" class="btn btn-crayon" onclick="screenshotOrder()">保存訂單截圖</button>
+      <button id="formBtn" class="btn btn-sketch" onclick="goToForm()">下一步：填寫寄送資訊</button>
     </div>
     <p id="formReminder">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
   </section>
