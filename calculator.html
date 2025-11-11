@@ -683,7 +683,7 @@ function calculate(isInit){
   let ship=0;
   const method=document.querySelector('input[name="shipMethod"]:checked');
   if(method){ ship=(method.value==='711')?60:120; }
-  const newTotal=qty1*320+ship;
+  const newTotal=qty1*299+ship;
   animateTotal(newTotal, !!isInit);
 }
 function animateTotal(target, isInit){
