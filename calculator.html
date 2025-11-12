@@ -270,7 +270,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 /* ===== 按鈕 ===== */
 .btn{
   display:inline-flex; align-items:center; gap:8px;
-  padding:12px 22px; border-radius:999px; border:1px solid transparent;
+  padding:12px 22px; border-radius:999px; border:1px solid透明;
   font:600 15px 'Noto Serif TC','Microsoft JhengHei',serif;
   letter-spacing:.2px; cursor:pointer; user-select:none;
   transition:transform .2s var(--ease), box-shadow .3s var(--ease),
@@ -361,7 +361,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 
 /* ===== 無動化偏好 ===== */
 @media (prefers-reduced-motion: reduce){
-  *{ animation:none !important; transition:none !重要; }
+  *{ animation:none !important; transition:none !important; }
   #startBtn::after{ display:none !important; }
 }
 </style>
@@ -408,7 +408,9 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
       <div class="input-group">
         <label for="customerEmail">訂購人 Email</label>
         <input type="email" id="customerEmail" placeholder="請輸入 Email"
-               autocomplete="email" enterkeyhint="done" inputmode="email">
+               autocomplete="email" enterkeyhint="done" inputmode="email"
+               list="emailHints">
+        <datalist id="emailHints"></datalist>
         <small class="error-hint" id="errEmail" hidden></small>
       </div>
     </div>
@@ -579,7 +581,63 @@ window.addEventListener('DOMContentLoaded',()=>{
     const digits = phoneInput.value.replace(/\D/g,'');
     if (digits.length >= 10) emailInput.focus();
   });
+
+  /* ===== Email 智慧建議（常見網域） ===== */
+  enableEmailAutoSuggest();
 });
+
+/* ===== Email 智慧建議（datalist 版） ===== */
+const COMMON_DOMAINS = [
+  'gmail.com',
+  'yahoo.com.tw','yahoo.com',
+  'hotmail.com','outlook.com','live.com',
+  'icloud.com','msn.com'
+];
+function enableEmailAutoSuggest(){
+  const emailInput = document.getElementById('customerEmail');
+  const listEl     = document.getElementById('emailHints');
+  if(!emailInput || !listEl) return;
+
+  function rebuildOptions(){
+    const raw = (emailInput.value || '').trim();
+    const atIndex = raw.indexOf('@');
+    const local   = atIndex >= 0 ? raw.slice(0, atIndex) : raw;
+    const prefix  = atIndex >= 0 ? raw.slice(atIndex + 1).toLowerCase() : '';
+
+    // 沒有使用者名稱就不顯示建議
+    if(!local){
+      listEl.innerHTML = '';
+      return;
+    }
+
+    const candidates = COMMON_DOMAINS
+      .filter(d => d.startsWith(prefix))
+      .slice(0, 8);
+
+    listEl.innerHTML = '';
+    for(const d of candidates){
+      const opt = document.createElement('option');
+      opt.value = `${local}@${d}`;
+      listEl.appendChild(opt);
+    }
+  }
+
+  emailInput.addEventListener('input', rebuildOptions);
+  emailInput.addEventListener('change', rebuildOptions);
+
+  // Alt+1~9 快速套用第 n 個建議（可移除）
+  emailInput.addEventListener('keydown', (e)=>{
+    if(e.altKey && /^[1-9]$/.test(e.key)){
+      const idx = Number(e.key) - 1;
+      const opt = listEl.children[idx];
+      if(opt){
+        e.preventDefault();
+        emailInput.value = opt.value;
+        emailInput.dispatchEvent(new Event('change', {bubbles:true}));
+      }
+    }
+  });
+}
 
 /* ===== 一行優惠 倒數 ===== */
 function setupInlinePromo(){
