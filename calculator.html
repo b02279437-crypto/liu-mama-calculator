@@ -28,6 +28,10 @@
   /* 一行優惠（純文字、無底框） */
   --promo-text:#2B3E53;
   --promo-red:#A6413C;
+
+  /* 與商品名稱一致的字級與顏色 */
+  --item-text:#2c3e50;
+  --item-size:15px;
 }
 
 html{-webkit-text-size-adjust:100%;}
@@ -163,7 +167,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 }
 .price-new{
   margin-top:3px;
-  font-size:13px;
+  font-size:13px;       /* 新價較小 */
   font-weight:700;
   color:var(--promo-red);
 }
@@ -197,6 +201,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 
 /* ===== 寄送方式 ===== */
 .ship-wrap{ width:90%; max-width:500px; margin:8px auto 12px; display:flex; gap:12px; }
+/* 卡片視覺維持原本，但標題字型統一 */
 .ship-card{
   --glow: rgba(30,79,123,.14);
   position:relative; flex:1; border-radius:14px;
@@ -218,16 +223,28 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   opacity:.18; transition:opacity var(--t-fast) var(--ease);
 }
 .ship-card input{ position:absolute; opacity:0; inset:0; pointer-events:none; }
-.ship-title,.ship-price{ font-size:15px; line-height:1.35; letter-spacing:.2px; color:#2d3b4a; }
-.ship-title{ font-weight:600; }
-.ship-price{ font-weight:500; color:#4f5f70; }
-.ship-card:has(input:checked), .ship-card.selected{
+
+/* ⬇⬇ 這裡是「統一字級/顏色」的重點 ⬇⬇ */
+.ship-title{
+  font-size:var(--item-size);     /* 15px 與商品名稱一致 */
+  color:var(--item-text);         /* #2c3e50 與商品名稱一致 */
+  font-weight:400;                /* 與商品名稱一致（一般字重） */
+  line-height:1.35; letter-spacing:.2px;
+}
+.ship-price{ font-size:15px; line-height:1.35; letter-spacing:.2px; color:#4f5f70; }
+
+/* 選取狀態：維持同色，不強制變藍 */
+.ship-card:has(input:checked),
+.ship-card.selected{
   border-color:rgba(30,79,123,.55);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.75), 0 12px 32px rgba(30,79,123,.18), 0 0 0 6px rgba(30,79,123,.06);
   filter:brightness(1.06);
 }
 .ship-card:has(input:checked)::after{ opacity:.28; }
-.ship-card input:checked ~ .ship-title, .ship-card input:checked ~ .ship-price{ color:#1E4F7B; text-shadow:0 0 1px rgba(30,79,123,.06); }
+/* 取消原本把 ship-title 變藍的效果，僅保留價格可微變色（如不想變可移除下一行） */
+.ship-card input:checked ~ .ship-title{ color:var(--item-text) !important; text-shadow:none !important; }
+/* 若也不想讓價格變色，可加上下一行：
+   .ship-card input:checked ~ .ship-price{ color:#4f5f70 !important; text-shadow:none !important; } */
 
 /* ===== Total ===== */
 .total{
@@ -270,7 +287,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 /* ===== 按鈕 ===== */
 .btn{
   display:inline-flex; align-items:center; gap:8px;
-  padding:12px 22px; border-radius:999px; border:1px solid透明;
+  padding:12px 22px; border-radius:999px; border:1px solid transparent;
   font:600 15px 'Noto Serif TC','Microsoft JhengHei',serif;
   letter-spacing:.2px; cursor:pointer; user-select:none;
   transition:transform .2s var(--ease), box-shadow .3s var(--ease),
@@ -408,8 +425,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
       <div class="input-group">
         <label for="customerEmail">訂購人 Email</label>
         <input type="email" id="customerEmail" placeholder="請輸入 Email"
-               autocomplete="email" enterkeyhint="done" inputmode="email"
-               list="emailHints">
+               autocomplete="email" enterkeyhint="done" inputmode="email" list="emailHints">
         <datalist id="emailHints"></datalist>
         <small class="error-hint" id="errEmail" hidden></small>
       </div>
@@ -419,7 +435,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   <section class="reveal right">
     <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
-    <!-- 一行優惠（純文字、無底框） -->
+    <!-- 一行優惠（純文字、無底框，預設就顯示，JS 會更新數字與動畫） -->
     <p id="promoInline" class="promo-inline">
        ⛧  先嚐一鍋就愛上 11/17 » 12/17 開賣價 <strong class="price-red">$299</strong>
       &nbsp; 倒數 <strong class="promo-days" id="promoDays">-- 天.ᐟ  </strong> 
@@ -557,7 +573,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     });
   });
 
-  // 一行優惠：倒數至 12/17 23:59:59
+  // 一行優惠：顯示 & 倒數動畫到 12/17 23:59:59（穩定版）
   setupInlinePromo();
 
   /* ===== 取消自動跳，只保留 Enter／Change ===== */
@@ -639,20 +655,21 @@ function enableEmailAutoSuggest(){
   });
 }
 
-/* ===== 一行優惠 倒數 ===== */
+/* ===== 一行優惠 倒數（強化穩定） ===== */
 function setupInlinePromo(){
   const wrap = document.getElementById('promoInline');
   const daysEl = document.getElementById('promoDays');
   if(!wrap || !daysEl){ return; }
 
   try{
-    const now   = new Date();
+    const now   = new Date();                 // 使用者當地時間
     const year  = now.getFullYear();
     const end   = new Date(year, 11, 17, 23, 59, 59); // 12/17 23:59:59
 
     if(now <= end){
       const daysLeft = Math.max(1, Math.ceil((end - now) / (24*60*60*1000)));
-      animatePromoNumber(daysEl, daysLeft);
+      animatePromoNumber(daysEl, daysLeft);   // 載入時做一次平滑動畫
+      // 設定跨夜自動刷新（到下一個 00:00）
       const midnightNext = new Date(year, now.getMonth(), now.getDate()+1, 0,0,0,0);
       setTimeout(()=>{
         const now2 = new Date();
@@ -660,25 +677,33 @@ function setupInlinePromo(){
         animatePromoNumber(daysEl, d2);
       }, Math.max(1000, midnightNext - now + 50));
     }else{
+      // 活動結束：顯示 0 天或隱藏整段（這裡顯示 0 天避免版面跳動）
       daysEl.textContent = '0 天';
     }
   }catch(err){
+    // 極端情況 fallback：至少給個可見數字
     daysEl.textContent = '— 天';
   }
 }
+
+/* 倒數數字動畫（與 total 的感覺一致） */
 function animatePromoNumber(el, target){
   if(!el) return;
+  // 取現在顯示的數字（可能是 "--"），取不到就從 0 開始
   let from = parseInt((el.textContent||'').replace(/[^\d]/g,''),10);
   if(isNaN(from)) from = 0;
+
   const duration = 900;
   const t0 = performance.now();
   const ease = t => 1 - Math.pow(1 - t, 3);
+
   function frame(now){
     const p = Math.min(1, (now - t0) / duration);
     const v = Math.max(0, Math.round(from + (target - from) * ease(p)));
     el.textContent = v + ' 天';
     if(p < 1){ requestAnimationFrame(frame); }
   }
+  // 觸發一次微彈動畫
   el.classList.remove('animate'); void el.offsetWidth; el.classList.add('animate');
   requestAnimationFrame(frame);
 }
@@ -705,6 +730,7 @@ function buildQty(){
     if(trigger) calculate();
   }
 
+  // 點擊 ±1（抑制長按後多觸發的 click）
   function setupClick(btn, delta){
     btn.addEventListener('click', (e)=>{
       if(btn._holdTriggered){
@@ -718,9 +744,11 @@ function buildQty(){
   setupClick(minus,-1);
   setupClick(plus, 1);
 
+  // 長按連續
   function setupHold(btn, delta){
     let tDelay, tRepeat;
     const step=()=> syncTo(Number(select.value)+delta);
+
     const start = (e)=>{
       btn._holdTriggered=false;
       tDelay=setTimeout(()=>{
@@ -742,6 +770,7 @@ function buildQty(){
   setupHold(minus,-1);
   setupHold(plus, 1);
 
+  // 鍵盤 & 直接輸入
   input.addEventListener('keydown', (e)=>{
     const v = Number(select.value);
     if(['ArrowUp','ArrowRight'].includes(e.key)){ e.preventDefault(); syncTo(v+1); }
