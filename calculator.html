@@ -20,44 +20,47 @@
   --ease:cubic-bezier(.22,.61,.36,1); --ease-soft:cubic-bezier(.2,.7,.2,1);
   --t-fast:.24s; --t-base:.6s; --t-slow:1.2s;
 
-  /* 表單控件統一高度 */
-  --control-h: 44px;
+  --control-h:44px;
+  --qty-btn-w:36px; --qty-disp-w:56px;
 
-  /* Stepper 尺寸（桌機） */
-  --qty-btn-w: 36px;   /* 每個 +/- 按鈕寬 */
-  --qty-disp-w: 56px;  /* 中間輸入欄寬 */
+  --crayon-blue:#54677C; --crayon-blue-ink:#3C5168;
 
-  /* 莫蘭迪灰藍系（供蠟筆/描邊按鈕使用） */
-  --crayon-blue:#54677C;
-  --crayon-blue-ink:#3C5168;
+  /* 一行優惠（純文字、無底框） */
+  --promo-text:#2B3E53;   /* 墨藍灰 */
+  --promo-red:#A6413C;    /* 胭脂紅（$299 與文案同色） */
 }
 
+/* ===== 全域 ===== */
 html{-webkit-text-size-adjust:100%;}
 *{ -webkit-tap-highlight-color: transparent; box-sizing:border-box; }
 button{ touch-action: manipulation; }
 
-/* ===== 全域 ===== */
 html,body{
   margin:0; padding:0; height:100%;
   background-color:var(--bg); color:#2c3e50;
-  font-family:'Noto Serif TC','Microsoft JhengHei',serif;
+  font-family:'Noto Serif TC','Microsoft JhengHei',serif; /* 中文統一 */
   text-align:center; overflow-x:hidden; scroll-behavior:smooth;
 }
-/* 等寬數字（對齊，不改字體風格） */
+
+/* 確保子元素繼承中文字體 */
+table, .ship-card, .btn, .account-box, .promo-inline, input, label, small, p, div, span {
+  font-family:inherit;
+}
+
+/* 表格數字、總額數字等對齊 */
 table td,table th,.total,#qty1,#formReminder,.ship-price{
   font-variant-numeric:tabular-nums lining-nums;
   font-feature-settings:"tnum" 1,"lnum" 1;
   letter-spacing:.02em;
 }
 
-/* ===== 開場動畫（等圖載入） ===== */
+/* ===== 開場動畫 ===== */
 #intro{
   position:fixed; inset:0; background-color:var(--bg);
   display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
   padding-top:12vh; z-index:9999; opacity:1; transition:opacity var(--t-slow) var(--ease);
 }
 #intro.fade-out{opacity:0; pointer-events:none;}
-/* LOGO 放大 */
 #intro-logo{
   width:clamp(360px, 92vw, 700px);
   opacity:0; transform:scale(.99);
@@ -78,22 +81,12 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   transition:opacity var(--t-base) var(--ease);
 }
 #intro-text.show{opacity:1;}
-
-/* Start Order：白底玻璃感（高級、透明、略小）＋ ripple */
 #startBtn{
-  margin-top:16px;
-  padding:12px 34px;
-  font-size:26px; /* 較小 */
-  font-family:'Amatic SC',cursive; letter-spacing:2px;
-  color:var(--navy);
-
-  background:rgba(255,255,255,.62);
-  border:1px solid rgba(255,255,255,.70);
-  border-radius:999px;
-  -webkit-backdrop-filter:blur(14px) saturate(1.06);
-  backdrop-filter:blur(14px) saturate(1.06);
+  margin-top:16px; padding:12px 34px; font-size:26px;
+  font-family:'Amatic SC',cursive; letter-spacing:2px; color:var(--navy);
+  background:rgba(255,255,255,.62); border:1px solid rgba(255,255,255,.70); border-radius:999px;
+  -webkit-backdrop-filter:blur(14px) saturate(1.06); backdrop-filter:blur(14px) saturate(1.06);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 10px 24px rgba(30,79,123,.14);
-
   cursor:pointer; position:relative; isolation:isolate;
   opacity:0; transform:translateY(10px);
   transition:opacity var(--t-base) var(--ease), transform var(--t-fast) var(--ease), filter .25s var(--ease);
@@ -101,7 +94,6 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 #startBtn.show{opacity:1; transform:translateY(0);}
 #startBtn:hover{ transform:translateY(-2px); filter:brightness(1.03); }
 #startBtn:active{ transform:translateY(-1px); }
-/* Ripple 墨暈 */
 #startBtn::after{
   content:""; position:absolute; inset:auto; width:10px; height:10px; border-radius:50%;
   background:radial-gradient(circle, rgba(30,79,123,.18) 0%, rgba(30,79,123,0) 70%);
@@ -115,13 +107,28 @@ main{opacity:0; visibility:hidden; transition:opacity var(--t-slow) var(--ease);
 main.show{opacity:1; visibility:visible;}
 h2{
   font-size:90px; font-weight:900; color:#1E4F7B;
-  margin:28px 0 10px 0; animation:titleFade 1.4s var(--ease) forwards;
+  margin:28px 0 6px 0;
+  animation:titleFade 1.4s var(--ease) forwards;
 }
 @keyframes titleFade{ 0%{opacity:0; transform:translateY(12px) scale(.98);} 60%{opacity:.8; transform:translateY(2px) scale(1.01);} 100%{opacity:1; transform:translateY(0) scale(1);} }
 h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
-.section-title{font-size:14px; color:#555; margin:10px 0 8px;}
+.section-title{font-size:14px; color:#555; margin:10px 0 6px;}
 .reveal{opacity:0; transform:translateY(34px); transition:opacity .9s var(--ease), transform .9s var(--ease);}
 .reveal.in{opacity:1; transform:translateY(0);}
+
+/* ===== 一行優惠（純文字、無底框） ===== */
+.promo-inline{
+  width:min(820px, 94vw);
+  margin:8px auto 12px;
+  font-size:13.8px; line-height:1.75;
+  color:var(--promo-text);
+  letter-spacing:.2px;
+}
+.promo-inline .price-red{ color:var(--promo-red); font-weight:700; letter-spacing:.25px; font-size:.92em; }
+.promo-days{ font-weight:800; display:inline-block; transform-origin:50% 60%; }
+.promo-days.animate{ animation: promoBounce .85s var(--ease); }
+@keyframes promoBounce{ 0%{transform:scale(1);} 45%{transform:scale(1.08);} 100%{transform:scale(1);} }
+@media (max-width:480px){ .promo-inline{ font-size:12.9px; width:96%; } }
 
 /* ===== 訂購資訊卡片 ===== */
 .input-container{
@@ -132,8 +139,7 @@ h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 .input-group{display:flex; flex-direction:column; gap:5px; margin-bottom:18px;}
 .input-group label{font-size:14px; color:#333;}
 .input-group input{
-  font-size:16px; /* >=16px 防 iOS 放大 */
-  height:var(--control-h); line-height:calc(var(--control-h) - 2px);
+  font-size:16px; height:var(--control-h); line-height:calc(var(--control-h) - 2px);
   padding:0 12px; border:1px solid #ccc; border-radius:8px; background:#fafafa;
   transition:border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
 }
@@ -141,7 +147,7 @@ h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 .input-error{border-color:#e74c3c !important;}
 .error-hint{font-size:12px; color:#c0392b; margin-top:2px;}
 
-/* ===== 表格（小計已移除 → 三欄） ===== */
+/* ===== 表格 ===== */
 table{
   width:90%; max-width:500px; margin:15px auto;
   border-collapse:separate; border-spacing:0; background:#fff; border-radius:16px; overflow:hidden;
@@ -149,23 +155,28 @@ table{
 }
 th,td{ padding:10px; border-bottom:1px solid #e9eef2; vertical-align:middle; white-space:nowrap; }
 th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
-
-/* 明確設定三欄寬度：縮小品項與價格，放大數量 */
-.col-item  { width:auto; }
-.col-price { width:90px; }
-.col-action{ width:148px; }
-
-/* 為了容納 Stepper，減少數量欄左右 padding */
-#productTable td:nth-child(3), #productTable th:nth-child(3){
-  padding-left:6px; padding-right:6px;
-}
-
+.col-item{ width:auto; } .col-price{ width:110px; } .col-action{ width:148px; }
+#productTable td:nth-child(3), #productTable th:nth-child(3){ padding-left:6px; padding-right:6px; }
 #productTable{ margin:15px auto 28px; }
 
-/* 隱藏原生 select（流程保留、同步用） */
+/* 商品名稱：與 711超商取貨 同尺寸/顏色/粗細 */
+.item-title{ font-size:15px; line-height:1.35; font-weight:600; color:#2d3b4a; }
+
+/* 表格內價格組合：原價刪除線 + 現價紅色（較小） */
+.price-old{
+  display:inline-block; margin-right:6px;
+  font-size:13px; color:#9aa3ad; text-decoration:line-through;
+  vertical-align:baseline;
+}
+.price-now{
+  font-size:14px; font-weight:700; color:var(--promo-red);
+  vertical-align:baseline;
+}
+
+/* 隱藏原生 select */
 #qty1[hidden]{ display:none !important; }
 
-/* ===== Stepper（可按可輸入） ===== */
+/* ===== Stepper ===== */
 .qty-stepper{
   display:inline-flex; align-items:center; height:var(--control-h);
   border:1px solid #ccc; border-radius:8px; background:#fff;
@@ -189,21 +200,18 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 .qty-stepper:focus-within{ box-shadow:0 0 0 3px rgba(30,79,123,.15); border-color:#9bb7d3; }
 .qty-btn:focus-visible, .qty-input:focus-visible{ outline:2px solid rgba(30,79,123,.6); outline-offset:2px; }
 
-/* ===== 寄送方式：玻璃磨砂卡片（保持） ===== */
+/* ===== 寄送方式 ===== */
 .ship-wrap{ width:90%; max-width:500px; margin:8px auto 12px; display:flex; gap:12px; }
 .ship-card{
   --glow: rgba(30,79,123,.14);
-  position:relative; flex:1;
-  border-radius:14px;
+  position:relative; flex:1; border-radius:14px;
   background:linear-gradient(180deg, rgba(255,255,255,.68), rgba(255,255,255,.50));
-  backdrop-filter:blur(12px) saturate(1.04);
-  -webkit-backdrop-filter:blur(12px) saturate(1.04);
+  backdrop-filter:blur(12px) saturate(1.04); -webkit-backdrop-filter:blur(12px) saturate(1.04);
   border:1px solid rgba(255,255,255,.55);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.75), 0 8px 22px rgba(20,40,60,.12);
   padding:14px 12px; cursor:pointer; user-select:none;
   transition: transform var(--t-fast) var(--ease), box-shadow var(--t-base) var(--ease), border-color var(--t-fast) var(--ease), filter var(--t-fast) var(--ease);
   display:flex; flex-direction:column; align-items:center; gap:6px;
-  font-family:'Noto Serif TC','Microsoft JhengHei',serif;
 }
 .ship-card:hover{ transform:translateY(-1px); filter:brightness(1.02); }
 .ship-card:active{ transform:translateY(0); }
@@ -226,7 +234,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 .ship-card:has(input:checked)::after{ opacity:.28; }
 .ship-card input:checked ~ .ship-title, .ship-card input:checked ~ .ship-price{ color:#1E4F7B; text-shadow:0 0 1px rgba(30,79,123,.06); }
 
-/* ===== Total（保留） ===== */
+/* ===== Total ===== */
 .total{
   font-family:'Amatic SC', cursive;
   font-size:30px; font-weight:900; letter-spacing:2.5px; color:#1E4F7B;
@@ -241,8 +249,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   transform:translateY(-50%) rotate(-1.2deg) scale(1);
   background:linear-gradient(120deg, rgba(255,229,185,.65) 0%, rgba(255,215,160,.5) 100%);
   border-radius:12px; z-index:-1;
-  filter:blur(1px) saturate(1.05);
-  opacity:.55; mix-blend-mode:soft-light;
+  filter:blur(1px) saturate(1.05); opacity:.55; mix-blend-mode:soft-light;
 }
 @keyframes totalUpdate{ 0%{transform:scale(1);} 50%{transform:scale(1.04);} 100%{transform:scale(1);} }
 .total.animate{ animation: totalUpdate .8s var(--ease); }
@@ -253,7 +260,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 }
 .total.glow::before{ animation: glowPulse 1.8s var(--ease) 1; }
 
-/* ===== 匯款資訊卡片（原玻璃背景保留） ===== */
+/* ===== 匯款資訊卡片 ===== */
 .account-box{
   width:85%; max-width:350px; margin:25px auto 0;
   background:rgba(255,255,255,0.55);
@@ -265,7 +272,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 }
 .account-box h3{margin:8px 0; font-weight:600; font-size:15px; color:#44566C; letter-spacing:.5px;}
 
-/* ===== 按鈕樣式（蠟筆塊底／手繪描邊） ===== */
+/* ===== 按鈕 ===== */
 .btn{
   display:inline-flex; align-items:center; gap:8px;
   padding:12px 22px; border-radius:999px; border:1px solid transparent;
@@ -278,11 +285,11 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 .btn:active{ transform:translateY(0); }
 .btn:focus-visible{ outline:2px solid rgba(30,79,123,.4); outline-offset:2px; }
 
-/* 蠟筆塊底（灰藍） */
+/* 蠟筆塊底 */
 .btn-crayon{
   color:#fff; background:var(--crayon-blue);
   border:1px solid var(--crayon-blue-ink);
-  border-radius:22px 20px 24px 21px / 21px 24px 20px 22px; /* 微不規則 */
+  border-radius:22px 20px 24px 21px / 21px 24px 20px 22px;
   box-shadow:0 8px 18px rgba(60,81,104,.22), inset 0 1px 0 rgba(255,255,255,.18);
   position:relative; overflow:hidden;
 }
@@ -294,11 +301,11 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 }
 .btn-crayon:hover{ filter:brightness(1.06) saturate(1.03); }
 
-/* 手繪描邊款（透明底＋深藍手繪線） */
+/* 手繪描邊 */
 .btn-sketch{
   color:var(--navy); background:transparent;
   border:2px solid var(--navy);
-  border-radius:22px 18px 24px 20px / 20px 24px 18px 22px; /* 不規則圓角 */
+  border-radius:22px 18px 24px 20px / 20px 24px 18px 22px;
   box-shadow:0 2px 0 rgba(30,79,123,.08);
   position:relative;
 }
@@ -308,7 +315,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 }
 .btn-sketch:hover{ filter:brightness(1.02); }
 
-/* ===== 底部提示字（保持原樣） ===== */
+/* ===== 提示字 ===== */
 #formReminder{
   font-size:14px; color:#555; margin-top:16px;
   opacity:0; transform:translateY(14px);
@@ -316,7 +323,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 }
 #formReminder.in{ opacity:1; transform:translateY(0); }
 
-/* ===== Toast（白玻璃＋左側深藍線條） ===== */
+/* ===== Toast ===== */
 .toast{
   position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(20px);
   min-width:260px; max-width:92vw;
@@ -327,7 +334,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   font-size:14px; font-weight:600;
   -webkit-backdrop-filter: blur(12px) saturate(1.1);
   backdrop-filter: blur(12px) saturate(1.1);
-  box-shadow:0 10px 28px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.6);
+  box-shadow:0 10px 28px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,.6);
   opacity:0; pointer-events:none; z-index:99999;
   transition:opacity .5s var(--ease), transform .5s var(--ease);
 }
@@ -344,7 +351,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   :root{ --qty-btn-w: 30px; --qty-disp-w: 44px; }
   h2{font-size:60px;}
   table{font-size:13.5px; width:96%;}
-  .col-price { width:86px; }
+  .col-price { width:100px; }
   .col-action{ width:130px; }
   #productTable td:nth-child(3), #productTable th:nth-child(3){ padding-left:4px; padding-right:4px; }
 
@@ -360,13 +367,13 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 /* ===== 無動化偏好 ===== */
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !重要; }
-  #startBtn::after{ display:none !important; } /* ripple 關閉 */
+  #startBtn::after{ display:none !重要; }
 }
 </style>
 </head>
 
 <body>
-<!-- ===== 開場（路徑不變） ===== -->
+<!-- ===== 開場 ===== -->
 <div id="intro">
   <img id="intro-logo" decoding="async" loading="eager"
        src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/logo.png" alt="Logo">
@@ -400,38 +407,55 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
       <div class="input-group">
         <label for="customerPhone">訂購人電話</label>
         <input type="text" id="customerPhone" placeholder="請輸入電話"
-               inputmode="numeric" pattern="[0-9]*" maxlength="10" enterkeyhint="done" autocomplete="tel">
+               inputmode="numeric" pattern="[0-9]*" maxlength="10" enterkeyhint="next" autocomplete="tel">
         <small class="error-hint" id="errPhone" hidden></small>
+      </div>
+      <div class="input-group">
+        <label for="customerEmail">訂購人 Email</label>
+        <input type="email" id="customerEmail" placeholder="請輸入 Email"
+               autocomplete="email" enterkeyhint="done" inputmode="email">
+        <small class="error-hint" id="errEmail" hidden></small>
       </div>
     </div>
   </section>
 
   <section class="reveal right">
     <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
+
+    <!-- 一行優惠（純文字、無底框） -->
+    <p id="promoInline" class="promo-inline" hidden>
+      先嚐一鍋就愛上：11/17–12/17 開賣價 <strong class="price-red">$299</strong>
+      &nbsp; 倒數 <strong class="promo-days" id="promoDays">36 天</strong>。
+    </p>
+
     <table id="productTable">
       <colgroup>
         <col class="col-item"><col class="col-price"><col class="col-action">
       </colgroup>
-      <tr><th>品項</th><th>優惠價格</th><th>數量</th></tr>
+      <tr><th>品項</th><th>價格</th><th>數量</th></tr>
       <tr>
-        <td>手抄麻辣底料包<br><small>(2人份)</small></td>
-        <td>$299</td>
         <td>
-          <!-- Stepper（可按可輸入） -->
+          <span class="item-title">手炒麻辣鍋底</span><br>
+          <small>(2人份)</small>
+        </td>
+        <td>
+          <span class="price-old">$320</span>
+          <span class="price-now">$299</span>
+        </td>
+        <td>
           <div class="qty-stepper" role="group" aria-label="數量">
             <button type="button" class="qty-btn" id="qtyMinus" aria-label="減少">−</button>
             <input id="qtyInput" class="qty-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
                    value="0" role="spinbutton" aria-valuemin="0" aria-valuemax="35" aria-valuenow="0" aria-live="polite">
             <button type="button" class="qty-btn" id="qtyPlus" aria-label="增加">＋</button>
           </div>
-          <!-- 隱藏 select：保留既有流程，同步用 -->
           <select id="qty1" onchange="calculate()" aria-label="數量" hidden></select>
         </td>
       </tr>
     </table>
   </section>
 
-  <!-- 寄送方式：卡片式並排 -->
+  <!-- 寄送方式 -->
   <section class="reveal left">
     <div class="ship-wrap" role="radiogroup" aria-label="寄送方式">
       <label class="ship-card" for="ship711">
@@ -458,7 +482,6 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
     </div>
 
     <div id="buttonContainer" style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:32px;">
-      <!-- 已對調樣式：截圖=蠟筆塊底、下一步=手繪描邊 -->
       <button id="screenshotBtn" class="btn btn-crayon" onclick="screenshotOrder()">保存訂單截圖</button>
       <button id="formBtn" class="btn btn-sketch" onclick="goToForm()">下一步：填寫寄送資訊</button>
     </div>
@@ -466,11 +489,11 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   </section>
 </main>
 
-<!-- Toast（提醒欄） -->
+<!-- Toast -->
 <div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
 
 <script>
-/* ===== 圖片載入：等 decode（最長 4 秒） ===== */
+/* ===== 圖片載入 ===== */
 function imgReady(el){
   if(el.complete){
     if('decode' in el){ return el.decode().catch(()=>{}); }
@@ -507,13 +530,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   for(let i=0;i<=35;i++){ const o=document.createElement('option'); o.value=i; o.textContent=i; select.appendChild(o); }
   select.value="0";
 
-  // 數量 Stepper 初始化
   buildQty();
-
-  // 初始計算
   calculate(true);
-
-  // 開場
   startIntroSequence();
 
   // 進主頁
@@ -543,9 +561,14 @@ window.addEventListener('DOMContentLoaded',()=>{
     });
   });
 
-  // 姓名 -> 電話 自動跳
-  const nameInput = document.getElementById('customerName');
+  // 一行優惠：顯示 & 倒數動畫到 12/17 23:59:59
+  setupInlinePromo();
+
+  // 姓名 -> 電話 -> Email 自動跳
+  const nameInput  = document.getElementById('customerName');
   const phoneInput = document.getElementById('customerPhone');
+  const emailInput = document.getElementById('customerEmail');
+
   let jumpTimer;
   nameInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); phoneInput.focus(); }});
   nameInput.addEventListener('change', ()=>{ if(nameInput.value.trim().length){ phoneInput.focus(); }});
@@ -557,12 +580,72 @@ window.addEventListener('DOMContentLoaded',()=>{
       }
     }, 600);
   });
+
+  phoneInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); emailInput.focus(); }});
+  phoneInput.addEventListener('change', ()=>{ if(phoneInput.value.trim().length){ emailInput.focus(); }});
+  phoneInput.addEventListener('input', ()=>{
+    clearTimeout(jumpTimer);
+    jumpTimer = setTimeout(()=>{
+      if(document.activeElement===phoneInput && phoneInput.value.trim().length>=6){
+        emailInput.focus();
+      }
+    }, 500);
+  });
 });
 
-/* ===== Stepper：可按可輸入（0–35、每次±1） ===== */
-/* 修正重複觸發造成一次加兩步（偶數）問題：
-   - 點一下：只觸發 click → ±1
-   - 長按 350ms：開始連續步進；放開後抑制 click 不再多加一次 */
+/* 一行優惠：從現在起 → 到 12/17 23:59:59 顯示；倒數數字動畫 */
+function setupInlinePromo(){
+  try{
+    const wrap = document.getElementById('promoInline');
+    const daysEl = document.getElementById('promoDays');
+    if(!wrap || !daysEl) return;
+
+    const now   = new Date();                  // 使用者當地時間
+    const year  = now.getFullYear();
+    const end   = new Date(year, 11, 17, 23, 59, 59); // 12/17 23:59:59
+
+    if(now <= end){
+      const msPerDay = 24*60*60*1000;
+      const daysLeft = Math.max(1, Math.ceil((end - now) / msPerDay));
+
+      animatePromoNumber(daysEl, daysLeft);
+      wrap.hidden = false;
+
+      // 跨日自動刷新倒數
+      const msToMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 0,0,0) - now + 50;
+      setTimeout(()=>{ 
+        const now2 = new Date();
+        const d2 = Math.max(1, Math.ceil((end - now2)/(msPerDay)));
+        animatePromoNumber(daysEl, d2);
+      }, msToMidnight);
+    }else{
+      wrap.hidden = true; // 12/18 之後自動隱藏
+    }
+  }catch(e){}
+}
+
+/* 倒數數字動畫（與 total 的感覺一致） */
+function animatePromoNumber(el, target){
+  if(!el) return;
+  let from = parseInt((el.textContent||'').replace(/[^\d]/g,''),10);
+  if(isNaN(from)) from = 0;
+
+  const duration = 900;
+  const t0 = performance.now();
+  const ease = t => 1 - Math.pow(1 - t, 3);
+
+  function frame(now){
+    const p = Math.min(1, (now - t0) / duration);
+    const v = Math.max(1, Math.round(from + (target - from) * ease(p)));
+    el.textContent = v + ' 天';
+    if(p < 1){ requestAnimationFrame(frame); } 
+    else { el.textContent = target + ' 天'; }
+  }
+  el.classList.remove('animate'); void el.offsetWidth; el.classList.add('animate');
+  requestAnimationFrame(frame);
+}
+
+/* ===== Stepper（0–35、±1、含長按連續） ===== */
 function buildQty(){
   const MIN=0, MAX=35;
   const select = document.getElementById('qty1');
@@ -584,10 +667,10 @@ function buildQty(){
     if(trigger) calculate();
   }
 
-  // 單次點擊（只加減 1）
+  // 點擊 ±1（抑制長按後多觸發的 click）
   function setupClick(btn, delta){
     btn.addEventListener('click', (e)=>{
-      if(btn._holdTriggered){ // 若剛剛是長按步進，抑制這次 click
+      if(btn._holdTriggered){
         e.preventDefault();
         btn._holdTriggered = false;
         return;
@@ -598,32 +681,24 @@ function buildQty(){
   setupClick(minus,-1);
   setupClick(plus, 1);
 
-  // 長按連續（350ms 後開始；70ms/步）
+  // 長按連續
   function setupHold(btn, delta){
-    let tDelay, tRepeat, holding=false;
+    let tDelay, tRepeat;
     const step=()=> syncTo(Number(select.value)+delta);
 
     const start = (e)=>{
-      holding=true;
       btn._holdTriggered=false;
-      // 350ms 後才開始步進，避免和點擊衝突
       tDelay=setTimeout(()=>{
-        step(); // 開始時先一步
+        step();
         btn._holdTriggered = true;
         tRepeat=setInterval(step, 70);
       }, 350);
-      // 捕捉指標避免外溢
       btn.setPointerCapture?.(e.pointerId);
     };
-
     const stop = ()=>{
-      holding=false;
       clearTimeout(tDelay);
       clearInterval(tRepeat);
-      // _holdTriggered 在 click 之後會被 reset
-      // 若使用者拖出按鈕範圍，亦視同放開
     };
-
     btn.addEventListener('pointerdown', start);
     btn.addEventListener('pointerup', stop);
     btn.addEventListener('pointercancel', stop);
@@ -632,7 +707,7 @@ function buildQty(){
   setupHold(minus,-1);
   setupHold(plus, 1);
 
-  // 鍵盤：↑→= +1；↓←= -1；PageUp/Down = ±5；Home/End = 0/35
+  // 鍵盤 & 直接輸入
   input.addEventListener('keydown', (e)=>{
     const v = Number(select.value);
     if(['ArrowUp','ArrowRight'].includes(e.key)){ e.preventDefault(); syncTo(v+1); }
@@ -642,41 +717,19 @@ function buildQty(){
     else if(e.key==='PageUp'){ e.preventDefault(); syncTo(v+5); }
     else if(e.key==='PageDown'){ e.preventDefault(); syncTo(v-5); }
   });
-
-  // 直接輸入：僅留數字、限制 0–35
   input.addEventListener('input', ()=>{
     input.value = input.value.replace(/[^0-9]/g,'').slice(0,2);
     const v = input.value==='' ? 0 : clamp(input.value);
     syncTo(v, true);
   });
-
-  // 失焦再保險校正
   input.addEventListener('blur', ()=>{
     syncTo(input.value==='' ? 0 : input.value, true);
   });
 
-  // 初始同步
   syncTo(select.value||0, false);
 }
 
-/* ===== Ripple ===== */
-function triggerRipple(e){
-  const btn=e.currentTarget, rect=btn.getBoundingClientRect();
-  btn.style.setProperty('--rx',(e.clientX-rect.left)+'px');
-  btn.style.setProperty('--ry',(e.clientY-rect.top)+'px');
-  btn.classList.remove('rippling'); void btn.offsetWidth; btn.classList.add('rippling');
-}
-
-/* ===== Toast（含 fallback） ===== */
-function showToast(msg){
-  const el=document.getElementById('toast');
-  if(!el){ alert(msg); return; }
-  el.textContent=msg; el.classList.add('show');
-  clearTimeout(showToast._t);
-  showToast._t=setTimeout(()=>el.classList.remove('show'),2200);
-}
-
-/* ===== 計算金額（數字滾動＋柔光） ===== */
+/* ===== 計算金額（以 $299 為準） ===== */
 let lastTotal=0;
 function calculate(isInit){
   const qty1=parseInt(document.getElementById('qty1').value)||0;
@@ -719,38 +772,58 @@ function screenshotOrder(){
     showToast('截圖已下載！記得填寫表單喔。');
   }).catch(()=>alert('截圖失敗，請再試一次'));
 }
+function showToast(msg){
+  const el=document.getElementById('toast');
+  if(!el){ alert(msg); return; }
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t=setTimeout(()=>el.classList.remove('show'),2200);
+}
 function setFieldError(el, id, msg){
   const hint=document.getElementById(id);
   if(msg){ el.classList.add('input-error'); el.setAttribute('aria-invalid','true'); hint.textContent=msg; hint.hidden=false; }
   else  { el.classList.remove('input-error'); el.setAttribute('aria-invalid','false'); hint.textContent=''; hint.hidden=true; }
 }
 function goToForm(){
-  const name=document.getElementById('customerName');
-  const phone=document.getElementById('customerPhone');
-  const qty=parseInt(document.getElementById('qty1').value)||0;
-  const method=document.querySelector('input[name="shipMethod"]:checked');
+  const name  = document.getElementById('customerName');
+  const phone = document.getElementById('customerPhone');
+  const email = document.getElementById('customerEmail');
+  const qty   = parseInt(document.getElementById('qty1').value)||0;
+  const method= document.querySelector('input[name="shipMethod"]:checked');
 
-  let ok=true; setFieldError(name,'errName',''); setFieldError(phone,'errPhone','');
+  let ok=true; setFieldError(name,'errName',''); setFieldError(phone,'errPhone',''); setFieldError(email,'errEmail','');
+
   if(!name.value.trim()){ setFieldError(name,'errName','請輸入訂購人姓名'); ok=false; }
   if(!phone.value.trim()){ setFieldError(phone,'errPhone','請輸入訂購人電話'); ok=false; }
   else if(!/^\d{10}$/.test(phone.value.trim())){ setFieldError(phone,'errPhone','電話需為 10 碼數字'); ok=false; }
+  if(!email.value.trim()){ setFieldError(email,'errEmail','請輸入 Email'); ok=false; }
+  else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())){ setFieldError(email,'errEmail','Email 格式不正確'); ok=false; }
+
   if(qty<=0){ showToast('請選擇購買數量'); ok=false; }
   if(!method){ showToast('請選擇寄送方式'); ok=false; }
   if(!ok) return;
 
-  const ship = (method.value==='711') ? '711超商取貨' : '郵局宅配';
-  const total = qty*320 + ((method.value==='711')?60:120);
+  const shipLabel = (method.value==='711') ? '711超商取貨' : '郵局宅配';
+  const total = qty*299 + ((method.value==='711')?60:120);
 
-  const formUrl=`https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url`
-    +`&entry.1152845848=${encodeURIComponent(name.value.trim())}`
-    +`&entry.178268335=${encodeURIComponent(phone.value.trim())}`
-    +`&entry.1732058404=${qty}`
-    +`&entry.509305715=${encodeURIComponent(ship)}`
-    +`&entry.1351577488=${total}`;
+  const base = 'https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url';
+  const formUrl = base
+    + `&entry.1152845848=${encodeURIComponent(name.value.trim())}`
+    + `&entry.178268335=${encodeURIComponent(phone.value.trim())}`
+    + `&entry.441082214=${encodeURIComponent(email.value.trim())}`
+    + `&entry.1732058404=${qty}`
+    + `&entry.509305715=${encodeURIComponent(shipLabel)}`
+    + `&entry.1351577488=${encodeURIComponent(total)}`;
   window.open(formUrl,'_blank');
 }
 
-/* ===== 鍵盤 Ripple（可選） ===== */
+/* ===== Ripple（鍵盤也可觸發） ===== */
+function triggerRipple(e){
+  const btn=e.currentTarget, rect=btn.getBoundingClientRect();
+  btn.style.setProperty('--rx',(e.clientX-rect.left)+'px');
+  btn.style.setProperty('--ry',(e.clientY-rect.top)+'px');
+  btn.classList.remove('rippling'); void btn.offsetWidth; btn.classList.add('rippling');
+}
 document.addEventListener('keydown',(e)=>{
   if(e.key==='Enter'){
     const btn=document.getElementById('startBtn');
