@@ -30,24 +30,18 @@
   --promo-red:#A6413C;    /* 胭脂紅（$299 與文案同色） */
 }
 
-/* ===== 全域 ===== */
 html{-webkit-text-size-adjust:100%;}
 *{ -webkit-tap-highlight-color: transparent; box-sizing:border-box; }
 button{ touch-action: manipulation; }
 
+/* ===== 全域 ===== */
 html,body{
   margin:0; padding:0; height:100%;
   background-color:var(--bg); color:#2c3e50;
-  font-family:'Noto Serif TC','Microsoft JhengHei',serif; /* 中文統一 */
+  font-family:'Noto Serif TC','Microsoft JhengHei',serif;
   text-align:center; overflow-x:hidden; scroll-behavior:smooth;
 }
-
-/* 確保子元素繼承中文字體 */
-table, .ship-card, .btn, .account-box, .promo-inline, input, label, small, p, div, span {
-  font-family:inherit;
-}
-
-/* 表格數字、總額數字等對齊 */
+table, .ship-card, .btn, .account-box, .promo-inline, input, label, small, p, div, span { font-family:inherit; }
 table td,table th,.total,#qty1,#formReminder,.ship-price{
   font-variant-numeric:tabular-nums lining-nums;
   font-feature-settings:"tnum" 1,"lnum" 1;
@@ -106,8 +100,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 main{opacity:0; visibility:hidden; transition:opacity var(--t-slow) var(--ease);}
 main.show{opacity:1; visibility:visible;}
 h2{
-  font-size:90px; font-weight:900; color:#1E4F7B;
-  margin:28px 0 6px 0;
+  font-size:90px; font-weight:900; color:#1E4F7B; margin:28px 0 6px 0;
   animation:titleFade 1.4s var(--ease) forwards;
 }
 @keyframes titleFade{ 0%{opacity:0; transform:translateY(12px) scale(.98);} 60%{opacity:.8; transform:translateY(2px) scale(1.01);} 100%{opacity:1; transform:translateY(0) scale(1);} }
@@ -159,18 +152,20 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 #productTable td:nth-child(3), #productTable th:nth-child(3){ padding-left:6px; padding-right:6px; }
 #productTable{ margin:15px auto 28px; }
 
-/* 商品名稱：與 711超商取貨 同尺寸/顏色/粗細 */
-.item-title{ font-size:15px; line-height:1.35; font-weight:600; color:#2d3b4a; }
-
-/* 表格內價格組合：原價刪除線 + 現價紅色（較小） */
-.price-old{
-  display:inline-block; margin-right:6px;
-  font-size:13px; color:#9aa3ad; text-decoration:line-through;
-  vertical-align:baseline;
+/* 價格上下排：上舊價(刪除線)、下新價(紅) */
+.price-cell{
+  display:flex; flex-direction:column; align-items:center; line-height:1.15;
 }
-.price-now{
-  font-size:14px; font-weight:700; color:var(--promo-red);
-  vertical-align:baseline;
+.price-old{
+  color:#6b7a8a;
+  text-decoration:line-through;
+  text-decoration-thickness:1.4px;
+}
+.price-new{
+  margin-top:3px;
+  font-size:13px;       /* 新價較小 */
+  font-weight:700;
+  color:var(--promo-red);
 }
 
 /* 隱藏原生 select */
@@ -366,8 +361,8 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 
 /* ===== 無動化偏好 ===== */
 @media (prefers-reduced-motion: reduce){
-  *{ animation:none !important; transition:none !重要; }
-  #startBtn::after{ display:none !重要; }
+  *{ animation:none !important; transition:none !important; }
+  #startBtn::after{ display:none !important; }
 }
 </style>
 </head>
@@ -422,10 +417,10 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   <section class="reveal right">
     <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
-    <!-- 一行優惠（純文字、無底框） -->
-    <p id="promoInline" class="promo-inline" hidden>
-      先嚐一鍋就愛上：11/17–12/17 開賣價 <strong class="price-red">$299</strong>
-      &nbsp; 倒數 <strong class="promo-days" id="promoDays">36 天</strong>。
+    <!-- 一行優惠（純文字、無底框，預設就顯示，JS 會更新數字與動畫） -->
+    <p id="promoInline" class="promo-inline">
+       ⛧  先嚐一鍋就愛上 11/17 » 12/17 開賣價 <strong class="price-red">$299</strong>
+      &nbsp; 倒數 <strong class="promo-days" id="promoDays">-- 天.ᐟ  </strong> 
     </p>
 
     <table id="productTable">
@@ -434,13 +429,12 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
       </colgroup>
       <tr><th>品項</th><th>價格</th><th>數量</th></tr>
       <tr>
+        <td>手抄麻辣底料包<br><small>(2人份)</small></td>
         <td>
-          <span class="item-title">手炒麻辣鍋底</span><br>
-          <small>(2人份)</small>
-        </td>
-        <td>
-          <span class="price-old">$320</span>
-          <span class="price-now">$299</span>
+          <div class="price-cell">
+            <span class="price-old">$320</span>
+            <span class="price-new">$299</span>
+          </div>
         </td>
         <td>
           <div class="qty-stepper" role="group" aria-label="數量">
@@ -561,7 +555,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     });
   });
 
-  // 一行優惠：顯示 & 倒數動畫到 12/17 23:59:59
+  // 一行優惠：顯示 & 倒數動畫到 12/17 23:59:59（穩定版）
   setupInlinePromo();
 
   // 姓名 -> 電話 -> Email 自動跳
@@ -593,40 +587,41 @@ window.addEventListener('DOMContentLoaded',()=>{
   });
 });
 
-/* 一行優惠：從現在起 → 到 12/17 23:59:59 顯示；倒數數字動畫 */
+/* ===== 一行優惠 倒數（強化穩定） ===== */
 function setupInlinePromo(){
-  try{
-    const wrap = document.getElementById('promoInline');
-    const daysEl = document.getElementById('promoDays');
-    if(!wrap || !daysEl) return;
+  const wrap = document.getElementById('promoInline');
+  const daysEl = document.getElementById('promoDays');
+  if(!wrap || !daysEl){ return; }
 
-    const now   = new Date();                  // 使用者當地時間
+  try{
+    const now   = new Date();                 // 使用者當地時間
     const year  = now.getFullYear();
     const end   = new Date(year, 11, 17, 23, 59, 59); // 12/17 23:59:59
 
     if(now <= end){
-      const msPerDay = 24*60*60*1000;
-      const daysLeft = Math.max(1, Math.ceil((end - now) / msPerDay));
-
-      animatePromoNumber(daysEl, daysLeft);
-      wrap.hidden = false;
-
-      // 跨日自動刷新倒數
-      const msToMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 0,0,0) - now + 50;
-      setTimeout(()=>{ 
+      const daysLeft = Math.max(1, Math.ceil((end - now) / (24*60*60*1000)));
+      animatePromoNumber(daysEl, daysLeft);   // 載入時做一次平滑動畫
+      // 設定跨夜自動刷新（到下一個 00:00）
+      const midnightNext = new Date(year, now.getMonth(), now.getDate()+1, 0,0,0,0);
+      setTimeout(()=>{
         const now2 = new Date();
-        const d2 = Math.max(1, Math.ceil((end - now2)/(msPerDay)));
+        const d2 = Math.max(1, Math.ceil((end - now2) / (24*60*60*1000)));
         animatePromoNumber(daysEl, d2);
-      }, msToMidnight);
+      }, Math.max(1000, midnightNext - now + 50));
     }else{
-      wrap.hidden = true; // 12/18 之後自動隱藏
+      // 活動結束：顯示 0 天或隱藏整段（這裡顯示 0 天避免版面跳動）
+      daysEl.textContent = '0 天';
     }
-  }catch(e){}
+  }catch(err){
+    // 極端情況 fallback：至少給個可見數字
+    daysEl.textContent = '— 天';
+  }
 }
 
 /* 倒數數字動畫（與 total 的感覺一致） */
 function animatePromoNumber(el, target){
   if(!el) return;
+  // 取現在顯示的數字（可能是 "--"），取不到就從 0 開始
   let from = parseInt((el.textContent||'').replace(/[^\d]/g,''),10);
   if(isNaN(from)) from = 0;
 
@@ -636,11 +631,11 @@ function animatePromoNumber(el, target){
 
   function frame(now){
     const p = Math.min(1, (now - t0) / duration);
-    const v = Math.max(1, Math.round(from + (target - from) * ease(p)));
+    const v = Math.max(0, Math.round(from + (target - from) * ease(p)));
     el.textContent = v + ' 天';
-    if(p < 1){ requestAnimationFrame(frame); } 
-    else { el.textContent = target + ' 天'; }
+    if(p < 1){ requestAnimationFrame(frame); }
   }
+  // 觸發一次微彈動畫
   el.classList.remove('animate'); void el.offsetWidth; el.classList.add('animate');
   requestAnimationFrame(frame);
 }
@@ -803,7 +798,7 @@ function goToForm(){
   if(!method){ showToast('請選擇寄送方式'); ok=false; }
   if(!ok) return;
 
-  const shipLabel = (method.value==='711') ? '711超商取貨' : '郵局宅配';
+  const shipLabel = (method.value==='711') ? '711超商取貨' : '宅配到家';
   const total = qty*299 + ((method.value==='711')?60:120);
 
   const base = 'https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url';
@@ -836,3 +831,4 @@ document.addEventListener('keydown',(e)=>{
 </script>
 </body>
 </html>
+
