@@ -26,8 +26,8 @@
   --crayon-blue:#54677C; --crayon-blue-ink:#3C5168;
 
   /* 一行優惠（純文字、無底框） */
-  --promo-text:#2B3E53;   /* 墨藍灰 */
-  --promo-red:#A6413C;    /* 胭脂紅（$299 與文案同色） */
+  --promo-text:#2B3E53;
+  --promo-red:#A6413C;
 }
 
 html{-webkit-text-size-adjust:100%;}
@@ -163,7 +163,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 }
 .price-new{
   margin-top:3px;
-  font-size:13px;       /* 新價較小 */
+  font-size:13px;
   font-weight:700;
   color:var(--promo-red);
 }
@@ -361,7 +361,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 
 /* ===== 無動化偏好 ===== */
 @media (prefers-reduced-motion: reduce){
-  *{ animation:none !important; transition:none !important; }
+  *{ animation:none !important; transition:none !重要; }
   #startBtn::after{ display:none !important; }
 }
 </style>
@@ -417,7 +417,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   <section class="reveal right">
     <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
-    <!-- 一行優惠（純文字、無底框，預設就顯示，JS 會更新數字與動畫） -->
+    <!-- 一行優惠（純文字、無底框） -->
     <p id="promoInline" class="promo-inline">
        ⛧  先嚐一鍋就愛上 11/17 » 12/17 開賣價 <strong class="price-red">$299</strong>
       &nbsp; 倒數 <strong class="promo-days" id="promoDays">-- 天.ᐟ  </strong> 
@@ -555,53 +555,46 @@ window.addEventListener('DOMContentLoaded',()=>{
     });
   });
 
-  // 一行優惠：顯示 & 倒數動畫到 12/17 23:59:59（穩定版）
+  // 一行優惠：倒數至 12/17 23:59:59
   setupInlinePromo();
 
-  // 姓名 -> 電話 -> Email 自動跳
+  /* ===== 取消自動跳，只保留 Enter／Change ===== */
   const nameInput  = document.getElementById('customerName');
   const phoneInput = document.getElementById('customerPhone');
   const emailInput = document.getElementById('customerEmail');
 
-  let jumpTimer;
-  nameInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); phoneInput.focus(); }});
-  nameInput.addEventListener('change', ()=>{ if(nameInput.value.trim().length){ phoneInput.focus(); }});
-  nameInput.addEventListener('input', ()=>{
-    clearTimeout(jumpTimer);
-    jumpTimer = setTimeout(()=>{
-      if(document.activeElement===nameInput && nameInput.value.trim().length>=2){
-        phoneInput.focus();
-      }
-    }, 600);
+  // Enter：立即跳
+  nameInput.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter'){ e.preventDefault(); phoneInput.focus(); }
+  });
+  phoneInput.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter'){ e.preventDefault(); emailInput.focus(); }
   });
 
-  phoneInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); emailInput.focus(); }});
-  phoneInput.addEventListener('change', ()=>{ if(phoneInput.value.trim().length){ emailInput.focus(); }});
-  phoneInput.addEventListener('input', ()=>{
-    clearTimeout(jumpTimer);
-    jumpTimer = setTimeout(()=>{
-      if(document.activeElement===phoneInput && phoneInput.value.trim().length>=6){
-        emailInput.focus();
-      }
-    }, 500);
+  // change（完成輸入/離開欄位）才跳
+  nameInput.addEventListener('change', ()=>{
+    if (nameInput.value.trim().length >= 1) phoneInput.focus();
+  });
+  phoneInput.addEventListener('change', ()=>{
+    const digits = phoneInput.value.replace(/\D/g,'');
+    if (digits.length >= 10) emailInput.focus();
   });
 });
 
-/* ===== 一行優惠 倒數（強化穩定） ===== */
+/* ===== 一行優惠 倒數 ===== */
 function setupInlinePromo(){
   const wrap = document.getElementById('promoInline');
   const daysEl = document.getElementById('promoDays');
   if(!wrap || !daysEl){ return; }
 
   try{
-    const now   = new Date();                 // 使用者當地時間
+    const now   = new Date();
     const year  = now.getFullYear();
     const end   = new Date(year, 11, 17, 23, 59, 59); // 12/17 23:59:59
 
     if(now <= end){
       const daysLeft = Math.max(1, Math.ceil((end - now) / (24*60*60*1000)));
-      animatePromoNumber(daysEl, daysLeft);   // 載入時做一次平滑動畫
-      // 設定跨夜自動刷新（到下一個 00:00）
+      animatePromoNumber(daysEl, daysLeft);
       const midnightNext = new Date(year, now.getMonth(), now.getDate()+1, 0,0,0,0);
       setTimeout(()=>{
         const now2 = new Date();
@@ -609,33 +602,25 @@ function setupInlinePromo(){
         animatePromoNumber(daysEl, d2);
       }, Math.max(1000, midnightNext - now + 50));
     }else{
-      // 活動結束：顯示 0 天或隱藏整段（這裡顯示 0 天避免版面跳動）
       daysEl.textContent = '0 天';
     }
   }catch(err){
-    // 極端情況 fallback：至少給個可見數字
     daysEl.textContent = '— 天';
   }
 }
-
-/* 倒數數字動畫（與 total 的感覺一致） */
 function animatePromoNumber(el, target){
   if(!el) return;
-  // 取現在顯示的數字（可能是 "--"），取不到就從 0 開始
   let from = parseInt((el.textContent||'').replace(/[^\d]/g,''),10);
   if(isNaN(from)) from = 0;
-
   const duration = 900;
   const t0 = performance.now();
   const ease = t => 1 - Math.pow(1 - t, 3);
-
   function frame(now){
     const p = Math.min(1, (now - t0) / duration);
     const v = Math.max(0, Math.round(from + (target - from) * ease(p)));
     el.textContent = v + ' 天';
     if(p < 1){ requestAnimationFrame(frame); }
   }
-  // 觸發一次微彈動畫
   el.classList.remove('animate'); void el.offsetWidth; el.classList.add('animate');
   requestAnimationFrame(frame);
 }
@@ -662,7 +647,6 @@ function buildQty(){
     if(trigger) calculate();
   }
 
-  // 點擊 ±1（抑制長按後多觸發的 click）
   function setupClick(btn, delta){
     btn.addEventListener('click', (e)=>{
       if(btn._holdTriggered){
@@ -676,11 +660,9 @@ function buildQty(){
   setupClick(minus,-1);
   setupClick(plus, 1);
 
-  // 長按連續
   function setupHold(btn, delta){
     let tDelay, tRepeat;
     const step=()=> syncTo(Number(select.value)+delta);
-
     const start = (e)=>{
       btn._holdTriggered=false;
       tDelay=setTimeout(()=>{
@@ -702,7 +684,6 @@ function buildQty(){
   setupHold(minus,-1);
   setupHold(plus, 1);
 
-  // 鍵盤 & 直接輸入
   input.addEventListener('keydown', (e)=>{
     const v = Number(select.value);
     if(['ArrowUp','ArrowRight'].includes(e.key)){ e.preventDefault(); syncTo(v+1); }
@@ -831,4 +812,3 @@ document.addEventListener('keydown',(e)=>{
 </script>
 </body>
 </html>
-
