@@ -140,7 +140,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 }
 #intro-text.show{opacity:1;}
 
-/* 開始訂購按鈕（無外框線） */
+/* 開始訂購按鈕（STAR ORDER 在上、中文在下；無外框線） */
 #startBtn{
   margin-top:18px;
   padding:10px 26px 11px;
@@ -173,23 +173,23 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
     box-shadow .25s var(--ease),
     filter .25s var(--ease);
 }
-#startBtn .btn-main{
-  font-size:14px;
-  letter-spacing:.26em;
-  text-indent:.26em;
-}
-#startBtn .btn-sub{
+#startBtn .btn-main-en{
   font-family:'Amatic SC',cursive;
-  font-size:18px;
-  letter-spacing:.14em;
-  opacity:.8;
+  font-size:20px;
+  letter-spacing:.18em;
+}
+#startBtn .btn-sub-zh{
+  font-size:13px;
+  letter-spacing:.22em;
+  text-indent:.22em;
+  opacity:.85;
   display:flex;
   align-items:center;
   gap:6px;
 }
-#startBtn .btn-sub::after{
+#startBtn .btn-sub-zh::after{
   content:"›";
-  font-size:17px;
+  font-size:15px;
   transform:translateY(0.5px);
 }
 
@@ -250,6 +250,7 @@ h2{
 h2 .english{
   font-family:'Amatic SC',cursive;
   font-weight:900;
+  white-space:nowrap;   /* 不換行 */
 }
 h2.title-in{
   animation:titleFloat 1.05s var(--ease) forwards;
@@ -282,7 +283,7 @@ h2.title-in{
   font-weight:500;
 }
 
-/* 一行優惠（第二行） */
+/* 第二行優惠 */
 .promo-inline{
   width:min(640px, 100%);
   margin:0 auto 4px;
@@ -585,11 +586,6 @@ th{
   letter-spacing:.08em;
   color:#4f5f70;
 }
-.ship-note{
-  font-size:11px;
-  color:#6f7b8a;
-  letter-spacing:.08em;
-}
 
 /* 選取狀態 */
 .ship-card:has(input:checked),
@@ -704,7 +700,7 @@ th{
   letter-spacing:.5px;
 }
 
-/* 讓複製按鈕置中 */
+/* 複製按鈕置中 */
 #copyBtn{
   display:block;
   margin:10px auto 0;
@@ -860,10 +856,10 @@ th{
 
   /* 手機：左右還是有留白，不滿版，只微調整體縮小 */
   .page-inner{
-    padding:0 10px 36px;
+    padding:0 22px 36px;
   }
 
-  /* 手機：標題稍微小一點、字距收一點，盡量維持一行 */
+  /* 手機：標題稍微小一點、字距收一點，配合 nowrap 不換行 */
   h2{
     font-size:78px;
     margin-top:22px;
@@ -888,7 +884,11 @@ th{
 
   table{
     font-size:14px;
-    /* 寬度沿用桌機版 90% + max-width，不再滿版 */
+    width:86%;          /* 左右留白更多 */
+  }
+  .ship-wrap{
+    width:86%;
+    gap:10px;
   }
 
   .input-container{
@@ -896,28 +896,9 @@ th{
     padding:18px 18px 20px;
   }
 
-  .ship-wrap{
-    /* 沿用 90% 寬度，維持留白 */
-    gap:10px;
-  }
-
-  .ship-card{
-    padding:10px 6px 9px;
-  }
-  .ship-title{
-    font-size:13px;
-    letter-spacing:.10em;
-  }
-  .ship-price{
-    font-size:13px;
-  }
-  .ship-note{
-    font-size:10.5px;
-  }
-
   .account-box{
+    width:86%;
     font-size:12.5px;
-    /* 寬度沿用 85%，保持左右空氣感 */
   }
 
   .btn{
@@ -938,13 +919,13 @@ th{
     margin-top:16px;
     padding:9px 22px 10px;
   }
-  #startBtn .btn-main{
-    font-size:13px;
-    letter-spacing:.22em;
+  #startBtn .btn-main-en{
+    font-size:19px;
+    letter-spacing:.16em;
   }
-  #startBtn .btn-sub{
-    font-size:17px;
-    letter-spacing:.14em;
+  #startBtn .btn-sub-zh{
+    font-size:12.5px;
+    letter-spacing:.2em;
   }
 
   .total{
@@ -977,8 +958,8 @@ th{
 陪你溫暖每一餐。
   </div>
   <button id="startBtn">
-    <span class="btn-main">開始訂購</span>
-    <span class="btn-sub">Start Order</span>
+    <span class="btn-main-en">STAR ORDER</span>
+    <span class="btn-sub-zh">開始訂購</span>
   </button>
 </div>
 
@@ -994,7 +975,7 @@ th{
       </p>
       <p id="promoInline" class="promo-inline">
         <span class="promo-mark">⛧</span>
-        11/17 ~ 12/17 開賣價
+        11/17 » 12/17 開賣價
         <strong class="price-red">$299</strong>
         <span class="promo-sep">·</span>
         倒數 <strong class="promo-days" id="promoDays">-- 天</strong>
