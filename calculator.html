@@ -993,7 +993,7 @@ th{
       </p>
       <p id="promoInline" class="promo-inline">
         <span class="promo-mark">⛧</span>
-        11/17 ~ 12/17 開賣價
+        11/17 » 12/17 開賣價
         <strong class="price-red">$299</strong>
         <span class="promo-sep">·</span>
         倒數 <strong class="promo-days" id="promoDays">-- 天</strong>
@@ -1034,7 +1034,7 @@ th{
         </colgroup>
         <tr><th>品項</th><th>價格</th><th>數量</th></tr>
         <tr>
-          <td>麻辣底料包<br><small>(約2人份)</small></td>
+          <td>手抄麻辣底料包<br><small>(2人份)</small></td>
           <td>
             <div class="price-cell">
               <span class="price-old">$320</span>
@@ -1201,8 +1201,10 @@ window.addEventListener('DOMContentLoaded',()=>{
 /* ===== Email 智慧建議（datalist 版） ===== */
 const COMMON_DOMAINS = [
   'gmail.com',
-  'yahoo.com.tw',
-  'hotmail.com','outlook.com',
+  'yahoo.com.tw','yahoo.com',
+  'hotmail.com','outlook.com','live.com',
+  'icloud.com','msn.com'
+];
 function enableEmailAutoSuggest(){
   const emailInput = document.getElementById('customerEmail');
   const listEl     = document.getElementById('emailHints');
