@@ -140,7 +140,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 }
 #intro-text.show{opacity:1;}
 
-/* 開始訂購按鈕（無外框線、略小一點） */
+/* 開始訂購按鈕（無外框線） */
 #startBtn{
   margin-top:18px;
   padding:10px 26px 11px;
@@ -862,21 +862,21 @@ th{
     letter-spacing:.03em;
   }
 
-  /* ✅ 手機：整體左右留白再多一點（32px → 36px） */
+  /* ✅ 手機：左右留白，但比剛剛少一點，保留一行標題空間 */
   .page-inner{
-    padding:0 36px 40px;
+    padding:0 24px 40px;
   }
 
-  /* ✅ 手機：標題縮小＋字距收一點，避免換行 */
+  /* ✅ 手機：標題維持大字，只略微比桌機小＆字距收窄，讓它不容易換行 */
   h2{
-    font-size:50px;
+    font-size:78px;
     margin-top:22px;
-    letter-spacing:.10em;
+    letter-spacing:.08em;
   }
 
   .brand-tagline{
     font-size:15px;
-    letter-spacing:.46em;
+    letter-spacing:.38em;
   }
 
   .promo-inline{
@@ -1146,7 +1146,6 @@ async function startIntroSequence(){
 
 /* ===== 初始化 ===== */
 window.addEventListener('DOMContentLoaded',()=>{
-  // 建立隱藏 select 的 0–35
   const select=document.getElementById('qty1');
   for(let i=0;i<=35;i++){
     const o=document.createElement('option');
@@ -1160,7 +1159,6 @@ window.addEventListener('DOMContentLoaded',()=>{
   calculate(true);
   startIntroSequence();
 
-  // 進主頁
   const intro=document.getElementById('intro');
   const btn=document.getElementById('startBtn');
   const main=document.getElementById('mainContent');
@@ -1172,11 +1170,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     setTimeout(()=>{
       intro.style.display='none';
       main.classList.add('show');
-
-      // 標題進場動畫
-      if(pageTitle){
-        pageTitle.classList.add('title-in');
-      }
+      if(pageTitle){ pageTitle.classList.add('title-in'); }
 
       document.querySelectorAll('.reveal').forEach((el,i)=>
         setTimeout(()=>el.classList.add('in'), i*180)
@@ -1186,7 +1180,6 @@ window.addEventListener('DOMContentLoaded',()=>{
     },600);
   });
 
-  // 寄送卡片切換
   document.querySelectorAll('.ship-card input').forEach(r=>{
     r.addEventListener('change', ()=>{
       calculate();
@@ -1197,15 +1190,12 @@ window.addEventListener('DOMContentLoaded',()=>{
     });
   });
 
-  // 一行優惠：倒數動畫到 12/17 23:59:59
   setupInlinePromo();
 
-  /* ===== 取消自動跳，只保留 Enter／Change ===== */
   const nameInput  = document.getElementById('customerName');
   const phoneInput = document.getElementById('customerPhone');
   const emailInput = document.getElementById('customerEmail');
 
-  // Enter：立即跳
   nameInput.addEventListener('keydown', (e)=>{
     if(e.key === 'Enter'){ e.preventDefault(); phoneInput.focus(); }
   });
@@ -1213,7 +1203,6 @@ window.addEventListener('DOMContentLoaded',()=>{
     if(e.key === 'Enter'){ e.preventDefault(); emailInput.focus(); }
   });
 
-  // change（完成輸入/離開欄位）才跳
   nameInput.addEventListener('change', ()=>{
     if (nameInput.value.trim().length >= 1) phoneInput.focus();
   });
@@ -1222,7 +1211,6 @@ window.addEventListener('DOMContentLoaded',()=>{
     if (digits.length >= 10) emailInput.focus();
   });
 
-  /* ===== Email 智慧建議（常見網域） ===== */
   enableEmailAutoSuggest();
 });
 
@@ -1285,7 +1273,7 @@ function setupInlinePromo(){
   try{
     const now   = new Date();
     const year  = now.getFullYear();
-    const end   = new Date(year, 11, 17, 23, 59, 59); // 12/17 23:59:59
+    const end   = new Date(year, 11, 17, 23, 59, 59);
 
     if(now <= end){
       const daysLeft = Math.max(1, Math.ceil((end - now) / (24*60*60*1000)));
@@ -1304,7 +1292,6 @@ function setupInlinePromo(){
   }
 }
 
-/* 倒數數字動畫 */
 function animatePromoNumber(el, target){
   if(!el) return;
   let from = parseInt((el.textContent||'').replace(/[^\d]/g,''),10);
