@@ -250,7 +250,7 @@ h2{
 h2 .english{
   font-family:'Amatic SC',cursive;
   font-weight:900;
-  white-space:nowrap;   /* 不換行 */
+  white-space:nowrap;
 }
 h2.title-in{
   animation:titleFloat 1.05s var(--ease) forwards;
@@ -854,14 +854,13 @@ th{
     --qty-disp-w: 44px;
   }
 
-  /* 手機：左右還是有留白，不滿版，只微調整體縮小 */
   .page-inner{
     padding:0 22px 36px;
   }
 
-  /* 手機：標題稍微小一點、字距收一點，配合 nowrap 不換行 */
+  /* 標題手機版稍微縮小，維持一行 */
   h2{
-    font-size:78px;
+    font-size:72px;
     margin-top:22px;
     letter-spacing:.10em;
   }
@@ -884,8 +883,17 @@ th{
 
   table{
     font-size:14px;
-    width:86%;          /* 左右留白更多 */
+    width:86%;
   }
+
+  /* 手機版商品欄位字大一點 */
+  #productTable td:first-child{
+    font-size:15px;
+  }
+  #productTable td:first-child small{
+    font-size:12px;
+  }
+
   .ship-wrap{
     width:86%;
     gap:10px;
@@ -930,6 +938,16 @@ th{
 
   .total{
     font-size:27px;
+  }
+
+  /* 手機價格欄對齊、變窄 → 品項變寬 */
+  #productTable td:nth-child(2),
+  #productTable th:nth-child(2){
+    text-align:right;
+    padding-right:16px;
+  }
+  #productTable .col-price{
+    width:90px;
   }
 }
 
