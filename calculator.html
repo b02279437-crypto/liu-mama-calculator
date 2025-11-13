@@ -16,14 +16,29 @@
 
 <style>
 :root{
-  --milk:#E8D9C4; --navy:#1E4F7B; --bg:#f7f6f2; --gray-blue:#7f9bb3; --milk-solid:#e9e3d7;
-  --ease:cubic-bezier(.22,.61,.36,1); --ease-soft:cubic-bezier(.2,.7,.2,1);
-  --t-fast:.24s; --t-base:.6s; --t-slow:1.2s;
+  --milk:#E8D9C4;
+  --navy:#2B3E53;
+  --bg:#f7f6f2;
+  --gray-blue:#7f9bb3;
+  --milk-solid:#e9e3d7;
+  --paper:#e4dccf;
+  --ink:#2f3438;
+
+  /* 莫蘭迪藍系線條 */
+  --line-blue:#aab5c4;
+
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-soft:cubic-bezier(.2,.7,.2,1);
+  --t-fast:.24s;
+  --t-base:.6s;
+  --t-slow:1.2s;
 
   --control-h:44px;
-  --qty-btn-w:36px; --qty-disp-w:56px;
+  --qty-btn-w:36px;
+  --qty-disp-w:56px;
 
-  --crayon-blue:#54677C; --crayon-blue-ink:#3C5168;
+  --crayon-blue:#54677C;
+  --crayon-blue-ink:#3C5168;
 
   /* 一行優惠（純文字、無底框） */
   --promo-text:#2B3E53;
@@ -35,105 +50,184 @@
 }
 
 html{-webkit-text-size-adjust:100%;}
-*{ -webkit-tap-highlight-color: transparent; box-sizing:border-box; }
+*{
+  -webkit-tap-highlight-color: transparent;
+  box-sizing:border-box;
+}
 button{ touch-action: manipulation; }
 
 /* ===== 全域 ===== */
 html,body{
-  margin:0; padding:0; height:100%;
-  background-color:var(--bg); color:#2c3e50;
+  margin:0;
+  padding:0;
+  height:100%;
+  background-color:var(--bg);
+  color:#2c3e50;
   font-family:'Noto Serif TC','Microsoft JhengHei',serif;
-  text-align:center; overflow-x:hidden; scroll-behavior:smooth;
+  text-align:center;
+  overflow-x:hidden;
+  scroll-behavior:smooth;
 }
-table, .ship-card, .btn, .account-box, .promo-inline, input, label, small, p, div, span { font-family:inherit; }
+table, .ship-card, .btn, .account-box, .promo-inline, input, label, small, p, div, span {
+  font-family:inherit;
+}
 table td,table th,.total,#qty1,#formReminder,.ship-price{
   font-variant-numeric:tabular-nums lining-nums;
   font-feature-settings:"tnum" 1,"lnum" 1;
   letter-spacing:.02em;
 }
-
-/* placeholder 顏色 */
 ::placeholder{
-  color:rgba(120,120,120,.75);
+  color:rgba(120,120,120,.7);
+}
+
+/* 主要內容容器（窄欄） */
+.page-inner{
+  max-width:720px;
+  margin:0 auto 56px;
+  padding:0 16px 40px;
 }
 
 /* ===== 開場動畫 ===== */
 #intro{
-  position:fixed; inset:0; background-color:var(--bg);
-  display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
-  padding-top:12vh; z-index:9999; opacity:1; transition:opacity var(--t-slow) var(--ease);
+  position:fixed;
+  inset:0;
+  background-color:var(--bg);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding-top:12vh;
+  z-index:9999;
+  opacity:1;
+  transition:opacity var(--t-slow) var(--ease);
 }
 #intro.fade-out{opacity:0; pointer-events:none;}
 #intro-logo{
   width:clamp(360px, 92vw, 700px);
-  opacity:0; transform:scale(.99);
-  transition:opacity calc(var(--t-slow)*1.1) var(--ease), transform calc(var(--t-slow)*1.3) var(--ease);
+  opacity:0;
+  transform:scale(.99);
+  transition:
+    opacity calc(var(--t-slow)*1.1) var(--ease),
+    transform calc(var(--t-slow)*1.3) var(--ease);
 }
-#intro-logo.show{opacity:1; transform:scale(1.04);}
-#intro-logo.hide{opacity:0; transform:scale(1.04); transition:opacity var(--t-base) var(--ease);}
+#intro-logo.show{opacity:1; transform:scale(1.02);}
+#intro-logo.hide{
+  opacity:0;
+  transform:scale(1.02);
+  transition:opacity var(--t-base) var(--ease);
+}
 #intro-hero{
   width:clamp(260px,60vw,380px);
-  opacity:0; transform:translateY(8px);
-  transition:opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
-  margin:18px auto -72px; filter:drop-shadow(0 10px 14px rgba(0,0,0,0.15));
+  opacity:0;
+  transform:translateY(8px);
+  transition:
+    opacity var(--t-base) var(--ease),
+    transform var(--t-base) var(--ease);
+  margin:18px auto -72px;
+  filter:drop-shadow(0 10px 14px rgba(0,0,0,0.12));
 }
-#intro-hero.show{opacity:1; transform:translateY(0);}
+#intro-hero.show{
+  opacity:1;
+  transform:translateY(0);
+}
 #intro-text{
-  font-weight:500; color:#333; font-size:15px; line-height:1.9;
-  opacity:0; white-space:pre-line; margin-top:-38px; letter-spacing:.5px;
+  font-weight:500;
+  color:#333;
+  font-size:15px;
+  line-height:1.9;
+  opacity:0;
+  white-space:pre-line;
+  margin-top:-38px;
+  letter-spacing:.5px;
   transition:opacity var(--t-base) var(--ease);
 }
 #intro-text.show{opacity:1;}
 #startBtn{
-  margin-top:16px; padding:12px 34px; font-size:26px;
-  font-family:'Amatic SC',cursive; letter-spacing:2px; color:var(--navy);
-  background:rgba(255,255,255,.62); border:1px solid rgba(255,255,255,.70); border-radius:999px;
-  -webkit-backdrop-filter:blur(14px) saturate(1.06); backdrop-filter:blur(14px) saturate(1.06);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 10px 24px rgba(30,79,123,.14);
-  cursor:pointer; position:relative; isolation:isolate;
-  opacity:0; transform:translateY(10px);
-  transition:opacity var(--t-base) var(--ease), transform var(--t-fast) var(--ease), filter .25s var(--ease);
+  margin-top:16px;
+  padding:12px 34px;
+  font-size:26px;
+  font-family:'Amatic SC',cursive;
+  letter-spacing:2px;
+  color:var(--navy);
+  background:rgba(255,255,255,.62);
+  border:1px solid rgba(255,255,255,.70);
+  border-radius:999px;
+  -webkit-backdrop-filter:blur(14px) saturate(1.06);
+  backdrop-filter:blur(14px) saturate(1.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.6),
+    0 8px 20px rgba(30,79,123,.16);
+  cursor:pointer;
+  position:relative;
+  isolation:isolate;
+  opacity:0;
+  transform:translateY(10px);
+  transition:
+    opacity var(--t-base) var(--ease),
+    transform var(--t-fast) var(--ease),
+    filter .25s var(--ease);
 }
 #startBtn.show{opacity:1; transform:translateY(0);}
-#startBtn:hover{ transform:translateY(-2px); filter:brightness(1.03); }
-#startBtn:active{ transform:translateY(-1px); }
-#startBtn::after{
-  content:""; position:absolute; inset:auto; width:10px; height:10px; border-radius:50%;
-  background:radial-gradient(circle, rgba(30,79,123,.18) 0%, rgba(30,79,123,0) 70%);
-  transform:translate(-50%,-50%) scale(1); opacity:0; pointer-events:none;
+#startBtn:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.03);
 }
-#startBtn.rippling::after{ left:var(--rx); top:var(--ry); animation:rippleInk .8s var(--ease-soft); }
-@keyframes rippleInk{ 0%{opacity:.35; transform:translate(-50%,-50%) scale(1);} 100%{opacity:0; transform:translate(-50%,-50%) scale(35);} }
+#startBtn:active{ transform:translateY(0); }
+#startBtn::after{
+  content:"";
+  position:absolute;
+  inset:auto;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(30,79,123,.18) 0%, rgba(30,79,123,0) 70%);
+  transform:translate(-50%,-50%) scale(1);
+  opacity:0;
+  pointer-events:none;
+}
+#startBtn.rippling::after{
+  left:var(--rx);
+  top:var(--ry);
+  animation:rippleInk .8s var(--ease-soft);
+}
+@keyframes rippleInk{
+  0%{opacity:.35; transform:translate(-50%,-50%) scale(1);}
+  100%{opacity:0; transform:translate(-50%,-50%) scale(32);}
+}
 
 /* ===== 主內容 ===== */
 main{
-  opacity:0; visibility:hidden; transition:opacity var(--t-slow) var(--ease);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity var(--t-slow) var(--ease);
 }
 main.show{opacity:1; visibility:visible;}
 
-/* ===== 標題 + 新動畫（稍微放大） ===== */
+/* ===== 標題 + 動畫 ===== */
 h2{
-  font-size:90px;
+  font-size:88px;
   font-weight:900;
-  color:#1E4F7B;
-  margin:28px 0 6px 0;
+  color:var(--navy);
+  margin:28px 0 8px 0;
   opacity:0;
   transform:translateY(12px);
-  letter-spacing:.1em;
+  letter-spacing:.11em;
 }
-h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
-
+h2 .english{
+  font-family:'Amatic SC',cursive;
+  font-weight:900;
+}
 h2.title-in{
-  animation:titleFloat 1s var(--ease) forwards;
+  animation:titleFloat 1.05s var(--ease) forwards;
 }
 @keyframes titleFloat{
   0%{
     opacity:0;
-    transform:translateY(14px) scale(.97);
+    transform:translateY(16px) scale(.97);
   }
-  60%{
+  55%{
     opacity:1;
-    transform:translateY(-3px) scale(1.02);
+    transform:translateY(-2px) scale(1.02);
   }
   100%{
     opacity:1;
@@ -141,23 +235,27 @@ h2.title-in{
   }
 }
 
-/* 品牌 tagline ＋ 優惠列 */
+/* ===== 標語＋優惠 ===== */
+.brand-block{
+  margin:4px 0 18px;
+}
 .brand-tagline{
-  margin:10px 0 4px;
+  margin:6px 0 6px;
   font-size:15px;
   color:#3f4f61;
-  letter-spacing:.40em;  /* 再拉開一點點 */
-  text-indent:.40em;
+  letter-spacing:.42em;
+  text-indent:.42em;
   font-weight:500;
 }
 
-/* 一行優惠（純文字、無底框，第二行） */
+/* 一行優惠（純文字、第二行） */
 .promo-inline{
-  width:min(820px, 94vw);
-  margin:2px auto 12px;
-  font-size:13px; line-height:1.7;
+  width:min(640px, 100%);
+  margin:0 auto 4px;
+  font-size:13px;
+  line-height:1.7;
   color:var(--promo-text);
-  letter-spacing:.16em;  /* 稍微加寬字距 */
+  letter-spacing:.16em;
 }
 .promo-inline .price-red{
   color:var(--promo-red);
@@ -166,12 +264,12 @@ h2.title-in{
 }
 .promo-mark{
   font-size:11px;
-  opacity:.75;
+  opacity:.7;
   margin-right:4px;
 }
 .promo-sep{
   margin:0 4px;
-  opacity:.6;
+  opacity:.5;
 }
 .promo-days{
   font-weight:800;
@@ -179,12 +277,20 @@ h2.title-in{
   transform-origin:50% 60%;
 }
 .promo-days.animate{ animation: promoBounce .85s var(--ease); }
-@keyframes promoBounce{ 0%{transform:scale(1);} 45%{transform:scale(1.08);} 100%{transform:scale(1);} }
+@keyframes promoBounce{
+  0%{transform:scale(1);}
+  45%{transform:scale(1.08);}
+  100%{transform:scale(1);}
+}
 
 /* 區塊小標 */
 .section-title{
-  font-size:14px; color:#555; margin:24px 0 8px;
-  display:inline-flex; align-items:center; gap:10px;
+  font-size:14px;
+  color:#555;
+  margin:26px 0 10px;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
   position:relative;
   letter-spacing:.16em;
 }
@@ -195,55 +301,128 @@ h2.title-in{
   height:1px;
   background:linear-gradient(to right, rgba(46,67,94,0.2), transparent);
 }
-.section-title::before{
-  max-width:60px;
-}
+.section-title::before{max-width:64px;}
 .section-title::after{
   max-width:120px;
   background:linear-gradient(to left, rgba(46,67,94,0.18), transparent);
 }
 
-.reveal{opacity:0; transform:translateY(34px); transition:opacity .9s var(--ease), transform .9s var(--ease);}
-.reveal.in{opacity:1; transform:translateY(0);}
-
-/* ===== 訂購資訊卡片 ===== */
-.input-container{
-  max-width:500px; margin:0 auto 30px; text-align:left;
-  background:#fff; padding:25px 28px; border-radius:18px;
-  box-shadow:0 10px 26px rgba(0,0,0,.05);
-  border:1px solid rgba(255,255,255,0.8);
+/* reveal 動畫 */
+.reveal{
+  opacity:0;
+  transform:translateY(28px);
+  transition:
+    opacity .9s var(--ease),
+    transform .9s var(--ease);
 }
-.input-group{display:flex; flex-direction:column; gap:5px; margin-bottom:18px;}
+.reveal.in{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ===== 訂購資訊卡片（無邊框，透明白底） ===== */
+.input-container{
+  max-width:520px;
+  margin:0 auto 30px;
+  text-align:left;
+
+  /* 透明感白底 */
+  background:rgba(255,255,255,0.88);
+  padding:24px 24px 22px;
+  border-radius:18px;
+
+  /* 不要外框線 */
+  border:none;
+
+  /* 柔和陰影＋一點玻璃感 */
+  box-shadow:0 14px 32px rgba(0,0,0,0.03);
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+}
+
+.input-group{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  margin-bottom:18px;
+}
 .input-group label{
-  font-size:13px; color:#444; letter-spacing:.08em;
+  font-size:13px;
+  color:#444;
+  letter-spacing:.08em;
 }
 .input-group input{
-  font-size:16px; height:var(--control-h); line-height:calc(var(--control-h) - 2px);
-  padding:0 12px; border:1px solid #ccc; border-radius:8px; background:#fafafa;
-  transition:border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease);
+  font-size:16px;
+  height:var(--control-h);
+  line-height:calc(var(--control-h) - 2px);
+  padding:0 12px;
+  border:1px solid #c5cfdd;
+  border-radius:8px;
+  background:#ffffff;          /* 輸入欄統一純白底 */
+  transition:
+    border-color var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) var(--ease),
+    background-color var(--t-fast) var(--ease);
 }
-.input-group input:focus{border-color:#1E4F7B; background:#fff; box-shadow:0 0 6px rgba(30,79,123,.2);}
-.input-error{border-color:#e74c3c !important; background:#fff5f4;}
-.error-hint{font-size:12px; color:#c0392b; margin-top:2px;}
+.input-group input:focus{
+  border-color:#7b8a9b;
+  background:#ffffff;          /* 聚焦時維持白色 */
+  box-shadow:0 0 0 2px rgba(123,138,155,.2);
+}
+.input-error{
+  border-color:#e74c3c !important;
+  background:#fff5f4;
+}
+.error-hint{
+  font-size:12px;
+  color:#c0392b;
+  margin-top:2px;
+}
 
-/* ===== 表格 ===== */
+/* ===== 表格（顏色回到最初版） ===== */
 table{
-  width:90%; max-width:500px; margin:15px auto;
-  border-collapse:separate; border-spacing:0; background:#fff; border-radius:16px; overflow:hidden;
-  box-shadow:0 2px 10px rgba(0,0,0,.08); font-size:15px; table-layout:fixed; text-align:center;
+  width:90%;
+  max-width:520px;
+  margin:15px auto 10px;
+  border-collapse:separate;
+  border-spacing:0;
+  background:#fff;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
+  font-size:15px;
+  table-layout:fixed;
+  text-align:center;
 }
-th,td{ padding:10px; border-bottom:1px solid #e9eef2; vertical-align:middle; white-space:nowrap; }
-th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
-.col-item{ width:auto; } .col-price{ width:110px; } .col-action{ width:148px; }
-#productTable td:nth-child(3), #productTable th:nth-child(3){ padding-left:6px; padding-right:6px; }
-#productTable{ margin:15px auto 28px; }
+th,td{
+  padding:10px;
+  border-bottom:1px solid #e9eef2;
+  vertical-align:middle;
+  white-space:nowrap;
+}
+th{
+  background-color:var(--gray-blue);
+  color:#fff;
+  font-weight:500;
+}
+.col-item{ width:auto; }
+.col-price{ width:110px; }
+.col-action{ width:148px; }
+#productTable td:nth-child(3),
+#productTable th:nth-child(3){
+  padding-left:6px;
+  padding-right:6px;
+}
 
 /* 價格上下排：上舊價(刪除線)、下新價(紅) */
 .price-cell{
-  display:flex; flex-direction:column; align-items:center; line-height:1.15;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  line-height:1.15;
 }
 .price-old{
-  color:#6b7a8a;
+  color:#7b8086;
   text-decoration:line-through;
   text-decoration-thickness:1.4px;
 }
@@ -259,60 +438,120 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 
 /* ===== Stepper ===== */
 .qty-stepper{
-  display:inline-flex; align-items:center; height:var(--control-h);
-  border:1px solid #ccc; border-radius:8px; background:#fff;
-  width: calc(var(--qty-btn-w)*2 + var(--qty-disp-w) + 2px);
+  display:inline-flex;
+  align-items:center;
+  height:var(--control-h);
+  border:1px solid var(--line-blue);
+  border-radius:8px;
+  background:#fff;
+  width:calc(var(--qty-btn-w)*2 + var(--qty-disp-w) + 2px);
   max-width:100%;
 }
 .qty-btn{
-  width:var(--qty-btn-w); height:100%;
-  border:none; background:#f3f3f3; cursor:pointer; font-size:20px; line-height:1;
-  display:inline-flex; align-items:center; justify-content:center;
-  transition:background-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+  width:var(--qty-btn-w);
+  height:100%;
+  border:none;
+  background:#f1f4f8;
+  cursor:pointer;
+  font-size:20px;
+  line-height:1;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  transition:
+    background-color var(--t-fast) var(--ease),
+    transform var(--t-fast) var(--ease);
   user-select:none;
 }
-.qty-btn:hover{ background:#ececec; }
+.qty-btn:hover{ background:#e6edf6; }
 .qty-btn:active{ transform:translateY(0); }
 .qty-input{
-  width:var(--qty-disp-w); height:100%;
-  border:none; border-left:1px solid #e6e6e6; border-right:1px solid #e6e6e6;
-  text-align:center; font-size:16px; background:#fff;
+  width:var(--qty-disp-w);
+  height:100%;
+  border:none;
+  border-left:1px solid #d0d8e4;
+  border-right:1px solid #d0d8e4;
+  text-align:center;
+  font-size:16px;
+  background:#fff;
 }
-.qty-stepper:focus-within{ box-shadow:0 0 0 3px rgba(30,79,123,.15); border-color:#9bb7d3; }
-.qty-btn:focus-visible, .qty-input:focus-visible{ outline:2px solid rgba(30,79,123,.6); outline-offset:2px; }
+.qty-stepper:focus-within{
+  box-shadow:0 0 0 3px rgba(123,138,155,.18);
+  border-color:#9bb0c5;
+}
+.qty-btn:focus-visible,
+.qty-input:focus-visible{
+  outline:2px solid rgba(30,79,123,.55);
+  outline-offset:2px;
+}
 
 /* ===== 寄送方式 ===== */
-.ship-wrap{ width:90%; max-width:500px; margin:8px auto 12px; display:flex; gap:12px; }
+.ship-wrap{
+  width:90%;
+  max-width:520px;
+  margin:10px auto 10px;
+  display:flex;
+  gap:12px;
+}
 .ship-card{
   --glow: rgba(30,79,123,.14);
-  position:relative; flex:1; border-radius:14px;
-  background:linear-gradient(180deg, rgba(255,255,255,.68), rgba(255,255,255,.50));
-  backdrop-filter:blur(12px) saturate(1.04); -webkit-backdrop-filter:blur(12px) saturate(1.04);
-  border:1px solid rgba(255,255,255,.55);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.75), 0 8px 22px rgba(20,40,60,.12);
-  padding:14px 12px; cursor:pointer; user-select:none;
-  transition: transform var(--t-fast) var(--ease), box-shadow var(--t-base) var(--ease), border-color var(--t-fast) var(--ease), filter var(--t-fast) var(--ease);
-  display:flex; flex-direction:column; align-items:center; gap:6px;
+  position:relative;
+  flex:1;
+  border-radius:14px;
+  background:linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.72));
+  -webkit-backdrop-filter:blur(10px) saturate(1.02);
+  backdrop-filter:blur(10px) saturate(1.02);
+  border:1px solid rgba(154,169,191,.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 8px 22px rgba(40,50,70,.09);
+  padding:14px 12px 12px;
+  cursor:pointer;
+  user-select:none;
+  transition:
+    transform var(--t-fast) var(--ease),
+    box-shadow var(--t-base) var(--ease),
+    border-color var(--t-fast) var(--ease),
+    filter var(--t-fast) var(--ease);
+  display:flex;
+  flex-direction:column;
+  align-items:center;           /* 文字置中 */
+  gap:4px;
+  text-align:center;            /* 文字置中 */
 }
-.ship-card:hover{ transform:translateY(-1px); filter:brightness(1.02); }
+.ship-card:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.02);
+}
 .ship-card:active{ transform:translateY(0); }
 .ship-card::after{
-  content:""; position:absolute; inset:0; pointer-events:none; border-radius:inherit;
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
   background:
-    radial-gradient(120% 70% at 50% -20%, rgba(255,255,255,.55), transparent 55%),
+    radial-gradient(120% 70% at 50% -20%, rgba(255,255,255,.7), transparent 55%),
     radial-gradient(120% 90% at 50% 120%, var(--glow), transparent 60%);
-  opacity:.18; transition:opacity var(--t-fast) var(--ease);
+  opacity:.16;
+  transition:opacity var(--t-fast) var(--ease);
 }
-.ship-card input{ position:absolute; opacity:0; inset:0; pointer-events:none; }
+.ship-card input{
+  position:absolute;
+  opacity:0;
+  inset:0;
+  pointer-events:none;
+}
 
 .ship-title{
   font-size:var(--item-size);
   color:var(--item-text);
   font-weight:400;
-  line-height:1.35; letter-spacing:.16em;
+  line-height:1.4;
+  letter-spacing:.16em;
 }
 .ship-price{
-  font-size:15px;
+  font-size:14px;
   line-height:1.35;
   letter-spacing:.08em;
   color:#4f5f70;
@@ -326,151 +565,282 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 /* 選取狀態 */
 .ship-card:has(input:checked),
 .ship-card.selected{
-  border-color:rgba(30,79,123,.55);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.75), 0 12px 32px rgba(30,79,123,.18), 0 0 0 6px rgba(30,79,123,.06);
-  filter:brightness(1.06);
+  border-color:rgba(90,112,142,.9);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.98),
+    0 12px 30px rgba(40,60,90,.2),
+    0 0 0 5px rgba(90,112,142,.16);
+  filter:brightness(1.05);
 }
-.ship-card:has(input:checked)::after{ opacity:.28; }
-.ship-card input:checked ~ .ship-title{ color:var(--item-text) !important; text-shadow:none !重要; }
+.ship-card:has(input:checked)::after{ opacity:.26; }
 
 /* ===== Total ===== */
 .total{
   font-family:'Amatic SC', cursive;
-  font-size:30px; font-weight:900; letter-spacing:2.5px; color:#1E4F7B;
-  margin-top:16px; position:relative; display:inline-block;
-  padding:6px 18px; opacity:0; transform:translateY(10px) scale(.96);
-  transition:opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
-  z-index:0; isolation:isolate;
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:2.5px;
+  color:var(--navy);
+  margin-top:16px;
+  position:relative;
+  display:inline-block;
+  padding:6px 18px;
+  opacity:0;
+  transform:translateY(10px) scale(.96);
+  transition:
+    opacity var(--t-slow) var(--ease),
+    transform var(--t-slow) var(--ease);
+  z-index:0;
+  isolation:isolate;
 }
-.total.show{opacity:1; transform:translateY(0) scale(1);}
+.total.show{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
 .total::before{
-  content:""; position:absolute; left:0; top:50%; width:100%; height:64%;
+  content:"";
+  position:absolute;
+  left:0;
+  top:50%;
+  width:100%;
+  height:64%;
   transform:translateY(-50%) rotate(-1.2deg) scale(1);
   background:linear-gradient(120deg, rgba(255,229,185,.65) 0%, rgba(255,215,160,.5) 100%);
-  border-radius:12px; z-index:-1;
-  filter:blur(1px) saturate(1.05); opacity:.55; mix-blend-mode:soft-light;
+  border-radius:12px;
+  z-index:-1;
+  filter:blur(1px) saturate(1.05);
+  opacity:.55;
+  mix-blend-mode:soft-light;
 }
-@keyframes totalUpdate{ 0%{transform:scale(1);} 50%{transform:scale(1.04);} 100%{transform:scale(1);} }
-.total.animate{ animation: totalUpdate .8s var(--ease); }
+@keyframes totalUpdate{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.04);}
+  100%{transform:scale(1);}
+}
+.total.animate{
+  animation: totalUpdate .8s var(--ease);
+}
 @keyframes glowPulse{
-  0%{opacity:.4; transform:translateY(-50%) rotate(-1.2deg) scale(1); filter:blur(1px) saturate(1.05) brightness(1);}
-  50%{opacity:.85; transform:translateY(-50%) rotate(-1.2deg) scale(1.04); filter:blur(1.6px) saturate(1.15) brightness(1.08);}
-  100%{opacity:.5; transform:translateY(-50%) rotate(-1.2deg) scale(1); filter:blur(1px) saturate(1.05) brightness(1);}
+  0%{
+    opacity:.4;
+    transform:translateY(-50%) rotate(-1.2deg) scale(1);
+    filter:blur(1px) saturate(1.05) brightness(1);
+  }
+  50%{
+    opacity:.85;
+    transform:translateY(-50%) rotate(-1.2deg) scale(1.04);
+    filter:blur(1.6px) saturate(1.15) brightness(1.08);
+  }
+  100%{
+    opacity:.5;
+    transform:translateY(-50%) rotate(-1.2deg) scale(1);
+    filter:blur(1px) saturate(1.05) brightness(1);
+  }
 }
-.total.glow::before{ animation: glowPulse 1.8s var(--ease) 1; }
-
+.total.glow::before{
+  animation: glowPulse 1.8s var(--ease) 1;
+}
 .total-note{
   margin-top:6px;
   font-size:11px;
   color:#6a7a8a;
   letter-spacing:.08em;
+  max-width:520px;
+  margin-left:auto;
+  margin-right:auto;
+  text-align:center;   /* 改成置中 */
 }
 
 /* ===== 匯款資訊卡片 ===== */
 .account-box{
-  width:85%; max-width:350px; margin:25px auto 0;
-  background:rgba(255,255,255,0.55);
-  -webkit-backdrop-filter:blur(12px) brightness(1.05);
-  backdrop-filter:blur(12px) brightness(1.05);
-  border:1px solid rgba(255,255,255,0.4);
-  color:#333; padding:16px; border-radius:16px; font-size:13px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.07);
+  width:85%;
+  max-width:360px;
+  margin:26px auto 0;
+  background:rgba(255,255,255,0.88);
+  -webkit-backdrop-filter:blur(11px) brightness(1.04);
+  backdrop-filter:blur(11px) brightness(1.04);
+  border:none;                 /* 不要外框線 */
+  color:#333;
+  padding:16px 16px 18px;
+  border-radius:16px;
+  font-size:13px;
+  box-shadow:0 10px 26px rgba(0,0,0,0.07);
+  text-align:left;
 }
 .account-box h3{
-  margin:8px 0;
+  margin:4px 0 10px;
   font-weight:600;
   font-size:15px;
   color:#44566C;
   letter-spacing:.5px;
 }
 
+/* 讓複製按鈕在匯款卡片裡置中 */
+#copyBtn{
+  display:block;
+  margin:10px auto 0;
+}
+
 /* ===== 按鈕 ===== */
 .btn{
-  display:inline-flex; align-items:center; gap:8px;
-  padding:12px 22px; border-radius:999px; border:1px solid transparent;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:12px 22px;
+  border-radius:999px;
+  border:1px solid transparent;
   font:600 15px 'Noto Serif TC','Microsoft JhengHei',serif;
   letter-spacing:.12em;
-  cursor:pointer; user-select:none;
-  transition:transform .2s var(--ease), box-shadow .3s var(--ease),
-             background-color .2s var(--ease), border-color .2s var(--ease), filter .2s;
+  cursor:pointer;
+  user-select:none;
+  transition:
+    transform .18s var(--ease),
+    box-shadow .28s var(--ease),
+    background-color .18s var(--ease),
+    border-color .18s var(--ease),
+    filter .18s;
 }
 .btn:hover{ transform:translateY(-1px); }
 .btn:active{ transform:translateY(0); }
-.btn:focus-visible{ outline:2px solid rgba(30,79,123,.4); outline-offset:2px; }
+.btn:focus-visible{
+  outline:2px solid rgba(30,79,123,.4);
+  outline-offset:2px;
+}
 
 /* 蠟筆塊底 */
 .btn-crayon{
-  color:#fff; background:var(--crayon-blue);
+  color:#fff;
+  background:var(--crayon-blue);
   border:1px solid var(--crayon-blue-ink);
   border-radius:22px 20px 24px 21px / 21px 24px 20px 22px;
-  box-shadow:0 8px 18px rgba(60,81,104,.22), inset 0 1px 0 rgba(255,255,255,.18);
-  position:relative; overflow:hidden;
+  box-shadow:
+    0 8px 18px rgba(60,81,104,.22),
+    inset 0 1px 0 rgba(255,255,255,.18);
+  position:relative;
+  overflow:hidden;
 }
 .btn-crayon::before{
-  content:""; position:absolute; inset:0; opacity:.18; pointer-events:none;
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:.16;
+  pointer-events:none;
   background:
-    repeating-linear-gradient(12deg, rgba(255,255,255,.08) 0 2px, rgba(255,255,255,0) 2px 6px),
-    repeating-linear-gradient(-8deg, rgba(0,0,0,.04) 0 1px, rgba(0,0,0,0) 1px 5px);
+    repeating-linear-gradient(14deg, rgba(255,255,255,.09) 0 2px, rgba(255,255,255,0) 2px 6px),
+    repeating-linear-gradient(-10deg, rgba(0,0,0,.04) 0 1px, rgba(0,0,0,0) 1px 5px);
 }
-.btn-crayon:hover{ filter:brightness(1.06) saturate(1.03); }
+.btn-crayon:hover{
+  filter:brightness(1.06) saturate(1.02);
+}
 
 /* 手繪描邊 */
 .btn-sketch{
-  color:var(--navy); background:transparent;
+  color:var(--navy);
+  background:transparent;
   border:2px solid var(--navy);
   border-radius:22px 18px 24px 20px / 20px 24px 18px 22px;
   box-shadow:0 2px 0 rgba(30,79,123,.08);
   position:relative;
 }
 .btn-sketch::after{
-  content:""; position:absolute; inset:3px; border-radius:inherit;
-  border:1px dashed rgba(30,79,123,.45); pointer-events:none;
+  content:"";
+  position:absolute;
+  inset:3px;
+  border-radius:inherit;
+  border:1px dashed rgba(30,79,123,.45);
+  pointer-events:none;
 }
 .btn-sketch:hover{ filter:brightness(1.02); }
 
 /* ===== 提示字 ===== */
 #formReminder{
-  font-size:14px; color:#555; margin-top:16px;
-  opacity:0; transform:translateY(14px);
-  transition:opacity .8s var(--ease), transform .8s var(--ease);
+  font-size:13.5px;
+  color:#555;
+  margin-top:16px;
+  opacity:0;
+  transform:translateY(14px);
+  transition:
+    opacity .8s var(--ease),
+    transform .8s var(--ease);
   letter-spacing:.12em;
 }
-#formReminder.in{ opacity:1; transform:translateY(0); }
+#formReminder.in{
+  opacity:1;
+  transform:translateY(0);
+}
 
 /* ===== Toast ===== */
 .toast{
-  position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(20px);
-  min-width:260px; max-width:92vw;
+  position:fixed;
+  left:50%;
+  bottom:22px;
+  transform:translateX(-50%) translateY(20px);
+  min-width:260px;
+  max-width:92vw;
   color:#1E4F7B;
-  background:rgba(255,255,255,.75);
+  background:rgba(255,255,255,.88);
   border:1px solid rgba(30,79,123,.18);
-  border-radius:12px; padding:12px 16px;
-  font-size:14px; font-weight:600;
+  border-radius:12px;
+  padding:12px 16px;
+  font-size:14px;
+  font-weight:600;
   -webkit-backdrop-filter: blur(12px) saturate(1.1);
   backdrop-filter: blur(12px) saturate(1.1);
-  box-shadow:0 10px 28px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,.6);
-  opacity:0; pointer-events:none; z-index:99999;
-  transition:opacity .5s var(--ease), transform .5s var(--ease);
+  box-shadow:
+    0 10px 24px rgba(0,0,0,0.12),
+    inset 0 1px 0 rgba(255,255,255,.6);
+  opacity:0;
+  pointer-events:none;
+  z-index:99999;
+  transition:
+    opacity .5s var(--ease),
+    transform .5s var(--ease);
 }
 .toast::before{
-  content:""; position:absolute; left:0; top:0; bottom:0; width:6px;
-  border-top-left-radius:12px; border-bottom-left-radius:12px;
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:6px;
+  border-top-left-radius:12px;
+  border-bottom-left-radius:12px;
   background:linear-gradient(180deg, #3a6aa1, #1E4F7B);
   box-shadow:0 0 0 1px rgba(30,79,123,.18) inset;
 }
-.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* ===== footer 小字 ===== */
+.footer-note{
+  margin-top:40px;
+  font-size:11px;
+  color:#8a8a84;
+  letter-spacing:.08em;
+  text-align:left;
+}
 
 /* ===== 手機優化 ===== */
 @media (max-width:480px){
-  :root{ --qty-btn-w: 30px; --qty-disp-w: 44px; }
+  :root{
+    --qty-btn-w: 30px;
+    --qty-disp-w: 44px;
+  }
 
   body{
-    letter-spacing:.03em;          /* 全體字距稍微放寬 */
+    letter-spacing:.03em;
   }
 
   h2{
-    font-size:60px;               /* 手機比上一版再放大一點 */
+    font-size:64px;
     margin-top:22px;
+    letter-spacing:.12em;
+  }
+
+  .page-inner{
+    padding:0 14px 40px;
   }
 
   .brand-tagline{
@@ -481,7 +851,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   .promo-inline{
     font-size:13px;
     width:96%;
-    letter-spacing:.18em;          /* 手機上拉開一點 */
+    letter-spacing:.18em;
   }
 
   .section-title{
@@ -491,25 +861,32 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 
   table{
     font-size:14px;
-    width:94%;
+    width:96%;
   }
   .col-price { width:100px; }
   .col-action{ width:130px; }
-  #productTable td:nth-child(3), #productTable th:nth-child(3){
-    padding-left:4px; padding-right:4px;
+  #productTable td:nth-child(3),
+  #productTable th:nth-child(3){
+    padding-left:4px;
+    padding-right:4px;
   }
 
   .input-container{
-    width:92%;
+    width:100%;
     padding:18px 16px 20px;
   }
   .input-group label{
     font-size:13.5px;
   }
 
+  .ship-wrap{
+    width:100%;
+    flex-direction:column;
+  }
+
   .account-box{
     font-size:12.5px;
-    width:92%;
+    width:100%;
   }
 
   .btn{
@@ -528,15 +905,6 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   }
   #startBtn{
     margin-top:14px;
-  }
-
-  .ship-wrap{width:94%;}
-  .ship-title{
-    font-size:14px;
-    letter-spacing:.18em;
-  }
-  .ship-price{
-    font-size:14px;
   }
 
   .total{
@@ -573,109 +941,117 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 
 <!-- ===== 主內容 ===== -->
 <main id="mainContent" aria-describedby="formReminder">
-  <h2 id="pageTitle"><span class="english">LIU MAMA Order</span></h2>
+  <div class="page-inner">
+    <h2 id="pageTitle"><span class="english">LIU MAMA Order</span></h2>
 
-  <!-- 標語 ＋ 優惠區 -->
-  <p class="brand-tagline">
-    手炒的麻辣，暖心又暖胃
-  </p>
-  <p id="promoInline" class="promo-inline">
-    <span class="promo-mark">⛧</span>
-    11/17 ~ 12/17 開賣價
-    <strong class="price-red">$299</strong>
-    <span class="promo-sep">·</span>
-    倒數 <strong class="promo-days" id="promoDays">-- 天</strong>
-  </p>
+    <!-- 標語 ＋ 優惠區 -->
+    <div class="brand-block">
+      <p class="brand-tagline">
+        手炒的麻辣，暖心又暖胃
+      </p>
+      <p id="promoInline" class="promo-inline">
+        <span class="promo-mark">⛧</span>
+        11/17 » 12/17 開賣價
+        <strong class="price-red">$299</strong>
+        <span class="promo-sep">·</span>
+        倒數 <strong class="promo-days" id="promoDays">-- 天</strong>
+      </p>
+    </div>
 
-  <section class="reveal left">
-    <p class="section-title">請填寫訂購人資訊</p>
-    <div class="input-container">
-      <div class="input-group">
-        <label for="customerName">訂購人姓名</label>
-        <input type="text" id="customerName" placeholder="請輸入姓名"
-               autocomplete="name" enterkeyhint="next">
-        <small class="error-hint" id="errName" hidden></small>
+    <section class="reveal left">
+      <p class="section-title">請填寫訂購人資訊</p>
+      <div class="input-container">
+        <div class="input-group">
+          <label for="customerName">訂購人姓名</label>
+          <input type="text" id="customerName" placeholder="請輸入姓名"
+                 autocomplete="name" enterkeyhint="next">
+          <small class="error-hint" id="errName" hidden></small>
+        </div>
+        <div class="input-group">
+          <label for="customerPhone">訂購人電話</label>
+          <input type="text" id="customerPhone" placeholder="請輸入電話"
+                 inputmode="numeric" pattern="[0-9]*" maxlength="10" enterkeyhint="next" autocomplete="tel">
+          <small class="error-hint" id="errPhone" hidden></small>
+        </div>
+        <div class="input-group">
+          <label for="customerEmail">訂購人 Email</label>
+          <input type="email" id="customerEmail" placeholder="請輸入 Email"
+                 autocomplete="email" enterkeyhint="done" inputmode="email" list="emailHints">
+          <datalist id="emailHints"></datalist>
+          <small class="error-hint" id="errEmail" hidden></small>
+        </div>
       </div>
-      <div class="input-group">
-        <label for="customerPhone">訂購人電話</label>
-        <input type="text" id="customerPhone" placeholder="請輸入電話"
-               inputmode="numeric" pattern="[0-9]*" maxlength="10" enterkeyhint="next" autocomplete="tel">
-        <small class="error-hint" id="errPhone" hidden></small>
+    </section>
+
+    <section class="reveal right">
+      <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
+
+      <table id="productTable">
+        <colgroup>
+          <col class="col-item"><col class="col-price"><col class="col-action">
+        </colgroup>
+        <tr><th>品項</th><th>價格</th><th>數量</th></tr>
+        <tr>
+          <td>手抄麻辣底料包<br><small>(2人份)</small></td>
+          <td>
+            <div class="price-cell">
+              <span class="price-old">$320</span>
+              <span class="price-new">$299</span>
+            </div>
+          </td>
+          <td>
+            <div class="qty-stepper" role="group" aria-label="數量">
+              <button type="button" class="qty-btn" id="qtyMinus" aria-label="減少">−</button>
+              <input id="qtyInput" class="qty-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
+                     value="0" role="spinbutton" aria-valuemin="0" aria-valuemax="35" aria-valuenow="0" aria-live="polite">
+              <button type="button" class="qty-btn" id="qtyPlus" aria-label="增加">＋</button>
+            </div>
+            <select id="qty1" onchange="calculate()" aria-label="數量" hidden></select>
+          </td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- 寄送方式 -->
+    <section class="reveal left">
+      <div class="ship-wrap" role="radiogroup" aria-label="寄送方式">
+        <label class="ship-card" for="ship711">
+          <input type="radio" name="shipMethod" id="ship711" value="711">
+          <div class="ship-title">711超商取貨</div>
+          <div class="ship-price">$60</div>
+          <div class="ship-note">常溫寄送，約 2–3 個工作天抵達門市</div>
+        </label>
+        <label class="ship-card" for="shipPost">
+          <input type="radio" name="shipMethod" id="shipPost" value="post">
+          <div class="ship-title">宅配到家</div>
+          <div class="ship-price">$120</div>
+          <div class="ship-note">適合大量訂購或送禮，由物流人員送達府上</div>
+        </label>
       </div>
-      <div class="input-group">
-        <label for="customerEmail">訂購人 Email</label>
-        <input type="email" id="customerEmail" placeholder="請輸入 Email"
-               autocomplete="email" enterkeyhint="done" inputmode="email" list="emailHints">
-        <datalist id="emailHints"></datalist>
-        <small class="error-hint" id="errEmail" hidden></small>
+
+      <div class="total" id="total" role="status" aria-live="polite" aria-atomic="true">Total Amount: $0</div>
+      <div class="total-note">金額已含寄送費用 · 單位：新台幣</div>
+    </section>
+
+    <!-- 匯款資訊 + 按鈕 -->
+    <section class="reveal right">
+      <div class="account-box">
+        <h3>請匯款至以下帳戶:</h3>
+        <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
+        <button id="copyBtn" class="btn btn-crayon" onclick="copyAccount()">複製匯款帳號</button>
       </div>
-    </div>
-  </section>
 
-  <section class="reveal right">
-    <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
+      <div id="buttonContainer" style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:32px;">
+        <button id="screenshotBtn" class="btn btn-crayon" onclick="screenshotOrder()">保存訂單截圖</button>
+        <button id="formBtn" class="btn btn-sketch" onclick="goToForm()">下一步：填寫寄送資訊</button>
+      </div>
+      <p id="formReminder">煩請先匯款後，一定要按「下一步」填寫寄送資訊！</p>
 
-    <table id="productTable">
-      <colgroup>
-        <col class="col-item"><col class="col-price"><col class="col-action">
-      </colgroup>
-      <tr><th>品項</th><th>價格</th><th>數量</th></tr>
-      <tr>
-        <td>手抄麻辣底料包<br><small>(2人份)</small></td>
-        <td>
-          <div class="price-cell">
-            <span class="price-old">$320</span>
-            <span class="price-new">$299</span>
-          </div>
-        </td>
-        <td>
-          <div class="qty-stepper" role="group" aria-label="數量">
-            <button type="button" class="qty-btn" id="qtyMinus" aria-label="減少">−</button>
-            <input id="qtyInput" class="qty-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
-                   value="0" role="spinbutton" aria-valuemin="0" aria-valuemax="35" aria-valuenow="0" aria-live="polite">
-            <button type="button" class="qty-btn" id="qtyPlus" aria-label="增加">＋</button>
-          </div>
-          <select id="qty1" onchange="calculate()" aria-label="數量" hidden></select>
-        </td>
-      </tr>
-    </table>
-  </section>
-
-  <!-- 寄送方式 -->
-  <section class="reveal left">
-    <div class="ship-wrap" role="radiogroup" aria-label="寄送方式">
-      <label class="ship-card" for="ship711">
-        <input type="radio" name="shipMethod" id="ship711" value="711">
-        <div class="ship-title">711超商取貨</div>
-        <div class="ship-price">$60</div>
-        <div class="ship-note">常溫寄送，約 2–3 個工作天抵達門市</div>
-      </label>
-      <label class="ship-card" for="shipPost">
-        <input type="radio" name="shipMethod" id="shipPost" value="post">
-        <div class="ship-title">宅配到家</div>
-        <div class="ship-price">$120</div>
-        <div class="ship-note">適合大量訂購或送禮，送貨到府</div>
-      </label>
-    </div>
-
-    <div class="total" id="total" role="status" aria-live="polite" aria-atomic="true">Total Amount: $0</div>
-    <div class="total-note">金額已含寄送費用 · 單位：新台幣</div>
-  </section>
-
-  <!-- 匯款資訊 + 按鈕 -->
-  <section class="reveal right">
-    <div class="account-box">
-      <h3>請匯款至以下帳戶:</h3>
-      <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
-      <button id="copyBtn" class="btn btn-crayon" onclick="copyAccount()">複製匯款帳號</button>
-    </div>
-
-    <div id="buttonContainer" style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:32px;">
-      <button id="screenshotBtn" class="btn btn-crayon" onclick="screenshotOrder()">保存訂單截圖</button>
-      <button id="formBtn" class="btn btn-sketch" onclick="goToForm()">下一步：填寫寄送資訊</button>
-    </div>
-    <p id="formReminder">煩請先匯款後,一定要按下一步填寫寄送資訊!</p>
-  </section>
+      <div class="footer-note">
+        © LIU MAMA 2015–2025 · Hand-crafted mala base from Taipei
+      </div>
+    </section>
+  </div>
 </main>
 
 <!-- Toast -->
@@ -718,7 +1094,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   const select=document.getElementById('qty1');
   for(let i=0;i<=35;i++){
     const o=document.createElement('option');
-    o.value=i; o.textContent=i;
+    o.value=i;
+    o.textContent=i;
     select.appendChild(o);
   }
   select.value="0";
@@ -848,12 +1225,11 @@ function enableEmailAutoSuggest(){
 
 /* ===== 一行優惠 倒數 ===== */
 function setupInlinePromo(){
-  const wrap = document.getElementById('promoInline');
   const daysEl = document.getElementById('promoDays');
-  if(!wrap || !daysEl){ return; }
+  if(!daysEl){ return; }
 
   try{
-    const now   = new Date();                 // 使用者當地時間
+    const now   = new Date();
     const year  = now.getFullYear();
     const end   = new Date(year, 11, 17, 23, 59, 59); // 12/17 23:59:59
 
@@ -867,10 +1243,10 @@ function setupInlinePromo(){
         animatePromoNumber(daysEl, d2);
       }, Math.max(1000, midnightNext - now + 50));
     }else{
-      daysEl.textContent = '0 天.ᐟ';
+      daysEl.textContent = '0 天';
     }
   }catch(err){
-    daysEl.textContent = '— 天.ᐟ';
+    daysEl.textContent = '— 天';
   }
 }
 
@@ -887,7 +1263,7 @@ function animatePromoNumber(el, target){
   function frame(now){
     const p = Math.min(1, (now - t0) / duration);
     const v = Math.max(0, Math.round(from + (target - from) * ease(p)));
-    el.textContent = v + ' 天.ᐟ';
+    el.textContent = v + ' 天';
     if(p < 1){ requestAnimationFrame(frame); }
   }
   el.classList.remove('animate'); void el.offsetWidth; el.classList.add('animate');
@@ -996,18 +1372,28 @@ function animateTotal(target, isInit){
     el.classList.add('show');
     return;
   }
-  el.classList.remove('animate','glow'); void el.offsetWidth; el.classList.add('animate','glow');
+  el.classList.remove('animate','glow');
+  void el.offsetWidth;
+  el.classList.add('animate','glow');
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     lastTotal=target;
     el.textContent='Total Amount: $'+target;
     return;
   }
-  const dur=900, t0=performance.now(), from=lastTotal, d=target-from, ease=t=>1-Math.pow(1-t,3);
+  const dur=900;
+  const t0=performance.now();
+  const from=lastTotal;
+  const d=target-from;
+  const ease=t=>1-Math.pow(1-t,3);
   function frame(now){
     const p=Math.min(1,(now-t0)/dur);
     const v=Math.round(from+d*ease(p));
     el.textContent='Total Amount: $'+v;
-    if(p<1){ requestAnimationFrame(frame);} else { lastTotal=target; }
+    if(p<1){
+      requestAnimationFrame(frame);
+    }else{
+      lastTotal=target;
+    }
   }
   requestAnimationFrame(frame);
 }
@@ -1047,8 +1433,12 @@ function screenshotOrder(){
 }
 function showToast(msg){
   const el=document.getElementById('toast');
-  if(!el){ alert(msg); return; }
-  el.textContent=msg; el.classList.add('show');
+  if(!el){
+    alert(msg);
+    return;
+  }
+  el.textContent=msg;
+  el.classList.add('show');
   clearTimeout(showToast._t);
   showToast._t=setTimeout(()=>el.classList.remove('show'),2200);
 }
@@ -1079,21 +1469,32 @@ function goToForm(){
   setFieldError(email,'errEmail','');
 
   if(!name.value.trim()){
-    setFieldError(name,'errName','請輸入訂購人姓名'); ok=false;
+    setFieldError(name,'errName','請輸入訂購人姓名');
+    ok=false;
   }
   if(!phone.value.trim()){
-    setFieldError(phone,'errPhone','請輸入訂購人電話'); ok=false;
+    setFieldError(phone,'errPhone','請輸入訂購人電話');
+    ok=false;
   }else if(!/^\d{10}$/.test(phone.value.trim())){
-    setFieldError(phone,'errPhone','電話需為 10 碼數字'); ok=false;
+    setFieldError(phone,'errPhone','電話需為 10 碼數字');
+    ok=false;
   }
   if(!email.value.trim()){
-    setFieldError(email,'errEmail','請輸入 Email'); ok=false;
+    setFieldError(email,'errEmail','請輸入 Email');
+    ok=false;
   }else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())){
-    setFieldError(email,'errEmail','Email 格式不正確'); ok=false;
+    setFieldError(email,'errEmail','Email 格式不正確');
+    ok=false;
   }
 
-  if(qty<=0){ showToast('請選擇購買數量'); ok=false; }
-  if(!method){ showToast('請選擇寄送方式'); ok=false; }
+  if(qty<=0){
+    showToast('請選擇購買數量');
+    ok=false;
+  }
+  if(!method){
+    showToast('請選擇寄送方式');
+    ok=false;
+  }
   if(!ok) return;
 
   const shipLabel = (method.value==='711') ? '711超商取貨' : '宅配到家';
@@ -1112,17 +1513,24 @@ function goToForm(){
 
 /* ===== Ripple（鍵盤也可觸發） ===== */
 function triggerRipple(e){
-  const btn=e.currentTarget, rect=btn.getBoundingClientRect();
+  const btn=e.currentTarget;
+  const rect=btn.getBoundingClientRect();
   btn.style.setProperty('--rx',(e.clientX-rect.left)+'px');
   btn.style.setProperty('--ry',(e.clientY-rect.top)+'px');
-  btn.classList.remove('rippling'); void btn.offsetWidth; btn.classList.add('rippling');
+  btn.classList.remove('rippling');
+  void btn.offsetWidth;
+  btn.classList.add('rippling');
 }
 document.addEventListener('keydown',(e)=>{
   if(e.key==='Enter'){
     const btn=document.getElementById('startBtn');
     if(document.activeElement===btn){
       const r=btn.getBoundingClientRect();
-      triggerRipple({currentTarget:btn, clientX:r.left+r.width/2, clientY:r.top+r.height/2});
+      triggerRipple({
+        currentTarget:btn,
+        clientX:r.left+r.width/2,
+        clientY:r.top+r.height/2
+      });
     }
   }
 });
