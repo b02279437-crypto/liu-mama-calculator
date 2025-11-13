@@ -275,7 +275,7 @@ h2.title-in{
 }
 .brand-tagline{
   margin:6px 0 6px;
-  font-size:14px;          /* ↓ 縮小一點 */
+  font-size:14px;          /* 縮小 */
   color:#3f4f61;
   letter-spacing:.38em;
   text-indent:.38em;
@@ -284,7 +284,7 @@ h2.title-in{
 .promo-inline{
   width:min(640px, 100%);
   margin:0 auto 4px;
-  font-size:12.5px;        /* ↓ 也縮小一點 */
+  font-size:12.5px;        /* 縮小 */
   line-height:1.7;
   color:var(--promo-text);
   letter-spacing:.16em;
@@ -861,11 +861,11 @@ th{
   }
 
   .brand-tagline{
-    font-size:13px;      /* 手機再小一點 */
+    font-size:13px;
     letter-spacing:.3em;
   }
   .promo-inline{
-    font-size:12px;      /* 手機版優惠行縮小 */
+    font-size:12px;
     width:100%;
     letter-spacing:.16em;
   }
@@ -880,7 +880,6 @@ th{
     width:96%;
   }
 
-  /* 手機版品項欄文字再大一點 */
   #productTable td:first-child{
     font-size:15px;
   }
@@ -1081,7 +1080,7 @@ th{
       <p id="formReminder">煩請先匯款後，一定要按「下一步」填寫寄送資訊！</p>
 
       <div class="footer-note">
-        © LIU MAMA 2015–2025 · Hand-crafted mala base from Taipei
+        © LIU MAMA 2015–2025 · Handcrafted spicy mala hot pot from Taipei
       </div>
     </section>
   </div>
@@ -1124,17 +1123,23 @@ async function startIntroSequence(){
 /* ===== scroll reveal：滑動到區塊時才淡入 ===== */
 function setupRevealOnScroll(){
   const reveals=document.querySelectorAll('.reveal');
-  if(!('IntersectionObserver' in window) || !reveals.length){
+  if(!reveals.length){ return; }
+
+  // 沒有 IntersectionObserver 時，全部直接顯示
+  if(!('IntersectionObserver' in window)){
     reveals.forEach(el=>el.classList.add('in'));
     const fr=document.getElementById('formReminder');
     if(fr) fr.classList.add('in');
     return;
   }
+
   const io=new IntersectionObserver((entries,observer)=>{
     entries.forEach(entry=>{
       if(entry.isIntersecting){
         entry.target.classList.add('in');
         observer.unobserve(entry.target);
+
+        // 如果這個 section 裡有 formReminder，就順便淡入
         if(entry.target.contains(document.getElementById('formReminder'))){
           const fr=document.getElementById('formReminder');
           if(fr) fr.classList.add('in');
@@ -1142,6 +1147,7 @@ function setupRevealOnScroll(){
       }
     });
   },{threshold:0.15});
+
   reveals.forEach(el=>io.observe(el));
 }
 
@@ -1172,6 +1178,9 @@ window.addEventListener('DOMContentLoaded',()=>{
       intro.style.display='none';
       main.classList.add('show');
       if(pageTitle){ pageTitle.classList.add('title-in'); }
+
+      // ⭐ 在主畫面顯示後才啟動捲動淡入
+      setupRevealOnScroll();
     },600);
   });
 
@@ -1207,7 +1216,6 @@ window.addEventListener('DOMContentLoaded',()=>{
   });
 
   enableEmailAutoSuggest();
-  setupRevealOnScroll();
 });
 
 /* ===== Email 智慧建議：只留常用四種 ===== */
