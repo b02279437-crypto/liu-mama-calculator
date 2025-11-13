@@ -154,7 +154,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 
   background:rgba(255,255,255,.80);
   border-radius:999px;
-  border:none; /* ✅ 取消外框線 */
+  border:none;
 
   -webkit-backdrop-filter:blur(16px) saturate(1.08);
   backdrop-filter:blur(16px) saturate(1.08);
@@ -862,8 +862,9 @@ th{
     letter-spacing:.03em;
   }
 
+  /* ✅ 手機：整體左右留白加大，避免滿版 */
   .page-inner{
-    padding:0 22px 40px; /* ✅ 手機左右留白加大 */
+    padding:0 32px 40px;
   }
 
   h2{
@@ -908,7 +909,7 @@ th{
     font-size:13.5px;
   }
 
-  /* ✅ 手機：寄送方式仍保持左右並排 */
+  /* ✅ 手機：寄送方式仍保持左右並排，吃 page-inner 留白 */
   .ship-wrap{
     width:100%;
     gap:10px;
@@ -933,7 +934,7 @@ th{
   }
 
   .btn{
-    padding:10px 18px;   /* ✅ 手機按鈕不要太大 */
+    padding:10px 18px;
     font-size:14px;
     letter-spacing:.13em;
   }
@@ -948,7 +949,7 @@ th{
   }
   #startBtn{
     margin-top:16px;
-    padding:9px 22px 10px;        /* ✅ 手機開始訂購按鈕再小一點 */
+    padding:9px 22px 10px;
   }
   #startBtn .btn-main{
     font-size:13px;
