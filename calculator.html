@@ -111,9 +111,9 @@ main{
 }
 main.show{opacity:1; visibility:visible;}
 
-/* ===== 標題 + 新動畫（縮小一點，手機也較小） ===== */
+/* ===== 標題 + 新動畫（稍微放大） ===== */
 h2{
-  font-size:80px;
+  font-size:86px;          /* ← 放大一點 */
   font-weight:900;
   color:#1E4F7B;
   margin:28px 0 6px 0;
@@ -467,7 +467,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 @media (max-width:480px){
   :root{ --qty-btn-w: 30px; --qty-disp-w: 44px; }
 
-  h2{font-size:48px;}
+  h2{font-size:52px;}   /* ← 手機也稍微放大，但不會太大 */
 
   table{font-size:13.5px; width:94%;}
   .col-price { width:100px; }
@@ -681,7 +681,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       intro.style.display='none';
       main.classList.add('show');
 
-      // 標題進場動畫（新的 titleFloat）
+      // 標題進場動畫
       if(pageTitle){
         pageTitle.classList.add('title-in');
       }
