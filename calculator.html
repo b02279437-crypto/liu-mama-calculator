@@ -113,12 +113,13 @@ main.show{opacity:1; visibility:visible;}
 
 /* ===== 標題 + 新動畫（稍微放大） ===== */
 h2{
-  font-size:86px;          /* ← 放大一點 */
+  font-size:86px;
   font-weight:900;
   color:#1E4F7B;
   margin:28px 0 6px 0;
   opacity:0;
   transform:translateY(12px);
+  letter-spacing:.1em;
 }
 h2 .english{font-family:'Amatic SC',cursive; font-weight:900;}
 
@@ -145,8 +146,8 @@ h2.title-in{
   margin:10px 0 4px;
   font-size:15px;
   color:#3f4f61;
-  letter-spacing:.38em;
-  text-indent:.38em;
+  letter-spacing:.42em;  /* 再拉開一點點 */
+  text-indent:.42em;
   font-weight:500;
 }
 
@@ -156,7 +157,7 @@ h2.title-in{
   margin:2px auto 12px;
   font-size:13px; line-height:1.7;
   color:var(--promo-text);
-  letter-spacing:.14em;
+  letter-spacing:.16em;  /* 稍微加寬字距 */
 }
 .promo-inline .price-red{
   color:var(--promo-red);
@@ -179,19 +180,13 @@ h2.title-in{
 }
 .promo-days.animate{ animation: promoBounce .85s var(--ease); }
 @keyframes promoBounce{ 0%{transform:scale(1);} 45%{transform:scale(1.08);} 100%{transform:scale(1);} }
-@media (max-width:480px){
-  .promo-inline{
-    font-size:12.2px;
-    width:96%;
-    letter-spacing:.12em;
-  }
-}
 
 /* 區塊小標 */
 .section-title{
   font-size:14px; color:#555; margin:24px 0 8px;
   display:inline-flex; align-items:center; gap:10px;
   position:relative;
+  letter-spacing:.16em;
 }
 .section-title::before,
 .section-title::after{
@@ -220,7 +215,7 @@ h2.title-in{
 }
 .input-group{display:flex; flex-direction:column; gap:5px; margin-bottom:18px;}
 .input-group label{
-  font-size:13px; color:#444; letter-spacing:.06em;
+  font-size:13px; color:#444; letter-spacing:.08em;
 }
 .input-group input{
   font-size:16px; height:var(--control-h); line-height:calc(var(--control-h) - 2px);
@@ -314,18 +309,18 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   font-size:var(--item-size);
   color:var(--item-text);
   font-weight:400;
-  line-height:1.35; letter-spacing:.2px;
+  line-height:1.35; letter-spacing:.16em;
 }
 .ship-price{
   font-size:15px;
   line-height:1.35;
-  letter-spacing:.2px;
+  letter-spacing:.08em;
   color:#4f5f70;
 }
 .ship-note{
   font-size:11px;
   color:#6f7b8a;
-  letter-spacing:.04em;
+  letter-spacing:.08em;
 }
 
 /* 選取狀態 */
@@ -336,7 +331,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   filter:brightness(1.06);
 }
 .ship-card:has(input:checked)::after{ opacity:.28; }
-.ship-card input:checked ~ .ship-title{ color:var(--item-text) !important; text-shadow:none !important; }
+.ship-card input:checked ~ .ship-title{ color:var(--item-text) !important; text-shadow:none !重要; }
 
 /* ===== Total ===== */
 .total{
@@ -394,7 +389,8 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   display:inline-flex; align-items:center; gap:8px;
   padding:12px 22px; border-radius:999px; border:1px solid transparent;
   font:600 15px 'Noto Serif TC','Microsoft JhengHei',serif;
-  letter-spacing:.2px; cursor:pointer; user-select:none;
+  letter-spacing:.12em;
+  cursor:pointer; user-select:none;
   transition:transform .2s var(--ease), box-shadow .3s var(--ease),
              background-color .2s var(--ease), border-color .2s var(--ease), filter .2s;
 }
@@ -437,6 +433,7 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
   font-size:14px; color:#555; margin-top:16px;
   opacity:0; transform:translateY(14px);
   transition:opacity .8s var(--ease), transform .8s var(--ease);
+  letter-spacing:.12em;
 }
 #formReminder.in{ opacity:1; transform:translateY(0); }
 
@@ -467,22 +464,84 @@ th{ background-color:var(--gray-blue); color:#fff; font-weight:500; }
 @media (max-width:480px){
   :root{ --qty-btn-w: 30px; --qty-disp-w: 44px; }
 
-  h2{font-size:52px;}   /* ← 手機也稍微放大，但不會太大 */
+  body{
+    letter-spacing:.03em;          /* 全體字距稍微放寬 */
+  }
 
-  table{font-size:13.5px; width:94%;}
+  h2{
+    font-size:60px;               /* 手機比上一版再放大一點 */
+    margin-top:22px;
+  }
+
+  .brand-tagline{
+    font-size:15px;
+    letter-spacing:.46em;
+  }
+
+  .promo-inline{
+    font-size:13px;
+    width:96%;
+    letter-spacing:.18em;          /* 手機上拉開一點 */
+  }
+
+  .section-title{
+    font-size:13.5px;
+    letter-spacing:.18em;
+  }
+
+  table{
+    font-size:14px;
+    width:94%;
+  }
   .col-price { width:100px; }
   .col-action{ width:130px; }
-  #productTable td:nth-child(3), #productTable th:nth-child(3){ padding-left:4px; padding-right:4px; }
+  #productTable td:nth-child(3), #productTable th:nth-child(3){
+    padding-left:4px; padding-right:4px;
+  }
 
-  .input-container{width:90%; padding:18px;}
-  .account-box{font-size:12.5px; width:90%;}
-  .btn{ padding:11px 18px; font-size:15px; }
-  #intro-hero{width:clamp(240px, 68vw, 360px); margin:14px auto -66px;}
-  #intro-text{margin-top:-34px; line-height:1.9;}
-  #startBtn{ margin-top:14px; }
+  .input-container{
+    width:92%;
+    padding:18px 16px 20px;
+  }
+  .input-group label{
+    font-size:13.5px;
+  }
+
+  .account-box{
+    font-size:12.5px;
+    width:92%;
+  }
+
+  .btn{
+    padding:11px 20px;
+    font-size:15px;
+    letter-spacing:.14em;
+  }
+
+  #intro-hero{
+    width:clamp(240px, 68vw, 360px);
+    margin:14px auto -66px;
+  }
+  #intro-text{
+    margin-top:-34px;
+    line-height:1.9;
+  }
+  #startBtn{
+    margin-top:14px;
+  }
+
   .ship-wrap{width:94%;}
-  .ship-title{font-size:13.5px;}
-  .ship-price{font-size:13.5px;}
+  .ship-title{
+    font-size:14px;
+    letter-spacing:.18em;
+  }
+  .ship-price{
+    font-size:14px;
+  }
+
+  .total{
+    font-size:28px;
+  }
 }
 
 /* ===== 無動化偏好 ===== */
