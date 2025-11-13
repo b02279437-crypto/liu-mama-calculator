@@ -77,7 +77,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   color:rgba(120,120,120,.7);
 }
 
-/* 主要內容容器（保留適度留白） */
+/* 主要內容容器 */
 .page-inner{
   max-width:720px;
   margin:0 auto 56px;
@@ -140,7 +140,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 }
 #intro-text.show{opacity:1;}
 
-/* 開始訂購按鈕（STAR ORDER 在上、中文在下；無外框線） */
+/* 開始訂購按鈕：STAR ORDER 在上，中文在下；無外框線 */
 #startBtn{
   margin-top:18px;
   padding:10px 26px 11px;
@@ -192,7 +192,6 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   font-size:15px;
   transform:translateY(0.5px);
 }
-
 #startBtn.show{opacity:1; transform:translateY(0);}
 #startBtn:hover{
   transform:translateY(-1px);
@@ -237,7 +236,7 @@ main{
 }
 main.show{opacity:1; visibility:visible;}
 
-/* ===== 標題（回復比較早期風格，避免手機被切掉） ===== */
+/* 標題 */
 h2{
   font-size:90px;
   font-weight:900;
@@ -245,7 +244,7 @@ h2{
   margin:28px 0 8px 0;
   opacity:0;
   transform:translateY(12px);
-  letter-spacing:.04em;  /* 縮小字距，減少被切掉的機會 */
+  letter-spacing:.04em;
 }
 h2 .english{
   font-family:'Amatic SC',cursive;
@@ -270,24 +269,22 @@ h2.title-in{
   }
 }
 
-/* ===== 標語＋優惠 ===== */
+/* 標語＋優惠 */
 .brand-block{
   margin:4px 0 18px;
 }
 .brand-tagline{
   margin:6px 0 6px;
-  font-size:15px;
+  font-size:14px;          /* ↓ 縮小一點 */
   color:#3f4f61;
-  letter-spacing:.42em;
-  text-indent:.42em;
+  letter-spacing:.38em;
+  text-indent:.38em;
   font-weight:500;
 }
-
-/* 第二行優惠 */
 .promo-inline{
   width:min(640px, 100%);
   margin:0 auto 4px;
-  font-size:13px;
+  font-size:12.5px;        /* ↓ 也縮小一點 */
   line-height:1.7;
   color:var(--promo-text);
   letter-spacing:.16em;
@@ -342,7 +339,7 @@ h2.title-in{
   background:linear-gradient(to left, rgba(46,67,94,0.18), transparent);
 }
 
-/* reveal 動畫 */
+/* scroll reveal 動畫：預設透明 & 下移 */
 .reveal{
   opacity:0;
   transform:translateY(28px);
@@ -355,7 +352,7 @@ h2.title-in{
   transform:translateY(0);
 }
 
-/* ===== 訂購資訊卡片（透明白底） ===== */
+/* ===== 訂購資訊卡片 ===== */
 .input-container{
   max-width:520px;
   margin:0 auto 30px;
@@ -409,7 +406,7 @@ h2.title-in{
   margin-top:2px;
 }
 
-/* ===== 表格（回到原來寬度設定） ===== */
+/* ===== 商品表格 ===== */
 table{
   width:90%;
   max-width:520px;
@@ -444,7 +441,7 @@ th{
   padding-right:6px;
 }
 
-/* 價格上下排：上舊價、下新價 */
+/* 價格上下排 */
 .price-cell{
   display:flex;
   flex-direction:column;
@@ -572,7 +569,6 @@ th{
   inset:0;
   pointer-events:none;
 }
-
 .ship-title{
   font-size:var(--item-size);
   color:var(--item-text);
@@ -838,7 +834,7 @@ th{
   transform:translateX(-50%) translateY(0);
 }
 
-/* ===== footer 小字 ===== */
+/* footer 小字 */
 .footer-note{
   margin-top:40px;
   font-size:11px;
@@ -847,7 +843,7 @@ th{
   text-align:left;
 }
 
-/* ===== 手機優化（回復早期比例＋放大品項欄文字） ===== */
+/* ===== 手機優化 ===== */
 @media (max-width:480px){
   :root{
     --qty-btn-w: 30px;
@@ -858,7 +854,6 @@ th{
     padding:0 16px 36px;
   }
 
-  /* 回到比較早期的大小，避免被切掉 */
   h2{
     font-size:60px;
     margin-top:22px;
@@ -866,12 +861,11 @@ th{
   }
 
   .brand-tagline{
-    font-size:15px;
+    font-size:13px;      /* 手機再小一點 */
     letter-spacing:.3em;
   }
-
   .promo-inline{
-    font-size:13px;
+    font-size:12px;      /* 手機版優惠行縮小 */
     width:100%;
     letter-spacing:.16em;
   }
@@ -883,7 +877,7 @@ th{
 
   table{
     font-size:14px;
-    width:96%;  /* 比 86% 大，整體表格回到原本視覺 */
+    width:96%;
   }
 
   /* 手機版品項欄文字再大一點 */
@@ -940,7 +934,6 @@ th{
     font-size:27px;
   }
 
-  /* 移除先前縮窄價格欄的設定，回到原來寬度 */
   #productTable td:nth-child(2),
   #productTable th:nth-child(2){
     text-align:center;
@@ -1000,7 +993,7 @@ th{
       </p>
     </div>
 
-    <section class="reveal left">
+    <section class="reveal">
       <p class="section-title">請填寫訂購人資訊</p>
       <div class="input-container">
         <div class="input-group">
@@ -1025,7 +1018,7 @@ th{
       </div>
     </section>
 
-    <section class="reveal right">
+    <section class="reveal">
       <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
       <table id="productTable">
@@ -1034,7 +1027,7 @@ th{
         </colgroup>
         <tr><th>品項</th><th>價格</th><th>數量</th></tr>
         <tr>
-          <td>手抄麻辣底料包<br><small>(2人份)</small></td>
+          <td>麻辣底料包<br><small>(2人份)</small></td>
           <td>
             <div class="price-cell">
               <span class="price-old">$320</span>
@@ -1055,7 +1048,7 @@ th{
     </section>
 
     <!-- 寄送方式 -->
-    <section class="reveal left">
+    <section class="reveal">
       <div class="ship-wrap" role="radiogroup" aria-label="寄送方式">
         <label class="ship-card" for="ship711">
           <input type="radio" name="shipMethod" id="ship711" value="711">
@@ -1074,7 +1067,7 @@ th{
     </section>
 
     <!-- 匯款資訊 + 按鈕 -->
-    <section class="reveal right">
+    <section class="reveal">
       <div class="account-box">
         <h3>請匯款至以下帳戶:</h3>
         <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
@@ -1128,6 +1121,30 @@ async function startIntroSequence(){
   });
 }
 
+/* ===== scroll reveal：滑動到區塊時才淡入 ===== */
+function setupRevealOnScroll(){
+  const reveals=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window) || !reveals.length){
+    reveals.forEach(el=>el.classList.add('in'));
+    const fr=document.getElementById('formReminder');
+    if(fr) fr.classList.add('in');
+    return;
+  }
+  const io=new IntersectionObserver((entries,observer)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+        if(entry.target.contains(document.getElementById('formReminder'))){
+          const fr=document.getElementById('formReminder');
+          if(fr) fr.classList.add('in');
+        }
+      }
+    });
+  },{threshold:0.15});
+  reveals.forEach(el=>io.observe(el));
+}
+
 /* ===== 初始化 ===== */
 window.addEventListener('DOMContentLoaded',()=>{
   const select=document.getElementById('qty1');
@@ -1155,12 +1172,6 @@ window.addEventListener('DOMContentLoaded',()=>{
       intro.style.display='none';
       main.classList.add('show');
       if(pageTitle){ pageTitle.classList.add('title-in'); }
-
-      document.querySelectorAll('.reveal').forEach((el,i)=>
-        setTimeout(()=>el.classList.add('in'), i*180)
-      );
-      setTimeout(()=>document.querySelector('.total').classList.add('show'),1000);
-      setTimeout(()=>document.getElementById('formReminder').classList.add('in'),1100);
     },600);
   });
 
@@ -1196,14 +1207,15 @@ window.addEventListener('DOMContentLoaded',()=>{
   });
 
   enableEmailAutoSuggest();
+  setupRevealOnScroll();
 });
 
-/* ===== Email 智慧建議（datalist 版） ===== */
+/* ===== Email 智慧建議：只留常用四種 ===== */
 const COMMON_DOMAINS = [
   'gmail.com',
-  'yahoo.com.tw','yahoo.com',
-  'hotmail.com','outlook.com','live.com',
-  'icloud.com','msn.com'
+  'yahoo.com.tw',
+  'yahoo.com',
+  'hotmail.com'
 ];
 function enableEmailAutoSuggest(){
   const emailInput = document.getElementById('customerEmail');
@@ -1533,7 +1545,7 @@ function goToForm(){
   window.open(formUrl,'_blank');
 }
 
-/* ===== Ripple（鍵盤也可觸發） ===== */
+/* ===== Ripple ===== */
 function triggerRipple(e){
   const btn=e.currentTarget;
   const rect=btn.getBoundingClientRect();
