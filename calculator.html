@@ -77,7 +77,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   color:rgba(120,120,120,.7);
 }
 
-/* 主要內容容器（窄欄） */
+/* 主要內容容器（保留適度留白） */
 .page-inner{
   max-width:720px;
   margin:0 auto 56px;
@@ -237,15 +237,15 @@ main{
 }
 main.show{opacity:1; visibility:visible;}
 
-/* ===== 標題 + 動畫 ===== */
+/* ===== 標題（回復比較早期風格，避免手機被切掉） ===== */
 h2{
-  font-size:86px;
+  font-size:90px;
   font-weight:900;
   color:var(--navy);
   margin:28px 0 8px 0;
   opacity:0;
   transform:translateY(12px);
-  letter-spacing:.14em;
+  letter-spacing:.04em;  /* 縮小字距，減少被切掉的機會 */
 }
 h2 .english{
   font-family:'Amatic SC',cursive;
@@ -409,7 +409,7 @@ h2.title-in{
   margin-top:2px;
 }
 
-/* ===== 表格（原始色） ===== */
+/* ===== 表格（回到原來寬度設定） ===== */
 table{
   width:90%;
   max-width:520px;
@@ -847,7 +847,7 @@ th{
   text-align:left;
 }
 
-/* ===== 手機優化 ===== */
+/* ===== 手機優化（回復早期比例＋放大品項欄文字） ===== */
 @media (max-width:480px){
   :root{
     --qty-btn-w: 30px;
@@ -855,38 +855,38 @@ th{
   }
 
   .page-inner{
-    padding:0 22px 36px;
+    padding:0 16px 36px;
   }
 
-  /* 標題手機版稍微縮小，維持一行 */
+  /* 回到比較早期的大小，避免被切掉 */
   h2{
-    font-size:72px;
+    font-size:60px;
     margin-top:22px;
-    letter-spacing:.10em;
+    letter-spacing:.03em;
   }
 
   .brand-tagline{
     font-size:15px;
-    letter-spacing:.36em;
+    letter-spacing:.3em;
   }
 
   .promo-inline{
     font-size:13px;
     width:100%;
-    letter-spacing:.18em;
+    letter-spacing:.16em;
   }
 
   .section-title{
     font-size:13.5px;
-    letter-spacing:.18em;
+    letter-spacing:.16em;
   }
 
   table{
     font-size:14px;
-    width:86%;
+    width:96%;  /* 比 86% 大，整體表格回到原本視覺 */
   }
 
-  /* 手機版商品欄位字大一點 */
+  /* 手機版品項欄文字再大一點 */
   #productTable td:first-child{
     font-size:15px;
   }
@@ -895,7 +895,7 @@ th{
   }
 
   .ship-wrap{
-    width:86%;
+    width:96%;
     gap:10px;
   }
 
@@ -940,14 +940,14 @@ th{
     font-size:27px;
   }
 
-  /* 手機價格欄對齊、變窄 → 品項變寬 */
+  /* 移除先前縮窄價格欄的設定，回到原來寬度 */
   #productTable td:nth-child(2),
   #productTable th:nth-child(2){
-    text-align:right;
-    padding-right:16px;
+    text-align:center;
+    padding-right:10px;
   }
   #productTable .col-price{
-    width:90px;
+    width:110px;
   }
 }
 
