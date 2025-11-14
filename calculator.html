@@ -275,7 +275,7 @@ h2.title-in{
 }
 .brand-tagline{
   margin:6px 0 6px;
-  font-size:14px;          /* 縮小 */
+  font-size:14px;
   color:#3f4f61;
   letter-spacing:.38em;
   text-indent:.38em;
@@ -284,7 +284,7 @@ h2.title-in{
 .promo-inline{
   width:min(640px, 100%);
   margin:0 auto 4px;
-  font-size:12.5px;        /* 縮小 */
+  font-size:12.5px;
   line-height:1.7;
   color:var(--promo-text);
   letter-spacing:.16em;
@@ -339,7 +339,7 @@ h2.title-in{
   background:linear-gradient(to left, rgba(46,67,94,0.18), transparent);
 }
 
-/* scroll reveal 動畫：預設透明 & 下移 */
+/* scroll reveal：預設透明 & 下移 */
 .reveal{
   opacity:0;
   transform:translateY(28px);
@@ -516,14 +516,17 @@ th{
 .ship-wrap{
   width:90%;
   max-width:520px;
-  margin:10px auto 10px;
+  margin:10px auto 6px;
   display:flex;
   gap:12px;
+  flex-wrap:wrap;
+  justify-content:center;
 }
 .ship-card{
   --glow: rgba(30,79,123,.14);
   position:relative;
-  flex:1;
+  flex:1 1 160px;
+  max-width:190px;
   border-radius:14px;
   background:linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.72));
   -webkit-backdrop-filter:blur(10px) saturate(1.02);
@@ -594,6 +597,21 @@ th{
   filter:brightness(1.05);
 }
 .ship-card:has(input:checked)::after{ opacity:.26; }
+
+/* 自取說明 */
+.pickup-note{
+  font-size:12px;
+  color:#6a7a8a;
+  letter-spacing:.08em;
+  margin-top:4px;
+  opacity:0;
+  transform:translateY(6px);
+  transition:opacity .5s var(--ease), transform .5s var(--ease);
+}
+.pickup-note.show{
+  opacity:1;
+  transform:translateY(0);
+}
 
 /* ===== Total ===== */
 .total{
@@ -891,6 +909,10 @@ th{
     width:96%;
     gap:10px;
   }
+  .ship-card{
+    flex:1 1 calc(50% - 8px);
+    max-width:none;
+  }
 
   .input-container{
     width:100%;
@@ -1059,7 +1081,16 @@ th{
           <div class="ship-title">宅配到家</div>
           <div class="ship-price">$120</div>
         </label>
+        <label class="ship-card" for="shipPickup">
+          <input type="radio" name="shipMethod" id="shipPickup" value="pickup">
+          <div class="ship-title">自取</div>
+          <div class="ship-price">免費</div>
+        </label>
       </div>
+
+      <p id="pickupNote" class="pickup-note" hidden>
+        自取地點：食實甜點工作室（111 臺北市士林區天母北路 47 號 1 樓）
+      </p>
 
       <div class="total" id="total" role="status" aria-live="polite" aria-atomic="true">Total Amount: $0</div>
       <div class="total-note">金額已含寄送費用 · 單位：新台幣</div>
@@ -1080,7 +1111,7 @@ th{
       <p id="formReminder">煩請先匯款後，一定要按「下一步」填寫寄送資訊！</p>
 
       <div class="footer-note">
-        © LIU MAMA 2015 Handcrafted spicy mala hot pot 
+        © LIU MAMA 2015–2025 · Handcrafted spicy mala hot pot
       </div>
     </section>
   </div>
@@ -1094,12 +1125,13 @@ th{
 function imgReady(el){
   if(el.complete){
     if('decode' in el){ return el.decode().catch(()=>{}); }
-    return Promise.resolve();
+  } else {
+    return new Promise(res=>{
+      el.addEventListener('load', res, {once:true});
+      el.addEventListener('error', res, {once:true});
+    });
   }
-  return new Promise(res=>{
-    el.addEventListener('load', res, {once:true});
-    el.addEventListener('error', res, {once:true});
-  });
+  return Promise.resolve();
 }
 async function startIntroSequence(){
   const logo=document.getElementById('intro-logo');
@@ -1120,12 +1152,12 @@ async function startIntroSequence(){
   });
 }
 
-/* ===== scroll reveal：滑動到區塊時才淡入 ===== */
+/* ===== scroll reveal：每次捲動進入視窗都淡入 ===== */
 function setupRevealOnScroll(){
   const reveals=document.querySelectorAll('.reveal');
-  if(!reveals.length){ return; }
+  if(!reveals.length) return;
 
-  // 沒有 IntersectionObserver 時，全部直接顯示
+  // 不支援 IntersectionObserver：全部顯示
   if(!('IntersectionObserver' in window)){
     reveals.forEach(el=>el.classList.add('in'));
     const fr=document.getElementById('formReminder');
@@ -1133,20 +1165,26 @@ function setupRevealOnScroll(){
     return;
   }
 
-  const io=new IntersectionObserver((entries,observer)=>{
+  const io=new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        entry.target.classList.add('in');
-        observer.unobserve(entry.target);
+      const el=entry.target;
+      const fr=document.getElementById('formReminder');
 
-        // 如果這個 section 裡有 formReminder，就順便淡入
-        if(entry.target.contains(document.getElementById('formReminder'))){
-          const fr=document.getElementById('formReminder');
-          if(fr) fr.classList.add('in');
+      if(entry.isIntersecting){
+        // 捲進畫面：淡入
+        el.classList.add('in');
+        if(fr && el.contains(fr)){
+          fr.classList.add('in');
+        }
+      }else{
+        // 離開畫面：拿掉，之後再捲回來就會再淡入
+        el.classList.remove('in');
+        if(fr && el.contains(fr)){
+          fr.classList.remove('in');
         }
       }
     });
-  },{threshold:0.15});
+  },{threshold:0.18});
 
   reveals.forEach(el=>io.observe(el));
 }
@@ -1179,10 +1217,12 @@ window.addEventListener('DOMContentLoaded',()=>{
       main.classList.add('show');
       if(pageTitle){ pageTitle.classList.add('title-in'); }
 
-      // ⭐ 在主畫面顯示後才啟動捲動淡入
+      // 啟動 scroll 淡入
       setupRevealOnScroll();
     },600);
   });
+
+  const pickupNote = document.getElementById('pickupNote');
 
   document.querySelectorAll('.ship-card input').forEach(r=>{
     r.addEventListener('change', ()=>{
@@ -1191,6 +1231,17 @@ window.addEventListener('DOMContentLoaded',()=>{
         const input=card.querySelector('input');
         card.classList.toggle('selected', input.checked);
       });
+
+      const method=document.querySelector('input[name="shipMethod"]:checked');
+      if(pickupNote){
+        if(method && method.value==='pickup'){
+          pickupNote.hidden=false;
+          pickupNote.classList.add('show');
+        }else{
+          pickupNote.classList.remove('show');
+          pickupNote.hidden=true;
+        }
+      }
     });
   });
 
@@ -1402,7 +1453,11 @@ function calculate(isInit){
   const qty1=parseInt(document.getElementById('qty1').value)||0;
   let ship=0;
   const method=document.querySelector('input[name="shipMethod"]:checked');
-  if(method){ ship=(method.value==='711')?60:120; }
+  if(method){
+    if(method.value==='711') ship=60;
+    else if(method.value==='post') ship=120;
+    else if(method.value==='pickup') ship=0;
+  }
   const newTotal=qty1*299+ship;
   animateTotal(newTotal, !!isInit);
 }
@@ -1539,8 +1594,12 @@ function goToForm(){
   }
   if(!ok) return;
 
-  const shipLabel = (method.value==='711') ? '711超商取貨' : '宅配到家';
-  const total = qty*299 + ((method.value==='711')?60:120);
+  let shipLabel='';
+  if(method.value==='711') shipLabel='711超商取貨';
+  else if(method.value==='post') shipLabel='宅配到家';
+  else if(method.value==='pickup') shipLabel='自取';
+
+  const total = qty*299 + (method.value==='711' ? 60 : method.value==='post' ? 120 : 0);
 
   const base = 'https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url';
   const formUrl = base
