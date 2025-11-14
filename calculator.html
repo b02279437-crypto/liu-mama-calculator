@@ -874,28 +874,23 @@ th{
   pointer-events:none;
   transition:opacity .4s var(--ease);
 }
-
 .promo-modal-backdrop.show{
   opacity:1;
   pointer-events:auto;
 }
-
 .promo-modal{
   position:relative;
   max-width:320px;
   width:80%;
   padding:18px 18px 16px;
   border-radius:18px;
-
   background:rgba(248,245,238,.96);
   border:1px solid rgba(151,147,135,.45);
   box-shadow:
     0 14px 30px rgba(0,0,0,.22),
     inset 0 1px 0 rgba(255,255,255,.8);
-
   -webkit-backdrop-filter:blur(16px) saturate(1.05);
   backdrop-filter:blur(16px) saturate(1.05);
-
   text-align:left;
   color:#3a3a34;
   transform:translateY(8px) scale(.96);
@@ -904,12 +899,10 @@ th{
     opacity .4s var(--ease),
     transform .4s var(--ease);
 }
-
 .promo-modal-backdrop.show .promo-modal{
   opacity:1;
   transform:translateY(0) scale(1);
 }
-
 .promo-label{
   font-size:11px;
   letter-spacing:.22em;
@@ -917,32 +910,27 @@ th{
   color:#8b806e;
   margin-bottom:6px;
 }
-
 .promo-modal h3{
   margin:0 0 6px;
   font-size:18px;
   letter-spacing:.14em;
 }
-
 .promo-main{
   font-size:13px;
   line-height:1.7;
   letter-spacing:.12em;
   color:#4b4b44;
 }
-
 .promo-main strong{
   color:#A6413C;
   font-weight:700;
 }
-
 .promo-sub{
   margin-top:6px;
   font-size:11px;
   color:#8d8c82;
   letter-spacing:.14em;
 }
-
 .promo-close{
   position:absolute;
   right:10px;
@@ -976,17 +964,14 @@ th{
     --qty-btn-w: 30px;
     --qty-disp-w: 44px;
   }
-
   .page-inner{
     padding:0 16px 36px;
   }
-
   h2{
     font-size:60px;
     margin-top:22px;
     letter-spacing:.03em;
   }
-
   .brand-tagline{
     font-size:13px;
     letter-spacing:.3em;
@@ -996,25 +981,21 @@ th{
     width:100%;
     letter-spacing:.16em;
   }
-
   .section-title{
     font-size:13.5px;
     letter-spacing:.16em;
   }
-
   table{
     font-size:14px;
     width:96%;
   }
-
   #productTable td:first-child{
     font-size:15px;
   }
   #productTable td:first-child small{
     font-size:12px;
   }
-
-  /* 手機版：寄送三個選項同一行，按鈕縮小 */
+  /* 手機寄送三個選項同一行，按鈕縮小 */
   .ship-wrap{
     width:96%;
     gap:6px;
@@ -1032,23 +1013,19 @@ th{
   .ship-price{
     font-size:13px;
   }
-
   .input-container{
     width:100%;
     padding:18px 18px 20px;
   }
-
   .account-box{
     width:86%;
     font-size:12.5px;
   }
-
   .btn{
     padding:8px 16px;
     font-size:13px;
     letter-spacing:.13em;
   }
-
   #intro-hero{
     width:clamp(240px, 68vw, 360px);
     margin:14px auto -66px;
@@ -1069,11 +1046,9 @@ th{
     font-size:12.5px;
     letter-spacing:.2em;
   }
-
   .total{
     font-size:27px;
   }
-
   #productTable td:nth-child(2),
   #productTable th:nth-child(2){
     text-align:center;
@@ -1082,7 +1057,6 @@ th{
   #productTable .col-price{
     width:110px;
   }
-
   .promo-modal{
     max-width:300px;
     padding:16px 16px 14px;
@@ -1198,7 +1172,7 @@ th{
       </table>
     </section>
 
-    <!-- 寄送方式 -->
+    <!-- 寄送方式：含自取 -->
     <section class="reveal">
       <div class="ship-wrap" role="radiogroup" aria-label="寄送方式">
         <label class="ship-card" for="ship711">
@@ -1344,7 +1318,6 @@ function showLaunchModal(){
   if(launchModalTimer) clearTimeout(launchModalTimer);
   launchModalTimer = setTimeout(hideLaunchModal, 7000);
 }
-
 function hideLaunchModal(){
   const backdrop = document.getElementById('launchModal');
   if(!backdrop) return;
@@ -1395,8 +1368,8 @@ window.addEventListener('DOMContentLoaded',()=>{
         card.classList.toggle('selected', input.checked);
       });
 
-      const method=document.querySelector('input[name="shipMethod"]:checked');
       if(pickupNote){
+        const method=document.querySelector('input[name="shipMethod"]:checked');
         if(method && method.value==='pickup'){
           pickupNote.hidden=false;
           pickupNote.classList.add('show');
@@ -1431,7 +1404,6 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   enableEmailAutoSuggest();
 
-  /* 開賣 Modal 關閉事件 */
   const launchBackdrop = document.getElementById('launchModal');
   const launchCloseBtn = document.getElementById('launchClose');
 
@@ -1447,7 +1419,6 @@ window.addEventListener('DOMContentLoaded',()=>{
       hideLaunchModal();
     });
   }
-
   document.addEventListener('keydown',(e)=>{
     if(e.key === 'Escape'){
       hideLaunchModal();
@@ -1506,28 +1477,22 @@ function enableEmailAutoSuggest(){
   });
 }
 
-/* ===== 一行優惠 倒數 ===== */
+/* ===== 倒數天數：用純日期差避免怪數字 ===== */
 function setupInlinePromo(){
   const daysEl = document.getElementById('promoDays');
-  if(!daysEl){ return; }
+  if(!daysEl) return;
 
   try{
     const now   = new Date();
     const year  = now.getFullYear();
-    const end   = new Date(year, 11, 17, 23, 59, 59);
+    const today = new Date(year, now.getMonth(), now.getDate()); // 今日 00:00
+    const end   = new Date(year, 11, 17); // 12 月 17 日 00:00（月份從 0 開始）
 
-    if(now <= end){
-      const daysLeft = Math.max(1, Math.ceil((end - now) / (24*60*60*1000)));
-      animatePromoNumber(daysEl, daysLeft);
-      const midnightNext = new Date(year, now.getMonth(), now.getDate()+1, 0,0,0,0);
-      setTimeout(()=>{
-        const now2 = new Date();
-        const d2 = Math.max(1, Math.ceil((end - now2) / (24*60*60*1000)));
-        animatePromoNumber(daysEl, d2);
-      }, Math.max(1000, midnightNext - now + 50));
-    }else{
-      daysEl.textContent = '0 天';
-    }
+    const MS = 24*60*60*1000;
+    let diffDays = Math.round((end - today) / MS);
+    if(diffDays < 0) diffDays = 0;
+
+    animatePromoNumber(daysEl, diffDays);
   }catch(err){
     daysEl.textContent = '— 天';
   }
@@ -1565,7 +1530,6 @@ function buildQty(){
     if(Number.isNaN(n)) n = 0;
     return Math.min(MAX, Math.max(MIN, n|0));
   }
-
   function syncTo(val, trigger=true){
     const v = clamp(val);
     if(select.value !== String(v)) select.value = String(v);
@@ -1573,7 +1537,6 @@ function buildQty(){
     input.setAttribute('aria-valuenow', String(v));
     if(trigger) calculate();
   }
-
   function setupClick(btn, delta){
     btn.addEventListener('click', (e)=>{
       if(btn._holdTriggered){
@@ -1590,7 +1553,6 @@ function buildQty(){
   function setupHold(btn, delta){
     let tDelay, tRepeat;
     const step=()=> syncTo(Number(select.value)+delta);
-
     const start = (e)=>{
       btn._holdTriggered=false;
       tDelay=setTimeout(()=>{
@@ -1824,3 +1786,4 @@ document.addEventListener('keydown',(e)=>{
 </script>
 </body>
 </html>
+
