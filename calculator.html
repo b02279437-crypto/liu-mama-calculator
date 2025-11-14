@@ -905,13 +905,23 @@ th{
     font-size:12px;
   }
 
+  /* 手機版：寄送三個選項同一行，按鈕縮小 */
   .ship-wrap{
     width:96%;
-    gap:10px;
+    gap:6px;
+    flex-wrap:nowrap;
   }
   .ship-card{
-    flex:1 1 calc(50% - 8px);
+    flex:1 1 0;
     max-width:none;
+    padding:9px 4px 8px;
+  }
+  .ship-title{
+    font-size:13px;
+    letter-spacing:.12em;
+  }
+  .ship-price{
+    font-size:13px;
   }
 
   .input-container{
@@ -925,8 +935,8 @@ th{
   }
 
   .btn{
-    padding:10px 18px;
-    font-size:14px;
+    padding:8px 16px;
+    font-size:13px;
     letter-spacing:.13em;
   }
 
@@ -1073,7 +1083,7 @@ th{
       <div class="ship-wrap" role="radiogroup" aria-label="寄送方式">
         <label class="ship-card" for="ship711">
           <input type="radio" name="shipMethod" id="ship711" value="711">
-          <div class="ship-title">711超商取貨</div>
+          <div class="ship-title">711取貨</div>
           <div class="ship-price">$60</div>
         </label>
         <label class="ship-card" for="shipPost">
@@ -1084,7 +1094,7 @@ th{
         <label class="ship-card" for="shipPickup">
           <input type="radio" name="shipMethod" id="shipPickup" value="pickup">
           <div class="ship-title">自取</div>
-          <div class="ship-price">免費</div>
+          <div class="ship-price">$0</div>
         </label>
       </div>
 
@@ -1595,7 +1605,7 @@ function goToForm(){
   if(!ok) return;
 
   let shipLabel='';
-  if(method.value==='711') shipLabel='711超商取貨';
+  if(method.value==='711') shipLabel='711取貨';
   else if(method.value==='post') shipLabel='宅配到家';
   else if(method.value==='pickup') shipLabel='自取';
 
