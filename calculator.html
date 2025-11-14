@@ -861,6 +861,115 @@ th{
   text-align:left;
 }
 
+/* ===== 開賣提示 Modal ===== */
+.promo-modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.16);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9998;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .4s var(--ease);
+}
+
+.promo-modal-backdrop.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.promo-modal{
+  position:relative;
+  max-width:320px;
+  width:80%;
+  padding:18px 18px 16px;
+  border-radius:18px;
+
+  background:rgba(248,245,238,.96);
+  border:1px solid rgba(151,147,135,.45);
+  box-shadow:
+    0 14px 30px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.8);
+
+  -webkit-backdrop-filter:blur(16px) saturate(1.05);
+  backdrop-filter:blur(16px) saturate(1.05);
+
+  text-align:left;
+  color:#3a3a34;
+  transform:translateY(8px) scale(.96);
+  opacity:0;
+  transition:
+    opacity .4s var(--ease),
+    transform .4s var(--ease);
+}
+
+.promo-modal-backdrop.show .promo-modal{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+
+.promo-label{
+  font-size:11px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:#8b806e;
+  margin-bottom:6px;
+}
+
+.promo-modal h3{
+  margin:0 0 6px;
+  font-size:18px;
+  letter-spacing:.14em;
+}
+
+.promo-main{
+  font-size:13px;
+  line-height:1.7;
+  letter-spacing:.12em;
+  color:#4b4b44;
+}
+
+.promo-main strong{
+  color:#A6413C;
+  font-weight:700;
+}
+
+.promo-sub{
+  margin-top:6px;
+  font-size:11px;
+  color:#8d8c82;
+  letter-spacing:.14em;
+}
+
+.promo-close{
+  position:absolute;
+  right:10px;
+  top:8px;
+  width:26px;
+  height:26px;
+  border-radius:999px;
+  border:none;
+  background:transparent;
+  color:#7a746a;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  line-height:1;
+  padding:0;
+  transition:background-color .2s var(--ease), transform .15s var(--ease), color .2s var(--ease);
+}
+.promo-close:hover{
+  background:rgba(0,0,0,.04);
+  color:#555149;
+}
+.promo-close:active{
+  transform:scale(.96);
+}
+
 /* ===== 手機優化 ===== */
 @media (max-width:480px){
   :root{
@@ -972,6 +1081,17 @@ th{
   }
   #productTable .col-price{
     width:110px;
+  }
+
+  .promo-modal{
+    max-width:300px;
+    padding:16px 16px 14px;
+  }
+  .promo-modal h3{
+    font-size:17px;
+  }
+  .promo-main{
+    font-size:12.5px;
   }
 }
 
@@ -1099,7 +1219,7 @@ th{
       </div>
 
       <p id="pickupNote" class="pickup-note" hidden>
-        自取地點：食實甜點工作室 臺北市士林區天母北路47號 1F
+        自取地點：食實甜點工作室（111 臺北市士林區天母北路 47 號 1 樓）
       </p>
 
       <div class="total" id="total" role="status" aria-live="polite" aria-atomic="true">Total Amount: $0</div>
@@ -1126,6 +1246,27 @@ th{
     </section>
   </div>
 </main>
+
+<!-- 開賣提示 Modal -->
+<div id="launchModal" class="promo-modal-backdrop" aria-hidden="true">
+  <div class="promo-modal" role="dialog" aria-modal="true" aria-labelledby="launchTitle">
+    <button type="button" class="promo-close" id="launchClose" aria-label="關閉">
+      ×
+    </button>
+    <div class="promo-label">LIU MAMA</div>
+    <h3 id="launchTitle">劉嘛麻 開賣啦&nbsp;&nbsp;.ᐟ.ᐟ</h3>
+
+    <p class="promo-main">
+      手炒麻辣鍋底<br>
+      11/17 ~ 12/17 開賣價 <strong>$299</strong><br>
+      期間限定價 · 先嚐一鍋就愛上
+    </p>
+
+    <p class="promo-sub">
+      四川改良 &emsp;×&emsp; 十三融香 &emsp;×&emsp; 香麻登場
+    </p>
+  </div>
+</div>
 
 <!-- Toast -->
 <div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
@@ -1162,15 +1303,15 @@ async function startIntroSequence(){
   });
 }
 
-/* ===== scroll reveal：每次捲動進入視窗都淡入 ===== */
+/* ===== scroll reveal：每次捲動進出都淡入 ===== */
 function setupRevealOnScroll(){
   const reveals=document.querySelectorAll('.reveal');
   if(!reveals.length) return;
 
-  // 不支援 IntersectionObserver：全部顯示
+  const fr=document.getElementById('formReminder');
+
   if(!('IntersectionObserver' in window)){
     reveals.forEach(el=>el.classList.add('in'));
-    const fr=document.getElementById('formReminder');
     if(fr) fr.classList.add('in');
     return;
   }
@@ -1178,25 +1319,37 @@ function setupRevealOnScroll(){
   const io=new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       const el=entry.target;
-      const fr=document.getElementById('formReminder');
-
       if(entry.isIntersecting){
-        // 捲進畫面：淡入
         el.classList.add('in');
-        if(fr && el.contains(fr)){
-          fr.classList.add('in');
-        }
+        if(fr && el.contains(fr)) fr.classList.add('in');
       }else{
-        // 離開畫面：拿掉，之後再捲回來就會再淡入
         el.classList.remove('in');
-        if(fr && el.contains(fr)){
-          fr.classList.remove('in');
-        }
+        if(fr && el.contains(fr)) fr.classList.remove('in');
       }
     });
   },{threshold:0.18});
 
   reveals.forEach(el=>io.observe(el));
+}
+
+/* ===== 開賣 Modal 控制 ===== */
+let launchModalTimer = null;
+
+function showLaunchModal(){
+  const backdrop = document.getElementById('launchModal');
+  if(!backdrop) return;
+  backdrop.classList.add('show');
+  backdrop.setAttribute('aria-hidden','false');
+
+  if(launchModalTimer) clearTimeout(launchModalTimer);
+  launchModalTimer = setTimeout(hideLaunchModal, 7000);
+}
+
+function hideLaunchModal(){
+  const backdrop = document.getElementById('launchModal');
+  if(!backdrop) return;
+  backdrop.classList.remove('show');
+  backdrop.setAttribute('aria-hidden','true');
 }
 
 /* ===== 初始化 ===== */
@@ -1227,8 +1380,8 @@ window.addEventListener('DOMContentLoaded',()=>{
       main.classList.add('show');
       if(pageTitle){ pageTitle.classList.add('title-in'); }
 
-      // 啟動 scroll 淡入
       setupRevealOnScroll();
+      showLaunchModal(); // 進主畫面時顯示開賣提示
     },600);
   });
 
@@ -1277,9 +1430,32 @@ window.addEventListener('DOMContentLoaded',()=>{
   });
 
   enableEmailAutoSuggest();
+
+  /* 開賣 Modal 關閉事件 */
+  const launchBackdrop = document.getElementById('launchModal');
+  const launchCloseBtn = document.getElementById('launchClose');
+
+  if(launchBackdrop){
+    launchBackdrop.addEventListener('click',(e)=>{
+      if(e.target === launchBackdrop){
+        hideLaunchModal();
+      }
+    });
+  }
+  if(launchCloseBtn){
+    launchCloseBtn.addEventListener('click',()=>{
+      hideLaunchModal();
+    });
+  }
+
+  document.addEventListener('keydown',(e)=>{
+    if(e.key === 'Escape'){
+      hideLaunchModal();
+    }
+  });
 });
 
-/* ===== Email 智慧建議：只留常用四種 ===== */
+/* ===== Email 智慧建議：常用幾種 ===== */
 const COMMON_DOMAINS = [
   'gmail.com',
   'yahoo.com.tw',
