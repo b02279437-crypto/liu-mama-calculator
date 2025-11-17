@@ -1486,7 +1486,7 @@ function setupInlinePromo(){
     const now   = new Date();
     const year  = now.getFullYear();
     const today = new Date(year, now.getMonth(), now.getDate()); // 今日 00:00
-    const end   = new Date(year, 11, 17); // 12 月 17 日 00:00（月份從 0 開始）
+    const end   = new Date(year, 11, 19); // 12 月 19 日 00:00（月份從 0 開始）
 
     const MS = 24*60*60*1000;
     let diffDays = Math.round((end - today) / MS);
@@ -1786,4 +1786,3 @@ document.addEventListener('keydown',(e)=>{
 </script>
 </body>
 </html>
-
