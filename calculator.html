@@ -406,7 +406,7 @@ h2.title-in{
   margin-top:2px;
 }
 
-/* ===== 商品表格 ===== */
+/* ===== 商品表格（調整桌機不卡版） ===== */
 table{
   width:90%;
   max-width:520px;
@@ -418,14 +418,14 @@ table{
   overflow:hidden;
   box-shadow:0 2px 10px rgba(0,0,0,.08);
   font-size:15px;
-  table-layout:fixed;
+  table-layout:auto; /* 換成 auto 比較不容易歪掉 */
   text-align:center;
 }
 th,td{
   padding:10px;
   border-bottom:1px solid #e9eef2;
   vertical-align:middle;
-  white-space:nowrap;
+  white-space:normal; /* 允許換行，避免桌機撐歪 */
 }
 th{
   background-color:var(--gray-blue);
@@ -433,8 +433,8 @@ th{
   font-weight:500;
 }
 .col-item{ width:auto; }
-.col-price{ width:110px; }
-.col-action{ width:148px; }
+.col-price{ width:120px; }
+.col-action{ width:150px; }
 #productTable td:nth-child(3),
 #productTable th:nth-child(3){
   padding-left:6px;
@@ -1198,6 +1198,8 @@ th{
   【食實甜點工作室】<br>
   台北市士林區天母北路47號1F<br>
   <span style="opacity:.8;">（天母商圈）</span><br><br>
+
+  <span style="display:inline-block;margin:2px 0 8px;font-size:12px;letter-spacing:.2em;opacity:.6;">OR</span><br><br>
 
   【Kuki House 軟餅乾專店】<br>
   台北市大同區太原路97巷8號1樓<br>
