@@ -406,7 +406,7 @@ h2.title-in{
   margin-top:2px;
 }
 
-/* ===== 商品表格（調整桌機不卡版） ===== */
+/* ===== 商品表格 ===== */
 table{
   width:90%;
   max-width:520px;
@@ -418,14 +418,14 @@ table{
   overflow:hidden;
   box-shadow:0 2px 10px rgba(0,0,0,.08);
   font-size:15px;
-  table-layout:auto; /* 換成 auto 比較不容易歪掉 */
+  table-layout:fixed;
   text-align:center;
 }
 th,td{
   padding:10px;
   border-bottom:1px solid #e9eef2;
   vertical-align:middle;
-  white-space:normal; /* 允許換行，避免桌機撐歪 */
+  white-space:nowrap;
 }
 th{
   background-color:var(--gray-blue);
@@ -433,19 +433,27 @@ th{
   font-weight:500;
 }
 .col-item{ width:auto; }
-.col-price{ width:120px; }
-.col-action{ width:150px; }
+.col-price{ width:100px; }
+.col-action{ width:140px; }
 #productTable td:nth-child(3),
 #productTable th:nth-child(3){
   padding-left:6px;
   padding-right:6px;
 }
 
+/* 價格欄、數量欄整體往左對齊一點 */
+#productTable th:nth-child(2),
+#productTable td:nth-child(2),
+#productTable th:nth-child(3),
+#productTable td:nth-child(3){
+  text-align:left;
+}
+
 /* 價格上下排 */
 .price-cell{
   display:flex;
   flex-direction:column;
-  align-items:center;
+  align-items:flex-start; /* 跟文字一起靠左 */
   line-height:1.15;
 }
 .price-old{
@@ -995,6 +1003,14 @@ th{
   #productTable td:first-child small{
     font-size:12px;
   }
+  /* 價格、數量欄在手機也一起靠左 */
+  #productTable td:nth-child(2),
+  #productTable th:nth-child(2),
+  #productTable td:nth-child(3),
+  #productTable th:nth-child(3){
+    text-align:left;
+    padding-right:6px;
+  }
   /* 手機寄送三個選項同一行，按鈕縮小 */
   .ship-wrap{
     width:96%;
@@ -1049,13 +1065,8 @@ th{
   .total{
     font-size:27px;
   }
-  #productTable td:nth-child(2),
-  #productTable th:nth-child(2){
-    text-align:center;
-    padding-right:10px;
-  }
   #productTable .col-price{
-    width:110px;
+    width:100px;
   }
   .promo-modal{
     max-width:300px;
@@ -1192,20 +1203,15 @@ th{
         </label>
       </div>
 
-    <p id="pickupNote" class="pickup-note" hidden>
-  自取地點：<br><br>
-
-  【食實甜點工作室】<br>
-  台北市士林區天母北路47號1F<br>
-  <span style="opacity:.8;">（天母商圈）</span><br><br>
-
-  <span style="display:inline-block;margin:2px 0 8px;font-size:12px;letter-spacing:.2em;opacity:.6;">OR</span><br><br>
-
-  【Kuki House 軟餅乾專店】<br>
-  台北市大同區太原路97巷8號1樓<br>
-  <span style="opacity:.8;">（近承德路、京站）</span>
-</p>
-
+      <p id="pickupNote" class="pickup-note" hidden>
+        自取地點：<br><br>
+        ① 【食實甜點工作室】<br>
+        台北市士林區天母北路47號1F<br>
+        <span style="opacity:.8;">（天母商圈）</span><br><br>
+        ② 【Kuki House 軟餅乾專店】<br>
+        台北市大同區太原路97巷8號1樓<br>
+        <span style="opacity:.8;">（近承德路、京站）</span>
+      </p>
 
       <div class="total" id="total" role="status" aria-live="polite" aria-atomic="true">Total Amount: $0</div>
       <div class="total-note">金額已含寄送費用 · 單位：新台幣</div>
