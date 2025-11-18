@@ -140,7 +140,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 }
 #intro-text.show{opacity:1;}
 
-/* 開始訂購按鈕：STAR ORDER 在上，中文在下；無外框線 */
+/* 開始訂購按鈕 */
 #startBtn{
   margin-top:18px;
   padding:10px 26px 11px;
@@ -216,7 +216,6 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   background:radial-gradient(circle, rgba(30,79,123,.18) 0%, rgba(30,79,123,0) 70%);
   transform:translate(-50%,-50%) scale(1);
   opacity:0;
-  pointer-events:none;
 }
 #startBtn.rippling::after{
   left:var(--rx);
@@ -339,7 +338,7 @@ h2.title-in{
   background:linear-gradient(to left, rgba(46,67,94,0.18), transparent);
 }
 
-/* scroll reveal：預設透明 & 下移 */
+/* scroll reveal */
 .reveal{
   opacity:0;
   transform:translateY(28px);
@@ -381,7 +380,6 @@ h2.title-in{
 .input-group input{
   font-size:16px;
   height:var(--control-h);
-  line-height:calc(var(--control-h) - 2px);
   padding:0 12px;
   border:1px solid #c5cfdd;
   border-radius:8px;
@@ -432,28 +430,23 @@ th{
   color:#fff;
   font-weight:500;
 }
-.col-item{ width:auto; }
-.col-price{ width:100px; }
-.col-action{ width:140px; }
+
+/* 重新分配三欄比例：品項 44%、價格 22%、數量 34% */
+.col-item{  width:44%; }
+.col-price{ width:22%; }
+.col-action{ width:34%; }
+
 #productTable td:nth-child(3),
 #productTable th:nth-child(3){
   padding-left:6px;
   padding-right:6px;
 }
 
-/* 價格欄、數量欄整體往左對齊一點 */
-#productTable th:nth-child(2),
-#productTable td:nth-child(2),
-#productTable th:nth-child(3),
-#productTable td:nth-child(3){
-  text-align:left;
-}
-
-/* 價格上下排 */
+/* 價格上下排（置中） */
 .price-cell{
   display:flex;
   flex-direction:column;
-  align-items:flex-start; /* 跟文字一起靠左 */
+  align-items:center;
   line-height:1.15;
 }
 .price-old{
@@ -475,6 +468,7 @@ th{
 .qty-stepper{
   display:inline-flex;
   align-items:center;
+  justify-content:center;
   height:var(--control-h);
   border:1px solid var(--line-blue);
   border-radius:8px;
@@ -489,7 +483,6 @@ th{
   background:#f1f4f8;
   cursor:pointer;
   font-size:20px;
-  line-height:1;
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -638,7 +631,6 @@ th{
     opacity var(--t-slow) var(--ease),
     transform var(--t-slow) var(--ease);
   z-index:0;
-  isolation:isolate;
 }
 .total.show{
   opacity:1;
@@ -1003,15 +995,11 @@ th{
   #productTable td:first-child small{
     font-size:12px;
   }
-  /* 價格、數量欄在手機也一起靠左 */
-  #productTable td:nth-child(2),
-  #productTable th:nth-child(2),
-  #productTable td:nth-child(3),
-  #productTable th:nth-child(3){
-    text-align:left;
-    padding-right:6px;
-  }
-  /* 手機寄送三個選項同一行，按鈕縮小 */
+  /* 用同樣比例，手機也保持三欄對齊 */
+  .col-item{  width:44%; }
+  .col-price{ width:22%; }
+  .col-action{ width:34%; }
+
   .ship-wrap{
     width:96%;
     gap:6px;
@@ -1064,9 +1052,6 @@ th{
   }
   .total{
     font-size:27px;
-  }
-  #productTable .col-price{
-    width:100px;
   }
   .promo-modal{
     max-width:300px;
@@ -1294,7 +1279,7 @@ async function startIntroSequence(){
   });
 }
 
-/* ===== scroll reveal：每次捲動進出都淡入 ===== */
+/* ===== scroll reveal ===== */
 function setupRevealOnScroll(){
   const reveals=document.querySelectorAll('.reveal');
   if(!reveals.length) return;
@@ -1371,7 +1356,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       if(pageTitle){ pageTitle.classList.add('title-in'); }
 
       setupRevealOnScroll();
-      showLaunchModal(); // 進主畫面時顯示開賣提示
+      showLaunchModal();
     },600);
   });
 
@@ -1443,7 +1428,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   });
 });
 
-/* ===== Email 智慧建議：常用幾種 ===== */
+/* ===== Email 智慧建議 ===== */
 const COMMON_DOMAINS = [
   'gmail.com',
   'yahoo.com.tw',
@@ -1494,7 +1479,7 @@ function enableEmailAutoSuggest(){
   });
 }
 
-/* ===== 倒數天數：用純日期差避免怪數字 ===== */
+/* ===== 倒數天數 ===== */
 function setupInlinePromo(){
   const daysEl = document.getElementById('promoDays');
   if(!daysEl) return;
@@ -1502,8 +1487,8 @@ function setupInlinePromo(){
   try{
     const now   = new Date();
     const year  = now.getFullYear();
-    const today = new Date(year, now.getMonth(), now.getDate()); // 今日 00:00
-    const end   = new Date(year, 11, 18); // 12 月 18 日 00:00（月份從 0 開始）
+    const today = new Date(year, now.getMonth(), now.getDate());
+    const end   = new Date(year, 11, 18); // 12/18
 
     const MS = 24*60*60*1000;
     let diffDays = Math.round((end - today) / MS);
@@ -1612,7 +1597,7 @@ function buildQty(){
   syncTo(select.value||0, false);
 }
 
-/* ===== 計算金額（以 $299 為準） ===== */
+/* ===== 計算金額 ===== */
 let lastTotal=0;
 function calculate(isInit){
   const qty1=parseInt(document.getElementById('qty1').value)||0;
