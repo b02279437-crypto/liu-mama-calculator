@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<!-- 關閉手機自動把數字變電話（反藍） -->
+<meta name="format-detection" content="telephone=no" />
 <title>LIU MAMA Order</title>
 
 <!-- 字體 -->
@@ -44,6 +46,12 @@
 
   --item-text:#2c3e50;
   --item-size:15px;
+}
+
+/* 手機若還是硬包 tel 連結，顏色也維持一般文字 */
+a[href^="tel"]{
+  color:inherit !important;
+  text-decoration:none !important;
 }
 
 html{-webkit-text-size-adjust:100%;}
@@ -1168,7 +1176,7 @@ th{
       </table>
     </section>
 
-    <!-- 寄送方式：含自取 -->
+    <!-- 寄送方式 -->
     <section class="reveal">
       <div class="ship-wrap" role="radiogroup" aria-label="寄送方式">
         <label class="ship-card" for="ship711">
