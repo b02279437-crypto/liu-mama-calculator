@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRODUCT STORY · 產品介紹｜劉嘛麻 麻辣鍋底</title>
+<title>PRODUCT STORY｜劉嘛麻 麻辣鍋底</title>
 
 <!-- 字體：標題/小書標題用 Noto Serif TC + Amatic SC，內文用 Noto Sans TC -->
 <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Noto+Serif+TC:wght@500;600&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
@@ -76,11 +76,11 @@ body{
 h1{
   margin:14px 0 16px;
   text-align:center;
-  font-size:26px;
-  letter-spacing:.28em;
-  text-indent:.28em;
+  font-size:32px;              /* 與表單英文標題接近的大小 */
+  letter-spacing:.18em;
+  text-indent:.18em;
   color:var(--navy);
-  font-family:'Noto Serif TC','Noto Sans TC','Microsoft JhengHei',serif;
+  font-family:'Amatic SC','Noto Serif TC','Noto Sans TC','Microsoft JhengHei',serif;
 }
 
 /* 標題下：商品照片輪播（調整高度比例） */
@@ -92,7 +92,7 @@ h1{
   position:relative;
   background:#ddd;
   box-shadow:0 10px 22px rgba(0,0,0,.08);
-  aspect-ratio:4 / 6;            /* 固定 4:3 比例，看起來不會太長 */
+  aspect-ratio:4 / 6;            /* 固定 4:6 比例，看起來不會太長 */
 }
 .hero-gallery-inner{
   display:flex;
@@ -480,7 +480,11 @@ h1{
     padding:10px 16px 34px;
   }
   h1{
-    font-size:22px;
+    font-size:28px;          /* 手機略小一點 */
+    letter-spacing:.16em;
+    text-indent:.16em;
+    white-space:nowrap;      /* 避免 PRODUCT STORY 斷行 */
+    line-height:1.3;
   }
   .hero-gallery{
     margin-bottom:20px;
@@ -527,7 +531,7 @@ h1{
 
 <div class="page">
   <!-- 標題 -->
-  <h1>PRODUCT STORY · 產品介紹</h1>
+  <h1>PRODUCT STORY</h1>
 
   <!-- 產品照片輪播 -->
   <div class="hero-gallery" id="heroGalleryOuter">
