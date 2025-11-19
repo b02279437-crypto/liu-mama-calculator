@@ -72,19 +72,51 @@ body{
   padding:10px 18px 40px;
 }
 
-/* ===== 標題區：PRODUCT STORY（跟表單英文一樣風格） ===== */
+/* ===== 標題區：PRODUCT STORY（跟表單英文接近） ===== */
 h1{
-  margin:22px 0 22px;
+  margin:26px 0 20px;
   text-align:center;
   font-family:'Amatic SC','Noto Serif TC','Noto Sans TC','Microsoft JhengHei',serif;
-  font-size:40px;              /* 主標大小（桌機） */
-  letter-spacing:.18em;
-  text-indent:.18em;
+  font-size:44px;              /* 主標大小（桌機） */
+  letter-spacing:.2em;
+  text-indent:.2em;
   color:var(--navy);           /* 和 LIU MAMA ORDER 一樣的深藍色 */
   text-transform:uppercase;
 }
 
-/* 標題下：商品照片輪播 */
+/* 品牌故事卡片（放在標題下面） */
+.hero-card{
+  background:#ffffff;
+  border-radius:18px;
+  padding:18px 18px 18px;
+  box-shadow:0 10px 22px rgba(0,0,0,.05);
+  text-align:center;
+  margin:0 auto 22px;
+  border:1px solid rgba(0,0,0,.03);
+  max-width:620px;
+}
+.hero-tag{
+  font-size:11px;
+  letter-spacing:.3em;
+  color:#777;
+  margin-bottom:6px;
+  font-family:'Noto Serif TC','Noto Sans TC',serif;
+}
+.hero-title{
+  font-size:18px;
+  letter-spacing:.2em;
+  margin-bottom:8px;
+  color:#3b4350;
+  font-family:'Noto Serif TC','Noto Sans TC',serif;
+}
+.hero-text{
+  font-size:13px;
+  line-height:1.9;
+  letter-spacing:.08em;
+  color:#4a4a44;
+}
+
+/* 標題下：商品照片輪播（搬到 hero-card 下面） */
 .hero-gallery{
   max-width:620px;
   margin:0 auto 30px;
@@ -93,7 +125,7 @@ h1{
   position:relative;
   background:#ddd;
   box-shadow:0 10px 22px rgba(0,0,0,.08);
-  aspect-ratio:4 / 6;            /* 固定比例 */
+  aspect-ratio:4 / 6;
 }
 .hero-gallery-inner{
   display:flex;
@@ -156,37 +188,6 @@ h1{
 }
 .hero-dot.active{
   background:#fff;
-}
-
-/* 品牌故事卡片 */
-.hero-card{
-  background:#ffffff;
-  border-radius:18px;
-  padding:18px 18px 18px;
-  box-shadow:0 10px 22px rgba(0,0,0,.05);
-  text-align:center;
-  margin-bottom:28px;
-  border:1px solid rgba(0,0,0,.03);
-}
-.hero-tag{
-  font-size:11px;
-  letter-spacing:.3em;
-  color:#777;
-  margin-bottom:6px;
-  font-family:'Noto Serif TC','Noto Sans TC',serif;
-}
-.hero-title{
-  font-size:18px;
-  letter-spacing:.2em;
-  margin-bottom:8px;
-  color:#3b4350;
-  font-family:'Noto Serif TC','Noto Sans TC',serif;
-}
-.hero-text{
-  font-size:13px;
-  line-height:1.9;
-  letter-spacing:.08em;
-  color:#4a4a44;
 }
 
 /* 區塊標題 */
@@ -481,12 +482,16 @@ h1{
     padding:10px 16px 34px;
   }
   h1{
-    font-size:36px;           /* 手機版主標，跟表單接近 */
-    letter-spacing:.18em;
-    text-indent:.18em;
+    font-size:42px;           /* 手機版主標，接近 LIU MAMA ORDER */
+    letter-spacing:.2em;
+    text-indent:.2em;
     color:var(--navy);
     white-space:nowrap;       /* 避免 PRODUCT STORY 斷行 */
     line-height:1.25;
+  }
+  .hero-card{
+    padding:16px 14px 16px;
+    margin-bottom:18px;
   }
   .hero-gallery{
     margin-bottom:20px;
@@ -495,9 +500,6 @@ h1{
   .hero-nav{
     width:28px;
     height:28px;
-  }
-  .hero-card{
-    padding:16px 14px 16px;
   }
   .manual-book{
     padding:12px 14px 12px;
@@ -535,7 +537,18 @@ h1{
   <!-- 標題 -->
   <h1>PRODUCT STORY</h1>
 
-  <!-- 產品照片輪播 -->
+  <!-- 品牌故事卡片（標題下方） -->
+  <div class="hero-card">
+    <div class="hero-tag">2015 · 從四川帶回的香麻記憶</div>
+    <div class="hero-title">手工慢炒麻辣鍋底（2人份）</div>
+    <p class="hero-text">
+      2015 年遠赴四川成都學習正宗麻辣鍋底與紅油煉製，<br>
+      保留花椒與辣椒的層次香氣，減少厚重油膩與負擔。<br>
+      一鍋香麻而不死鹹的湯底，適合在家簡單備料，輕鬆上桌。
+    </p>
+  </div>
+
+  <!-- 產品照片輪播（放在文字卡片之後） -->
   <div class="hero-gallery" id="heroGalleryOuter">
     <div class="hero-gallery-inner" id="heroGallery">
       <div class="hero-slide">
@@ -551,17 +564,6 @@ h1{
     <button class="hero-nav hero-prev" id="heroPrev" aria-label="上一張">‹</button>
     <button class="hero-nav hero-next" id="heroNext" aria-label="下一張">›</button>
     <div class="hero-dots" id="heroDots"></div>
-  </div>
-
-  <!-- 品牌故事卡片 -->
-  <div class="hero-card">
-    <div class="hero-tag">2015 · 從四川帶回的香麻記憶</div>
-    <div class="hero-title">手工慢炒麻辣鍋底（2人份）</div>
-    <p class="hero-text">
-      2015 年遠赴四川成都學習正宗麻辣鍋底與紅油煉製，<br>
-      保留花椒與辣椒的層次香氣，減少厚重油膩與負擔。<br>
-      一鍋香麻而不死鹹的湯底，適合在家簡單備料，輕鬆上桌。
-    </p>
   </div>
 
   <!-- 產品特色 -->
