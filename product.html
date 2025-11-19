@@ -72,18 +72,19 @@ body{
   padding:10px 18px 40px;
 }
 
-/* 標題區 */
+/* ===== 標題區：PRODUCT STORY（跟表單英文一樣風格） ===== */
 h1{
-  margin:14px 0 16px;
+  margin:22px 0 22px;
   text-align:center;
-  font-size:32px;              /* 與表單英文標題接近的大小 */
+  font-family:'Amatic SC','Noto Serif TC','Noto Sans TC','Microsoft JhengHei',serif;
+  font-size:40px;              /* 主標大小（桌機） */
   letter-spacing:.18em;
   text-indent:.18em;
-  color:var(--navy);
-  font-family:'Amatic SC','Noto Serif TC','Noto Sans TC','Microsoft JhengHei',serif;
+  color:var(--navy);           /* 和 LIU MAMA ORDER 一樣的深藍色 */
+  text-transform:uppercase;
 }
 
-/* 標題下：商品照片輪播（調整高度比例） */
+/* 標題下：商品照片輪播 */
 .hero-gallery{
   max-width:620px;
   margin:0 auto 30px;
@@ -92,7 +93,7 @@ h1{
   position:relative;
   background:#ddd;
   box-shadow:0 10px 22px rgba(0,0,0,.08);
-  aspect-ratio:4 / 6;            /* 固定 4:6 比例，看起來不會太長 */
+  aspect-ratio:4 / 6;            /* 固定比例 */
 }
 .hero-gallery-inner{
   display:flex;
@@ -107,8 +108,8 @@ h1{
   width:100%;
   height:100%;
   display:block;
-  object-fit:cover;              /* 等比例裁切填滿 */
-  object-position:center center; /* 圖片居中 */
+  object-fit:cover;
+  object-position:center center;
 }
 
 /* 輪播左右按鈕 */
@@ -480,11 +481,12 @@ h1{
     padding:10px 16px 34px;
   }
   h1{
-    font-size:28px;          /* 手機略小一點 */
-    letter-spacing:.16em;
-    text-indent:.16em;
-    white-space:nowrap;      /* 避免 PRODUCT STORY 斷行 */
-    line-height:1.3;
+    font-size:36px;           /* 手機版主標，跟表單接近 */
+    letter-spacing:.18em;
+    text-indent:.18em;
+    color:var(--navy);
+    white-space:nowrap;       /* 避免 PRODUCT STORY 斷行 */
+    line-height:1.25;
   }
   .hero-gallery{
     margin-bottom:20px;
