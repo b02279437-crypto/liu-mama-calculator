@@ -72,7 +72,7 @@ body{
   padding:24px 18px 64px;
 }
 
-/* 滾動淡入動畫 */
+/* ===== 共用滾動淡入動畫 ===== */
 .reveal{
   opacity:0;
   transform:translateY(18px);
@@ -83,7 +83,7 @@ body{
   transform:translateY(0);
 }
 
-/* 標題 */
+/* ===== 標題區：PRODUCT STORY（跟表單英文接近） ===== */
 h1{
   margin:34px 0 28px;
   text-align:center;
@@ -96,7 +96,7 @@ h1{
   text-transform:uppercase;
 }
 
-/* ===== 品牌故事卡片 ===== */
+/* 品牌故事卡片（標題下面；再縮小＋留白） */
 .hero-card{
   background:#ffffff;
   border-radius:18px;
@@ -105,19 +105,21 @@ h1{
   text-align:center;
   margin:0 auto 32px;
   border:1px solid rgba(0,0,0,.03);
-  max-width:450px;
+  max-width:450px; /* 再縮小一點，周圍空白更多 */
 }
 .hero-tag{
   font-size:10px;
   letter-spacing:.28em;
   color:#777;
   margin-bottom:6px;
+  font-family:'Noto Serif TC','Noto Sans TC',serif;
 }
 .hero-title{
   font-size:16px;
   letter-spacing:.24em;
   margin-bottom:6px;
   color:#3b4350;
+  font-family:'Noto Serif TC','Noto Sans TC',serif;
 }
 .hero-text{
   font-size:12.5px;
@@ -126,42 +128,35 @@ h1{
   color:#4a4a44;
 }
 
-/* ===== 商品圖片輪播區 ===== */
+/* 商品照片輪播（用 4:6 比例，高一點） */
 .hero-gallery{
-  max-width:600px;
-  margin:0 auto 40px;
+  max-width:620px;
+  margin:0 auto 30px;
   border-radius:18px;
   overflow:hidden;
   position:relative;
   background:#ddd;
   box-shadow:0 10px 22px rgba(0,0,0,.08);
-
-  height:360px;   /* ← 你指定的高度 */
+  aspect-ratio:4 / 6;            /* 偏直式的比例，看起來比較高、質感好 */
 }
 .hero-gallery-inner{
   display:flex;
   transition:transform .6s var(--ease-soft);
-  height:100%;
+  will-change:transform;
 }
 .hero-slide{
   flex:0 0 100%;
-  height:100%;
+  position:relative;
 }
 .hero-slide img{
   width:100%;
   height:100%;
-  object-fit:cover;
-  object-position:center center;
+  display:block;
+  object-fit:cover;              /* 等比例裁切填滿 */
+  object-position:center center; /* 圖片居中 */
 }
 
-/* 手機高度 */
-@media (max-width:600px){
-  .hero-gallery{
-    height:260px;
-  }
-}
-
-/* 輪播按鈕 */
+/* 輪播左右按鈕 */
 .hero-nav{
   position:absolute;
   top:50%;
@@ -183,8 +178,11 @@ h1{
   opacity:.4;
   cursor:default;
 }
+.hero-nav:not(:disabled):hover{
+  background:rgba(0,0,0,.32);
+}
 
-/* 指示點 */
+/* 照片輪播小點 */
 .hero-dots{
   position:absolute;
   bottom:10px;
@@ -204,12 +202,13 @@ h1{
   background:#fff;
 }
 
-/* ===== 區塊標題 ===== */
+/* 區塊標題 */
 .section-title{
   font-size:14px;
   letter-spacing:.2em;
   margin:38px 0 14px;
   color:#444;
+  font-family:'Noto Serif TC','Noto Sans TC',serif;
 }
 .section-title--accent{
   padding-left:10px;
@@ -220,89 +219,326 @@ h1{
 .section-body{
   font-size:13px;
   line-height:1.9;
+  letter-spacing:.06em;
+  color:#111827;
   margin-bottom:14px;
 }
-.section-body p{ margin:0 0 10px; }
+.section-body p{
+  margin:0 0 10px;
+}
 
-/* ===== 使用說明書（小冊） ===== */
-/*（原樣保留，你的程式碼無誤）*/
-.manual-wrapper{ margin-top:8px; }
+/* 辣度紅圈圈（共用） */
+.spice-label{
+  font-size:12px;
+  margin-top:8px;
+  color:#6b7280;
+}
+.spice-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:4px;
+}
+.spice-level{
+  font-size:12px;
+  min-width:36px;
+}
+.spice-dots{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.spice-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  border:1px solid #c4b9ab;
+  background:#fff;
+}
+.spice-dot.hot{
+  background:#A6413C;
+  border-color:#A6413C;
+}
+.spice-desc{
+  font-size:12px;
+  margin-left:4px;
+}
+
+/* ===== 使用說明書：日系小冊 ===== */
+.manual-wrapper{
+  margin-top:8px;
+}
+
+/* 小冊框 */
 .manual-book{
-  max-width:740px; margin:18px auto 0; background:#fff;
-  border-radius:16px; border:1px solid var(--border-soft);
+  max-width:740px;
+  margin:18px auto 0;
+  background:#ffffff;
+  border-radius:16px;
+  border:1px solid var(--border-soft);
   box-shadow:0 10px 18px rgba(15,23,42,.05);
   padding:14px 18px 14px;
+  position:relative;
 }
-.manual-head{
-  display:flex; justify-content:space-between; align-items:flex-end;
-  border-bottom:1px solid #eceff3; padding-bottom:6px;
-}
-.manual-head-title{ font-size:13px; letter-spacing:.24em; color:#4b5563; }
-.manual-head-tag{ font-size:11px; color:#9ca3af; }
 
+/* 上方標題列 */
+.manual-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:8px;
+  border-bottom:1px solid #eceff3;
+  padding-bottom:6px;
+}
+.manual-head-title{
+  font-size:13px;
+  letter-spacing:.24em;
+  text-indent:.24em;
+  color:#4b5563;
+  font-family:'Noto Serif TC','Noto Sans TC',serif;
+}
+.manual-head-tag{
+  font-size:11px;
+  letter-spacing:.18em;
+  color:#9ca3af;
+}
+
+/* 內頁視窗 */
 .manual-viewport{
-  overflow:hidden; border-radius:12px; border:1px solid #e5e7eb;
-  background:#fff; margin-top:10px;
+  position:relative;
+  overflow:hidden;
+  border-radius:12px;
+  background:#ffffff;
+  border:1px solid #e5e7eb;
+  margin-top:10px;
 }
+
+/* 整排頁面，左右滑動 */
 .manual-pages{
-  display:flex; transition:transform .45s var(--ease-soft);
+  display:flex;
+  transition:transform .45s var(--ease-soft);
+  will-change:transform;
 }
+
+/* 單頁：統一留白與行距 */
 .manual-page{
-  flex:0 0 100%; padding:18px 20px 22px; min-height:220px; position:relative;
+  flex:0 0 100%;
+  padding:18px 20px 22px;
+  min-height:220px;
+  position:relative;
 }
 .manual-page-title{
-  font-size:13px; border-left:2px solid var(--accent); padding-left:8px;
+  font-size:13px;
+  letter-spacing:.18em;
+  color:#374151;
   margin-bottom:10px;
+  padding-left:8px;
+  border-left:2px solid var(--accent);
+  font-family:'Noto Serif TC','Noto Sans TC',serif;
+  font-weight:400;
 }
-.manual-page-body{ font-size:14px; line-height:1.9; }
-.manual-page-num{
-  position:absolute; bottom:6px; right:10px; font-size:10px; color:#c4c4c4;
+.manual-page-body{
+  font-size:14px;
+  line-height:1.9;
+  letter-spacing:.04em;
+  color:#111827;
+}
+.manual-page-body p{
+  margin:2px 0 6px;
+}
+.manual-group{
+  margin-bottom:14px;
+}
+.manual-group:last-of-type{
+  margin-bottom:0;
 }
 
+/* 小書裡的英文小標題：Amatic + 小中文說明 */
+.manual-subtitle{
+  font-family:'Amatic SC','Noto Sans TC',cursive;
+  font-size:17px;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:var(--navy);
+  margin-bottom:4px;
+}
+.manual-subtitle-sub{
+  display:block;
+  font-family:'Noto Sans TC','Microsoft JhengHei',system-ui,sans-serif;
+  font-size:11px;
+  letter-spacing:.16em;
+  color:#9ca3af;
+  margin-top:1px;
+}
+
+/* 頁碼：右下 P1 / P2 / P3 */
+.manual-page-num{
+  position:absolute;
+  right:10px;
+  bottom:6px;
+  font-size:10px;
+  letter-spacing:.18em;
+  color:#c4c4c4;
+  font-weight:400;
+}
+
+/* 底部說明＋翻頁控制列 */
 .manual-footer{
-  display:flex; justify-content:flex-end; gap:10px; margin-top:10px;
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  margin-top:10px;
+  gap:10px;
+}
+
+/* 翻頁按鈕：PREV / NEXT */
+.manual-nav{
+  display:flex;
+  gap:6px;
+  align-items:center;
 }
 .manual-btn{
-  padding:6px 14px; border-radius:999px; background:#fff;
-  border:1px solid #d1d5db; cursor:pointer;
+  border-radius:999px;
+  padding:6px 14px;
+  font-size:12px;
+  letter-spacing:.16em;
+  cursor:pointer;
+  background:#ffffff;
+  color:#4b5563;
+  border:1px solid #d1d5db;
+}
+.manual-btn:disabled{
+  opacity:.4;
+  cursor:default;
+}
+.manual-btn:not(:disabled):hover{
+  background:#f3f4f6;
+}
+.manual-btn--next,
+.manual-btn--prev{
+  font-family:'Amatic SC','Noto Sans TC',cursive;
+  font-size:16px;
+  letter-spacing:.26em;
+  text-transform:uppercase;
+}
+
+/* 頁面指示點 */
+.manual-dots{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-size:10px;
+  color:#9ca3af;
 }
 .manual-dot{
-  width:6px; height:6px; border-radius:50%;
+  width:6px;
+  height:6px;
+  border-radius:50%;
   border:1px solid #c4c4c4;
+  background:transparent;
+}
+.manual-dot.active{
+  background:#4b5563;
+  border-color:#4b5563;
 }
 
-/* CTA */
-.cta{ margin-top:40px; text-align:center; }
+/* CTA 區塊 */
+.cta{
+  margin-top:40px;
+  text-align:center;
+}
 .cta-btn{
-  display:inline-flex; padding:10px 26px; border-radius:999px;
-  background:var(--navy); color:#fff; text-decoration:none; letter-spacing:.18em;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 26px;
+  border-radius:999px;
+  border:none;
+  background:var(--navy);
+  color:#fff;
+  font-size:14px;
+  letter-spacing:.18em;
+  text-decoration:none;
+  cursor:pointer;
+}
+.cta-btn:hover{
+  opacity:.95;
 }
 
-/* Footer */
+/* 頁尾小字 */
 .footer-note{
-  margin-top:40px; font-size:11px; color:#8a8a84;
+  margin-top:40px;
+  font-size:11px;
+  color:#8a8a84;
+  letter-spacing:.08em;
+  text-align:left;
+}
+
+/* 手機版 */
+@media (max-width:600px){
+  .topbar{
+    padding:10px 14px 0;
+  }
+  .page{
+    padding:18px 16px 56px;
+  }
+  h1{
+    font-size:46px;
+    letter-spacing:.22em;
+    text-indent:.22em;
+    color:#var(--navy);
+    white-space:nowrap;
+    line-height:1.25;
+  }
+  .hero-card{
+    padding:12px 14px 14px;
+    margin-bottom:26px;
+  }
+  .hero-gallery{
+    margin-bottom:32px;
+    max-width:100%;
+  }
+  .hero-nav{
+    width:28px;
+    height:28px;
+  }
+  .manual-book{
+    padding:12px 14px 12px;
+  }
+  .manual-page{
+    padding:16px 16px 20px;
+    min-height:200px;
+  }
+  .manual-btn{
+    padding:6px 14px;
+    font-size:12px;
+  }
+  .manual-btn--next,
+  .manual-btn--prev{
+    font-size:16px;
+  }
 }
 </style>
 </head>
-
 <body>
 
-<!-- 頂部 -->
-<div class="topbar reveal">
+<!-- 頂部列：品牌＋回訂購頁 -->
+<div class="topbar">
   <div class="topbar-brand">
     <div class="topbar-logo"></div>
     <div class="topbar-name">LIU MAMA · 麻辣鍋底</div>
   </div>
+  <!-- 回到訂購頁（直接跳過開場動畫） -->
   <a class="topbar-link" href="https://b02279437-crypto.github.io/liu-mama-calculator/calculator.html?skipIntro=1">
     回到訂購頁 →
   </a>
 </div>
 
 <div class="page">
-
+  <!-- 標題 -->
   <h1 class="reveal">PRODUCT STORY</h1>
 
-  <!-- 品牌故事卡 -->
+  <!-- 品牌故事卡片（標題下方） -->
   <div class="hero-card reveal">
     <div class="hero-tag">2015 · 從四川帶回的香麻記憶</div>
     <div class="hero-title">劉嘛麻 麻辣鍋底料包</div>
@@ -313,55 +549,202 @@ h1{
     </p>
   </div>
 
-  <!-- ===== 產品輪播（已改成 product-1 2 5 6） ===== -->
+  <!-- 產品照片輪播 -->
   <div class="hero-gallery reveal" id="heroGalleryOuter">
     <div class="hero-gallery-inner" id="heroGallery">
-
       <div class="hero-slide">
-        <img src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-1">
+        <img src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-1" alt="劉嘛麻麻辣鍋底 商品照 1">
       </div>
       <div class="hero-slide">
-        <img src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2">
+        <img src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2" alt="劉嘛麻辣鍋底 商品照 2">
       </div>
       <div class="hero-slide">
-        <img src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-5">
+        <img src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-5" alt="劉嘛麻辣鍋底 商品照 5">
       </div>
       <div class="hero-slide">
-        <img src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-6">
+        <img src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-6" alt="劉嘛麻辣鍋底 商品照 6">
       </div>
-
     </div>
-
-    <button class="hero-nav hero-prev" id="heroPrev">‹</button>
-    <button class="hero-nav hero-next" id="heroNext">›</button>
+    <button class="hero-nav hero-prev" id="heroPrev" aria-label="上一張">‹</button>
+    <button class="hero-nav hero-next" id="heroNext" aria-label="下一張">›</button>
     <div class="hero-dots" id="heroDots"></div>
   </div>
 
-  <!-- ===== 產品特色 ===== -->
+  <!-- 產品特色 -->
   <h2 class="section-title section-title--accent reveal">產品特色</h2>
   <div class="section-body reveal">
-    <p>手工煉油，慢火堆疊香氣 ...（原文保留）</p>
-    <p>這不是食品加工廠大量機器製作能做到的味道 ...</p>
-    <p>底料堅持小量分批製作 ...</p>
-    <p>辣度可以自己決定 ...</p>
+    <p>
+      手工煉油，慢火堆疊香氣。<br>
+      我們的辣油不是現成品。選用 13 種中藥材、3 種乾辣椒與紅、青花椒，
+      以小火不斷推炒超過兩小時慢慢煉製，讓香氣層層堆疊，麻而不躁、辣而不嗆。
+    </p>
+    <p>
+      這不是食品加工廠大量機器製作能做到的味道，
+      而是每一鍋都用心掌控火候的手工麻辣。
+    </p>
+    <p>
+      底料堅持小量分批製作：先爆香薑片，再加入豆瓣、乾辣椒、花椒與中藥材，
+      透過多次翻炒讓香氣慢慢融合釋放，打造出溫潤又有深度的香辣風味。<br>
+      不是單一的死辣，而是越煮越香、越煮越出味。
+    </p>
+    <p>
+      辣度可以自己決定。湯頭辣度可以依個人口味加辣椒或辣油調整，
+      無論是清爽微辣或重口麻辣，都能煮出最適合自己的一鍋。
+    </p>
   </div>
 
-  <!-- ===== 成分 ===== -->
+  <!-- 成分與內容物 -->
   <h2 class="section-title section-title--accent reveal">成分與內容物</h2>
   <div class="section-body reveal">
-    內容物（2 人份）：朝天椒、子彈椒、燈籠椒、雞心辣椒、魔鬼辣椒、花椒 ...
+    內容物（2 人份）：<br>
+    朝天椒、子彈椒、燈籠椒、雞心辣椒、魔鬼辣椒、花椒、豆瓣醬、薑片、八角、三奈等。<br><br>
+
+    一份組合內含：<br>
+    ・底料包 × 1<br>
+    ・綜合乾料包 × 1（兩種乾辣椒、青紅花椒、草果、香葉）<br>
+    ・魔鬼辣椒粉 × 1（魔鬼辣椒粉非常辣 .ᐟ 請酌量添加）<br>
+    ・辣油 × 1
   </div>
 
-  <!-- ===== 保存方式 ===== -->
+  <!-- 保存方式 -->
   <h2 class="section-title section-title--accent reveal">保存方式</h2>
-  <div class="section-body reveal">常溫保存，賞味期間三個月。</div>
+  <div class="section-body reveal">
+    常溫保存，賞味期間三個月。
+  </div>
 
-  <!-- ===== 使用說明書 ===== -->
+  <!-- 使用說明書（小冊） -->
   <h2 class="section-title reveal">使用說明書</h2>
 
-  <!-- （保留原本程式碼，不再重複貼超長內容） -->
+  <div class="manual-wrapper reveal">
+    <div class="manual-book">
+      <div class="manual-head">
+        <div class="manual-head-title">劉嘛麻 麻辣湯底</div>
+        <div class="manual-head-tag">USAGE GUIDE · 使用說明書</div>
+      </div>
 
-  <!-- CTA -->
+      <div class="manual-viewport">
+        <div class="manual-pages" id="manualPages">
+          <!-- P1：建議用量 + 參考辣度 -->
+          <section class="manual-page" data-page="1">
+            <div class="manual-page-title">建議用量 &amp; 辣度</div>
+            <div class="manual-page-body">
+              <div class="manual-group">
+                <div class="manual-subtitle">
+                  SERVING GUIDE
+                  <span class="manual-subtitle-sub">建議用量</span>
+                </div>
+                <p>• 底料包 x1 + 水約 800–850ml</p>
+                <p>• 辣度調整：可依個人喜好適量加入綜合乾料包、魔鬼辣椒粉及辣油</p>
+                <p>（花椒入口略帶渣感，建議適量放入棉袋中）</p>
+              </div>
+
+              <div class="manual-group">
+                <div class="manual-subtitle">
+                  SPICE LEVEL
+                  <span class="manual-subtitle-sub">參考辣度</span>
+                </div>
+
+                <div class="spice-row">
+                  <div class="spice-level">小辣</div>
+                  <div class="spice-dots">
+                    <div class="spice-dot hot"></div>
+                    <div class="spice-dot"></div>
+                  </div>
+                  <div class="spice-desc">辣油 1 包</div>
+                </div>
+
+                <div class="spice-row">
+                  <div class="spice-level">中辣</div>
+                  <div class="spice-dots">
+                    <div class="spice-dot hot"></div>
+                    <div class="spice-dot hot"></div>
+                  </div>
+                  <div class="spice-desc">魔鬼辣椒粉 1/2 包 + 辣油 1 包</div>
+                </div>
+
+                <div class="spice-row">
+                  <div class="spice-level">大辣</div>
+                  <div class="spice-dots">
+                    <div class="spice-dot hot"></div>
+                    <div class="spice-dot hot"></div>
+                    <div class="spice-dot hot"></div>
+                  </div>
+                  <div class="spice-desc">魔鬼辣椒粉 1 包 + 辣油 1 包</div>
+                </div>
+              </div>
+            </div>
+            <div class="manual-page-num">P1</div>
+          </section>
+
+          <!-- P2：食用步驟 & 注意事項 -->
+          <section class="manual-page" data-page="2">
+            <div class="manual-page-title">食用步驟 &amp; 注意事項</div>
+            <div class="manual-page-body">
+              <div class="manual-group">
+                <div class="manual-subtitle">
+                  COOKING STEPS
+                  <span class="manual-subtitle-sub">食用步驟</span>
+                </div>
+                <p>Step 1 鍋中加入約 800–850ml 的水</p>
+                <p>Step2 放入底料包與辣油，小火煮出香氣</p>
+                <p>Step3 依喜好加入綜合乾料包或魔鬼辣椒粉（請酌量慢加.ᐟ）</p>
+                <p>Step4 放入火鍋食材，煮熟即可享用 ⛧ 可視食材入味情況撈起底料包</p>
+              </div>
+
+              <div class="manual-group">
+                <div class="manual-subtitle">
+                  NOTES
+                  <span class="manual-subtitle-sub">注意事項</span>
+                </div>
+                <p>• 魔鬼辣椒粉非常辣 .ᐟ 請酌量添加</p>
+                <p>• 若湯底過鹹或過辣，可加水稀釋</p>
+                <p>• 花椒入口略帶渣感，建議依喜好適量放入棉袋中再煮</p>
+              </div>
+            </div>
+            <div class="manual-page-num">P2</div>
+          </section>
+
+          <!-- P3：推薦吃法 -->
+          <section class="manual-page" data-page="3">
+            <div class="manual-page-title">推薦吃法</div>
+            <div class="manual-page-body">
+              <div class="manual-group">
+                <div class="manual-subtitle">
+                  MALA CONGEE
+                  <span class="manual-subtitle-sub">麻辣粥</span>
+                </div>
+                <p>Step1. 享用火鍋後，撈出鍋內食材與底料包</p>
+                <p>Step2. 加入白飯，小火熬煮成粥（小火約煮 7 分鐘，過程需不時攪拌）</p>
+                <p>Step3. 最後加入蛋花、灑上蔥花即完成</p>
+              </div>
+
+              <div class="manual-group">
+                <div class="manual-subtitle">
+                  MALA TOFU
+                  <span class="manual-subtitle-sub">麻辣豆腐</span>
+                </div>
+                <p>Step1. 板豆腐放入湯底（800ml 水 + 800g 豆腐）</p>
+                <p>Step2. 中小火煮約 40 分鐘，加蓋靜置一晚（切勿翻攪）</p>
+                <p>Step3. 隔天加熱即可食用</p>
+                <p>豆腐已完全吸飽湯汁，麻辣入味、香氣十足！入口即麻香濃厚，涮嘴停不下來！</p>
+              </div>
+            </div>
+            <div class="manual-page-num">P3</div>
+          </section>
+        </div>
+      </div>
+
+      <div class="manual-footer">
+        <div class="manual-nav">
+          <button class="manual-btn manual-btn--prev" id="prevPage">PREV</button>
+          <button class="manual-btn manual-btn--next" id="nextPage">NEXT</button>
+          <div class="manual-dots" id="manualDots"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA 回訂購 -->
   <div class="cta reveal">
     <a class="cta-btn" href="https://b02279437-crypto.github.io/liu-mama-calculator/calculator.html?skipIntro=1">
       我要訂購劉嘛麻鍋底
@@ -371,99 +754,183 @@ h1{
   <div class="footer-note reveal">
     © LIU MAMA 2015–2025 · Handcrafted spicy mala hot pot
   </div>
-
 </div>
 
 <script>
-/* 書本翻頁控制 */
+/* 書本翻頁控制：3 頁 + 手指滑動 */
 (function(){
-  const pagesWrap=document.getElementById('manualPages');
-  if(!pagesWrap)return;
-  const pages=Array.from(pagesWrap.querySelectorAll('.manual-page'));
-  const prev=document.getElementById('prevPage');
-  const next=document.getElementById('nextPage');
-  const dots=document.getElementById('manualDots');
-  let current=0;
+  const pagesWrap = document.getElementById('manualPages');
+  if(!pagesWrap) return;
+  const pages = Array.from(pagesWrap.querySelectorAll('.manual-page'));
+  const prevBtn = document.getElementById('prevPage');
+  const nextBtn = document.getElementById('nextPage');
+  const dotsWrap = document.getElementById('manualDots');
+  const viewport = document.querySelector('.manual-viewport');
 
-  pages.forEach((_,i)=>{
-    const d=document.createElement('div');
-    d.className='manual-dot'+(i===0?' active':'');
-    d.onclick=()=>go(i);
-    dots.appendChild(d);
+  let current = 0;
+
+  // 建立小點
+  pages.forEach((_, idx)=>{
+    const dot = document.createElement('div');
+    dot.className = 'manual-dot' + (idx===0 ? ' active':'');
+    dot.dataset.index = idx;
+    dot.addEventListener('click', ()=> goTo(idx));
+    dotsWrap.appendChild(dot);
   });
 
-  function go(i){
-    if(i<0||i>=pages.length)return;
-    current=i;
-    pagesWrap.style.transform=`translateX(${i*-100}%)`;
-    prev.disabled=i===0;
-    next.disabled=i===pages.length-1;
-    [...dots.children].forEach((d,idx)=>d.classList.toggle('active',idx===i));
-  }
-  prev.onclick=()=>go(current-1);
-  next.onclick=()=>go(current+1);
-  go(0);
-})();
+  function update(){
+    const total = pages.length;
+    pagesWrap.style.transform = `translateX(${current * -100}%)`;
 
-/* 輪播控制 */
-(function(){
-  const wrap=document.getElementById('heroGallery');
-  const outer=document.getElementById('heroGalleryOuter');
-  const prev=document.getElementById('heroPrev');
-  const next=document.getElementById('heroNext');
-  const dots=document.getElementById('heroDots');
-  const slides=[...wrap.children];
-  let index=0,timer=null;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total-1;
 
-  slides.forEach((_,i)=>{
-    const b=document.createElement('button');
-    b.className='hero-dot'+(i===0?' active':'');
-    b.onclick=()=>{go(i);start();};
-    dots.appendChild(b);
-  });
-
-  function go(i){
-    index=i;
-    wrap.style.transform=`translateX(${i*-100}%)`;
-    [...dots.children].forEach((d,idx)=>d.classList.toggle('active',idx===i));
-    prev.disabled=i===0;
-    next.disabled=i===slides.length-1;
-  }
-  prev.onclick=()=>{go(index-1);start();}
-  next.onclick=()=>{go(index+1);start();}
-
-  function auto(){
-    index=index===slides.length-1?0:index+1;
-    go(index);
-  }
-  function start(){
-    stop();
-    timer=setInterval(auto,4500);
-  }
-  function stop(){
-    if(timer)clearInterval(timer),timer=null;
+    Array.from(dotsWrap.children).forEach((dot, idx)=>{
+      dot.classList.toggle('active', idx === current);
+    });
   }
 
-  outer.onmouseenter=stop;
-  outer.onmouseleave=start;
-  outer.ontouchstart=stop;
+  function goTo(i){
+    const total = pages.length;
+    if(i<0 || i>=total) return;
+    current = i;
+    update();
+  }
 
-  go(0);
-  start();
-})();
+  prevBtn.addEventListener('click', ()=> goTo(current-1));
+  nextBtn.addEventListener('click', ()=> goTo(current+1));
 
-/* 滾動動畫 */
-(function(){
-  const list=[...document.querySelectorAll('.reveal')];
-  const io=new IntersectionObserver(es=>{
-    es.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.classList.add('reveal--visible');
-        io.unobserve(e.target);
+  // 手指左右滑動翻頁（手機）
+  if(viewport){
+    let startX = null;
+    viewport.addEventListener('touchstart', (e)=>{
+      if(e.touches && e.touches.length === 1){
+        startX = e.touches[0].clientX;
       }
-    })
-  },{threshold:0.12});
-  list.forEach(el=>io.observe(el));
+    }, {passive:true});
+
+    viewport.addEventListener('touchend', (e)=>{
+      if(startX === null) return;
+      const touch = e.changedTouches && e.changedTouches[0];
+      if(!touch) return;
+      const dx = touch.clientX - startX;
+      const threshold = 40;
+      if(Math.abs(dx) > threshold){
+        if(dx < 0){
+          goTo(current+1);
+        }else{
+          goTo(current-1);
+        }
+      }
+      startX = null;
+    }, {passive:true});
+  }
+
+  update();
+})();
+
+/* 商品照片輪播控制：自動輪播 + 滑鼠移入暫停 */
+(function(){
+  const wrap = document.getElementById('heroGallery');
+  const outer = document.getElementById('heroGalleryOuter');
+  if(!wrap || !outer) return;
+
+  const slides = Array.from(wrap.querySelectorAll('.hero-slide'));
+  const prev = document.getElementById('heroPrev');
+  const next = document.getElementById('heroNext');
+  const dotsWrap = document.getElementById('heroDots');
+
+  let index = 0;
+  let autoTimer = null;
+
+  // 產生小點
+  slides.forEach((_, i)=>{
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'hero-dot' + (i===0 ? ' active':'');
+    dot.addEventListener('click', ()=>{
+      goTo(i);
+      startAuto();
+    });
+    dotsWrap.appendChild(dot);
+  });
+
+  function update(){
+    wrap.style.transform = `translateX(${index * -100}%)`;
+    Array.from(dotsWrap.children).forEach((d, i)=>{
+      d.classList.toggle('active', i === index);
+    });
+    prev.disabled = index === 0;
+    next.disabled = index === slides.length - 1;
+  }
+
+  function goTo(i){
+    if(i < 0) i = 0;
+    if(i >= slides.length) i = slides.length - 1;
+    index = i;
+    update();
+  }
+
+  function nextSlide(){
+    if(slides.length <= 1) return;
+    if(index === slides.length - 1){
+      index = 0;
+    }else{
+      index++;
+    }
+    update();
+  }
+
+  function startAuto(){
+    stopAuto();
+    if(slides.length <= 1) return;
+    autoTimer = setInterval(nextSlide, 4500);
+  }
+
+  function stopAuto(){
+    if(autoTimer){
+      clearInterval(autoTimer);
+      autoTimer = null;
+    }
+  }
+
+  prev.addEventListener('click', ()=>{
+    goTo(index - 1);
+    startAuto();
+  });
+  next.addEventListener('click', ()=>{
+    goTo(index + 1);
+    startAuto();
+  });
+
+  outer.addEventListener('mouseenter', stopAuto);
+  outer.addEventListener('mouseleave', startAuto);
+  outer.addEventListener('touchstart', stopAuto, {passive:true});
+
+  update();
+  startAuto();
+})();
+
+/* 滾動淡入動畫 */
+(function(){
+  const targets = document.querySelectorAll('.reveal');
+  if(!targets.length) return;
+
+  if(!('IntersectionObserver' in window)){
+    targets.forEach(el => el.classList.add('reveal--visible'));
+    return;
+  }
+
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('reveal--visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.12});
+
+  targets.forEach(el=>io.observe(el));
 })();
 </script>
 
