@@ -142,15 +142,46 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   line-height:1.9;
   opacity:0;
   white-space:pre-line;
-  margin-top:-38px;
+  margin-top:-26px;
   letter-spacing:.5px;
+  max-width:380px;
+  padding:0 20px;
+  text-align:center;
   transition:opacity var(--t-base) var(--ease);
 }
 #intro-text.show{opacity:1;}
 
-/* 開始訂購按鈕 */
-#startBtn{
+/* 開場按鈕區：包兩顆按鈕 */
+.intro-actions{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
   margin-top:18px;
+}
+
+/* 桌機：兩顆並排 */
+@media (min-width:640px){
+  .intro-actions{
+    flex-direction:row;
+    gap:16px;
+    margin-top:22px;
+  }
+}
+
+/* 手機：上下排 */
+@media (max-width:639px){
+  .intro-actions{
+    flex-direction:column;
+    gap:10px;
+    margin-top:18px;
+  }
+}
+
+/* 開場按鈕（STAR ORDER + PRODUCT STORY 共用） */
+#startBtn,
+#storyBtn{
+  margin-top:0;
   padding:10px 26px 11px;
   display:inline-flex;
   flex-direction:column;
@@ -181,12 +212,17 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
     box-shadow .25s var(--ease),
     filter .25s var(--ease);
 }
-#startBtn .btn-main-en{
+#storyBtn{
+  /* 個別 margin-top 改由 intro-actions 控制，這裡只保留其他樣式 */
+}
+#startBtn .btn-main-en,
+#storyBtn .btn-main-en{
   font-family:'Amatic SC',cursive;
   font-size:20px;
   letter-spacing:.18em;
 }
-#startBtn .btn-sub-zh{
+#startBtn .btn-sub-zh,
+#storyBtn .btn-sub-zh{
   font-size:13px;
   letter-spacing:.22em;
   text-indent:.22em;
@@ -195,26 +231,34 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   align-items:center;
   gap:6px;
 }
-#startBtn .btn-sub-zh::after{
+#startBtn .btn-sub-zh::after,
+#storyBtn .btn-sub-zh::after{
   content:"›";
   font-size:15px;
   transform:translateY(0.5px);
 }
-#startBtn.show{opacity:1; transform:translateY(0);}
-#startBtn:hover{
+#startBtn.show,
+#storyBtn.show{
+  opacity:1;
+  transform:translateY(0);
+}
+#startBtn:hover,
+#storyBtn:hover{
   transform:translateY(-1px);
   filter:brightness(1.03);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.95),
     0 11px 24px rgba(25,60,104,.22);
 }
-#startBtn:active{
+#startBtn:active,
+#storyBtn:active{
   transform:translateY(0);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.9),
     0 6px 14px rgba(25,60,104,.18);
 }
-#startBtn::after{
+#startBtn::after,
+#storyBtn::after{
   content:"";
   position:absolute;
   inset:auto;
@@ -225,7 +269,8 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   transform:translate(-50%,-50%) scale(1);
   opacity:0;
 }
-#startBtn.rippling::after{
+#startBtn.rippling::after,
+#storyBtn.rippling::after{
   left:var(--rx);
   top:var(--ry);
   animation:rippleInk .8s var(--ease-soft);
@@ -285,7 +330,6 @@ h2.title-in{
   font-size:14px;
   color:#3f4f61;
   letter-spacing:.38em;
-  text-indent:.38em;
   font-weight:500;
 }
 .promo-inline{
@@ -1043,18 +1087,21 @@ th{
     margin:14px auto -66px;
   }
   #intro-text{
-    margin-top:-34px;
-    line-height:1.9;
+    margin-top:-24px;
+    max-width:360px;
+    padding:0 18px;
   }
-  #startBtn{
-    margin-top:16px;
+  #startBtn,
+  #storyBtn{
     padding:9px 22px 10px;
   }
-  #startBtn .btn-main-en{
+  #startBtn .btn-main-en,
+  #storyBtn .btn-main-en{
     font-size:19px;
     letter-spacing:.16em;
   }
-  #startBtn .btn-sub-zh{
+  #startBtn .btn-sub-zh,
+  #storyBtn .btn-sub-zh{
     font-size:12.5px;
     letter-spacing:.2em;
   }
@@ -1076,7 +1123,8 @@ th{
 /* ===== 無動化偏好 ===== */
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
-  #startBtn::after{ display:none !important; }
+  #startBtn::after,
+  #storyBtn::after{ display:none !important; }
 }
 </style>
 </head>
@@ -1097,10 +1145,17 @@ th{
 劉嘛麻，一鍋來自初心的麻辣香氣，
 陪你溫暖每一餐。
   </div>
-  <button id="startBtn">
-    <span class="btn-main-en">STAR ORDER</span>
-    <span class="btn-sub-zh">開始訂購</span>
-  </button>
+
+  <div class="intro-actions">
+    <button id="startBtn">
+      <span class="btn-main-en">STAR ORDER</span>
+      <span class="btn-sub-zh">開始訂購</span>
+    </button>
+    <button id="storyBtn">
+      <span class="btn-main-en">PRODUCT STORY</span>
+      <span class="btn-sub-zh">產品介紹</span>
+    </button>
+  </div>
 </div>
 
 <!-- ===== 主內容 ===== -->
@@ -1273,6 +1328,7 @@ async function startIntroSequence(){
   const hero=document.getElementById('intro-hero');
   const text=document.getElementById('intro-text');
   const btn=document.getElementById('startBtn');
+  const storyBtn=document.getElementById('storyBtn');
   const maxWait=new Promise(r=>setTimeout(r,4000));
   await Promise.race([Promise.all([imgReady(logo), imgReady(hero)]), maxWait]);
   requestAnimationFrame(()=>{
@@ -1283,7 +1339,10 @@ async function startIntroSequence(){
       hero.classList.add('show');
       text.classList.add('show');
     },3200);
-    setTimeout(()=>btn.classList.add('show'),4800);
+    setTimeout(()=>{
+      if(btn) btn.classList.add('show');
+      if(storyBtn) storyBtn.classList.add('show');
+    },4800);
   });
 }
 
@@ -1355,6 +1414,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   const intro=document.getElementById('intro');
   const btn=document.getElementById('startBtn');
+  const storyBtn=document.getElementById('storyBtn');
   const main=document.getElementById('mainContent');
   const pageTitle=document.getElementById('pageTitle');
 
@@ -1387,6 +1447,14 @@ window.addEventListener('DOMContentLoaded',()=>{
         setupRevealOnScroll();
         showLaunchModal();
       },600);
+    });
+  }
+
+  // PRODUCT STORY 按鈕：導去產品介紹頁
+  if(storyBtn){
+    storyBtn.addEventListener('click',(e)=>{
+      triggerRipple(e);
+      window.location.href='https://b02279437-crypto.github.io/liu-mama-calculator/product.html';
     });
   }
 
