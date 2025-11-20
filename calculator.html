@@ -1214,7 +1214,7 @@ th{
     <section class="reveal">
       <div class="account-box">
         <h3>請匯款至以下帳戶:</h3>
-        <p>824 連線商業銀行　帳號：<span id="accountNumber">  111021686628  </p>
+        <p>824 連線商業銀行　帳號：<span id="accountNumber">  111021686628  </span></p>
         <button id="copyBtn" class="btn btn-crayon" onclick="copyAccount()">複製匯款帳號</button>
       </div>
 
@@ -1337,6 +1337,10 @@ function hideLaunchModal(){
 
 /* ===== 初始化 ===== */
 window.addEventListener('DOMContentLoaded',()=>{
+  // 讀取網址參數，判斷是否要跳過開場動畫
+  const params = new URLSearchParams(window.location.search);
+  const skipIntro = params.get('skipIntro') === '1';
+
   const select=document.getElementById('qty1');
   for(let i=0;i<=35;i++){
     const o=document.createElement('option');
@@ -1348,25 +1352,43 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   buildQty();
   calculate(true);
-  startIntroSequence();
 
   const intro=document.getElementById('intro');
   const btn=document.getElementById('startBtn');
   const main=document.getElementById('mainContent');
   const pageTitle=document.getElementById('pageTitle');
 
-  btn.addEventListener('click',(e)=>{
-    triggerRipple(e);
-    intro.classList.add('fade-out');
-    setTimeout(()=>{
+  if(skipIntro){
+    // ✅ 帶 ?skipIntro=1：不顯示開場動畫，直接顯示主畫面
+    if(intro){
+      intro.classList.add('fade-out');
       intro.style.display='none';
+    }
+    if(main){
       main.classList.add('show');
-      if(pageTitle){ pageTitle.classList.add('title-in'); }
+    }
+    if(pageTitle){
+      pageTitle.classList.add('title-in');
+    }
+    setupRevealOnScroll();
+    showLaunchModal();
+  }else{
+    // 保持原本開場動畫流程
+    startIntroSequence();
 
-      setupRevealOnScroll();
-      showLaunchModal();
-    },600);
-  });
+    btn.addEventListener('click',(e)=>{
+      triggerRipple(e);
+      intro.classList.add('fade-out');
+      setTimeout(()=>{
+        intro.style.display='none';
+        main.classList.add('show');
+        if(pageTitle){ pageTitle.classList.add('title-in'); }
+
+        setupRevealOnScroll();
+        showLaunchModal();
+      },600);
+    });
+  }
 
   const pickupNote = document.getElementById('pickupNote');
 
