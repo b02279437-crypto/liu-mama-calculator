@@ -88,7 +88,7 @@ h1{
   margin:34px 0 28px;
   text-align:center;
   font-family:'Amatic SC','Noto Serif TC','Noto Sans TC','Microsoft JhengHei',serif;
-  font-size:52px;
+  font-size:56px;
   font-weight:700;
   letter-spacing:.22em;
   text-indent:.22em;
@@ -105,7 +105,7 @@ h1{
   text-align:center;
   margin:0 auto 32px;
   border:1px solid rgba(0,0,0,.03);
-  max-width:500px; /* 再縮小一點，周圍空白更多 */
+  max-width:450px; /* 再縮小一點，周圍空白更多 */
 }
 .hero-tag{
   font-size:10px;
@@ -130,30 +130,46 @@ h1{
 
 /* 商品照片輪播（照原比例縮小） */
 .hero-gallery{
-  max-width:640px;
+  max-width:600px;
   margin:0 auto 40px;
   border-radius:18px;
   overflow:hidden;
   position:relative;
   background:#ddd;
   box-shadow:0 10px 22px rgba(0,0,0,.08);
+
+  /* 新增固定高度 */
+  height:360px;
 }
+
 .hero-gallery-inner{
   display:flex;
   transition:transform .6s var(--ease-soft);
   will-change:transform;
+  height:100%;  /* 讓內容填滿固定高度 */
 }
+
 .hero-slide{
   flex:0 0 100%;
   position:relative;
+  height:100%;  /* 讓每張 slide 都固定高度 */
 }
+
 .hero-slide img{
   width:100%;
-  height:auto;
+  height:100%;
   display:block;
-  object-fit:contain;
+  object-fit:cover; /* 🚀 改成 cover，高度才漂亮 */
   object-position:center center;
 }
+
+/* 手機版縮短高度 */
+@media (max-width:600px){
+  .hero-gallery{
+    height:260px;
+  }
+}
+
 
 /* 輪播左右按鈕 */
 .hero-nav{
