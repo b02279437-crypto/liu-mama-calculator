@@ -88,10 +88,10 @@ h1{
   margin:34px 0 28px;
   text-align:center;
   font-family:'Amatic SC','Noto Serif TC','Noto Sans TC','Microsoft JhengHei',serif;
-  font-size:56px;
-  font-weight:700;
-  letter-spacing:.22em;
-  text-indent:.22em;
+  font-size:90px;           /* 對齊訂購頁標題大小 */
+  font-weight:900;
+  letter-spacing:.04em;
+  text-indent:.04em;
   color:var(--navy);
   text-transform:uppercase;
 }
@@ -206,9 +206,10 @@ h1{
 .section-title{
   font-size:14px;
   letter-spacing:.2em;
-  margin:38px 0 14px;
+  margin:42px auto 14px;
   color:#444;
   font-family:'Noto Serif TC','Noto Sans TC',serif;
+  max-width:640px;
 }
 .section-title--accent{
   padding-left:10px;
@@ -218,10 +219,11 @@ h1{
 /* 內文 */
 .section-body{
   font-size:13px;
-  line-height:1.9;
+  line-height:2;
   letter-spacing:.06em;
   color:#111827;
-  margin-bottom:14px;
+  margin:0 auto 18px;
+  max-width:640px;
 }
 .section-body p{
   margin:0 0 10px;
@@ -272,7 +274,7 @@ h1{
 /* 小冊框 */
 .manual-book{
   max-width:740px;
-  margin:18px auto 0;
+  margin:22px auto 0;
   background:#ffffff;
   border-radius:16px;
   border:1px solid var(--border-soft);
@@ -483,10 +485,10 @@ h1{
     padding:18px 16px 56px;
   }
   h1{
-    font-size:46px;
-    letter-spacing:.22em;
-    text-indent:.22em;
-    color:#var(--navy);
+    font-size:60px;        /* 手機同步訂購頁 */
+    letter-spacing:.04em;
+    text-indent:.04em;
+    color:var(--navy);     /* 修正 #var 語法 */
     white-space:nowrap;
     line-height:1.25;
   }
@@ -612,7 +614,7 @@ h1{
     常溫保存，賞味期間三個月。
   </div>
 
-  <!-- 食用說明書（小冊） -->
+  <!-- 食用說明書 -->
   <h2 class="section-title reveal">食用說明書</h2>
 
   <div class="manual-wrapper reveal">
