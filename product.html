@@ -94,6 +94,14 @@ h1{
   text-indent:.04em;
   color:var(--navy);
   text-transform:uppercase;
+
+  opacity:0;
+  transform:translateY(16px) scale(.97);
+  transition:opacity .9s var(--ease-soft),transform .9s var(--ease-soft);
+}
+h1.title-in{
+  opacity:1;
+  transform:translateY(0) scale(1);
 }
 
 /* 品牌故事卡片（標題下面） */
@@ -200,6 +208,44 @@ h1{
 }
 .hero-dot.active{
   background:#fff;
+}
+
+/* Scroll hint */
+.scroll-hint{
+  margin:6px auto 6px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  font-size:10px;
+  letter-spacing:.26em;
+  color:#9ca3af;
+}
+.scroll-hint-text{
+  font-family:'Amatic SC','Noto Serif TC',cursive;
+}
+.scroll-hint-line{
+  width:1px;
+  height:14px;
+  background:#cbd5e1;
+  position:relative;
+  overflow:hidden;
+}
+.scroll-hint-line::after{
+  content:"";
+  position:absolute;
+  left:0;
+  top:-6px;
+  width:100%;
+  height:6px;
+  background:#64748b;
+  animation:scrollLine 1.6s infinite var(--ease-soft);
+}
+@keyframes scrollLine{
+  0%{ transform:translateY(0); opacity:0; }
+  20%{ opacity:1; }
+  80%{ transform:translateY(14px); opacity:1; }
+  100%{ transform:translateY(14px); opacity:0; }
 }
 
 /* 區塊標題 */
@@ -328,6 +374,12 @@ h1{
   padding:18px 20px 22px;
   min-height:220px;
   position:relative;
+  transition:box-shadow .35s var(--ease-soft), transform .35s var(--ease-soft), background-color .35s var(--ease-soft);
+}
+.manual-page.is-active{
+  background:#f9fafb;
+  box-shadow:0 6px 14px rgba(15,23,42,.06);
+  transform:translateY(-2px);
 }
 .manual-page-title{
   font-size:13px;
@@ -488,7 +540,7 @@ h1{
     font-size:60px;        /* 手機同步訂購頁 */
     letter-spacing:.04em;
     text-indent:.04em;
-    color:var(--navy);     /* 修正 #var 語法 */
+    color:var(--navy);
     white-space:nowrap;
     line-height:1.25;
   }
@@ -538,7 +590,7 @@ h1{
 
 <div class="page">
   <!-- 標題 -->
-  <h1 class="reveal">PRODUCT STORY</h1>
+  <h1 class="reveal" id="storyTitle">PRODUCT STORY</h1>
 
   <!-- 品牌故事卡片（標題下方） -->
   <div class="hero-card reveal">
@@ -570,6 +622,12 @@ h1{
     <button class="hero-nav hero-prev" id="heroPrev" aria-label="上一張">‹</button>
     <button class="hero-nav hero-next" id="heroNext" aria-label="下一張">›</button>
     <div class="hero-dots" id="heroDots"></div>
+  </div>
+
+  <!-- scroll hint -->
+  <div class="scroll-hint reveal">
+    <span class="scroll-hint-text">SCROLL</span>
+    <span class="scroll-hint-line"></span>
   </div>
 
   <!-- 產品特色 -->
@@ -790,6 +848,11 @@ h1{
     Array.from(dotsWrap.children).forEach((dot, idx)=>{
       dot.classList.toggle('active', idx === current);
     });
+
+    // 突顯目前頁面
+    pages.forEach((p,idx)=>{
+      p.classList.toggle('is-active', idx === current);
+    });
   }
 
   function goTo(i){
@@ -913,9 +976,18 @@ h1{
   startAuto();
 })();
 
-/* 滾動淡入動畫 */
+/* 滾動淡入動畫 + 標題進場 */
 (function(){
   const targets = document.querySelectorAll('.reveal');
+  const title = document.getElementById('storyTitle');
+
+  if(title){
+    // 首頁載入就讓標題浮現
+    requestAnimationFrame(()=>{
+      title.classList.add('title-in');
+    });
+  }
+
   if(!targets.length) return;
 
   if(!('IntersectionObserver' in window)){
