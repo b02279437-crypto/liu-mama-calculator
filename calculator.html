@@ -111,7 +111,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 
 /* Stage 1：Logo */
 #intro-logo{
-  width:clamp(360px, 92vw, 700px); /* 保持跟原版一樣大 */
+  width:clamp(360px, 92vw, 700px);
   opacity:0;
   transform:scale(.99);
   transition:
@@ -1132,7 +1132,6 @@ th{
   #intro{
     padding-top:10vh;
   }
-  /* ✅ 手機也維持跟原版一樣的大 logo */
   #intro-logo{
     width:clamp(360px, 92vw, 700px);
   }
@@ -1327,6 +1326,7 @@ th{
       </p>
 
       <div class="total" id="total" role="status" aria-live="polite" aria-atomic="true">Total Amount: $0</div>
+      <div id="totalDetail" class="total-note"></div>
       <div class="total-note">金額已含寄送費用 · 單位：新台幣</div>
     </section>
 
@@ -1376,6 +1376,18 @@ th{
 <div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
 
 <script>
+/* ===== 常數設定 ===== */
+const UNIT_PRICE  = 299;
+const SHIP_FEE    = { '711': 60, 'post': 120, 'pickup': 0 };
+const MAX_QTY     = 35;
+
+const STORAGE_KEY = 'liumama_order';
+const INTRO_KEY   = 'liumama_intro_seen';
+
+let lastTotal = 0;
+let launchModalTimer = null;
+let hasEdited = false;
+
 /* ===== 圖片載入 ===== */
 function imgReady(el){
   if(el && el.complete){
@@ -1420,7 +1432,7 @@ async function startIntroSequence(){
       if(text) text.classList.add('show');
     }, STAGE_SWITCH);
 
-    /* Stage 2 淡出（秒數跟 Logo 一樣） */
+    /* Stage 2 淡出 */
     setTimeout(()=>{
       if(hero) hero.classList.remove('show');
       if(text) text.classList.remove('show');
@@ -1441,7 +1453,7 @@ async function startIntroSequence(){
         if(btn) btn.classList.add('show');
         if(storyBtn) storyBtn.classList.add('show');
       }, 400);
-    }, STAGE_SWITCH + STAGE_SWITCH); // 文字頁顯示時間大約同 Logo
+    }, STAGE_SWITCH + STAGE_SWITCH);
   });
 }
 
@@ -1475,8 +1487,6 @@ function setupRevealOnScroll(){
 }
 
 /* ===== 開賣 Modal 控制 ===== */
-let launchModalTimer = null;
-
 function showLaunchModal(){
   const backdrop = document.getElementById('launchModal');
   if(!backdrop) return;
@@ -1492,140 +1502,6 @@ function hideLaunchModal(){
   backdrop.classList.remove('show');
   backdrop.setAttribute('aria-hidden','true');
 }
-
-/* ===== 初始化 ===== */
-window.addEventListener('DOMContentLoaded',()=>{
-  // 讀取網址參數，判斷是否要跳過開場動畫
-  const params = new URLSearchParams(window.location.search);
-  const skipIntro = params.get('skipIntro') === '1';
-
-  const select=document.getElementById('qty1');
-  for(let i=0;i<=35;i++){
-    const o=document.createElement('option');
-    o.value=i;
-    o.textContent=i;
-    select.appendChild(o);
-  }
-  select.value="0";
-
-  buildQty();
-  calculate(true);
-
-  const intro=document.getElementById('intro');
-  const btn=document.getElementById('startBtn');
-  const storyBtn=document.getElementById('storyBtn');
-  const main=document.getElementById('mainContent');
-  const pageTitle=document.getElementById('pageTitle');
-
-  if(skipIntro){
-    // ✅ 帶 ?skipIntro=1：直接顯示主畫面
-    if(intro){
-      intro.classList.add('fade-out');
-      intro.style.display='none';
-    }
-    if(main){
-      main.classList.add('show');
-    }
-    if(pageTitle){
-      pageTitle.classList.add('title-in');
-    }
-    setupRevealOnScroll();
-    showLaunchModal();
-  }else{
-    // 開場動畫：Logo → 原文字頁 → Hero 產品照
-    startIntroSequence();
-
-    if(btn){
-      btn.addEventListener('click',(e)=>{
-        triggerRipple(e);
-        intro.classList.add('fade-out');
-        setTimeout(()=>{
-          intro.style.display='none';
-          main.classList.add('show');
-          if(pageTitle){ pageTitle.classList.add('title-in'); }
-
-          setupRevealOnScroll();
-          showLaunchModal();
-        },600);
-      });
-    }
-  }
-
-  // PRODUCT STORY 按鈕：導去產品介紹頁
-  if(storyBtn){
-    storyBtn.addEventListener('click',(e)=>{
-      triggerRipple(e);
-      window.location.href='https://b02279437-crypto.github.io/liu-mama-calculator/product.html';
-    });
-  }
-
-  const pickupNote = document.getElementById('pickupNote');
-
-  document.querySelectorAll('.ship-card input').forEach(r=>{
-    r.addEventListener('change', ()=>{
-      calculate();
-      document.querySelectorAll('.ship-card').forEach(card=>{
-        const input=card.querySelector('input');
-        card.classList.toggle('selected', input.checked);
-      });
-
-      if(pickupNote){
-        const method=document.querySelector('input[name="shipMethod"]:checked');
-        if(method && method.value==='pickup'){
-          pickupNote.hidden=false;
-          pickupNote.classList.add('show');
-        }else{
-          pickupNote.classList.remove('show');
-          pickupNote.hidden=true;
-        }
-      }
-    });
-  });
-
-  setupInlinePromo();
-
-  const nameInput  = document.getElementById('customerName');
-  const phoneInput = document.getElementById('customerPhone');
-  const emailInput = document.getElementById('customerEmail');
-
-  nameInput.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter'){ e.preventDefault(); phoneInput.focus(); }
-  });
-  phoneInput.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter'){ e.preventDefault(); emailInput.focus(); }
-  });
-
-  nameInput.addEventListener('change', ()=>{
-    if (nameInput.value.trim().length >= 1) phoneInput.focus();
-  });
-  phoneInput.addEventListener('change', ()=>{
-    const digits = phoneInput.value.replace(/\D/g,'');
-    if (digits.length >= 10) emailInput.focus();
-  });
-
-  enableEmailAutoSuggest();
-
-  const launchBackdrop = document.getElementById('launchModal');
-  const launchCloseBtn = document.getElementById('launchClose');
-
-  if(launchBackdrop){
-    launchBackdrop.addEventListener('click',(e)=>{
-      if(e.target === launchBackdrop){
-        hideLaunchModal();
-      }
-    });
-  }
-  if(launchCloseBtn){
-    launchCloseBtn.addEventListener('click',()=>{
-      hideLaunchModal();
-    });
-  }
-  document.addEventListener('keydown',(e)=>{
-    if(e.key === 'Escape'){
-      hideLaunchModal();
-    }
-  });
-});
 
 /* ===== Email 智慧建議 ===== */
 const COMMON_DOMAINS = [
@@ -1691,7 +1567,12 @@ function setupInlinePromo(){
 
     const MS = 24*60*60*1000;
     let diffDays = Math.round((end - today) / MS);
-    if(diffDays < 0) diffDays = 0;
+
+    if(diffDays < 0){
+      daysEl.textContent = '活動已結束';
+      daysEl.classList.remove('animate');
+      return;
+    }
 
     animatePromoNumber(daysEl, diffDays);
   }catch(err){
@@ -1718,18 +1599,28 @@ function animatePromoNumber(el, target){
   requestAnimationFrame(frame);
 }
 
-/* ===== Stepper（0–35、±1、含長按連續） ===== */
+/* ===== Stepper（0–MAX_QTY、±1、含長按連續） ===== */
 function buildQty(){
-  const MIN=0, MAX=35;
+  const MIN   = 0;
   const select = document.getElementById('qty1');
   const minus  = document.getElementById('qtyMinus');
   const plus   = document.getElementById('qtyPlus');
   const input  = document.getElementById('qtyInput');
 
+  if(!select || !minus || !plus || !input) return;
+
+  for(let i=0;i<=MAX_QTY;i++){
+    const o=document.createElement('option');
+    o.value=i;
+    o.textContent=i;
+    select.appendChild(o);
+  }
+  select.value="0";
+
   function clamp(n){
     n = Number(n);
     if(Number.isNaN(n)) n = 0;
-    return Math.min(MAX, Math.max(MIN, n|0));
+    return Math.min(MAX_QTY, Math.max(MIN, n|0));
   }
   function syncTo(val, trigger=true){
     const v = clamp(val);
@@ -1780,7 +1671,7 @@ function buildQty(){
     if(['ArrowUp','ArrowRight'].includes(e.key)){ e.preventDefault(); syncTo(v+1); }
     else if(['ArrowDown','ArrowLeft'].includes(e.key)){ e.preventDefault(); syncTo(v-1); }
     else if(e.key==='Home'){ e.preventDefault(); syncTo(MIN); }
-    else if(e.key==='End'){ e.preventDefault(); syncTo(MAX); }
+    else if(e.key==='End'){ e.preventDefault(); syncTo(MAX_QTY); }
     else if(e.key==='PageUp'){ e.preventDefault(); syncTo(v+5); }
     else if(e.key==='PageDown'){ e.preventDefault(); syncTo(v-5); }
   });
@@ -1796,22 +1687,58 @@ function buildQty(){
   syncTo(select.value||0, false);
 }
 
-/* ===== 計算金額 ===== */
-let lastTotal=0;
-function calculate(isInit){
-  const qty1=parseInt(document.getElementById('qty1').value)||0;
-  let ship=0;
-  const method=document.querySelector('input[name="shipMethod"]:checked');
-  if(method){
-    if(method.value==='711') ship=60;
-    else if(method.value==='post') ship=120;
-    else if(method.value==='pickup') ship=0;
+/* ===== Total 明細 ===== */
+function updateTotalDetail(qty, methodValue){
+  const detailEl = document.getElementById('totalDetail');
+  if(!detailEl) return;
+
+  if(qty <= 0 && !methodValue){
+    detailEl.textContent = '請先選擇購買數量與寄送方式';
+    return;
   }
-  const newTotal=qty1*299+ship;
-  animateTotal(newTotal, !!isInit);
+
+  const shipLabel =
+    methodValue === '711'   ? '711 取貨' :
+    methodValue === 'post'  ? '宅配到家' :
+    methodValue === 'pickup'? '自取' : '';
+
+  const goodsPart = qty > 0 ? `鍋底 ${qty} 包（$${qty * UNIT_PRICE}）` : '';
+  const shipFee   = (SHIP_FEE[methodValue] ?? 0);
+
+  let shipPart = '';
+  if(methodValue === 'pickup'){
+    shipPart = '自取（$0）';
+  }else if(shipLabel){
+    shipPart = `${shipLabel}（$${shipFee}）`;
+  }
+
+  const parts = [goodsPart, shipPart].filter(Boolean);
+  detailEl.textContent = parts.length ? parts.join(' ＋ ') : '請先選擇購買數量與寄送方式';
 }
+
+/* ===== 計算金額 ===== */
+function calculate(isInit){
+  const qtySelect = document.getElementById('qty1');
+  const totalEl   = document.getElementById('total');
+  if(!qtySelect || !totalEl) return;
+
+  const qty1 = parseInt(qtySelect.value, 10) || 0;
+  const method = document.querySelector('input[name="shipMethod"]:checked');
+  const methodVal = method ? method.value : '';
+
+  let ship=0;
+  if(methodVal){
+    ship = SHIP_FEE[methodVal] ?? 0;
+  }
+  const newTotal=qty1*UNIT_PRICE+ship;
+  animateTotal(newTotal, !!isInit);
+  updateTotalDetail(qty1, methodVal);
+}
+
 function animateTotal(target, isInit){
   const el=document.getElementById('total');
+  if(!el) return;
+
   if(isInit){
     lastTotal=target;
     el.textContent='Total Amount: $'+target;
@@ -1842,6 +1769,58 @@ function animateTotal(target, isInit){
     }
   }
   requestAnimationFrame(frame);
+}
+
+/* ===== localStorage：儲存 / 還原 ===== */
+function saveState(){
+  try{
+    const method = document.querySelector('input[name="shipMethod"]:checked');
+    const data = {
+      name:  (document.getElementById('customerName')  || {}).value?.trim() || '',
+      phone: (document.getElementById('customerPhone') || {}).value?.trim() || '',
+      email: (document.getElementById('customerEmail') || {}).value?.trim() || '',
+      qty:   (document.getElementById('qty1')          || {}).value || '0',
+      ship:  method ? method.value : ''
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }catch(e){}
+}
+function restoreState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const data = JSON.parse(raw);
+
+    const nameEl  = document.getElementById('customerName');
+    const phoneEl = document.getElementById('customerPhone');
+    const emailEl = document.getElementById('customerEmail');
+    const qtySel  = document.getElementById('qty1');
+    const qtyInput = document.getElementById('qtyInput');
+
+    if(nameEl && data.name)  nameEl.value  = data.name;
+    if(phoneEl && data.phone) phoneEl.value = data.phone;
+    if(emailEl && data.email) emailEl.value = data.email;
+
+    if(qtySel && typeof data.qty !== 'undefined'){
+      qtySel.value = String(data.qty);
+      if(qtyInput){
+        qtyInput.value = String(data.qty);
+        qtyInput.setAttribute('aria-valuenow', String(data.qty));
+      }
+    }
+
+    if(data.ship){
+      const r = document.querySelector(`input[name="shipMethod"][value="${data.ship}"]`);
+      if(r){
+        r.checked = true;
+        r.dispatchEvent(new Event('change', {bubbles:true}));
+      }
+    }
+  }catch(e){}
+}
+
+function markEdited(){
+  hasEdited = true;
 }
 
 /* ===== 複製帳號／截圖／送表單 ===== */
@@ -1890,6 +1869,7 @@ function showToast(msg){
 }
 function setFieldError(el, id, msg){
   const hint=document.getElementById(id);
+  if(!el || !hint) return;
   if(msg){
     el.classList.add('input-error');
     el.setAttribute('aria-invalid','true');
@@ -1948,7 +1928,7 @@ function goToForm(){
   else if(method.value==='post') shipLabel='宅配到家';
   else if(method.value==='pickup') shipLabel='自取';
 
-  const total = qty*299 + (method.value==='711' ? 60 : method.value==='post' ? 120 : 0);
+  const total = qty*UNIT_PRICE + (SHIP_FEE[method.value] ?? 0);
 
   const base = 'https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url';
   const formUrl = base
@@ -1958,6 +1938,9 @@ function goToForm(){
     + `&entry.1732058404=${qty}`
     + `&entry.509305715=${encodeURIComponent(shipLabel)}`
     + `&entry.1351577488=${encodeURIComponent(total)}`;
+
+  hasEdited = false; // 送出時取消離頁提醒
+  saveState();       // 狀態也更新一次
   window.open(formUrl,'_blank');
 }
 
@@ -1982,6 +1965,166 @@ document.addEventListener('keydown',(e)=>{
         clientY:r.top+r.height/2
       });
     }
+  }
+});
+
+/* ===== 初始化 ===== */
+window.addEventListener('DOMContentLoaded',()=>{
+  const params = new URLSearchParams(window.location.search);
+  const skipIntroParam = params.get('skipIntro') === '1';
+  const introSeen = (()=>{ try{return localStorage.getItem(INTRO_KEY)==='1';}catch(e){return false;} })();
+  const skipIntro = skipIntroParam || introSeen;
+
+  buildQty();
+  restoreState();
+  calculate(true);
+
+  const intro=document.getElementById('intro');
+  const btn=document.getElementById('startBtn');
+  const storyBtn=document.getElementById('storyBtn');
+  const main=document.getElementById('mainContent');
+  const pageTitle=document.getElementById('pageTitle');
+
+  if(skipIntro){
+    if(intro){
+      intro.classList.add('fade-out');
+      intro.style.display='none';
+    }
+    if(main){
+      main.classList.add('show');
+    }
+    if(pageTitle){
+      pageTitle.classList.add('title-in');
+    }
+    setupRevealOnScroll();
+    showLaunchModal();
+  }else{
+    startIntroSequence();
+
+    if(btn){
+      btn.addEventListener('click',(e)=>{
+        triggerRipple(e);
+        try{ localStorage.setItem(INTRO_KEY,'1'); }catch(err){}
+        intro.classList.add('fade-out');
+        setTimeout(()=>{
+          intro.style.display='none';
+          main.classList.add('show');
+          if(pageTitle){ pageTitle.classList.add('title-in'); }
+
+          setupRevealOnScroll();
+          showLaunchModal();
+        },600);
+      });
+    }
+  }
+
+  // PRODUCT STORY 按鈕：導去產品介紹頁
+  if(storyBtn){
+    storyBtn.addEventListener('click',(e)=>{
+      triggerRipple(e);
+      window.location.href='https://b02279437-crypto.github.io/liu-mama-calculator/product.html';
+    });
+  }
+
+  const pickupNote = document.getElementById('pickupNote');
+
+  document.querySelectorAll('.ship-card input').forEach(r=>{
+    r.addEventListener('change', ()=>{
+      calculate();
+      document.querySelectorAll('.ship-card').forEach(card=>{
+        const input=card.querySelector('input');
+        card.classList.toggle('selected', input.checked);
+      });
+
+      if(pickupNote){
+        const method=document.querySelector('input[name="shipMethod"]:checked');
+        if(method && method.value==='pickup'){
+          pickupNote.hidden=false;
+          pickupNote.classList.add('show');
+        }else{
+          pickupNote.classList.remove('show');
+          pickupNote.hidden=true;
+        }
+      }
+      markEdited();
+      saveState();
+    });
+  });
+
+  setupInlinePromo();
+  enableEmailAutoSuggest();
+
+  const nameInput  = document.getElementById('customerName');
+  const phoneInput = document.getElementById('customerPhone');
+  const emailInput = document.getElementById('customerEmail');
+
+  if(nameInput && phoneInput && emailInput){
+    nameInput.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){ e.preventDefault(); phoneInput.focus(); }
+    });
+    phoneInput.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){ e.preventDefault(); emailInput.focus(); }
+    });
+
+    nameInput.addEventListener('change', ()=>{
+      if (nameInput.value.trim().length >= 1) phoneInput.focus();
+    });
+    phoneInput.addEventListener('change', ()=>{
+      const digits = phoneInput.value.replace(/\D/g,'');
+      if (digits.length >= 10) emailInput.focus();
+    });
+
+    // 手機電話自動整理：全形轉半形、去掉非數字
+    phoneInput.addEventListener('input', ()=>{
+      let v = phoneInput.value || '';
+      v = v.replace(/[０-９]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0));
+      v = v.replace(/\D/g,'').slice(0,10);
+      phoneInput.value = v;
+    });
+  }
+
+  // 訂購資訊欄位＆數量變動時記錄狀態
+  ['customerName','customerPhone','customerEmail','qty1','qtyInput'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){
+      el.addEventListener('input', ()=>{
+        markEdited();
+        saveState();
+      });
+      el.addEventListener('change', ()=>{
+        markEdited();
+        saveState();
+      });
+    }
+  });
+
+  const launchBackdrop = document.getElementById('launchModal');
+  const launchCloseBtn = document.getElementById('launchClose');
+
+  if(launchBackdrop){
+    launchBackdrop.addEventListener('click',(e)=>{
+      if(e.target === launchBackdrop){
+        hideLaunchModal();
+      }
+    });
+  }
+  if(launchCloseBtn){
+    launchCloseBtn.addEventListener('click',()=>{
+      hideLaunchModal();
+    });
+  }
+  document.addEventListener('keydown',(e)=>{
+    if(e.key === 'Escape'){
+      hideLaunchModal();
+    }
+  });
+});
+
+/* ===== 離頁提醒 ===== */
+window.addEventListener('beforeunload', (e)=>{
+  if(hasEdited){
+    e.preventDefault();
+    e.returnValue = '';
   }
 });
 </script>
