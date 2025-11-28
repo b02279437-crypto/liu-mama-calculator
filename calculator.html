@@ -479,41 +479,47 @@ h2.title-in{
   }
 
   .page-inner{
-    padding:0 16px 44px;   /* 底部多一點留白 */
+    /* 整頁底部的留白，會影響整頁最後一塊的喘息感 */
+    padding:0 16px 44px;
   }
 
-  /* STEP1：運送方式＋Total + 下一步 整塊往下拉一點 */
-  .ship-wrap{
+  h2{
+    font-size:60px;
+    margin-top:22px;
+    letter-spacing:.03em;
+  }
+  .brand-tagline{
+    font-size:13px;
+    letter-spacing:.3em;
+  }
+  .promo-inline{
+    font-size:12px;
+    width:100%;
+    letter-spacing:.16em;
+  }
+  .section-title{
+    font-size:13.5px;
+    letter-spacing:.16em;
+  }
+  table{
+    font-size:14px;
     width:96%;
-    gap:6px;
+  }
+  #productTable td:first-child{
+    font-size:15px;
+  }
+  #productTable td:first-child small{
+    font-size:12px;
+  }
+
+  /* ===== STEP1：運送方式 + Total + 下一步（你第二張圖紅框）===== */
+  .ship-wrap{
+    /* 商品表格 → 「711取貨/宅配/自取」這排的距離 */
+    width:96%;
+    gap:8px;
     flex-wrap:nowrap;
-    margin-top:18px;        /* 比原本再多一點 */
+    margin:20px auto 10px;   /* 想再近：改成 16；想更鬆：改成 24 */
   }
-  .total{
-    margin-top:22px;        /* Total 再往下 */
-  }
-  .step-next-btn{
-    margin-top:26px;        /* 下一步按鈕再往下 */
-  }
-
-  /* STEP2：商品摘要卡片、匯款卡片、按鈕之間拉開 */
-  .checkout-layout{
-    flex-direction:column;
-    margin:24px auto 18px;  /* 圖片 → 小計卡片 中間多一點空隙 */
-  }
-  .account-box{
-    margin:26px auto 0;     /* 小計卡片 → 匯款資訊 卡片拉開 */
-  }
-  .step2-actions{
-    margin-top:26px;        /* 匯款資訊 → 三顆按鈕 再往下 */
-  }
-
-  .checkout-{
-    flex:1 1 auto;
-    max-width:260px;
-    margin:0 auto;
-  }
-
   .ship-card{
     flex:1 1 0;
     max-width:none;
@@ -527,6 +533,21 @@ h2.title-in{
     font-size:13px;
   }
 
+  .total{
+    /* 運送方式那排 → TOTAL AMOUNT 間距 */
+    margin-top:22px;         /* 覺得還擠可以改 26 */
+  }
+  .total-note{
+    /* Total 下面那行「金額已含寄送費用…」 */
+    margin-top:12px;         /* 原本 6，現在比較鬆 */
+  }
+  .step-next-btn{
+    /* 「下一步：結帳與匯款」上方的空隙（第二張圖紅框上半部） */
+    margin-top:26px;         /* 覺得太鬆可改 22 */
+    min-width:230px;
+    justify-content:center;
+  }
+
   .input-container{
     width:100%;
     padding:18px 18px 20px;
@@ -535,13 +556,40 @@ h2.title-in{
     width:86%;
     font-size:12.5px;
   }
+
   .btn{
     padding:8px 16px;
     font-size:13px;
     letter-spacing:.13em;
   }
 
-  /* 下面這些保持原來的就好 */
+  /* ===== STEP2：小計卡片 + 匯款卡片 + 按鈕（第一、三張圖紅框）===== */
+  .checkout-layout{
+    /* 商品照片 → 「商品小計/合計金額」那張白卡的距離 */
+    flex-direction:column;
+    margin:26px auto 20px;   /* 覺得還擠就把 26 再加大一點 */
+  }
+  .checkout-product{
+    flex:1 1 auto;
+    max-width:260px;
+    margin:0 auto;
+  }
+
+  .account-box{
+    /* 上面那張合計金額卡片 → 匯款帳戶資訊卡片的距離（第三張圖中間那塊） */
+    margin:26px auto 0;      /* 想兩張更靠近就改 20；想更開就改 30 */
+  }
+
+  .step2-actions{
+    /* 匯款帳戶資訊卡片 → 三顆按鈕（下載截圖/返回/下一步）的距離（第一張圖紅框） */
+    margin-top:26px;         /* 覺得還擠改 30，太鬆改 22 */
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  /* ===== 開場 Hero 手機版維持原樣 ===== */
   #intro{
     padding-top:10vh;
   }
@@ -582,13 +630,13 @@ h2.title-in{
 
 /* Step 區塊 */
 .step-panel{
-  margin-top:10px;
+  margin-top:8px;
 }
 .step-panel[hidden]{ display:none; }
 
 /* 區塊小標：上方空間加大 */
 .section-title{
-  font-size:14px;
+  font-size:10px;
   color:#555;
   margin:32px 0 14px;
   display:inline-flex;
@@ -1635,7 +1683,7 @@ th{
         <div class="checkout-layout" id="checkoutCard">
           <div class="checkout-product">
             <img decoding="async" loading="lazy"
-                 src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-6"
+                 src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-7"
                  alt="劉嘛麻 麻辣鍋底商品圖">
             <div class="checkout-product-name">麻辣底料包（2人份）</div>
           </div>
