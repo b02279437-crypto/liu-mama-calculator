@@ -518,17 +518,17 @@ h2.title-in{
   background:linear-gradient(to left, rgba(46,67,94,0.18), transparent);
 }
 
-/* scroll reveal */
+/* ===== scroll reveal（加強版） ===== */
 .reveal{
   opacity:0;
-  transform:translateY(28px);
+  transform:translateY(40px) scale(.96);
   transition:
-    opacity .9s var(--ease),
-    transform .9s var(--ease);
+    opacity 1s var(--ease),
+    transform 1s var(--ease);
 }
 .reveal.in{
   opacity:1;
-  transform:translateY(0);
+  transform:translateY(0) scale(1);
 }
 
 /* ===== 訂購資訊卡片 ===== */
@@ -1543,7 +1543,7 @@ th{
 
     <!-- ===== STEP.2 結帳與匯款 ===== -->
     <div id="step2Panel" class="step-panel" hidden aria-label="STEP2 結帳與匯款">
-      <section>
+      <section class="reveal">
         <p class="section-title">STEP.2 · 結帳與匯款（匯款帳號與訂單摘要）</p>
 
         <div class="checkout-layout" id="checkoutCard">
@@ -1746,6 +1746,16 @@ function setStep(step){
       n1.classList.add('is-done');
       n2.classList.add('is-active');
     }
+  }
+
+  /* STEP.2 顯示時，強制讓裡面的 .reveal 做一次 in 動畫 */
+  if(step === 2){
+    const reveals = document.querySelectorAll('#step2Panel .reveal');
+    reveals.forEach(el=>{
+      el.classList.remove('in');
+      void el.offsetWidth; // 重新觸發 transition
+      el.classList.add('in');
+    });
   }
 }
 
@@ -2257,7 +2267,11 @@ function goToStep2(){
 
   updateSummary();
   setStep(2);
-  window.scrollTo({top:0, behavior:'smooth'});
+
+  /* 直接整頁捲到最上面（手機也會確實到頂） */
+  setTimeout(()=>{
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 60);
 }
 
 /* STEP3：前往表單 */
