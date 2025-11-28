@@ -15,7 +15,7 @@
 <!-- 預載圖片 -->
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/logo.png">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/LOGO2-removebg-preview.png">
-link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2">
+<link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-6">
 
 <style>
@@ -226,7 +226,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   gap:10px;
 }
 
-/* 開場按鈕 */
+/* 開場按鈕（現在只出現在 Hero 產品頁） */
 #startBtn,
 #storyBtn{
   margin-top:0;
@@ -417,26 +417,26 @@ h2.title-in{
   100%{transform:scale(1);}
 }
 
-/* ===== 流程 Step 導覽（回到比較乾淨的一版） ===== */
+/* ===== 流程 Step 導覽 ===== */
 .step-nav{
   max-width:720px;
-  margin:6px auto 10px;
-  padding:0 20px 6px;
+  margin:10px auto 6px;
+  padding:0 4px 6px;
   display:flex;
   align-items:flex-start;
-  justify-content:space-between;
-  gap:16px;
+  gap:8px;
   font-size:11px;
   letter-spacing:.12em;
 }
 .step-nav-item{
   flex:1 1 0;
+  position:relative;
   text-align:center;
   color:#9aa4b0;
 }
 .step-nav-item-dot{
-  width:26px;
-  height:26px;
+  width:22px;
+  height:22px;
   margin:0 auto 4px;
   border-radius:999px;
   border:1px solid #c0c8d4;
@@ -446,14 +446,25 @@ h2.title-in{
   justify-content:center;
   font-size:11px;
 }
+.step-label{
+  font-weight:600;
+}
 .step-name{
   display:block;
   font-size:11px;
   line-height:1.5;
 }
-
-/* 不要連接線 */
-.step-nav-item::after{ display:none; }
+.step-nav-item::after{
+  content:"";
+  position:absolute;
+  top:11px;
+  left:50%;
+  right:-50%;
+  height:1px;
+  background:linear-gradient(to right, rgba(160,172,186,.8), transparent);
+  z-index:-1;
+}
+.step-nav-item:last-child::after{ display:none; }
 
 .step-nav-item.is-active{
   color:var(--navy);
@@ -883,6 +894,12 @@ th{
   font-weight:600;
   color:#2f3c4a;
   letter-spacing:.08em;
+}
+.checkout-product-note{
+  margin-top:2px;
+  font-size:11px;
+  color:#7e8288;
+  letter-spacing:.06em;
 }
 
 .checkout-summary{
@@ -1324,6 +1341,15 @@ th{
     font-size:11.5px;
   }
 
+  .step-nav{
+    flex-direction:column;
+    align-items:stretch;
+    gap:2px;
+  }
+  .step-nav-item::after{
+    display:none;
+  }
+
   .checkout-layout{
     flex-direction:column;
   }
@@ -1539,6 +1565,7 @@ th{
                  src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-6"
                  alt="劉嘛麻 麻辣鍋底商品圖">
             <div class="checkout-product-name">麻辣底料包（2人份）</div>
+            <div class="checkout-product-note">手工慢炒紅油 · 一鍋約 2～3 人份</div>
           </div>
 
           <div class="checkout-summary">
