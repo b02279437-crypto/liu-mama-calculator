@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<!-- 關閉手機自動把數字變電話（反藍） -->
-<meta name="format-detection" content="telephone=no" />
 <title>LIU MAMA Order</title>
 
 <!-- 字體 -->
@@ -15,7 +13,6 @@
 <!-- 預載圖片 -->
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/logo.png">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/LOGO2-removebg-preview.png">
-<link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2">
 
 <style>
 :root{
@@ -47,12 +44,6 @@
 
   --item-text:#2c3e50;
   --item-size:15px;
-}
-
-/* 手機若還是硬包 tel 連結，顏色也維持一般文字 */
-a[href^="tel"]{
-  color:inherit !important;
-  text-decoration:none !important;
 }
 
 html{-webkit-text-size-adjust:100%;}
@@ -108,8 +99,6 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   transition:opacity var(--t-slow) var(--ease);
 }
 #intro.fade-out{opacity:0; pointer-events:none;}
-
-/* Stage 1：Logo */
 #intro-logo{
   width:clamp(360px, 92vw, 700px);
   opacity:0;
@@ -124,8 +113,6 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   transform:scale(1.02);
   transition:opacity var(--t-base) var(--ease);
 }
-
-/* Stage 2：原本的文字頁（LOGO2 + 故事文字） */
 #intro-hero{
   width:clamp(260px,60vw,380px);
   opacity:0;
@@ -153,93 +140,19 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 }
 #intro-text.show{opacity:1;}
 
-/* Stage 3：Hero 產品照面板（product-2 + 按鈕） */
-#intro-hero-panel{
-  position:absolute;
-  inset:0;
-  padding:10vh 16px 8vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  opacity:0;
-  pointer-events:none;
-  transform:translateY(10px) scale(.98);
-  transition:
-    opacity var(--t-slow) var(--ease),
-    transform var(--t-slow) var(--ease);
-}
-#intro-hero-panel.show{
-  opacity:1;
-  pointer-events:auto;
-  transform:translateY(0) scale(1);
-}
-.hero-frame{
-  position:relative;
-  width:min(880px, 100%);
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 18px 40px rgba(0,0,0,.22);
-  background:#d9cdbb;
-}
-.hero-image{
-  width:100%;
-  display:block;
-  min-height:220px;
-  object-fit:cover;
-}
-.hero-overlay{
-  position:absolute;
-  inset:0;
-  padding:clamp(18px,5vw,32px);
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:flex-start;
-  text-align:left;
-  background:
-    linear-gradient(90deg, rgba(14,23,34,.68), rgba(14,23,34,.35), rgba(14,23,34,.08));
-  color:#f9f7f3;
-}
-.hero-eyebrow{
-  font-size:11px;
-  letter-spacing:.28em;
-  text-transform:uppercase;
-  margin-bottom:10px;
-  opacity:.85;
-}
-.hero-title{
-  font-size:26px;
-  letter-spacing:.22em;
-  margin-bottom:8px;
-}
-.hero-sub{
-  font-size:13px;
-  letter-spacing:.14em;
-  max-width:360px;
-  margin-bottom:18px;
-  opacity:.9;
-}
-.hero-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-}
-
-/* 開場按鈕（現在只出現在 Hero 產品頁） */
-#startBtn,
-#storyBtn{
-  margin-top:0;
-  padding:8px 20px 9px;
+/* 開始訂購按鈕：STAR ORDER 在上，中文在下；無外框線 */
+#startBtn{
+  margin-top:18px;
+  padding:10px 26px 11px;
   display:inline-flex;
-  flex-direction:row;
+  flex-direction:column;
   align-items:center;
-  justify-content:center;
-  gap:6px;
+  gap:2px;
 
   font-family:'Noto Serif TC','Microsoft JhengHei',serif;
   color:var(--navy);
 
-  background:rgba(255,255,255,.85);
+  background:rgba(255,255,255,.80);
   border-radius:999px;
   border:none;
 
@@ -260,73 +173,58 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
     box-shadow .25s var(--ease),
     filter .25s var(--ease);
 }
-#storyBtn{
-  background:transparent;
-  color:#f1ebe0;
-  border:1px solid rgba(240,233,221,.8);
-}
-#startBtn .btn-main-en,
-#storyBtn .btn-main-en{
+#startBtn .btn-main-en{
   font-family:'Amatic SC',cursive;
-  font-size:17px;
+  font-size:20px;
   letter-spacing:.18em;
 }
-#startBtn .btn-sub-zh,
-#storyBtn .btn-sub-zh{
-  font-size:12px;
-  letter-spacing:.18em;
-  text-indent:.18em;
-  opacity:.9;
+#startBtn .btn-sub-zh{
+  font-size:13px;
+  letter-spacing:.22em;
+  text-indent:.22em;
+  opacity:.85;
   display:flex;
   align-items:center;
-  gap:4px;
+  gap:6px;
 }
-#startBtn .btn-sub-zh::after,
-#storyBtn .btn-sub-zh::after{
+#startBtn .btn-sub-zh::after{
   content:"›";
-  font-size:13px;
+  font-size:15px;
   transform:translateY(0.5px);
 }
-#startBtn.show,
-#storyBtn.show{
-  opacity:1;
-  transform:translateY(0);
-}
-#startBtn:hover,
-#storyBtn:hover{
+#startBtn.show{opacity:1; transform:translateY(0);}
+#startBtn:hover{
   transform:translateY(-1px);
   filter:brightness(1.03);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.95),
     0 11px 24px rgba(25,60,104,.22);
 }
-#startBtn:active,
-#storyBtn:active{
+#startBtn:active{
   transform:translateY(0);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.9),
     0 6px 14px rgba(25,60,104,.18);
 }
-#startBtn::after,
-#storyBtn::after{
+#startBtn::after{
   content:"";
   position:absolute;
   inset:auto;
   width:10px;
   height:10px;
   border-radius:50%;
-  background:radial-gradient(circle, rgba(255,255,255,.45) 0%, rgba(255,255,255,0) 70%);
+  background:radial-gradient(circle, rgba(30,79,123,.18) 0%, rgba(30,79,123,0) 70%);
   transform:translate(-50%,-50%) scale(1);
   opacity:0;
+  pointer-events:none;
 }
-#startBtn.rippling::after,
-#storyBtn.rippling::after{
+#startBtn.rippling::after{
   left:var(--rx);
   top:var(--ry);
   animation:rippleInk .8s var(--ease-soft);
 }
 @keyframes rippleInk{
-  0%{opacity:.45; transform:translate(-50%,-50%) scale(1);}
+  0%{opacity:.35; transform:translate(-50%,-50%) scale(1);}
   100%{opacity:0; transform:translate(-50%,-50%) scale(32);}
 }
 
@@ -380,6 +278,7 @@ h2.title-in{
   font-size:14px;
   color:#3f4f61;
   letter-spacing:.38em;
+  text-indent:.38em;
   font-weight:500;
 }
 .promo-inline{
@@ -440,7 +339,7 @@ h2.title-in{
   background:linear-gradient(to left, rgba(46,67,94,0.18), transparent);
 }
 
-/* scroll reveal */
+/* scroll reveal：預設透明 & 下移 */
 .reveal{
   opacity:0;
   transform:translateY(28px);
@@ -482,6 +381,7 @@ h2.title-in{
 .input-group input{
   font-size:16px;
   height:var(--control-h);
+  line-height:calc(var(--control-h) - 2px);
   padding:0 12px;
   border:1px solid #c5cfdd;
   border-radius:8px;
@@ -532,19 +432,16 @@ th{
   color:#fff;
   font-weight:500;
 }
-
-/* 三欄比例：品項 46%、價格 20%、數量 34% */
-.col-item{  width:46%; }
-.col-price{ width:20%; }
-.col-action{ width:34%; }
-
+.col-item{ width:auto; }
+.col-price{ width:110px; }
+.col-action{ width:148px; }
 #productTable td:nth-child(3),
 #productTable th:nth-child(3){
   padding-left:6px;
   padding-right:6px;
 }
 
-/* 價格上下排（置中） */
+/* 價格上下排 */
 .price-cell{
   display:flex;
   flex-direction:column;
@@ -570,7 +467,6 @@ th{
 .qty-stepper{
   display:inline-flex;
   align-items:center;
-  justify-content:center;
   height:var(--control-h);
   border:1px solid var(--line-blue);
   border-radius:8px;
@@ -585,6 +481,7 @@ th{
   background:#f1f4f8;
   cursor:pointer;
   font-size:20px;
+  line-height:1;
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -733,6 +630,7 @@ th{
     opacity var(--t-slow) var(--ease),
     transform var(--t-slow) var(--ease);
   z-index:0;
+  isolation:isolate;
 }
 .total.show{
   opacity:1;
@@ -1097,7 +995,7 @@ th{
   #productTable td:first-child small{
     font-size:12px;
   }
-
+  /* 手機寄送三個選項同一行，按鈕縮小 */
   .ship-wrap{
     width:96%;
     gap:6px;
@@ -1128,13 +1026,6 @@ th{
     font-size:13px;
     letter-spacing:.13em;
   }
-
-  #intro{
-    padding-top:10vh;
-  }
-  #intro-logo{
-    width:clamp(360px, 92vw, 700px);
-  }
   #intro-hero{
     width:clamp(240px, 68vw, 360px);
     margin:14px auto -66px;
@@ -1143,34 +1034,45 @@ th{
     margin-top:-34px;
     line-height:1.9;
   }
-  #intro-hero-panel{
-    padding:8vh 16px 6vh;
+  #startBtn{
+    margin-top:16px;
+    padding:9px 22px 10px;
   }
-  .hero-overlay{
-    padding:16px 16px 18px;
+  #startBtn .btn-main-en{
+    font-size:19px;
+    letter-spacing:.16em;
   }
-  .hero-title{
-    font-size:22px;
-  }
-  .hero-sub{
+  #startBtn .btn-sub-zh{
     font-size:12.5px;
-    max-width:280px;
+    letter-spacing:.2em;
   }
-  #startBtn .btn-main-en,
-  #storyBtn .btn-main-en{
-    font-size:16px;
+  .total{
+    font-size:27px;
   }
-  #startBtn .btn-sub-zh,
-  #storyBtn .btn-sub-zh{
-    font-size:11.5px;
+  #productTable td:nth-child(2),
+  #productTable th:nth-child(2){
+    text-align:center;
+    padding-right:10px;
+  }
+  #productTable .col-price{
+    width:110px;
+  }
+  .promo-modal{
+    max-width:300px;
+    padding:16px 16px 14px;
+  }
+  .promo-modal h3{
+    font-size:17px;
+  }
+  .promo-main{
+    font-size:12.5px;
   }
 }
 
 /* ===== 無動化偏好 ===== */
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
-  #startBtn::after,
-  #storyBtn::after{ display:none !important; }
+  #startBtn::after{ display:none !important; }
 }
 </style>
 </head>
@@ -1178,11 +1080,8 @@ th{
 <body>
 <!-- ===== 開場 ===== -->
 <div id="intro">
-  <!-- Stage 1：Logo -->
   <img id="intro-logo" decoding="async" loading="eager"
        src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/logo.png" alt="Logo">
-
-  <!-- Stage 2：原先文字頁（LOGO2 + 故事文字，沒有按鈕） -->
   <img id="intro-hero" decoding="async" loading="eager"
        src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/LOGO2-removebg-preview.png" alt="Liu Mama Secondary Logo">
 
@@ -1194,32 +1093,10 @@ th{
 劉嘛麻，一鍋來自初心的麻辣香氣，
 陪你溫暖每一餐。
   </div>
-
-  <!-- Stage 3：Hero 產品照 + 按鈕 -->
-  <div id="intro-hero-panel">
-    <div class="hero-frame">
-      <img class="hero-image" decoding="async" loading="eager"
-           src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2"
-           alt="Liu Mama 麻辣鍋底產品照">
-      <div class="hero-overlay">
-        <div class="hero-eyebrow">LIU MAMA </div>
-        <div class="hero-title">手炒麻辣鍋底 · 開賣中</div>
-        <div class="hero-sub">
-          手炒的麻辣，暖心又暖胃。<br>
-        </div>
-        <div class="hero-actions">
-          <button id="startBtn">
-            <span class="btn-main-en">START ORDER</span>
-            <span class="btn-sub-zh">開始訂購</span>
-          </button>
-          <button id="storyBtn">
-            <span class="btn-main-en">PRODUCT STORY</span>
-            <span class="btn-sub-zh">產品介紹</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <button id="startBtn">
+    <span class="btn-main-en">STAR ORDER</span>
+    <span class="btn-sub-zh">開始訂購</span>
+  </button>
 </div>
 
 <!-- ===== 主內容 ===== -->
@@ -1234,7 +1111,7 @@ th{
       </p>
       <p id="promoInline" class="promo-inline">
         <span class="promo-mark">⛧</span>
-        11/18 ~ 12/18 開賣價
+        11/17 ~ 12/17 開賣價
         <strong class="price-red">$299</strong>
         <span class="promo-sep">·</span>
         倒數 <strong class="promo-days" id="promoDays">-- 天</strong>
@@ -1295,7 +1172,7 @@ th{
       </table>
     </section>
 
-    <!-- 寄送方式 -->
+    <!-- 寄送方式：含自取 -->
     <section class="reveal">
       <div class="ship-wrap" role="radiogroup" aria-label="寄送方式">
         <label class="ship-card" for="ship711">
@@ -1316,17 +1193,10 @@ th{
       </div>
 
       <p id="pickupNote" class="pickup-note" hidden>
-        自取地點：<br><br>
-        ① 【食實甜點工作室】<br>
-        台北市士林區天母北路47號1F<br>
-        <span style="opacity:.8;">（天母商圈）</span><br><br>
-        ② 【Kuki House 軟餅乾專店】<br>
-        台北市大同區太原路97巷8號1樓<br>
-        <span style="opacity:.8;">（近承德路、京站）</span>
+        自取地點：食實甜點工作室 臺北市士林區天母北路47號1F
       </p>
 
       <div class="total" id="total" role="status" aria-live="polite" aria-atomic="true">Total Amount: $0</div>
-      <div id="totalDetail" class="total-note"></div>
       <div class="total-note">金額已含寄送費用 · 單位：新台幣</div>
     </section>
 
@@ -1334,7 +1204,7 @@ th{
     <section class="reveal">
       <div class="account-box">
         <h3>請匯款至以下帳戶:</h3>
-        <p>824 連線商業銀行　帳號：<span id="accountNumber">  111021686628  </span></p>
+        <p>台新銀行 812　帳號：<span id="accountNumber">123456789</span> 陳慧珍</p>
         <button id="copyBtn" class="btn btn-crayon" onclick="copyAccount()">複製匯款帳號</button>
       </div>
 
@@ -1358,11 +1228,11 @@ th{
       ×
     </button>
     <div class="promo-label">LIU MAMA</div>
-    <h3 id="launchTitle">劉嘛麻 開賣啦&nbsp;.ᐟ.ᐟ</h3>
+    <h3 id="launchTitle">劉嘛麻 開賣啦&nbsp;&nbsp;.ᐟ.ᐟ</h3>
 
     <p class="promo-main">
       手炒麻辣鍋底<br>
-      11/18 ~ 12/18 開賣價 <strong>$299</strong><br>
+      11/17 ~ 12/17 開賣價 <strong>$299</strong><br>
       期間限定價 · 先嚐一鍋就愛上
     </p>
 
@@ -1376,23 +1246,11 @@ th{
 <div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
 
 <script>
-/* ===== 常數設定 ===== */
-const UNIT_PRICE  = 299;
-const SHIP_FEE    = { '711': 60, 'post': 120, 'pickup': 0 };
-const MAX_QTY     = 35;
-
-const STORAGE_KEY = 'liumama_order';
-const INTRO_KEY   = 'liumama_intro_seen';
-
-let lastTotal = 0;
-let launchModalTimer = null;
-let hasEdited = false;
-
 /* ===== 圖片載入 ===== */
 function imgReady(el){
-  if(el && el.complete){
+  if(el.complete){
     if('decode' in el){ return el.decode().catch(()=>{}); }
-  } else if(el){
+  } else {
     return new Promise(res=>{
       el.addEventListener('load', res, {once:true});
       el.addEventListener('error', res, {once:true});
@@ -1400,64 +1258,26 @@ function imgReady(el){
   }
   return Promise.resolve();
 }
-
-/* ===== 新版開場流程：Logo → 原文字頁 → Hero 產品照＋按鈕 ===== */
 async function startIntroSequence(){
-  const logo      = document.getElementById('intro-logo');   // Stage 1
-  const hero      = document.getElementById('intro-hero');   // Stage 2 圖
-  const text      = document.getElementById('intro-text');   // Stage 2 文
-  const heroPanel = document.getElementById('intro-hero-panel'); // Stage 3
-  const btn       = document.getElementById('startBtn');
-  const storyBtn  = document.getElementById('storyBtn');
-
-  const maxWait = new Promise(r=>setTimeout(r,4000));
+  const logo=document.getElementById('intro-logo');
+  const hero=document.getElementById('intro-hero');
+  const text=document.getElementById('intro-text');
+  const btn=document.getElementById('startBtn');
+  const maxWait=new Promise(r=>setTimeout(r,4000));
   await Promise.race([Promise.all([imgReady(logo), imgReady(hero)]), maxWait]);
-
-  const STAGE_SWITCH = 3200; // Logo→文字頁的切換時間
-  const FADE_TIME    = 2000; // Logo / 文字頁淡出秒數
-
   requestAnimationFrame(()=>{
-    if(!logo) return;
-
-    /* Stage 1：Logo 淡入 */
     logo.classList.add('show');
-
-    /* Logo 淡出 */
-    setTimeout(()=>{ logo.classList.add('hide'); }, FADE_TIME);
-
-    /* Stage 2：文字頁（LOGO2 + 故事文字，沒有按鈕） */
+    setTimeout(()=>logo.classList.add('hide'),2000);
     setTimeout(()=>{
       logo.style.display='none';
-      if(hero) hero.classList.add('show');
-      if(text) text.classList.add('show');
-    }, STAGE_SWITCH);
-
-    /* Stage 2 淡出 */
-    setTimeout(()=>{
-      if(hero) hero.classList.remove('show');
-      if(text) text.classList.remove('show');
-    }, STAGE_SWITCH + FADE_TIME);
-
-    /* Stage 3：Hero 產品照 + 按鈕 */
-    setTimeout(()=>{
-      if(hero){
-        hero.style.display='none';
-      }
-      if(text){
-        text.style.display='none';
-      }
-      if(heroPanel){
-        heroPanel.classList.add('show');
-      }
-      setTimeout(()=>{
-        if(btn) btn.classList.add('show');
-        if(storyBtn) storyBtn.classList.add('show');
-      }, 400);
-    }, STAGE_SWITCH + STAGE_SWITCH);
+      hero.classList.add('show');
+      text.classList.add('show');
+    },3200);
+    setTimeout(()=>btn.classList.add('show'),4800);
   });
 }
 
-/* ===== scroll reveal ===== */
+/* ===== scroll reveal：每次捲動進出都淡入 ===== */
 function setupRevealOnScroll(){
   const reveals=document.querySelectorAll('.reveal');
   if(!reveals.length) return;
@@ -1487,6 +1307,8 @@ function setupRevealOnScroll(){
 }
 
 /* ===== 開賣 Modal 控制 ===== */
+let launchModalTimer = null;
+
 function showLaunchModal(){
   const backdrop = document.getElementById('launchModal');
   if(!backdrop) return;
@@ -1503,7 +1325,108 @@ function hideLaunchModal(){
   backdrop.setAttribute('aria-hidden','true');
 }
 
-/* ===== Email 智慧建議 ===== */
+/* ===== 初始化 ===== */
+window.addEventListener('DOMContentLoaded',()=>{
+  const select=document.getElementById('qty1');
+  for(let i=0;i<=35;i++){
+    const o=document.createElement('option');
+    o.value=i;
+    o.textContent=i;
+    select.appendChild(o);
+  }
+  select.value="0";
+
+  buildQty();
+  calculate(true);
+  startIntroSequence();
+
+  const intro=document.getElementById('intro');
+  const btn=document.getElementById('startBtn');
+  const main=document.getElementById('mainContent');
+  const pageTitle=document.getElementById('pageTitle');
+
+  btn.addEventListener('click',(e)=>{
+    triggerRipple(e);
+    intro.classList.add('fade-out');
+    setTimeout(()=>{
+      intro.style.display='none';
+      main.classList.add('show');
+      if(pageTitle){ pageTitle.classList.add('title-in'); }
+
+      setupRevealOnScroll();
+      showLaunchModal(); // 進主畫面時顯示開賣提示
+    },600);
+  });
+
+  const pickupNote = document.getElementById('pickupNote');
+
+  document.querySelectorAll('.ship-card input').forEach(r=>{
+    r.addEventListener('change', ()=>{
+      calculate();
+      document.querySelectorAll('.ship-card').forEach(card=>{
+        const input=card.querySelector('input');
+        card.classList.toggle('selected', input.checked);
+      });
+
+      if(pickupNote){
+        const method=document.querySelector('input[name="shipMethod"]:checked');
+        if(method && method.value==='pickup'){
+          pickupNote.hidden=false;
+          pickupNote.classList.add('show');
+        }else{
+          pickupNote.classList.remove('show');
+          pickupNote.hidden=true;
+        }
+      }
+    });
+  });
+
+  setupInlinePromo();
+
+  const nameInput  = document.getElementById('customerName');
+  const phoneInput = document.getElementById('customerPhone');
+  const emailInput = document.getElementById('customerEmail');
+
+  nameInput.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter'){ e.preventDefault(); phoneInput.focus(); }
+  });
+  phoneInput.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter'){ e.preventDefault(); emailInput.focus(); }
+  });
+
+  nameInput.addEventListener('change', ()=>{
+    if (nameInput.value.trim().length >= 1) phoneInput.focus();
+  });
+  phoneInput.addEventListener('change', ()=>{
+    const digits = phoneInput.value.replace(/\D/g,'');
+    if (digits.length >= 10) emailInput.focus();
+  });
+
+  enableEmailAutoSuggest();
+
+  const launchBackdrop = document.getElementById('launchModal');
+  const launchCloseBtn = document.getElementById('launchClose');
+
+  if(launchBackdrop){
+    launchBackdrop.addEventListener('click',(e)=>{
+      if(e.target === launchBackdrop){
+        hideLaunchModal();
+      }
+    });
+  }
+  if(launchCloseBtn){
+    launchCloseBtn.addEventListener('click',()=>{
+      hideLaunchModal();
+    });
+  }
+  document.addEventListener('keydown',(e)=>{
+    if(e.key === 'Escape'){
+      hideLaunchModal();
+    }
+  });
+});
+
+/* ===== Email 智慧建議：常用幾種 ===== */
 const COMMON_DOMAINS = [
   'gmail.com',
   'yahoo.com.tw',
@@ -1554,7 +1477,7 @@ function enableEmailAutoSuggest(){
   });
 }
 
-/* ===== 倒數天數 ===== */
+/* ===== 倒數天數：用純日期差避免怪數字 ===== */
 function setupInlinePromo(){
   const daysEl = document.getElementById('promoDays');
   if(!daysEl) return;
@@ -1562,17 +1485,12 @@ function setupInlinePromo(){
   try{
     const now   = new Date();
     const year  = now.getFullYear();
-    const today = new Date(year, now.getMonth(), now.getDate());
-    const end   = new Date(year, 11, 18); // 12/18
+    const today = new Date(year, now.getMonth(), now.getDate()); // 今日 00:00
+    const end   = new Date(year, 11, 17); // 12 月 17 日 00:00（月份從 0 開始）
 
     const MS = 24*60*60*1000;
     let diffDays = Math.round((end - today) / MS);
-
-    if(diffDays < 0){
-      daysEl.textContent = '活動已結束';
-      daysEl.classList.remove('animate');
-      return;
-    }
+    if(diffDays < 0) diffDays = 0;
 
     animatePromoNumber(daysEl, diffDays);
   }catch(err){
@@ -1599,28 +1517,18 @@ function animatePromoNumber(el, target){
   requestAnimationFrame(frame);
 }
 
-/* ===== Stepper（0–MAX_QTY、±1、含長按連續） ===== */
+/* ===== Stepper（0–35、±1、含長按連續） ===== */
 function buildQty(){
-  const MIN   = 0;
+  const MIN=0, MAX=35;
   const select = document.getElementById('qty1');
   const minus  = document.getElementById('qtyMinus');
   const plus   = document.getElementById('qtyPlus');
   const input  = document.getElementById('qtyInput');
 
-  if(!select || !minus || !plus || !input) return;
-
-  for(let i=0;i<=MAX_QTY;i++){
-    const o=document.createElement('option');
-    o.value=i;
-    o.textContent=i;
-    select.appendChild(o);
-  }
-  select.value="0";
-
   function clamp(n){
     n = Number(n);
     if(Number.isNaN(n)) n = 0;
-    return Math.min(MAX_QTY, Math.max(MIN, n|0));
+    return Math.min(MAX, Math.max(MIN, n|0));
   }
   function syncTo(val, trigger=true){
     const v = clamp(val);
@@ -1671,7 +1579,7 @@ function buildQty(){
     if(['ArrowUp','ArrowRight'].includes(e.key)){ e.preventDefault(); syncTo(v+1); }
     else if(['ArrowDown','ArrowLeft'].includes(e.key)){ e.preventDefault(); syncTo(v-1); }
     else if(e.key==='Home'){ e.preventDefault(); syncTo(MIN); }
-    else if(e.key==='End'){ e.preventDefault(); syncTo(MAX_QTY); }
+    else if(e.key==='End'){ e.preventDefault(); syncTo(MAX); }
     else if(e.key==='PageUp'){ e.preventDefault(); syncTo(v+5); }
     else if(e.key==='PageDown'){ e.preventDefault(); syncTo(v-5); }
   });
@@ -1687,58 +1595,22 @@ function buildQty(){
   syncTo(select.value||0, false);
 }
 
-/* ===== Total 明細 ===== */
-function updateTotalDetail(qty, methodValue){
-  const detailEl = document.getElementById('totalDetail');
-  if(!detailEl) return;
-
-  if(qty <= 0 && !methodValue){
-    detailEl.textContent = '請先選擇購買數量與寄送方式';
-    return;
-  }
-
-  const shipLabel =
-    methodValue === '711'   ? '711 取貨' :
-    methodValue === 'post'  ? '宅配到家' :
-    methodValue === 'pickup'? '自取' : '';
-
-  const goodsPart = qty > 0 ? `鍋底 ${qty} 包（$${qty * UNIT_PRICE}）` : '';
-  const shipFee   = (SHIP_FEE[methodValue] ?? 0);
-
-  let shipPart = '';
-  if(methodValue === 'pickup'){
-    shipPart = '自取（$0）';
-  }else if(shipLabel){
-    shipPart = `${shipLabel}（$${shipFee}）`;
-  }
-
-  const parts = [goodsPart, shipPart].filter(Boolean);
-  detailEl.textContent = parts.length ? parts.join(' ＋ ') : '請先選擇購買數量與寄送方式';
-}
-
-/* ===== 計算金額 ===== */
+/* ===== 計算金額（以 $299 為準） ===== */
+let lastTotal=0;
 function calculate(isInit){
-  const qtySelect = document.getElementById('qty1');
-  const totalEl   = document.getElementById('total');
-  if(!qtySelect || !totalEl) return;
-
-  const qty1 = parseInt(qtySelect.value, 10) || 0;
-  const method = document.querySelector('input[name="shipMethod"]:checked');
-  const methodVal = method ? method.value : '';
-
+  const qty1=parseInt(document.getElementById('qty1').value)||0;
   let ship=0;
-  if(methodVal){
-    ship = SHIP_FEE[methodVal] ?? 0;
+  const method=document.querySelector('input[name="shipMethod"]:checked');
+  if(method){
+    if(method.value==='711') ship=60;
+    else if(method.value==='post') ship=120;
+    else if(method.value==='pickup') ship=0;
   }
-  const newTotal=qty1*UNIT_PRICE+ship;
+  const newTotal=qty1*299+ship;
   animateTotal(newTotal, !!isInit);
-  updateTotalDetail(qty1, methodVal);
 }
-
 function animateTotal(target, isInit){
   const el=document.getElementById('total');
-  if(!el) return;
-
   if(isInit){
     lastTotal=target;
     el.textContent='Total Amount: $'+target;
@@ -1769,58 +1641,6 @@ function animateTotal(target, isInit){
     }
   }
   requestAnimationFrame(frame);
-}
-
-/* ===== localStorage：儲存 / 還原 ===== */
-function saveState(){
-  try{
-    const method = document.querySelector('input[name="shipMethod"]:checked');
-    const data = {
-      name:  (document.getElementById('customerName')  || {}).value?.trim() || '',
-      phone: (document.getElementById('customerPhone') || {}).value?.trim() || '',
-      email: (document.getElementById('customerEmail') || {}).value?.trim() || '',
-      qty:   (document.getElementById('qty1')          || {}).value || '0',
-      ship:  method ? method.value : ''
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }catch(e){}
-}
-function restoreState(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return;
-    const data = JSON.parse(raw);
-
-    const nameEl  = document.getElementById('customerName');
-    const phoneEl = document.getElementById('customerPhone');
-    const emailEl = document.getElementById('customerEmail');
-    const qtySel  = document.getElementById('qty1');
-    const qtyInput = document.getElementById('qtyInput');
-
-    if(nameEl && data.name)  nameEl.value  = data.name;
-    if(phoneEl && data.phone) phoneEl.value = data.phone;
-    if(emailEl && data.email) emailEl.value = data.email;
-
-    if(qtySel && typeof data.qty !== 'undefined'){
-      qtySel.value = String(data.qty);
-      if(qtyInput){
-        qtyInput.value = String(data.qty);
-        qtyInput.setAttribute('aria-valuenow', String(data.qty));
-      }
-    }
-
-    if(data.ship){
-      const r = document.querySelector(`input[name="shipMethod"][value="${data.ship}"]`);
-      if(r){
-        r.checked = true;
-        r.dispatchEvent(new Event('change', {bubbles:true}));
-      }
-    }
-  }catch(e){}
-}
-
-function markEdited(){
-  hasEdited = true;
 }
 
 /* ===== 複製帳號／截圖／送表單 ===== */
@@ -1869,7 +1689,6 @@ function showToast(msg){
 }
 function setFieldError(el, id, msg){
   const hint=document.getElementById(id);
-  if(!el || !hint) return;
   if(msg){
     el.classList.add('input-error');
     el.setAttribute('aria-invalid','true');
@@ -1928,7 +1747,7 @@ function goToForm(){
   else if(method.value==='post') shipLabel='宅配到家';
   else if(method.value==='pickup') shipLabel='自取';
 
-  const total = qty*UNIT_PRICE + (SHIP_FEE[method.value] ?? 0);
+  const total = qty*299 + (method.value==='711' ? 60 : method.value==='post' ? 120 : 0);
 
   const base = 'https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url';
   const formUrl = base
@@ -1938,9 +1757,6 @@ function goToForm(){
     + `&entry.1732058404=${qty}`
     + `&entry.509305715=${encodeURIComponent(shipLabel)}`
     + `&entry.1351577488=${encodeURIComponent(total)}`;
-
-  hasEdited = false; // 送出時取消離頁提醒
-  saveState();       // 狀態也更新一次
   window.open(formUrl,'_blank');
 }
 
@@ -1967,166 +1783,7 @@ document.addEventListener('keydown',(e)=>{
     }
   }
 });
-
-/* ===== 初始化 ===== */
-window.addEventListener('DOMContentLoaded',()=>{
-  const params = new URLSearchParams(window.location.search);
-  const skipIntroParam = params.get('skipIntro') === '1';
-  const introSeen = (()=>{ try{return localStorage.getItem(INTRO_KEY)==='1';}catch(e){return false;} })();
-  const skipIntro = skipIntroParam || introSeen;
-
-  buildQty();
-  restoreState();
-  calculate(true);
-
-  const intro=document.getElementById('intro');
-  const btn=document.getElementById('startBtn');
-  const storyBtn=document.getElementById('storyBtn');
-  const main=document.getElementById('mainContent');
-  const pageTitle=document.getElementById('pageTitle');
-
-  if(skipIntro){
-    if(intro){
-      intro.classList.add('fade-out');
-      intro.style.display='none';
-    }
-    if(main){
-      main.classList.add('show');
-    }
-    if(pageTitle){
-      pageTitle.classList.add('title-in');
-    }
-    setupRevealOnScroll();
-    showLaunchModal();
-  }else{
-    startIntroSequence();
-
-    if(btn){
-      btn.addEventListener('click',(e)=>{
-        triggerRipple(e);
-        try{ localStorage.setItem(INTRO_KEY,'1'); }catch(err){}
-        intro.classList.add('fade-out');
-        setTimeout(()=>{
-          intro.style.display='none';
-          main.classList.add('show');
-          if(pageTitle){ pageTitle.classList.add('title-in'); }
-
-          setupRevealOnScroll();
-          showLaunchModal();
-        },600);
-      });
-    }
-  }
-
-  // PRODUCT STORY 按鈕：導去產品介紹頁
-  if(storyBtn){
-    storyBtn.addEventListener('click',(e)=>{
-      triggerRipple(e);
-      window.location.href='https://b02279437-crypto.github.io/liu-mama-calculator/product.html';
-    });
-  }
-
-  const pickupNote = document.getElementById('pickupNote');
-
-  document.querySelectorAll('.ship-card input').forEach(r=>{
-    r.addEventListener('change', ()=>{
-      calculate();
-      document.querySelectorAll('.ship-card').forEach(card=>{
-        const input=card.querySelector('input');
-        card.classList.toggle('selected', input.checked);
-      });
-
-      if(pickupNote){
-        const method=document.querySelector('input[name="shipMethod"]:checked');
-        if(method && method.value==='pickup'){
-          pickupNote.hidden=false;
-          pickupNote.classList.add('show');
-        }else{
-          pickupNote.classList.remove('show');
-          pickupNote.hidden=true;
-        }
-      }
-      markEdited();
-      saveState();
-    });
-  });
-
-  setupInlinePromo();
-  enableEmailAutoSuggest();
-
-  const nameInput  = document.getElementById('customerName');
-  const phoneInput = document.getElementById('customerPhone');
-  const emailInput = document.getElementById('customerEmail');
-
-  if(nameInput && phoneInput && emailInput){
-    nameInput.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter'){ e.preventDefault(); phoneInput.focus(); }
-    });
-    phoneInput.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter'){ e.preventDefault(); emailInput.focus(); }
-    });
-
-    nameInput.addEventListener('change', ()=>{
-      if (nameInput.value.trim().length >= 1) phoneInput.focus();
-    });
-    phoneInput.addEventListener('change', ()=>{
-      const digits = phoneInput.value.replace(/\D/g,'');
-      if (digits.length >= 10) emailInput.focus();
-    });
-
-    // 手機電話自動整理：全形轉半形、去掉非數字
-    phoneInput.addEventListener('input', ()=>{
-      let v = phoneInput.value || '';
-      v = v.replace(/[０-９]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0));
-      v = v.replace(/\D/g,'').slice(0,10);
-      phoneInput.value = v;
-    });
-  }
-
-  // 訂購資訊欄位＆數量變動時記錄狀態
-  ['customerName','customerPhone','customerEmail','qty1','qtyInput'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el){
-      el.addEventListener('input', ()=>{
-        markEdited();
-        saveState();
-      });
-      el.addEventListener('change', ()=>{
-        markEdited();
-        saveState();
-      });
-    }
-  });
-
-  const launchBackdrop = document.getElementById('launchModal');
-  const launchCloseBtn = document.getElementById('launchClose');
-
-  if(launchBackdrop){
-    launchBackdrop.addEventListener('click',(e)=>{
-      if(e.target === launchBackdrop){
-        hideLaunchModal();
-      }
-    });
-  }
-  if(launchCloseBtn){
-    launchCloseBtn.addEventListener('click',()=>{
-      hideLaunchModal();
-    });
-  }
-  document.addEventListener('keydown',(e)=>{
-    if(e.key === 'Escape'){
-      hideLaunchModal();
-    }
-  });
-});
-
-/* ===== 離頁提醒 ===== */
-window.addEventListener('beforeunload', (e)=>{
-  if(hasEdited){
-    e.preventDefault();
-    e.returnValue = '';
-  }
-});
 </script>
 </body>
 </html>
+
