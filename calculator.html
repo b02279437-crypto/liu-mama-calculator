@@ -480,63 +480,38 @@ h2.title-in{
   }
 
   .page-inner{
-    /* 整頁底部的留白，會影響整頁最後一塊的喘息感 */
     padding:0 16px 44px;
-  }
-
-  h2{
-    font-size:60px;
-    margin-top:22px;
-    letter-spacing:.03em;
-  }
-  .brand-tagline{
-    font-size:13px;
-    letter-spacing:.3em;
-  }
-  .promo-inline{
-    font-size:12px;
-    width:100%;
-    letter-spacing:.16em;
-  }
-  .section-title{
-    font-size:13.5px;
-    letter-spacing:.16em;
-  }
-  table{
-    font-size:14px;
-    width:96%;
-  }
-  #productTable td:first-child{
-    font-size:15px;
-  }
-  #productTable td:first-child small{
-    font-size:12px;
   }
 
   /* ===== STEP1：運送方式 + Total + 下一步 ===== */
   .ship-wrap{
-    /* 商品表格 → 「711取貨/宅配/自取」這排的距離 */
-    width:96%;
-    gap:8px;
-    flex-wrap:nowrap;
-    margin:20px auto 10px;   /* 想再近：改成 16；想更鬆：改成 24 */
+    /* 讓三顆按鈕一定排在同一行 */
+    width:100%;
+    max-width:520px;
+    gap:6px;
+    flex-wrap:nowrap;        /* 強制不換行 */
+    margin:20px auto 10px;
   }
   .ship-card{
     flex:1 1 0;
     max-width:none;
-    padding:9px 4px 8px;
+    padding:8px 2px 7px;     /* 上下左右都再縮一點 */
   }
   .ship-title{
-    font-size:13px;
-    letter-spacing:.12em;
+    font-size:12px;          /* 字再小一點 */
+    letter-spacing:.08em;
   }
   .ship-price{
-    font-size:13px;
+    font-size:12px;
   }
+
+  /* 下面原本的手機設定都照舊 */
+}
+
 
   .total{
     /* 運送方式那排 → TOTAL AMOUNT 間距 */
-    margin-top:22px;         /* 覺得還擠可以改 26 */
+    margin-top:26px;         /* 覺得還擠可以改 26 */
   }
   .total-note{
     /* Total 下面那行「金額已含寄送費用…」 */
@@ -544,7 +519,7 @@ h2.title-in{
   }
   .step-next-btn{
     /* 「下一步：結帳與匯款」上方的空隙 */
-    margin-top:26px;         /* 覺得太鬆可改 22 */
+    margin-top:40px;         /* 覺得太鬆可改 22 */
     min-width:230px;
     justify-content:center;
   }
@@ -568,7 +543,7 @@ h2.title-in{
   .checkout-layout{
     /* 商品照片 → 「商品小計/合計金額」那張白卡的距離 */
     flex-direction:column;
-    margin:26px auto 20px;   /* 覺得還擠就把 26 再加大一點 */
+    margin:26px auto 26px;   /* 覺得還擠就把 26 再加大一點 */
   }
   .checkout-product{
     flex:1 1 auto;
@@ -578,12 +553,12 @@ h2.title-in{
 
   .account-box{
     /* 上面那張合計金額卡片 → 匯款帳戶資訊卡片的距離 */
-    margin:26px auto 0;      /* 想兩張更靠近就改 20；想更開就改 30 */
+    margin:30px auto 0;      /* 想兩張更靠近就改 20；想更開就改 30 */
   }
 
   .step2-actions{
     /* 匯款帳戶資訊卡片 → 三顆按鈕（下載截圖/返回/下一步）的距離 */
-    margin-top:26px;         /* 覺得還擠改 30，太鬆改 22 */
+    margin-top:35px;         /* 覺得還擠改 30，太鬆改 22 */
     display:flex;
     justify-content:center;
     gap:10px;
