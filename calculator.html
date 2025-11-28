@@ -94,7 +94,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   padding:0 16px 40px;
 }
 
-/* ===== 開場動畫（完全沿用原版） ===== */
+/* ===== 開場動畫（原版保留） ===== */
 #intro{
   position:fixed;
   inset:0;
@@ -110,7 +110,6 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 }
 #intro.fade-out{opacity:0; pointer-events:none;}
 
-/* Stage 1：Logo */
 #intro-logo{
   width:clamp(360px, 92vw, 700px);
   opacity:0;
@@ -126,7 +125,6 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   transition:opacity var(--t-base) var(--ease);
 }
 
-/* Stage 2：原本的文字頁（LOGO2 + 故事文字） */
 #intro-hero{
   width:clamp(260px,60vw,380px);
   opacity:0;
@@ -154,7 +152,6 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 }
 #intro-text.show{opacity:1;}
 
-/* Stage 3：Hero 產品照面板（product-2 + 按鈕） */
 #intro-hero-panel{
   position:absolute;
   inset:0;
@@ -226,7 +223,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   gap:10px;
 }
 
-/* 開場按鈕（現在只出現在 Hero 產品頁） */
+/* 開場按鈕 */
 #startBtn,
 #storyBtn{
   margin-top:0;
@@ -417,71 +414,76 @@ h2.title-in{
   100%{transform:scale(1);}
 }
 
-/* ===== 流程 Step 導覽 ===== */
+/* ===== 流程 Step 導覽（圓點＋STEP.文字） ===== */
 .step-nav{
   max-width:720px;
-  margin:10px auto 6px;
-  padding:0 4px 6px;
+  margin:8px auto 8px;
+  padding:0 20px;
   display:flex;
   align-items:flex-start;
-  gap:8px;
-  font-size:11px;
-  letter-spacing:.12em;
+  justify-content:center;
+  gap:40px;
 }
 .step-nav-item{
-  flex:1 1 0;
-  position:relative;
-  text-align:center;
-  color:#9aa4b0;
-}
-.step-nav-item-dot{
-  width:22px;
-  height:22px;
-  margin:0 auto 4px;
-  border-radius:999px;
-  border:1px solid #c0c8d4;
-  background:#f5f7fa;
   display:flex;
+  flex-direction:column;
   align-items:center;
-  justify-content:center;
-  font-size:11px;
+  gap:6px;
 }
-.step-label{
-  font-weight:600;
+.step-circle{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  border:2px solid #c4ccd6;
+  position:relative;
+  box-sizing:border-box;
 }
-.step-name{
-  display:block;
-  font-size:11px;
-  line-height:1.5;
-}
-.step-nav-item::after{
+.step-circle::after{
   content:"";
   position:absolute;
-  top:11px;
-  left:50%;
-  right:-50%;
-  height:1px;
-  background:linear-gradient(to right, rgba(160,172,186,.8), transparent);
-  z-index:-1;
+  inset:4px;
+  border-radius:50%;
+  background:transparent;
+  transition:background-color .25s var(--ease);
 }
-.step-nav-item:last-child::after{ display:none; }
+.step-label{
+  font-size:11px;
+  letter-spacing:.26em;
+  text-transform:uppercase;
+  color:#a2adb9;
+}
 
-.step-nav-item.is-active{
+/* 目前步驟 */
+.step-nav-item.is-active .step-circle{
+  border-color:var(--navy);
+}
+.step-nav-item.is-active .step-circle::after{
+  background:var(--navy);
+}
+.step-nav-item.is-active .step-label{
   color:var(--navy);
 }
-.step-nav-item.is-active .step-nav-item-dot{
-  background:#2b3e53;
-  color:#fff;
-  border-color:#2b3e53;
-  box-shadow:0 0 0 4px rgba(43,62,83,.12);
+
+/* 已完成步驟 */
+.step-nav-item.is-done .step-circle{
+  border-color:#6e8296;
 }
-.step-nav-item.is-done{
+.step-nav-item.is-done .step-circle::after{
+  background:#6e8296;
+}
+.step-nav-item.is-done .step-label{
   color:#6e8296;
 }
-.step-nav-item.is-done .step-nav-item-dot{
-  background:#fff;
-  color:#2b3e53;
-  border-color:#2b3e53;
+
+@media (max-width:480px){
+  .step-nav{
+    gap:32px;
+    padding:0 12px;
+  }
+  .step-label{
+    font-size:10px;
+    letter-spacing:.22em;
+  }
 }
 
 /* 每個 Step 區塊 */
@@ -620,7 +622,7 @@ th{
   padding-right:6px;
 }
 
-/* 價格上下排（置中） */
+/* 價格上下排 */
 .price-cell{
   display:flex;
   flex-direction:column;
@@ -894,12 +896,6 @@ th{
   font-weight:600;
   color:#2f3c4a;
   letter-spacing:.08em;
-}
-.checkout-product-note{
-  margin-top:2px;
-  font-size:11px;
-  color:#7e8288;
-  letter-spacing:.06em;
 }
 
 .checkout-summary{
@@ -1341,15 +1337,6 @@ th{
     font-size:11.5px;
   }
 
-  .step-nav{
-    flex-direction:column;
-    align-items:stretch;
-    gap:2px;
-  }
-  .step-nav-item::after{
-    display:none;
-  }
-
   .checkout-layout{
     flex-direction:column;
   }
@@ -1376,7 +1363,7 @@ th{
   <img id="intro-logo" decoding="async" loading="eager"
        src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/logo.png" alt="Logo">
 
-  <!-- Stage 2：原先文字頁（LOGO2 + 故事文字，沒有按鈕） -->
+  <!-- Stage 2：原文字頁（LOGO2 + 故事文字） -->
   <img id="intro-hero" decoding="async" loading="eager"
        src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/LOGO2-removebg-preview.png" alt="Liu Mama Secondary Logo">
 
@@ -1421,19 +1408,19 @@ th{
   <div class="page-inner">
     <h2 id="pageTitle"><span class="english">LIU MAMA Order</span></h2>
 
-    <!-- Step 導覽 -->
+    <!-- Step 導覽：圓點＋STEP.文字 -->
     <div class="step-nav" aria-label="訂購流程">
       <div class="step-nav-item is-active" id="stepNav1">
-        <div class="step-nav-item-dot"><span class="step-label">1</span></div>
-        <span class="step-name">STEP.1 商品與數量</span>
+        <div class="step-circle"></div>
+        <div class="step-label">STEP.1</div>
       </div>
       <div class="step-nav-item" id="stepNav2">
-        <div class="step-nav-item-dot"><span class="step-label">2</span></div>
-        <span class="step-name">STEP.2 結帳與匯款</span>
+        <div class="step-circle"></div>
+        <div class="step-label">STEP.2</div>
       </div>
       <div class="step-nav-item" id="stepNav3">
-        <div class="step-nav-item-dot"><span class="step-label">3</span></div>
-        <span class="step-name">STEP.3 填寫寄送資訊</span>
+        <div class="step-circle"></div>
+        <div class="step-label">STEP.3</div>
       </div>
     </div>
 
@@ -1565,7 +1552,6 @@ th{
                  src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-6"
                  alt="劉嘛麻 麻辣鍋底商品圖">
             <div class="checkout-product-name">麻辣底料包（2人份）</div>
-            <div class="checkout-product-note">手工慢炒紅油 · 一鍋約 2～3 人份</div>
           </div>
 
           <div class="checkout-summary">
@@ -1655,18 +1641,18 @@ function imgReady(el){
 
 /* ===== 新版開場流程：Logo → 原文字頁 → Hero 產品照＋按鈕 ===== */
 async function startIntroSequence(){
-  const logo      = document.getElementById('intro-logo');   // Stage 1
-  const hero      = document.getElementById('intro-hero');   // Stage 2 圖
-  const text      = document.getElementById('intro-text');   // Stage 2 文
-  const heroPanel = document.getElementById('intro-hero-panel'); // Stage 3
+  const logo      = document.getElementById('intro-logo');
+  const hero      = document.getElementById('intro-hero');
+  const text      = document.getElementById('intro-text');
+  const heroPanel = document.getElementById('intro-hero-panel');
   const btn       = document.getElementById('startBtn');
   const storyBtn  = document.getElementById('storyBtn');
 
   const maxWait = new Promise(r=>setTimeout(r,4000));
   await Promise.race([Promise.all([imgReady(logo), imgReady(hero)]), maxWait]);
 
-  const STAGE_SWITCH = 3200; // Logo→文字頁的切換時間
-  const FADE_TIME    = 2000; // Logo / 文字頁淡出秒數
+  const STAGE_SWITCH = 3200;
+  const FADE_TIME    = 2000;
 
   requestAnimationFrame(()=>{
     if(!logo) return;
@@ -1677,7 +1663,7 @@ async function startIntroSequence(){
     /* Logo 淡出 */
     setTimeout(()=>{ logo.classList.add('hide'); }, FADE_TIME);
 
-    /* Stage 2：文字頁（LOGO2 + 故事文字，沒有按鈕） */
+    /* Stage 2：文字頁 */
     setTimeout(()=>{
       logo.style.display='none';
       if(hero) hero.classList.add('show');
@@ -1705,7 +1691,7 @@ async function startIntroSequence(){
         if(btn) btn.classList.add('show');
         if(storyBtn) storyBtn.classList.add('show');
       }, 400);
-    }, STAGE_SWITCH + STAGE_SWITCH); // 文字頁顯示時間大約同 Logo
+    }, STAGE_SWITCH + STAGE_SWITCH);
   });
 }
 
@@ -1759,7 +1745,6 @@ function setStep(step){
     }else if(step === 2){
       n1.classList.add('is-done');
       n2.classList.add('is-active');
-      // STEP3 保持待辦狀態，只作為流程提示
     }
   }
 }
@@ -1785,7 +1770,6 @@ function hideLaunchModal(){
 
 /* ===== 初始化 ===== */
 window.addEventListener('DOMContentLoaded',()=>{
-  // 讀取網址參數，判斷是否要跳過開場動畫
   const params = new URLSearchParams(window.location.search);
   const skipIntro = params.get('skipIntro') === '1';
 
@@ -1822,7 +1806,6 @@ window.addEventListener('DOMContentLoaded',()=>{
     setupRevealOnScroll();
     showLaunchModal();
   }else{
-    // 開場動畫：Logo → 原文字頁 → Hero 產品照
     startIntroSequence();
 
     if(btn){
@@ -1841,7 +1824,6 @@ window.addEventListener('DOMContentLoaded',()=>{
     }
   }
 
-  // PRODUCT STORY 按鈕：導去產品介紹頁
   if(storyBtn){
     storyBtn.addEventListener('click',(e)=>{
       triggerRipple(e);
@@ -1984,7 +1966,7 @@ function setupInlinePromo(){
     const now   = new Date();
     const year  = now.getFullYear();
     const today = new Date(year, now.getMonth(), now.getDate());
-    const end   = new Date(year, 11, 18); // 12/18
+    const end   = new Date(year, 11, 18);
 
     const MS = 24*60*60*1000;
     let diffDays = Math.round((end - today) / MS);
