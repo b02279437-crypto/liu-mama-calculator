@@ -15,7 +15,7 @@
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/logo.png">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/LOGO2-removebg-preview.png">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2">
-<link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-6">
+<link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-7">
 
 <style>
 :root{
@@ -472,6 +472,7 @@ h2.title-in{
   color:#6e8296;
 }
 
+/* ===== 手機版調整：把你紅框那幾塊都拉鬆一點 ===== */
 @media (max-width:480px){
   :root{
     --qty-btn-w: 30px;
@@ -512,7 +513,7 @@ h2.title-in{
     font-size:12px;
   }
 
-  /* ===== STEP1：運送方式 + Total + 下一步（你第二張圖紅框）===== */
+  /* ===== STEP1：運送方式 + Total + 下一步 ===== */
   .ship-wrap{
     /* 商品表格 → 「711取貨/宅配/自取」這排的距離 */
     width:96%;
@@ -542,7 +543,7 @@ h2.title-in{
     margin-top:12px;         /* 原本 6，現在比較鬆 */
   }
   .step-next-btn{
-    /* 「下一步：結帳與匯款」上方的空隙（第二張圖紅框上半部） */
+    /* 「下一步：結帳與匯款」上方的空隙 */
     margin-top:26px;         /* 覺得太鬆可改 22 */
     min-width:230px;
     justify-content:center;
@@ -563,7 +564,7 @@ h2.title-in{
     letter-spacing:.13em;
   }
 
-  /* ===== STEP2：小計卡片 + 匯款卡片 + 按鈕（第一、三張圖紅框）===== */
+  /* ===== STEP2：小計卡片 + 匯款卡片 + 按鈕 ===== */
   .checkout-layout{
     /* 商品照片 → 「商品小計/合計金額」那張白卡的距離 */
     flex-direction:column;
@@ -576,12 +577,12 @@ h2.title-in{
   }
 
   .account-box{
-    /* 上面那張合計金額卡片 → 匯款帳戶資訊卡片的距離（第三張圖中間那塊） */
+    /* 上面那張合計金額卡片 → 匯款帳戶資訊卡片的距離 */
     margin:26px auto 0;      /* 想兩張更靠近就改 20；想更開就改 30 */
   }
 
   .step2-actions{
-    /* 匯款帳戶資訊卡片 → 三顆按鈕（下載截圖/返回/下一步）的距離（第一張圖紅框） */
+    /* 匯款帳戶資訊卡片 → 三顆按鈕（下載截圖/返回/下一步）的距離 */
     margin-top:26px;         /* 覺得還擠改 30，太鬆改 22 */
     display:flex;
     justify-content:center;
@@ -589,7 +590,7 @@ h2.title-in{
     flex-wrap:wrap;
   }
 
-  /* ===== 開場 Hero 手機版維持原樣 ===== */
+  /* ===== 開場 Hero 手機版 ===== */
   #intro{
     padding-top:10vh;
   }
@@ -756,8 +757,8 @@ th{
 .col-price{ width:20%; }
 .col-action{ width:34%; }
 
-#Table td:nth-child(3),
-#Table th:nth-child(3){
+#productTable td:nth-child(3),
+#productTable th:nth-child(3){
   padding-left:6px;
   padding-right:6px;
 }
@@ -1203,9 +1204,9 @@ th{
   justify-content:center;
 }
 
-/* 提醒 */
+/* 提醒（字變小一點） */
 #formReminder{
-  font-size:13.5px;
+  font-size:11.5px;
   color:#555;
   margin-top:16px;
   opacity:0;
@@ -1370,115 +1371,10 @@ th{
   transform:scale(.96);
 }
 
-/* 手機 */
+/* 手機：另外補上 checkout product 寬度，不再重覆第二組 @media */
 @media (max-width:480px){
-  :root{
-    --qty-btn-w: 30px;
-    --qty-disp-w: 44px;
-  }
-  .page-inner{
-    padding:0 16px 44px;
-  }
-  h2{
-    font-size:60px;
-    margin-top:24px;
-    letter-spacing:.03em;
-  }
-  .brand-tagline{
-    font-size:13px;
-    letter-spacing:.3em;
-  }
-  .promo-inline{
-    font-size:12px;
-    width:100%;
-    letter-spacing:.16em;
-  }
-  .section-title{
-    font-size:13.5px;
-    letter-spacing:.16em;
-  }
-  table{
-    font-size:14px;
-    width:96%;
-  }
-  #productTable td:first-child{
-    font-size:15px;
-  }
-  #productTable td:first-child small{
-    font-size:12px;
-  }
-
-  .ship-wrap{
-    width:96%;
-    gap:6px;
-    flex-wrap:nowrap;
-  }
-  .ship-card{
-    flex:1 1 0;
-    max-width:none;
-    padding:9px 4px 8px;
-  }
-  .ship-title{
-    font-size:13px;
-    letter-spacing:.12em;
-  }
-  .ship-price{
-    font-size:13px;
-  }
-  .input-container{
-    width:100%;
-    padding:20px 18px 20px;
-    margin-bottom:30px;
-  }
-  .account-box{
-    width:86%;
-    font-size:12.5px;
-  }
-  .btn{
-    padding:8px 16px;
-    font-size:13px;
-    letter-spacing:.13em;
-  }
-
-  #intro{
-    padding-top:10vh;
-  }
-  #intro-logo{
-    width:clamp(360px, 92vw, 700px);
-  }
-  #intro-hero{
-    width:clamp(240px, 68vw, 360px);
-    margin:14px auto -66px;
-  }
-  #intro-text{
-    margin-top:-34px;
-    line-height:1.9;
-  }
-  #intro-hero-panel{
-    padding:8vh 16px 6vh;
-  }
-  .hero-overlay{
-    padding:16px 16px 18px;
-  }
-  .hero-title{
-    font-size:22px;
-  }
-  .hero-sub{
-    font-size:12.5px;
-    max-width:280px;
-  }
-  #startBtn .btn-main-en,
-  #storyBtn .btn-main-en{
-    font-size:16px;
-  }
-  #startBtn .btn-sub-zh,
-  #storyBtn .btn-sub-zh{
-    font-size:11.5px;
-  }
-
   .checkout-layout{
     flex-direction:column;
-    margin-top:24px;
   }
   .checkout-product{
     flex:1 1 auto;
@@ -1666,7 +1562,7 @@ th{
         </button>
 
         <p id="formReminder">
-          下一步會先進入「結帳與匯款」頁面，再到 STEP.3 表單填寫寄送資訊。
+          請按下一步前往結帳匯款。
         </p>
 
         <div class="footer-note">
