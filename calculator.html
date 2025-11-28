@@ -85,10 +85,11 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   color:rgba(120,120,120,.7);
 }
 
+/* 拉鬆整體上下空間 */
 .page-inner{
   max-width:720px;
-  margin:0 auto 56px;
-  padding:0 16px 40px;
+  margin:0 auto 72px;
+  padding:0 20px 56px;
 }
 
 /* ===== 開場動畫（原版保留） ===== */
@@ -337,7 +338,7 @@ h2{
   font-size:90px;
   font-weight:900;
   color:var(--navy);
-  margin:28px 0 8px 0;
+  margin:32px 0 10px 0;
   opacity:0;
   transform:translateY(12px);
   letter-spacing:.04em;
@@ -365,9 +366,9 @@ h2.title-in{
   }
 }
 
-/* 標語＋優惠 */
+/* 標語＋優惠：往下多留一點 */
 .brand-block{
-  margin:4px 0 18px;
+  margin:10px 0 26px;
 }
 .brand-tagline{
   margin:6px 0 6px;
@@ -413,12 +414,12 @@ h2.title-in{
 /* ===== 流程 Step 導覽（圓點＋STEP.文字） ===== */
 .step-nav{
   max-width:720px;
-  margin:8px auto 8px;
+  margin:14px auto 14px;
   padding:0 20px;
   display:flex;
   align-items:flex-start;
   justify-content:center;
-  gap:40px;
+  gap:48px;
 }
 .step-nav-item{
   display:flex;
@@ -484,15 +485,15 @@ h2.title-in{
 
 /* Step 區塊 */
 .step-panel{
-  margin-top:4px;
+  margin-top:10px;
 }
 .step-panel[hidden]{ display:none; }
 
-/* 區塊小標 */
+/* 區塊小標：上方空間加大 */
 .section-title{
   font-size:14px;
   color:#555;
-  margin:26px 0 10px;
+  margin:32px 0 14px;
   display:inline-flex;
   align-items:center;
   gap:10px;
@@ -525,14 +526,14 @@ h2.title-in{
   transform:translateY(0) scale(1);
 }
 
-/* ===== 訂購資訊卡片 ===== */
+/* ===== 訂購資訊卡片：多一點呼吸感 ===== */
 .input-container{
   max-width:520px;
-  margin:0 auto 30px;
+  margin:0 auto 34px;
   text-align:left;
 
   background:rgba(255,255,255,0.88);
-  padding:24px 24px 22px;
+  padding:26px 26px 24px;
   border-radius:18px;
 
   border:none;
@@ -578,11 +579,11 @@ h2.title-in{
   margin-top:2px;
 }
 
-/* ===== 商品表格 ===== */
+/* ===== 商品表格：上下距離拉開 ===== */
 table{
   width:90%;
   max-width:520px;
-  margin:15px auto 10px;
+  margin:22px auto 18px;
   border-collapse:separate;
   border-spacing:0;
   background:#fff;
@@ -594,7 +595,7 @@ table{
   text-align:center;
 }
 th,td{
-  padding:10px;
+  padding:12px;
   border-bottom:1px solid #e9eef2;
   vertical-align:middle;
   white-space:nowrap;
@@ -687,11 +688,11 @@ th{
   outline-offset:2px;
 }
 
-/* ===== 寄送方式 ===== */
+/* ===== 寄送方式：整塊往下多一點 ===== */
 .ship-wrap{
   width:90%;
   max-width:520px;
-  margin:10px auto 6px;
+  margin:18px auto 10px;
   display:flex;
   gap:12px;
   flex-wrap:wrap;
@@ -778,7 +779,7 @@ th{
   font-size:12px;
   color:#6a7a8a;
   letter-spacing:.08em;
-  margin-top:4px;
+  margin-top:6px;
   opacity:0;
   transform:translateY(6px);
   transition:opacity .5s var(--ease), transform .5s var(--ease);
@@ -795,7 +796,7 @@ th{
   font-weight:900;
   letter-spacing:2.5px;
   color:var(--navy);
-  margin-top:16px;
+  margin-top:22px;
   position:relative;
   display:inline-block;
   padding:6px 18px;
@@ -854,7 +855,7 @@ th{
   animation: glowPulse 1.8s var(--ease) 1;
 }
 .total-note{
-  margin-top:6px;
+  margin-top:8px;
   font-size:11px;
   color:#6a7a8a;
   letter-spacing:.08em;
@@ -864,13 +865,13 @@ th{
   text-align:center;
 }
 
-/* ===== STEP2 layout ===== */
+/* ===== STEP2 layout：整塊拉鬆 ===== */
 .checkout-layout{
   max-width:520px;
-  margin:18px auto 10px;
+  margin:26px auto 18px;
   display:flex;
   align-items:flex-start;
-  gap:16px;
+  gap:18px;
 }
 .checkout-product{
   flex:0 0 150px;
@@ -896,7 +897,7 @@ th{
   flex:1 1 auto;
   background:rgba(255,255,255,0.9);
   border-radius:16px;
-  padding:14px 14px 12px;
+  padding:16px 16px 14px;
   text-align:left;
   box-shadow:0 8px 22px rgba(0,0,0,.06);
 }
@@ -905,7 +906,7 @@ th{
   justify-content:space-between;
   align-items:center;
   font-size:13px;
-  padding:4px 0;
+  padding:5px 0;
   color:#334356;
 }
 .summary-row + .summary-row{
@@ -915,8 +916,8 @@ th{
   font-variant-numeric:tabular-nums lining-nums;
 }
 .summary-total{
-  margin-top:8px;
-  padding-top:6px;
+  margin-top:10px;
+  padding-top:8px;
   border-top:1px solid #cdd4df;
   display:flex;
   justify-content:space-between;
@@ -929,24 +930,24 @@ th{
   font-size:16px;
 }
 .summary-small{
-  margin-top:6px;
+  margin-top:8px;
   font-size:11px;
   color:#6e7a86;
   letter-spacing:.06em;
 }
 .summary-note{
-  margin-top:8px;
+  margin-top:10px;
   font-size:11px;
   color:#7f7a6c;
   line-height:1.7;
   letter-spacing:.08em;
 }
 
-/* 匯款 info */
+/* 匯款 info：上方距離拉大一點 */
 .account-box{
   width:85%;
   max-width:360px;
-  margin:18px auto 0;
+  margin:22px auto 0;
   background:rgba(255,255,255,0.88);
   -webkit-backdrop-filter:blur(11px) brightness(1.04);
   backdrop-filter:blur(11px) brightness(1.04);
@@ -967,16 +968,16 @@ th{
 }
 #copyBtn{
   display:block;
-  margin:10px auto 0;
+  margin:12px auto 0;
 }
 
-/* STEP2 底部按鈕 */
+/* STEP2 底部按鈕：多一點空間 */
 .step2-actions{
   display:flex;
   justify-content:center;
-  gap:10px;
+  gap:12px;
   flex-wrap:wrap;
-  margin-top:20px;
+  margin-top:24px;
 }
 
 /* ===== 按鈕 ===== */
@@ -1052,7 +1053,7 @@ th{
 
 /* STEP1 下一步 */
 .step-next-btn{
-  margin-top:22px;
+  margin-top:26px;
   min-width:230px;
   justify-content:center;
 }
@@ -1061,7 +1062,7 @@ th{
 #formReminder{
   font-size:13.5px;
   color:#555;
-  margin-top:14px;
+  margin-top:16px;
   opacity:0;
   transform:translateY(14px);
   transition:
@@ -1118,9 +1119,9 @@ th{
   transform:translateX(-50%) translateY(0);
 }
 
-/* footer */
+/* footer：再往下多一點 */
 .footer-note{
-  margin-top:40px;
+  margin-top:48px;
   font-size:11px;
   color:#8a8a84;
   letter-spacing:.08em;
@@ -1231,11 +1232,11 @@ th{
     --qty-disp-w: 44px;
   }
   .page-inner{
-    padding:0 16px 36px;
+    padding:0 16px 44px;
   }
   h2{
     font-size:60px;
-    margin-top:22px;
+    margin-top:24px;
     letter-spacing:.03em;
   }
   .brand-tagline{
@@ -1281,7 +1282,8 @@ th{
   }
   .input-container{
     width:100%;
-    padding:18px 18px 20px;
+    padding:20px 18px 20px;
+    margin-bottom:30px;
   }
   .account-box{
     width:86%;
@@ -1331,6 +1333,7 @@ th{
 
   .checkout-layout{
     flex-direction:column;
+    margin-top:24px;
   }
   .checkout-product{
     flex:1 1 auto;
@@ -1535,7 +1538,7 @@ th{
         <div class="checkout-layout" id="checkoutCard">
           <div class="checkout-product">
             <img decoding="async" loading="lazy"
-                 src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-6"
+                 src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-8.png"
                  alt="劉嘛麻 麻辣鍋底商品圖">
             <div class="checkout-product-name">麻辣底料包（2人份）</div>
           </div>
