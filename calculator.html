@@ -15,7 +15,7 @@
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/logo.png">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/LOGO2-removebg-preview.png">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2">
-<link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-6">
+<link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-7">
 
 <style>
 :root{
@@ -472,6 +472,7 @@ h2.title-in{
   color:#6e8296;
 }
 
+/* ===== 手機版調整（第一組，其他區塊間距） ===== */
 @media (max-width:480px){
   :root{
     --qty-btn-w: 30px;
@@ -489,7 +490,7 @@ h2.title-in{
   }
   .brand-tagline{
     font-size:13px;
-    letter-spacing:.3em;
+    letter舉-spacing:.3em;
   }
   .promo-inline{
     font-size:12px;
@@ -511,26 +512,6 @@ h2.title-in{
     font-size:12px;
   }
 
-  /* STEP1 手機版：運送方式區塊間距 */
-  .ship-wrap{
-    width:96%;
-    gap:8px;
-    flex-wrap:nowrap;
-    margin:20px auto 10px;
-  }
-  .ship-card{
-    flex:1 1 0;
-    max-width:none;
-    padding:9px 4px 8px;
-  }
-  .ship-title{
-    font-size:13px;
-    letter-spacing:.12em;
-  }
-  .ship-price{
-    font-size:13px;
-  }
-
   .total{
     margin-top:22px;
   }
@@ -538,7 +519,9 @@ h2.title-in{
     margin-top:12px;
   }
   .step-next-btn{
-    margin-top:30px;
+    margin-top:26px;
+    min-width:230px;
+    justify-content:center;
   }
 
   .input-container{
@@ -556,7 +539,6 @@ h2.title-in{
     letter-spacing:.13em;
   }
 
-  /* STEP2 手機版：整塊拉鬆 */
   .checkout-layout{
     flex-direction:column;
     margin:26px auto 20px;
@@ -566,11 +548,17 @@ h2.title-in{
     max-width:260px;
     margin:0 auto;
   }
+
   .account-box{
     margin:26px auto 0;
   }
+
   .step2-actions{
     margin-top:26px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
   }
 
   #intro{
@@ -609,7 +597,6 @@ h2.title-in{
     font-size:11.5px;
   }
 }
-
 
 /* Step 區塊 */
 .step-panel{
@@ -739,8 +726,8 @@ th{
 .col-price{ width:20%; }
 .col-action{ width:34%; }
 
-#Table td:nth-child(3),
-#Table th:nth-child(3){
+#productTable td:nth-child(3),
+#productTable th:nth-child(3){
   padding-left:6px;
   padding-right:6px;
 }
@@ -816,7 +803,7 @@ th{
   outline-offset:2px;
 }
 
-/* ===== 寄送方式：整塊往下多一點 ===== */
+/* ===== 寄送方式：整塊往下多一點（桌機＋平板基準） ===== */
 .ship-wrap{
   width:90%;
   max-width:520px;
@@ -1099,24 +1086,13 @@ th{
   margin:12px auto 0;
 }
 
-/* STEP2 底部按鈕：多一點空間＋第三顆換行 */
+/* STEP2 底部按鈕：多一點空間 */
 .step2-actions{
   display:flex;
   justify-content:center;
-  gap:12px 18px;
+  gap:12px;
   flex-wrap:wrap;
-  margin-top:26px;
-}
-.step2-actions .btn{
-  min-width:180px;
-}
-@media (min-width:768px){
-  .step2-actions .btn:last-child{
-    flex-basis:100%;
-    max-width:260px;
-    justify-content:center;
-    margin-top:6px;   /* 讓第三顆跟上面有一點空隙 */
-  }
+  margin-top:24px;
 }
 
 /* ===== 按鈕 ===== */
@@ -1190,18 +1166,18 @@ th{
 }
 .btn-sketch:hover{ filter:brightness(1.02); }
 
-/* STEP1 下一步按鈕：整塊往下多一點 */
+/* STEP1 下一步 */
 .step-next-btn{
-  margin-top:32px;
+  margin-top:26px;
   min-width:230px;
   justify-content:center;
 }
 
-/* STEP1 提醒：字小一點＋往下拉開 */
+/* 提醒（字變小一點） */
 #formReminder{
-  font-size:12px;
+  font-size:11.5px;
   color:#555;
-  margin-top:20px;
+  margin-top:16px;
   opacity:0;
   transform:translateY(14px);
   transition:
@@ -1364,120 +1340,36 @@ th{
   transform:scale(.96);
 }
 
-/* 手機 */
+/* 再補一次手機版：checkout 商品寬度 */
 @media (max-width:480px){
-  :root{
-    --qty-btn-w: 30px;
-    --qty-disp-w: 44px;
-  }
-  .page-inner{
-    padding:0 16px 44px;
-  }
-  h2{
-    font-size:60px;
-    margin-top:24px;
-    letter-spacing:.03em;
-  }
-  .brand-tagline{
-    font-size:13px;
-    letter-spacing:.3em;
-  }
-  .promo-inline{
-    font-size:12px;
-    width:100%;
-    letter-spacing:.16em;
-  }
-  .section-title{
-    font-size:13.5px;
-    letter-spacing:.16em;
-  }
-  table{
-    font-size:14px;
-    width:96%;
-  }
-  #productTable td:first-child{
-    font-size:15px;
-  }
-  #productTable td:first-child small{
-    font-size:12px;
-  }
-
-  .ship-wrap{
-    width:96%;
-    gap:6px;
-    flex-wrap:nowrap;
-  }
-  .ship-card{
-    flex:1 1 0;
-    max-width:none;
-    padding:9px 4px 8px;
-  }
-  .ship-title{
-    font-size:13px;
-    letter-spacing:.12em;
-  }
-  .ship-price{
-    font-size:13px;
-  }
-  .input-container{
-    width:100%;
-    padding:20px 18px 20px;
-    margin-bottom:30px;
-  }
-  .account-box{
-    width:86%;
-    font-size:12.5px;
-  }
-  .btn{
-    padding:8px 16px;
-    font-size:13px;
-    letter-spacing:.13em;
-  }
-
-  #intro{
-    padding-top:10vh;
-  }
-  #intro-logo{
-    width:clamp(360px, 92vw, 700px);
-  }
-  #intro-hero{
-    width:clamp(240px, 68vw, 360px);
-    margin:14px auto -66px;
-  }
-  #intro-text{
-    margin-top:-34px;
-    line-height:1.9;
-  }
-  #intro-hero-panel{
-    padding:8vh 16px 6vh;
-  }
-  .hero-overlay{
-    padding:16px 16px 18px;
-  }
-  .hero-title{
-    font-size:22px;
-  }
-  .hero-sub{
-    font-size:12.5px;
-    max-width:280px;
-  }
-  #startBtn .btn-main-en,
-  #storyBtn .btn-main-en{
-    font-size:16px;
-  }
-  #startBtn .btn-sub-zh,
-  #storyBtn .btn-sub-zh{
-    font-size:11.5px;
-  }
-
   .checkout-layout{
     flex-direction:column;
-    margin-top:24px;
   }
   .checkout-product{
     flex:1 1 auto;
     max-width:260px;
     margin:0 auto;
+  }
+}
+
+/* ★ 手機版寄送方式：強制三顆縮小排成同一行（覆寫最上面的設定） */
+@media (max-width:480px){
+  .ship-wrap{
+    width:100%;
+    max-width:520px;
+    margin:20px auto 10px;
+    gap:6px;
+    flex-wrap:nowrap;          /* 不換行 */
+  }
+  .ship-card{
+    flex:1 1 0 !important;     /* 平均分配寬度 */
+    max-width:none;
+    padding:8px 2px 7px;       /* 內距縮小一點 */
+  }
+  .ship-title,
+  .ship-price{
+    font-size:12px;
+    letter-spacing:.06em;
   }
 }
 
@@ -1510,7 +1402,7 @@ th{
   <div id="intro-hero-panel">
     <div class="hero-frame">
       <img class="hero-image" decoding="async" loading="eager"
-           src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-7"
+           src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2"
            alt="Liu Mama 麻辣鍋底產品照">
       <div class="hero-overlay">
         <div class="hero-eyebrow">LIU MAMA </div>
@@ -1677,7 +1569,7 @@ th{
         <div class="checkout-layout" id="checkoutCard">
           <div class="checkout-product">
             <img decoding="async" loading="lazy"
-                 src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-8"
+                 src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-7"
                  alt="劉嘛麻 麻辣鍋底商品圖">
             <div class="checkout-product-name">麻辣底料包（2人份）</div>
           </div>
@@ -1720,7 +1612,7 @@ th{
           <button id="formBtn" class="btn btn-crayon" type="button" onclick="goToForm()">下一步：填寫寄送資訊</button>
         </div>
 
-        <p class="total-note" style="margin-top:18px;">
+        <p class="total-note" style="margin-top:12px;">
          一定要記得按下一步填寫寄送資訊呦!
         </p>
       </section>
@@ -1883,7 +1775,6 @@ function setStep(step){
     }
   }
 
-  /* STEP2 出現時強制觸發 reveal 動畫（手機也會看到） */
   if(step === 2){
     const reveals = document.querySelectorAll('#step2Panel .reveal');
     reveals.forEach(el=>{
@@ -2400,7 +2291,6 @@ function goToStep2(){
   updateSummary();
   setStep(2);
 
-  /* 切到 STEP2 後，整頁直接捲到最上面（手機也會到頂） */
   setTimeout(scrollToPageTopSmooth, 80);
 }
 
