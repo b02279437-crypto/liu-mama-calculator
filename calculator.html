@@ -2177,7 +2177,11 @@ function updateSummary(){
 
 /* ===== 複製／截圖／Toast ===== */
 function copyAccount(){
-  const acct=document.getElementById('accountNumber').innerText;
+  const acct = document.getElementById('accountNumber')
+    .textContent           // 取純文字
+    .replace(/\s+/g, '')   // 把所有空白字元移除
+    .trim();               // 再保險一次頭尾去空白
+
   if(navigator.clipboard && window.isSecureContext){
     navigator.clipboard.writeText(acct).then(()=>{
       showToast('匯款帳號已複製，完成匯款後請前往下一步填寫寄送資訊。');
@@ -2192,6 +2196,7 @@ function copyAccount(){
     showToast('匯款帳號已複製，完成匯款後請前往下一步填寫寄送資訊。');
   }
 }
+
 function screenshotOrder(){
   const target=document.getElementById('checkoutCard') || document.getElementById('mainContent');
   if(typeof html2canvas==='undefined'){
