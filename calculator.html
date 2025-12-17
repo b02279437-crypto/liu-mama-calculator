@@ -390,6 +390,23 @@ h2.title-in{
   font-weight:700;
   margin:0 2px;
 }
+
+.promo-link{
+  color:var(--promo-text);
+  text-decoration:none;
+  font-weight:700;
+  letter-spacing:.16em;
+  border-bottom:1px dashed rgba(44,62,80,.35);
+  padding-bottom:1px;
+}
+.promo-link:hover{ filter:brightness(1.05); }
+
+.price-old.is-hidden{ display:none; }
+.price-new.is-regular{
+  color:var(--item-text);
+  font-weight:600;
+}
+
 .promo-mark{
   font-size:11px;
   opacity:.7;
@@ -1016,6 +1033,67 @@ th{
   text-align:left;
   box-shadow:0 8px 22px rgba(0,0,0,.06);
 }
+
+/* ===== 優惠碼 ===== */
+.coupon-box{
+  margin-top:12px;
+  padding:12px 12px 10px;
+  border-radius:14px;
+  background:rgba(255,255,255,0.86);
+  border:1px dashed rgba(154,169,191,.75);
+}
+.coupon-title{
+  font-size:11px;
+  letter-spacing:.22em;
+  color:#6b7682;
+  margin-bottom:8px;
+  text-transform:uppercase;
+}
+.coupon-controls{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+}
+.coupon-controls input{
+  flex:0 1 190px;
+  max-width:240px;
+  height:36px;
+  border-radius:10px;
+  border:1px solid #c5cfdd;
+  padding:0 10px;
+  font-size:13px;
+  letter-spacing:.08em;
+}
+
+.coupon-hint{
+  width:100%;
+  text-align:right;
+  font-size:12px;
+  color:#475569;
+  margin-top:6px;
+}
+.coupon-hint b{ font-weight:700; }
+.coupon-controls input:focus{
+  outline:none;
+  border-color:#7b8a9b;
+  box-shadow:0 0 0 2px rgba(123,138,155,.18);
+}
+.coupon-hint{
+  margin-top:8px;
+  font-size:11px;
+  color:#6e7a86;
+  letter-spacing:.06em;
+  line-height:1.7;
+}
+.coupon-hint a{
+  color:var(--navy);
+  text-decoration:none;
+  border-bottom:1px dashed rgba(43,62,83,.45);
+}
+.coupon-hint a:hover{ filter:brightness(1.05); }
+
 .summary-row{
   display:flex;
   justify-content:space-between;
@@ -1498,8 +1576,8 @@ th{
             <td>麻辣底料包<br><small>(2人份)</small></td>
             <td>
               <div class="price-cell">
-                <span class="price-old">$320</span>
-                <span class="price-new">$299</span>
+                <span class="price-old" id="priceOld">$320</span>
+                <span class="price-new" id="priceNew">$299</span>
               </div>
             </td>
             <td>
@@ -1583,11 +1661,27 @@ th{
               <span>運費（<span id="summaryShip">—</span>）</span>
               <span id="summaryShipFee">$0</span>
             </div>
-            <div class="summary-total">
+
+            <div class="summary-row" id="summaryDiscountRow" style="display:none;">
+              <span>優惠折扣（<span id="summaryCouponLabel">—</span>）</span>
+              <span id="summaryDiscount">-$0</span>
+            </div>
+<div class="summary-total">
               <span>合計金額</span>
               <span id="summaryTotal">$0</span>
             </div>
-            <div class="summary-small">
+
+            <div class="coupon-box" id="couponBox">
+              <div class="coupon-title">COUPON</div>
+              <div class="coupon-controls">
+                <input id="couponInput" type="text" placeholder="輸入優惠碼（滿$1000可用）" autocomplete="off" enterkeyhint="done">
+                <button id="applyCouponBtn" class="btn btn-sketch" type="button">套用</button>
+              </div>
+              <div class="coupon-hint">
+                沒有優惠碼？<a id="lineLink2" href="#" target="_blank" rel="noopener">加入LINE好友領取</a>
+              </div>
+            </div>
+<div class="summary-small">
               訂購份數：<span id="summaryQty">0 份</span> · 訂購人：<span id="summaryName">—</span>
             </div>
             <p class="summary-note">
@@ -1803,6 +1897,201 @@ function hideLaunchModal(){
   backdrop.setAttribute('aria-hidden','true');
 }
 
+
+/* ===== Pricing & Coupon ===== */
+const LINE_URL = 'https://page.line.me/217mwvhv'; // ← 換成你的 LINE 連結（例如：https://lin.ee/xxxxx）
+const PRICE_REGULAR = 320;
+const PRICE_SALE    = 299;
+
+/** 倒數顯示到 12/18；價格在 12/19 00:00（台灣時間）回復 $320 */
+function getSaleDates(now = new Date()){
+  // ✅ 日期設定（台灣時間）：可在這裡控制「倒數顯示到哪天」與「何時恢復原價」
+  // ✅ 已改回正式：12/18 結束顯示倒數，12/19 00:00（台灣時間）恢復原價。
+  // 測試OK後，把 priceCutoff 改回：new Date(2025, 11, 19, 0, 0, 0)
+  const countdownEnd = new Date(2025, 11, 18);          // 2025/12/18（倒數顯示用）
+  const priceCutoff  = new Date(2025, 11, 19, 0, 0, 0); // 2025/12/19 00:00（明天過12點恢復原價）
+  return { countdownEnd, priceCutoff };
+}
+function getPricingContext(now = new Date()){
+  const { priceCutoff } = getSaleDates(now);
+  const isSaleActive = now < priceCutoff;
+  return {
+    isSaleActive,
+    unitPrice: isSaleActive ? PRICE_SALE : PRICE_REGULAR,
+    priceCutoff
+  };
+}
+
+/** 優惠碼設定（可自行新增） */
+const COUPONS = {
+  // 你指定的優惠碼：滿 $1000 才能使用，95折（5% OFF）
+  'LIUMAMA2025': { kind:'percent', percent: 5, minSubtotal: 1000, label:'95折（滿$1000）' },
+};
+
+let appliedCoupon = '';
+function normalizeCoupon(code){
+  return (code || '').trim().toUpperCase();
+}
+function computeDiscount(qty, unitPrice){
+  const code = normalizeCoupon(appliedCoupon);
+  if(!code) return { discount:0, label:'' };
+
+  const cfg = COUPONS[code];
+  if(!cfg) return { discount:0, label:'' };
+
+  if(cfg.kind === 'set_unit_price'){
+    if(unitPrice <= cfg.unitPrice){
+      return { discount:0, label: cfg.label || code };
+    }
+    const discount = Math.max(0, (unitPrice - cfg.unitPrice) * qty);
+    return { discount, label: cfg.label || code };
+  }
+
+  if(cfg.kind === 'percent'){
+    const pct = Number(cfg.percent) || 0;
+    const subtotal = qty * unitPrice;
+
+    const min = Number(cfg.minSubtotal) || 0;
+    if(min > 0 && subtotal < min){
+      return { discount:0, label: cfg.label || (pct + '% OFF'), notEligible:true, minSubtotal:min };
+    }
+
+    const discount = Math.max(0, Math.round(subtotal * pct / 100));
+    return { discount, label: cfg.label || (pct + '% OFF') };
+  }
+
+  return { discount:0, label: cfg.label || code };
+}
+function setLineLinks(){
+  const a2 = document.getElementById('lineLink2');
+  if(a2){ a2.href = LINE_URL; }
+}
+function updatePricingUI(){
+  const promo = document.getElementById('promoInline');
+  const priceOld = document.getElementById('priceOld');
+  const priceNew = document.getElementById('priceNew');
+  const launchMain = document.querySelector('#launchModal .promo-main');
+
+  const { isSaleActive, unitPrice } = getPricingContext(new Date());
+
+  // 商品價格顯示（表格）
+  if(priceOld && priceNew){
+    if(isSaleActive){
+      priceOld.classList.remove('is-hidden');
+      priceNew.classList.remove('is-regular');
+      priceOld.textContent = '$' + PRICE_REGULAR;
+      priceNew.textContent = '$' + PRICE_SALE;
+    }else{
+      priceOld.classList.add('is-hidden');
+      priceNew.classList.add('is-regular');
+      priceNew.textContent = '$' + PRICE_REGULAR;
+    }
+  }
+
+  // 首屏活動文案（會在 12/19 00:00 自動切換）
+  if(promo){
+    if(isSaleActive){
+      promo.innerHTML = `
+        <span class="promo-mark">⛧</span>
+        11/18 ~ 12/18 開賣價
+        <strong class="price-red">$${PRICE_SALE}</strong>
+        <span class="promo-sep">·</span>
+        倒數 <strong class="promo-days" id="promoDays">-- 天</strong>
+      `;
+      setupInlinePromo(); // 重新跑倒數
+    }else{
+      promo.innerHTML = `
+        <span class="promo-mark">⛧</span>
+        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">
+          加入LINE好友，拿優惠碼
+        </a>
+      `;
+    }
+  }
+
+  // 開賣彈窗文案同步切換
+  if(launchMain){
+    if(isSaleActive){
+      launchMain.innerHTML = `
+        手炒麻辣鍋底<br>
+        11/18 ~ 12/18 開賣價 <strong>$${PRICE_SALE}</strong><br>
+        期間限定價 · 先嚐一鍋就愛上
+      `;
+    }else{
+      launchMain.innerHTML = `
+        手炒麻辣鍋底<br>
+        加入 LINE 好友領取優惠碼<br>
+        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">點我加入 LINE</a>
+      `;
+    }
+  }
+
+  setLineLinks();
+}
+function schedulePricingSwitch(){
+  const now = new Date();
+  const { priceCutoff } = getPricingContext(now);
+  const ms = priceCutoff - now;
+  if(ms > 0 && ms < 1000 * 60 * 60 * 72){ // 72 小時內才排程，避免很久的 timeout
+    setTimeout(()=>{
+      updatePricingUI();
+      calculate(true);
+
+  document.querySelectorAll('input[name="shipMethod"]').forEach(r=>{
+    r.addEventListener('change', ()=>{
+      calculate(false);
+    });
+  });
+
+      updateSummary();
+    }, ms + 900);
+  }
+}
+function applyCoupon(){
+  const input = document.getElementById('couponInput');
+  if(!input) return;
+
+  const code = normalizeCoupon(input.value);
+
+  // 空白＝清除
+  if(!code){
+    appliedCoupon = '';
+    input.value = '';
+    showToast('已清除優惠碼。');
+    calculate(false);
+    updateSummary();
+    return;
+  }
+
+  // 無此碼
+  if(!COUPONS[code]){
+    showToast('優惠碼無效，請確認後再試一次。');
+    return;
+  }
+
+  const qty = parseInt(document.getElementById('qty1').value) || 0;
+  const { unitPrice } = getPricingContext(new Date());
+  const res = computeDiscount(qty, unitPrice);
+
+  // 門檻檢查（例如滿 $1000）
+  if(res && res.notEligible){
+    showToast(`此優惠碼需滿 $${res.minSubtotal} 才能使用喔。`);
+    return;
+  }
+
+  // OK 才套用
+  appliedCoupon = code;
+  input.value = code;
+
+  if((res.discount || 0) <= 0){
+    showToast(`已套用優惠碼：${code}（本次無折扣）`);
+  }else{
+    showToast(`已套用優惠碼：${code}`);
+  }
+  calculate(false);
+  updateSummary();
+}
+
 /* ===== 初始化 ===== */
 window.addEventListener('DOMContentLoaded',()=>{
   const params = new URLSearchParams(window.location.search);
@@ -1818,6 +2107,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   select.value="0";
 
   buildQty();
+  updatePricingUI();
+  schedulePricingSwitch();
   calculate(true);
   setStep(1);
 
@@ -1933,6 +2224,21 @@ window.addEventListener('DOMContentLoaded',()=>{
       scrollToPageTopSmooth();
     });
   }
+
+  const applyBtn = document.getElementById('applyCouponBtn');
+  if(applyBtn){
+    applyBtn.addEventListener('click', applyCoupon);
+  }
+  const couponInput = document.getElementById('couponInput');
+  if(couponInput){
+    couponInput.addEventListener('keydown',(e)=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        applyCoupon();
+      }
+    });
+  }
+
 });
 
 /* ===== Email 提示 ===== */
@@ -2106,16 +2412,24 @@ function buildQty(){
 /* ===== 計算金額 ===== */
 let lastTotal=0;
 function calculate(isInit){
-  const qty1=parseInt(document.getElementById('qty1').value)||0;
-  let ship=0;
-  const method=document.querySelector('input[name="shipMethod"]:checked');
+  const qty1 = parseInt(document.getElementById('qty1').value) || 0;
+
+  let ship = 0;
+  const method = document.querySelector('input[name="shipMethod"]:checked');
   if(method){
-    if(method.value==='711') ship=60;
-    else if(method.value==='post') ship=120;
-    else if(method.value==='pickup') ship=0;
+    if(method.value === '711') ship = 60;
+    else if(method.value === 'post') ship = 120;
+    else if(method.value === 'pickup') ship = 0;
   }
-  const newTotal=qty1*299+ship;
+
+  const { unitPrice } = getPricingContext(new Date());
+  const subtotal = qty1 * unitPrice;
+
+  const { discount } = computeDiscount(qty1, unitPrice);
+  const newTotal = Math.max(0, subtotal - discount + ship);
+
   animateTotal(newTotal, !!isInit);
+  updateSummary();
 }
 function animateTotal(target, isInit){
   const el=document.getElementById('total');
@@ -2153,7 +2467,7 @@ function animateTotal(target, isInit){
 
 /* ===== STEP2 摘要 ===== */
 function updateSummary(){
-  const qty   = parseInt(document.getElementById('qty1').value)||0;
+  const qty   = parseInt(document.getElementById('qty1').value) || 0;
   const method= document.querySelector('input[name="shipMethod"]:checked');
   const name  = document.getElementById('customerName').value.trim();
 
@@ -2164,15 +2478,34 @@ function updateSummary(){
     else if(method.value==='post'){ shipFee=120; shipLabel='宅配到家'; }
     else if(method.value==='pickup'){ shipFee=0; shipLabel='自取'; }
   }
-  const subtotal = qty*299;
-  const total = subtotal + shipFee;
 
-  document.getElementById('summaryQty').textContent   = qty + ' 份';
-  document.getElementById('summaryShip').textContent  = shipLabel;
+  const { unitPrice } = getPricingContext(new Date());
+  const subtotal = qty * unitPrice;
+
+  const { discount, label } = computeDiscount(qty, unitPrice);
+  const total = Math.max(0, subtotal - discount + shipFee);
+
+  document.getElementById('summaryQty').textContent      = qty + ' 份';
+  document.getElementById('summaryShip').textContent     = shipLabel;
   document.getElementById('summarySubtotal').textContent = '$' + subtotal;
   document.getElementById('summaryShipFee').textContent  = '$' + shipFee;
   document.getElementById('summaryTotal').textContent    = '$' + total;
   document.getElementById('summaryName').textContent     = name || '—';
+
+  const row = document.getElementById('summaryDiscountRow');
+  const val = document.getElementById('summaryDiscount');
+  const lab = document.getElementById('summaryCouponLabel');
+  if(row && val && lab){
+    if(discount > 0){
+      row.style.display = '';
+      val.textContent = '-$' + discount;
+      lab.textContent = label || normalizeCoupon(appliedCoupon) || '優惠碼';
+    }else{
+      row.style.display = 'none';
+      val.textContent = '-$0';
+      lab.textContent = '—';
+    }
+  }
 }
 
 /* ===== 複製／截圖／Toast ===== */
@@ -2358,7 +2691,11 @@ function goToForm(){
   else if(method.value==='post') shipLabel='宅配到家';
   else if(method.value==='pickup') shipLabel='自取';
 
-  const total = qty*299 + (method.value==='711' ? 60 : method.value==='post' ? 120 : 0);
+    const { unitPrice } = getPricingContext(new Date());
+  const subtotal = qty * unitPrice;
+  const { discount } = computeDiscount(qty, unitPrice);
+  const shipFee = (method.value==='711' ? 60 : method.value==='post' ? 120 : 0);
+  const total = Math.max(0, subtotal - discount + shipFee);
 
   const base = 'https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url';
   const formUrl = base
