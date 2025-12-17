@@ -1623,7 +1623,7 @@ th{
         </p>
 
         <div class="total" id="total" role="status" aria-live="polite" aria-atomic="true">Total Amount: $0</div>
-        <div class="total-note">金額已含寄送費用 · 單位：新台幣</div>
+        <div class="total-note">運費另計（折扣後再加運費） · 單位：新台幣</div>
 
         <button id="toStep2Btn" class="btn btn-crayon step-next-btn" type="button" onclick="goToStep2()">
           下一步：結帳與匯款
@@ -1677,9 +1677,7 @@ th{
                 <input id="couponInput" type="text" placeholder="輸入優惠碼（滿$1000可用）" autocomplete="off" enterkeyhint="done">
                 <button id="applyCouponBtn" class="btn btn-sketch" type="button">套用</button>
               </div>
-              <div class="coupon-hint">
-                沒有優惠碼？<a id="lineLink2" href="#" target="_blank" rel="noopener">加入LINE好友領取</a>
-              </div>
+              <div class="coupon-hint">※ 商品滿 <b>$1000</b> 才能使用優惠碼（運費另計）。沒有優惠碼？<a id="lineLink2" href="#" target="_blank" rel="noopener">加入LINE好友領取</a></div>
             </div>
 <div class="summary-small">
               訂購份數：<span id="summaryQty">0 份</span> · 訂購人：<span id="summaryName">—</span>
@@ -1925,7 +1923,7 @@ function getPricingContext(now = new Date()){
 /** 優惠碼設定（可自行新增） */
 const COUPONS = {
   // 你指定的優惠碼：滿 $1000 才能使用，95折（5% OFF）
-  'LIUMAMA2025': { kind:'percent', percent: 5, minSubtotal: 1000, label:'95折（滿$1000）' },
+  'LIUMAMA2025': { kind:'percent', percent: 5, minSubtotal: 1000, label:'95折' },
 };
 
 let appliedCoupon = '';
@@ -2071,16 +2069,6 @@ function applyCoupon(){
 
   const code = normalizeCoupon(input.value);
 
-
-  const { isSaleActive, priceCutoff } = getPricingContext(new Date());
-  if(isSaleActive){
-    // 到期後才開放領取/使用優惠碼
-    const mm = String(priceCutoff.getMonth()+1).padStart(2,'0');
-    const dd = String(priceCutoff.getDate()).padStart(2,'0');
-    showToast(`優惠碼將於 ${mm}/${dd} 00:00 開放領取喔。`);
-    return;
-  }
-
   // 空白＝清除
   if(!code){
     appliedCoupon = '';
@@ -2091,24 +2079,38 @@ function applyCoupon(){
     return;
   }
 
+  // 到期後（恢復原價後）才開放領取/使用優惠碼
+  const ctx = getPricingContext(new Date());
+  if(ctx.isSaleActive){
+    const mm = String(ctx.priceCutoff.getMonth()+1).padStart(2,'0');
+    const dd = String(ctx.priceCutoff.getDate()).padStart(2,'0');
+    alert(`優惠碼將於 ${mm}/${dd} 00:00 開放領取喔。`);
+    showToast(`優惠碼將於 ${mm}/${dd} 00:00 開放領取喔。`);
+    return;
+  }
+
   // 無此碼
   if(!COUPONS[code]){
+    alert('優惠碼無效，請確認後再試一次。');
     showToast('優惠碼無效，請確認後再試一次。');
     return;
   }
 
-  const qty = parseInt(document.getElementById('qty1').value) || 0;
-  const { unitPrice } = getPricingContext(new Date());
-  const res = computeDiscount(qty, unitPrice);
+  // 門檻檢查（商品小計滿$1000，不含運費）
+  const qty = parseInt(document.getElementById('qty1')?.value) || 0;
+  const unitPrice = ctx.unitPrice;
+  const prev = appliedCoupon;
+  appliedCoupon = code; // 讓 computeDiscount 直接用同一套邏輯（之後不合格會復原）
 
-  // 門檻檢查（例如滿 $1000）
+  const res = computeDiscount(qty, unitPrice);
   if(res && res.notEligible){
-    showToast(`此優惠碼需滿 $${res.minSubtotal} 才能使用喔。`);
+    appliedCoupon = prev;
+    alert(`商品滿 $${res.minSubtotal} 才能使用優惠碼喔。`);
+    showToast(`商品滿 $${res.minSubtotal} 才能使用優惠碼喔。`);
     return;
   }
 
   // OK 才套用
-  appliedCoupon = code;
   input.value = code;
 
   if((res.discount || 0) <= 0){
@@ -2119,6 +2121,7 @@ function applyCoupon(){
   calculate(false);
   updateSummary();
 }
+
 
 /* ===== 初始化 ===== */
 window.addEventListener('DOMContentLoaded',()=>{
@@ -2442,6 +2445,7 @@ let lastTotal=0;
 function calculate(isInit){
   const qty1 = parseInt(document.getElementById('qty1').value) || 0;
 
+  // 運費：不參與折扣，折扣後再加運費
   let ship = 0;
   const method = document.querySelector('input[name="shipMethod"]:checked');
   if(method){
@@ -2459,6 +2463,7 @@ function calculate(isInit){
   animateTotal(newTotal, !!isInit);
   updateSummary();
 }
+
 function animateTotal(target, isInit){
   const el=document.getElementById('total');
   if(isInit){
