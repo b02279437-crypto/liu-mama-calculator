@@ -1074,6 +1074,9 @@ th{
   color:#475569;
   margin-top:6px;
 }
+
+.coupon-hint{ line-height:1.5; }
+.coupon-hint a{ display:block; margin-top:2px; }
 .coupon-hint b{ font-weight:700; }
 .coupon-controls input:focus{
   outline:none;
@@ -1456,6 +1459,11 @@ th{
   #startBtn::after,
   #storyBtn::after{ display:none !important; }
 }
+
+.coupon-hint{ line-height:1.5; }
+.coupon-hint .coupon-line{ display:block; margin-top:4px; }
+.coupon-hint .coupon-line a{ display:inline; margin-left:2px; }
+
 </style>
 </head>
 
@@ -1677,7 +1685,7 @@ th{
                 <input id="couponInput" type="text" placeholder="輸入優惠碼（滿$1000可用）" autocomplete="off" enterkeyhint="done">
                 <button id="applyCouponBtn" class="btn btn-sketch" type="button">套用</button>
               </div>
-              <div class="coupon-hint">※ 商品滿 <b>$1000</b> 才能使用優惠碼（運費另計）。沒有優惠碼？<a id="lineLink2" href="#" target="_blank" rel="noopener">加入LINE好友領取</a></div>
+              <div class="coupon-hint">※ 商品滿 <b>$1000</b> 才能使用優惠碼（運費另計）。<span class="coupon-line">沒有優惠碼？ <a id="lineLink2" href="#" target="_blank" rel="noopener">加入LINE好友領取</a></span></div>
             </div>
 <div class="summary-small">
               訂購份數：<span id="summaryQty">0 份</span> · 訂購人：<span id="summaryName">—</span>
