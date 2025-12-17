@@ -1966,6 +1966,24 @@ function setLineLinks(){
   const a2 = document.getElementById('lineLink2');
   if(a2){ a2.href = LINE_URL; }
 }
+
+function updateCouponVisibility(){
+  const box = document.getElementById('couponBox');
+  if(!box) return;
+
+  const { isSaleActive } = getPricingContext(new Date());
+
+  // 優惠碼：到期後（恢復原價後）才顯示/可使用
+  if(isSaleActive){
+    box.style.display = 'none';
+    appliedCoupon = '';
+    const input = document.getElementById('couponInput');
+    if(input) input.value = '';
+  }else{
+    box.style.display = '';
+  }
+}
+
 function updatePricingUI(){
   const promo = document.getElementById('promoInline');
   const priceOld = document.getElementById('priceOld');
@@ -2025,7 +2043,7 @@ function updatePricingUI(){
       `;
     }
   }
-
+  updateCouponVisibility();
   setLineLinks();
 }
 function schedulePricingSwitch(){
@@ -2052,6 +2070,16 @@ function applyCoupon(){
   if(!input) return;
 
   const code = normalizeCoupon(input.value);
+
+
+  const { isSaleActive, priceCutoff } = getPricingContext(new Date());
+  if(isSaleActive){
+    // 到期後才開放領取/使用優惠碼
+    const mm = String(priceCutoff.getMonth()+1).padStart(2,'0');
+    const dd = String(priceCutoff.getDate()).padStart(2,'0');
+    showToast(`優惠碼將於 ${mm}/${dd} 00:00 開放領取喔。`);
+    return;
+  }
 
   // 空白＝清除
   if(!code){
