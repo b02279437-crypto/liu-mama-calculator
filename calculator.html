@@ -1680,14 +1680,26 @@ th{
             </div>
 
             <div class="coupon-box" id="couponBox">
-              <div class="coupon-title">COUPON</div>
-              <div class="coupon-controls">
-                <input id="couponInput" type="text" placeholder="輸入優惠碼（滿$1000可用）" autocomplete="off" enterkeyhint="done">
-                <button id="applyCouponBtn" class="btn btn-sketch" type="button">套用</button>
-              </div>
-              <div class="coupon-hint">※ 商品滿 <b>$1000</b> 才能使用優惠碼（運費另計）。<span class="coupon-line">沒有優惠碼？ <a id="lineLink2" href="#" target="_blank" rel="noopener">加入LINE好友領取</a></span></div>
-            </div>
-<div class="summary-small">
+  <div class="coupon-title">COUPON</div>
+  <div class="coupon-controls">
+    <input id="couponInput" type="text" placeholder="輸入優惠碼（滿$1000可用）" autocomplete="off" enterkeyhint="done">
+    <button id="applyCouponBtn" class="btn btn-sketch" type="button">套用</button>
+  </div>
+  <div class="coupon-hint">
+    <span class="coupon-line">※ 商品滿 <b>$1000</b> 才能使用優惠碼（運費另計）。</span>
+    <span class="coupon-line">沒有優惠碼？ <a id="lineLink2" href="#" target="_blank" rel="noopener">加入LINE官方，得知最新優惠資訊</a></span>
+  </div>
+</div>
+
+<div class="coupon-box" id="lineInfoBox" style="display:none;">
+  <div class="coupon-title">LINE</div>
+  <div class="coupon-hint">
+    <span class="coupon-line">劉嘛麻LINE官方上線啦!</span>
+    <span class="coupon-line">
+      <a id="lineLinkInfo" href="#" target="_blank" rel="noopener">加入LINE官方，得知最新優惠資訊</a>
+    </span>
+  </div>
+</div><div class="summary-small">
               訂購份數：<span id="summaryQty">0 份</span> · 訂購人：<span id="summaryName">—</span>
             </div>
             <p class="summary-note">
@@ -1905,26 +1917,41 @@ function hideLaunchModal(){
 
 
 /* ===== Pricing & Coupon ===== */
+
+function getNow(){ return new Date(); }
+
 const LINE_URL = 'https://page.line.me/217mwvhv'; // ← 換成你的 LINE 連結（例如：https://lin.ee/xxxxx）
 const PRICE_REGULAR = 320;
 const PRICE_SALE    = 299;
 
 /** 倒數顯示到 12/18；價格在 12/19 00:00（台灣時間）回復 $320 */
 function getSaleDates(now = new Date()){
-  // ✅ 日期設定（台灣時間）：可在這裡控制「倒數顯示到哪天」與「何時恢復原價」
-  // ✅ 已改回正式：12/18 結束顯示倒數，12/19 00:00（台灣時間）恢復原價。
-  // 測試OK後，把 priceCutoff 改回：new Date(2025, 11, 19, 0, 0, 0)
+  // ✅ 日期設定（台灣時間, UTC+8）
+  // - 倒數顯示到 12/18
+  // - 12/19 00:00（台北時間）恢復原價
+  // - 12/26 00:00（台北時間）新年優惠券/優惠碼開始
   const countdownEnd = new Date(2025, 11, 18);          // 2025/12/18（倒數顯示用）
-  const priceCutoff  = new Date(2025, 11, 19, 0, 0, 0); // 2025/12/19 00:00（明天過12點恢復原價）
-  return { countdownEnd, priceCutoff };
+  const priceCutoff  = new Date(2025, 11, 19, 0, 0, 0); // 2025/12/19 00:00（恢復原價）
+  const newYearStart = new Date(2025, 11, 26, 0, 0, 0); // 2025/12/26 00:00（新年優惠開始）
+  return { countdownEnd, priceCutoff, newYearStart };
 }
-function getPricingContext(now = new Date()){
-  const { priceCutoff } = getSaleDates(now);
-  const isSaleActive = now < priceCutoff;
+function getCampaignPhase(now = getNow()){
+  const { priceCutoff, newYearStart } = getSaleDates(now);
+  if(now < priceCutoff) return 'sale'; // 仍在開賣價期間
+  if(now < newYearStart) return 'line'; // LINE官方上線期（尚未開放新年優惠）
+  return 'ny'; // 新年優惠開始
+}
+
+function getPricingContext(now = getNow()){
+  const { priceCutoff, newYearStart } = getSaleDates(now);
+  const phase = getCampaignPhase(now);
+  const isSaleActive = (phase === 'sale');
   return {
+    phase,
     isSaleActive,
     unitPrice: isSaleActive ? PRICE_SALE : PRICE_REGULAR,
-    priceCutoff
+    priceCutoff,
+    newYearStart
   };
 }
 
@@ -1971,22 +1998,54 @@ function computeDiscount(qty, unitPrice){
 function setLineLinks(){
   const a2 = document.getElementById('lineLink2');
   if(a2){ a2.href = LINE_URL; }
+  const aInfo = document.getElementById('lineLinkInfo');
+  if(aInfo){ aInfo.href = LINE_URL; }
 }
 
 function updateCouponVisibility(){
-  const box = document.getElementById('couponBox');
-  if(!box) return;
+  const couponBox = document.getElementById('couponBox');
+  const lineInfoBox = document.getElementById('lineInfoBox');
+  if(!couponBox || !lineInfoBox) return;
 
-  const { isSaleActive } = getPricingContext(new Date());
+  const ctx = getPricingContext(getNow());
+  const phase = ctx.phase;
 
-  // 優惠碼：到期後（恢復原價後）才顯示/可使用
-  if(isSaleActive){
-    box.style.display = 'none';
+  // phase:
+  // - sale：開賣期間 → 不顯示優惠碼區
+  // - line：12/19~12/25 → 顯示「LINE官方上線」提示
+  // - ny：12/26 起 → 顯示優惠碼區
+  if(phase === 'sale'){
+    couponBox.style.display = 'none';
+    lineInfoBox.style.display = 'none';
+    appliedCoupon = '';
+    const input = document.getElementById('couponInput');
+    if(input) input.value = '';
+  }else if(phase === 'line'){
+    couponBox.style.display = 'none';
+    lineInfoBox.style.display = '';
     appliedCoupon = '';
     const input = document.getElementById('couponInput');
     if(input) input.value = '';
   }else{
-    box.style.display = '';
+    couponBox.style.display = '';
+    lineInfoBox.style.display = 'none';
+  }
+
+  // 新年優惠卷 12/26 才開始：此階段不在頁面顯示提示（避免混淆）
+  const nyHint = document.getElementById('nyStartHint');
+  if(nyHint){
+    nyHint.style.display = 'none';
+    nyHint.textContent = '';
+  }
+
+  // 新年期：更新 coupon hint 連結文字
+  const a2 = document.getElementById('lineLink2');
+  if(a2){
+    if(phase === 'ny'){
+      a2.textContent = '加入LINE好友，領取新年優惠卷';
+    }else{
+      a2.textContent = '加入LINE官方，得知最新優惠資訊';
+    }
   }
 }
 
@@ -1996,7 +2055,8 @@ function updatePricingUI(){
   const priceNew = document.getElementById('priceNew');
   const launchMain = document.querySelector('#launchModal .promo-main');
 
-  const { isSaleActive, unitPrice } = getPricingContext(new Date());
+  const ctx = getPricingContext(getNow());
+  const { isSaleActive, phase } = ctx;
 
   // 商品價格顯示（表格）
   if(priceOld && priceNew){
@@ -2012,9 +2072,12 @@ function updatePricingUI(){
     }
   }
 
-  // 首屏活動文案（會在 12/19 00:00 自動切換）
+  const mm = String(ctx.newYearStart.getMonth()+1).padStart(2,'0');
+  const dd = String(ctx.newYearStart.getDate()).padStart(2,'0');
+
+  // 首屏活動文案（依 phase 切換）
   if(promo){
-    if(isSaleActive){
+    if(phase === 'sale'){
       promo.innerHTML = `
         <span class="promo-mark">⛧</span>
         11/18 ~ 12/18 開賣價
@@ -2023,11 +2086,22 @@ function updatePricingUI(){
         倒數 <strong class="promo-days" id="promoDays">-- 天</strong>
       `;
       setupInlinePromo(); // 重新跑倒數
+    }else if(phase === 'line'){
+      promo.innerHTML = `
+        <span class="promo-mark">⛧</span>
+        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">
+          劉嘛麻LINE官方上線啦!
+        </a>
+        <span class="promo-sep">·</span>
+        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">
+          加入LINE官方，得知最新優惠資訊
+        </a>
+      `;
     }else{
       promo.innerHTML = `
         <span class="promo-mark">⛧</span>
         <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">
-          加入LINE好友，拿優惠碼
+          加入LINE好友，領取新年優惠卷
         </a>
       `;
     }
@@ -2035,41 +2109,43 @@ function updatePricingUI(){
 
   // 開賣彈窗文案同步切換
   if(launchMain){
-    if(isSaleActive){
+    if(phase === 'sale'){
       launchMain.innerHTML = `
         手炒麻辣鍋底<br>
         11/18 ~ 12/18 開賣價 <strong>$${PRICE_SALE}</strong><br>
         期間限定價 · 先嚐一鍋就愛上
       `;
+    }else if(phase === 'line'){
+      launchMain.innerHTML = `
+        劉嘛麻LINE官方上線啦!<br>
+        加入LINE官方，得知最新優惠資訊<br>
+        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">點我加入 LINE</a>
+      `;
     }else{
       launchMain.innerHTML = `
         手炒麻辣鍋底<br>
-        加入 LINE 好友領取優惠碼<br>
+        加入LINE好友，領取新年優惠卷<br>
         <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">點我加入 LINE</a>
       `;
     }
   }
+
   updateCouponVisibility();
   setLineLinks();
 }
 function schedulePricingSwitch(){
-  const now = new Date();
-  const { priceCutoff } = getPricingContext(now);
-  const ms = priceCutoff - now;
-  if(ms > 0 && ms < 1000 * 60 * 60 * 72){ // 72 小時內才排程，避免很久的 timeout
-    setTimeout(()=>{
-      updatePricingUI();
-      calculate(true);
+  const now = getNow();
+  const { priceCutoff, newYearStart } = getSaleDates(now);
 
-  document.querySelectorAll('input[name="shipMethod"]').forEach(r=>{
-    r.addEventListener('change', ()=>{
-      calculate(false);
-    });
+  [priceCutoff, newYearStart].forEach(target=>{
+    const ms = target - now;
+    if(ms > 0 && ms < 1000 * 60 * 60 * 72){ // 72 小時內才排程，避免很久的 timeout
+      setTimeout(()=>{
+        updatePricingUI();
+        calculate(true);
+      }, ms + 900);
+    }
   });
-
-      updateSummary();
-    }, ms + 900);
-  }
 }
 function applyCoupon(){
   const input = document.getElementById('couponInput');
@@ -2088,14 +2164,14 @@ function applyCoupon(){
   }
 
   // 到期後（恢復原價後）才開放領取/使用優惠碼
-  const ctx = getPricingContext(new Date());
-  if(ctx.isSaleActive){
-    const mm = String(ctx.priceCutoff.getMonth()+1).padStart(2,'0');
-    const dd = String(ctx.priceCutoff.getDate()).padStart(2,'0');
-    alert(`優惠碼將於 ${mm}/${dd} 00:00 開放領取喔。`);
-    showToast(`優惠碼將於 ${mm}/${dd} 00:00 開放領取喔。`);
-    return;
-  }
+  const ctx = getPricingContext(getNow());
+  if(ctx.phase !== 'ny'){
+  const mm = String(ctx.newYearStart.getMonth()+1).padStart(2,'0');
+  const dd = String(ctx.newYearStart.getDate()).padStart(2,'0');
+  alert(`新年優惠卷將於 ${mm}/${dd} 00:00 開放領取喔。`);
+  showToast(`新年優惠卷將於 ${mm}/${dd} 00:00 開放領取喔。`);
+  return;
+}
 
   // 無此碼
   if(!COUPONS[code]){
@@ -2462,7 +2538,7 @@ function calculate(isInit){
     else if(method.value === 'pickup') ship = 0;
   }
 
-  const { unitPrice } = getPricingContext(new Date());
+  const { unitPrice } = getPricingContext(getNow());
   const subtotal = qty1 * unitPrice;
 
   const { discount } = computeDiscount(qty1, unitPrice);
@@ -2520,7 +2596,7 @@ function updateSummary(){
     else if(method.value==='pickup'){ shipFee=0; shipLabel='自取'; }
   }
 
-  const { unitPrice } = getPricingContext(new Date());
+  const { unitPrice } = getPricingContext(getNow());
   const subtotal = qty * unitPrice;
 
   const { discount, label } = computeDiscount(qty, unitPrice);
@@ -2732,7 +2808,7 @@ function goToForm(){
   else if(method.value==='post') shipLabel='宅配到家';
   else if(method.value==='pickup') shipLabel='自取';
 
-    const { unitPrice } = getPricingContext(new Date());
+    const { unitPrice } = getPricingContext(getNow());
   const subtotal = qty * unitPrice;
   const { discount } = computeDiscount(qty, unitPrice);
   const shipFee = (method.value==='711' ? 60 : method.value==='post' ? 120 : 0);
