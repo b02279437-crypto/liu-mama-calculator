@@ -1920,9 +1920,62 @@ function hideLaunchModal(){
 
 function getNow(){ return new Date(); }
 
-const LINE_URL = 'https://page.line.me/217mwvhv'; // ← 換成你的 LINE 連結（例如：https://lin.ee/xxxxx）
-const PRICE_REGULAR = 320;
-const PRICE_SALE    = 299;
+// ===============================
+// ✅ 單一設定區：以後要改「日期/折扣/優惠碼」都改這裡
+//   - 月份請用「1~12」(例如 12月 = 12)
+//   - 時間預設 00:00:00；需要指定時再加 hh/mm/ss
+// ===============================
+const CAMPAIGN_CONFIG = {
+  // 主要日期（台北時間 UTC+8）
+  dates: {
+    // 倒數顯示到哪一天（沿用你目前的邏輯：該日 00:00）
+    countdownEnd: { y: 2025, m: 12, d: 18 },
+
+    // 何時恢復原價（12/19 00:00）
+    priceCutoff:  { y: 2025, m: 12, d: 19, hh: 0, mm: 0, ss: 0 },
+
+    // 新年優惠開始（12/26 00:00）
+    newYearStart: { y: 2025, m: 12, d: 26, hh: 0, mm: 0, ss: 0 },
+  },
+
+  // 價格
+  prices: {
+    regular: 320,
+    sale:    299,
+  },
+
+  // LINE
+  line: {
+    url: 'https://page.line.me/217mwvhv',
+  },
+
+  // ✅ 優惠碼（之後要換新券、改折扣、改門檻，都在這裡改）
+  // kind:
+  // - 'percent'：打幾%折（percent: 5 代表 5% OFF = 95折）
+  // - 'set_unit_price'：指定每盒價格（unitPrice）
+  coupons: {
+    'LIUMAMA2025': { kind:'percent', percent: 5, minSubtotal: 1000, label:'95折' },
+  },
+};
+
+function makeTWDate(obj){
+  if(!obj) return new Date();
+  const y = Number(obj.y);
+  const m = Number(obj.m); // 1~12
+  const d = Number(obj.d);
+  const hh = Number(obj.hh || 0);
+  const mm = Number(obj.mm || 0);
+  const ss = Number(obj.ss || 0);
+  // JS month is 0-based
+  return new Date(y, (m - 1), d, hh, mm, ss);
+}
+
+// 下面維持原本程式使用的常數名稱（功能不變）
+const LINE_URL      = CAMPAIGN_CONFIG.line.url;
+const PRICE_REGULAR = CAMPAIGN_CONFIG.prices.regular;
+const PRICE_SALE    = CAMPAIGN_CONFIG.prices.sale;
+const COUPONS       = CAMPAIGN_CONFIG.coupons;
+
 
 /** 倒數顯示到 12/18；價格在 12/19 00:00（台灣時間）回復 $320 */
 function getSaleDates(now = new Date()){
@@ -1930,9 +1983,9 @@ function getSaleDates(now = new Date()){
   // - 倒數顯示到 12/18
   // - 12/19 00:00（台北時間）恢復原價
   // - 12/26 00:00（台北時間）新年優惠券/優惠碼開始
-  const countdownEnd = new Date(2025, 11, 18);          // 2025/12/18（倒數顯示用）
-  const priceCutoff  = new Date(2025, 11, 19, 0, 0, 0); // 2025/12/19 00:00（恢復原價）
-  const newYearStart = new Date(2025, 11, 26, 0, 0, 0); // 2025/12/26 00:00（新年優惠開始）
+  const countdownEnd = makeTWDate(CAMPAIGN_CONFIG.dates.countdownEnd);
+  const priceCutoff  = makeTWDate(CAMPAIGN_CONFIG.dates.priceCutoff);
+  const newYearStart = makeTWDate(CAMPAIGN_CONFIG.dates.newYearStart);
   return { countdownEnd, priceCutoff, newYearStart };
 }
 function getCampaignPhase(now = getNow()){
@@ -1956,10 +2009,7 @@ function getPricingContext(now = getNow()){
 }
 
 /** 優惠碼設定（可自行新增） */
-const COUPONS = {
-  // 你指定的優惠碼：滿 $1000 才能使用，95折（5% OFF）
-  'LIUMAMA2025': { kind:'percent', percent: 5, minSubtotal: 1000, label:'95折' },
-};
+// （優惠碼設定已集中到 CAMPAIGN_CONFIG.coupons）
 
 let appliedCoupon = '';
 function normalizeCoupon(code){
