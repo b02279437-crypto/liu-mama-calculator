@@ -1694,7 +1694,7 @@ th{
 <div class="coupon-box" id="lineInfoBox" style="display:none;">
   <div class="coupon-title">LINE</div>
   <div class="coupon-hint">
-    <span class="coupon-line">劉嘛麻LINE官方上線啦!</span>
+    <span class="coupon-line">LINE官方上線啦!</span>
     <span class="coupon-line">
       <a id="lineLinkInfo" href="#" target="_blank" rel="noopener">加入LINE官方，得知最新優惠資訊</a>
     </span>
@@ -2094,7 +2094,7 @@ function updateCouponVisibility(){
     if(phase === 'ny'){
       a2.textContent = '加入LINE好友，領取新年優惠卷';
     }else{
-      a2.textContent = '加入LINE官方，得知最新優惠資訊';
+      a2.textContent = '快加入，得知最新優惠資訊';
     }
   }
 }
@@ -2144,7 +2144,7 @@ function updatePricingUI(){
         </a>
         <span class="promo-sep">·</span>
         <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">
-          加入LINE官方，得知最新優惠資訊
+          快加入，得知最新優惠資訊
         </a>
       `;
     }else{
@@ -2168,7 +2168,7 @@ function updatePricingUI(){
     }else if(phase === 'line'){
       launchMain.innerHTML = `
         劉嘛麻LINE官方上線啦!<br>
-        加入LINE官方，得知最新優惠資訊<br>
+        快加入，得知最新優惠資訊<br>
         <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">點我加入 LINE</a>
       `;
     }else{
