@@ -104,9 +104,11 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   padding-top:12vh;
   z-index:9999;
   opacity:1;
-  transition:opacity var(--t-slow) var(--ease);
+  transform:translateY(0);
+  transition:opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
 }
-#intro.fade-out{opacity:0; pointer-events:none;}
+#intro.fade-out{opacity:0;
+  transform:translateY(-14vh); pointer-events:none;}
 
 #intro-logo{
   width:clamp(360px, 92vw, 700px);
@@ -1591,8 +1593,8 @@ th{
             <td>
               <div class="qty-stepper" role="group" aria-label="數量">
                 <button type="button" class="qty-btn" id="qtyMinus" aria-label="減少">−</button>
-                <input id="qtyInput" class="qty-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
-                       value="0" role="spinbutton" aria-valuemin="0" aria-valuemax="35" aria-valuenow="0" aria-live="polite">
+                <input id="qtyInput" class="qty-input" type="text" inputmode="numeric" pattern="[0-9]*"
+                       value="0" role="spinbutton" aria-valuemin="0" aria-valuenow="0" aria-live="polite">
                 <button type="button" class="qty-btn" id="qtyPlus" aria-label="增加">＋</button>
               </div>
               <select id="qty1" onchange="calculate()" aria-label="數量" hidden></select>
@@ -2263,13 +2265,10 @@ window.addEventListener('DOMContentLoaded',()=>{
   const skipIntro = params.get('skipIntro') === '1';
 
   const select=document.getElementById('qty1');
-  for(let i=0;i<=35;i++){
-    const o=document.createElement('option');
-    o.value=i;
-    o.textContent=i;
-    select.appendChild(o);
+  if(select){
+    // 由 buildQty() 動態維護 select（避免生成大量 options）
+    select.innerHTML = '<option value="0" selected>0</option>';
   }
-  select.value="0";
 
   buildQty();
   updatePricingUI();
@@ -2282,6 +2281,70 @@ window.addEventListener('DOMContentLoaded',()=>{
   const storyBtn=document.getElementById('storyBtn');
   const main=document.getElementById('mainContent');
   const pageTitle=document.getElementById('pageTitle');
+
+  // ===== 開場快速跳過：上滑 / 點一下即可進入選單 =====
+  function dismissIntro({ withRippleEvent=null, scrollToMenu=true } = {}){
+    try{
+      if(withRippleEvent){ triggerRipple(withRippleEvent); }
+    }catch(_e){}
+
+    if(intro){
+      intro.classList.add('fade-out'); // 會同時淡出＋往上滑
+      setTimeout(()=>{
+        intro.style.display='none';
+      }, 650);
+    }
+
+    if(main){ main.classList.add('show'); }
+    if(pageTitle){ pageTitle.classList.add('title-in'); }
+
+    setupRevealOnScroll();
+    showLaunchModal();
+
+    if(scrollToMenu){
+      setStep(1);
+      scrollToPageTopSmooth();
+    }
+  }
+
+  function bindIntroQuickDismiss(){
+    if(!intro) return;
+    let startY=null;
+    let dismissed=false;
+
+    intro.addEventListener('touchstart',(e)=>{
+      if(dismissed) return;
+      const t = e.touches && e.touches[0];
+      if(!t) return;
+      startY = t.clientY;
+    }, {passive:true});
+
+    intro.addEventListener('touchmove',(e)=>{
+      if(dismissed || startY===null) return;
+      const t = e.touches && e.touches[0];
+      if(!t) return;
+      const dy = t.clientY - startY;
+      if(dy < -55){
+        dismissed=true;
+        dismissIntro({scrollToMenu:true});
+      }
+    }, {passive:true});
+
+    const tapSkip = (e)=>{
+      if(dismissed) return;
+      // 點「產品故事」不跳過（照原本邏輯進產品頁）
+      if(e.target && e.target.closest && e.target.closest('#storyBtn')) return;
+      // Start 按鈕本身會帶 ripple，交給它處理
+      if(e.target && e.target.closest && e.target.closest('#startBtn')) return;
+
+      dismissed=true;
+      dismissIntro({scrollToMenu:true});
+    };
+
+    intro.addEventListener('click', tapSkip);
+    intro.addEventListener('touchend', tapSkip, {passive:true});
+  }
+
 
   if(skipIntro){
     if(intro){
@@ -2297,22 +2360,12 @@ window.addEventListener('DOMContentLoaded',()=>{
     setupRevealOnScroll();
     showLaunchModal();
   }else{
+    bindIntroQuickDismiss();
     startIntroSequence();
 
-    if(btn){
-      btn.addEventListener('click',(e)=>{
-        triggerRipple(e);
-        intro.classList.add('fade-out');
-        setTimeout(()=>{
-          intro.style.display='none';
-          main.classList.add('show');
-          if(pageTitle){ pageTitle.classList.add('title-in'); }
-
-          setupRevealOnScroll();
-          showLaunchModal();
-        },600);
-      });
-    }
+if(btn){
+      btn.addEventListener('click',(e)=>{ dismissIntro({ withRippleEvent:e, scrollToMenu:true }); });
+}
   }
 
   if(storyBtn){
@@ -2498,80 +2551,107 @@ function animatePromoNumber(el, target){
 
 /* ===== Stepper ===== */
 function buildQty(){
-  const MIN=0, MAX=35;
   const select = document.getElementById('qty1');
+  const input  = document.getElementById('qtyInput');
   const minus  = document.getElementById('qtyMinus');
   const plus   = document.getElementById('qtyPlus');
-  const input  = document.getElementById('qtyInput');
 
-  function clamp(n){
-    n = Number(n);
-    if(Number.isNaN(n)) n = 0;
-    return Math.min(MAX, Math.max(MIN, n|0));
+  if(!select || !input || !minus || !plus) return;
+
+  // 原本 qty1 是固定範圍的 select（隱藏），現在改成「動態單一 option」承接目前數量
+  function ensureSelectValue(v){
+    v = Number.isFinite(v) ? Math.max(0, Math.floor(v)) : 0;
+    const current = select.querySelector('option');
+    if(!current || current.value !== String(v)){
+      select.innerHTML = '';
+      const opt = document.createElement('option');
+      opt.value = String(v);
+      opt.textContent = String(v);
+      opt.selected = true;
+      select.appendChild(opt);
+    }
+    select.value = String(v);
+    return v;
   }
-  function syncTo(val, trigger=true){
-    const v = clamp(val);
-    if(select.value !== String(v)) select.value = String(v);
-    if(input.value  !== String(v)) input.value  = String(v);
+
+  function getVal(){
+    const raw = (input.value || '').replace(/\D/g,'');
+    if(raw === '') return 0;
+    const v = parseInt(raw,10);
+    return Number.isFinite(v) ? v : 0;
+  }
+
+  function syncTo(v, {fromInput=false} = {}){
+    v = ensureSelectValue(v);
+    if(!fromInput){
+      input.value = String(v);
+    }
     input.setAttribute('aria-valuenow', String(v));
-    if(trigger) calculate();
+    calculate();
   }
-  function setupClick(btn, delta){
-    btn.addEventListener('click', (e)=>{
-      if(btn._holdTriggered){
-        e.preventDefault();
-        btn._holdTriggered = false;
-        return;
-      }
-      syncTo(Number(select.value)+delta);
-    });
-  }
-  setupClick(minus,-1);
-  setupClick(plus, 1);
 
+  // 初始化
+  syncTo(getVal(), {fromInput:true});
+
+  function step(delta){
+    syncTo(getVal() + delta);
+  }
+
+  // 點按 +/-
+  minus.addEventListener('click', ()=> step(-1));
+  plus .addEventListener('click', ()=> step( 1));
+
+  // 長按（保留原手感，且不限制上限）
   function setupHold(btn, delta){
-    let tDelay, tRepeat;
-    const step=()=> syncTo(Number(select.value)+delta);
-    const start = (e)=>{
-      btn._holdTriggered=false;
-      tDelay=setTimeout(()=>{
-        step();
-        btn._holdTriggered = true;
-        tRepeat=setInterval(step, 70);
+    let t1=null, t2=null, started=false;
+
+    const start=()=>{
+      if(started) return;
+      started=true;
+      step(delta);
+
+      // 先慢（180ms），再快（90ms）
+      t1=setTimeout(()=>{
+        t2=setInterval(()=> step(delta), 180);
+
+        setTimeout(()=>{
+          if(t2){
+            clearInterval(t2);
+            t2=setInterval(()=> step(delta), 90);
+          }
+        }, 900);
       }, 350);
-      btn.setPointerCapture?.(e.pointerId);
     };
-    const stop = ()=>{
-      clearTimeout(tDelay);
-      clearInterval(tRepeat);
+
+    const stop=()=>{
+      started=false;
+      if(t1){ clearTimeout(t1); t1=null; }
+      if(t2){ clearInterval(t2); t2=null; }
     };
-    btn.addEventListener('pointerdown', start);
+
+    btn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); start(); });
     btn.addEventListener('pointerup', stop);
     btn.addEventListener('pointercancel', stop);
     btn.addEventListener('pointerleave', stop);
+    btn.addEventListener('touchend', stop, {passive:true});
   }
-  setupHold(minus,-1);
-  setupHold(plus, 1);
+  setupHold(minus, -1);
+  setupHold(plus,  1);
 
-  input.addEventListener('keydown', (e)=>{
-    const v = Number(select.value);
-    if(['ArrowUp','ArrowRight'].includes(e.key)){ e.preventDefault(); syncTo(v+1); }
-    else if(['ArrowDown','ArrowLeft'].includes(e.key)){ e.preventDefault(); syncTo(v-1); }
-    else if(e.key==='Home'){ e.preventDefault(); syncTo(MIN); }
-    else if(e.key==='End'){ e.preventDefault(); syncTo(MAX); }
-    else if(e.key==='PageUp'){ e.preventDefault(); syncTo(v+5); }
-    else if(e.key==='PageDown'){ e.preventDefault(); syncTo(v-5); }
-  });
+  // 直接輸入：不限制數量（移除 35 上限）
   input.addEventListener('input', ()=>{
-    input.value = input.value.replace(/[^0-9]/g,'').slice(0,2);
-    const v = input.value==='' ? 0 : clamp(input.value);
-    syncTo(v, true);
-  });
-  input.addEventListener('blur', ()=>{
-    syncTo(input.value==='' ? 0 : input.value, true);
+    const digits = (input.value || '').replace(/\D/g,'');
+    input.value = digits;
+    syncTo(digits === '' ? 0 : parseInt(digits,10), {fromInput:true});
   });
 
-  syncTo(select.value||0, false);
+  // 鍵盤：↑↓ / Home / End
+  input.addEventListener('keydown',(e)=>{
+    if(e.key==='ArrowUp'){ e.preventDefault(); step(1); }
+    if(e.key==='ArrowDown'){ e.preventDefault(); step(-1); }
+    if(e.key==='Home'){ e.preventDefault(); syncTo(0); }
+    if(e.key==='End'){ e.preventDefault(); syncTo(getVal()); }
+  });
 }
 
 /* ===== 計算金額 ===== */
