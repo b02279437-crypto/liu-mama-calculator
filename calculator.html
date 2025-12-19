@@ -181,7 +181,11 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   width:100%;
   height:6px;
   background:#64748b;
-  animation:scrollLine 1.6s infinite var(--ease-soft);
+  will-change:transform,opacity;
+  animation-name:scrollLine;
+  animation-duration:1.6s;
+  animation-iteration-count:infinite;
+  animation-timing-function:var(--ease-soft, ease-in-out);
 }
 /* 跳到選單狀態：強制顯示 hero panel，並關掉提示 */
 #intro.is-menu .scroll-hint{ display:none; }
@@ -1559,9 +1563,9 @@ th{
   *{ animation:none !important; transition:none !important; }
   #startBtn::after,
   #storyBtn::after{ display:none !important; }
-
   /* keep scroll-hint animation even if Reduce Motion is on */
-  .scroll-hint-line::after{ animation:scrollLine 1.6s infinite var(--ease-soft) !important; }
+  /* keep scroll-hint animation even if Reduce Motion is on */
+  .scroll-hint-line::after{ animation:scrollLine 1.6s infinite var(--ease-soft, ease-in-out) !important; }
 }
 
 .coupon-hint{ line-height:1.5; }
@@ -1569,6 +1573,63 @@ th{
 .coupon-hint .coupon-line a{ display:inline; margin-left:2px; }
 
 </style>
+
+
+
+
+<style id="scroll-hint-fix">
+/* ===== Scroll-hint (only) — keep original thin 1px style ===== */
+.scroll-hint .scroll-hint-line{
+  width:1px !important;
+  height:18px !important;
+  background:rgba(226,232,240,.95) !important; /* light track */
+  border-radius:999px !important;
+  position:relative !important;
+  overflow:hidden !important;
+}
+
+/* moving dark segment inside the 1px line */
+.scroll-hint .scroll-hint-line::after{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  top:0 !important;
+  width:100% !important;          /* 1px */
+  height:8px !important;          /* longer so it’s noticeable */
+  background:rgba(51,65,85,.95) !important; /* darker segment */
+  transform:translate3d(0,-10px,0) !important;
+  will-change:transform,opacity !important;
+
+  animation-name:liuScrollHintLine !important;
+  animation-duration:1.4s !important;
+  animation-iteration-count:infinite !important;
+  animation-timing-function:ease-in-out !important;
+}
+
+@keyframes liuScrollHintLine{
+  0%   { transform:translate3d(0,-10px,0); opacity:0; }
+  18%  { opacity:1; }
+  70%  { transform:translate3d(0, 10px,0); opacity:1; }
+  100% { transform:translate3d(0, 24px,0); opacity:0; }
+}
+
+/* Menu state: no scroll-hint */
+#intro.is-menu .scroll-hint{ display:none !important; }
+
+/* Even if Reduce Motion is enabled, keep ONLY this hint moving */
+@media (prefers-reduced-motion: reduce){
+  .scroll-hint .scroll-hint-line::after{
+    animation-name:liuScrollHintLine !important;
+    animation-duration:1.4s !important;
+    animation-iteration-count:infinite !important;
+    animation-timing-function:ease-in-out !important;
+  }
+}
+</style>
+
+
+
+
 </head>
 
 <body>
