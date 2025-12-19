@@ -110,6 +110,103 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 #intro.fade-out{opacity:0;
   transform:translateY(-14vh); pointer-events:none;}
 
+/* ===== Topbar（產品介紹同款） ===== */
+.topbar{
+  max-width:920px;
+  margin:0 auto;
+  padding:14px 18px 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:12px;
+  letter-spacing:.16em;
+  color:#666;
+}
+.topbar-brand{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.topbar-logo{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:#e4ded0;
+}
+.topbar-name{
+  font-size:12px;
+}
+.topbar-link{
+  text-decoration:none;
+  color:#44566C;
+  border-bottom:1px solid rgba(68,86,108,.4);
+  padding-bottom:1px;
+}
+.topbar-link:hover{
+  color:#2B3E53;
+  border-color:#2B3E53;
+}
+
+/* ===== Intro：上滑/點一下 -> 跳到「選單」 ===== */
+.intro-scroll-hint{
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  font-size:10px;
+  letter-spacing:.26em;
+  color:#9ca3af;
+  pointer-events:none;
+  z-index:10001;
+}
+.intro-scroll-hint .scroll-hint-text{
+  font-family:'Amatic SC','Noto Serif TC',cursive;
+}
+.intro-scroll-hint .scroll-hint-line{
+  width:1px;
+  height:14px;
+  background:#cbd5e1;
+  position:relative;
+  overflow:hidden;
+}
+.intro-scroll-hint .scroll-hint-line::after{
+  content:"";
+  position:absolute;
+  left:0;
+  top:-6px;
+  width:100%;
+  height:6px;
+  background:#64748b;
+  animation:scrollLine 1.6s infinite var(--ease-soft);
+}
+.intro-scroll-hint .scroll-hint-sub{
+  font-size:10px;
+  letter-spacing:.18em;
+  color:#9aa3af;
+}
+
+/* 跳到選單狀態：強制顯示 hero panel，並關掉提示 */
+#intro.is-menu .intro-scroll-hint{ display:none; }
+#intro.is-menu #intro-logo,
+#intro.is-menu #intro-hero,
+#intro.is-menu #intro-text{
+  display:none !important;
+}
+#intro.is-menu #intro-hero-panel{
+  opacity:1 !important;
+  pointer-events:auto !important;
+  transform:translateY(0) scale(1) !important;
+}
+#intro.is-menu #startBtn,
+#intro.is-menu #storyBtn{
+  opacity:1 !important;
+  transform:translateY(0) !important;
+}
+
 #intro-logo{
   width:clamp(360px, 92vw, 700px);
   opacity:0;
@@ -1511,11 +1608,32 @@ th{
       </div>
     </div>
   </div>
+
+  <!-- 上滑提示（像產品頁的小標示） -->
+  <div class="intro-scroll-hint" aria-hidden="true">
+    <span class="scroll-hint-text">SCROLL</span>
+    <span class="scroll-hint-line"></span>
+    <span class="scroll-hint-sub">上滑 / 點一下跳過</span>
+  </div>
+
 </div>
 
 <!-- ===== 主內容 ===== -->
 <main id="mainContent" aria-describedby="formReminder">
-  <div class="page-inner">
+  
+
+  <!-- 頂部列：品牌＋到產品介紹 -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-logo"></div>
+      <div class="topbar-name">LIU MAMA · 麻辣底料包</div>
+    </div>
+    <a class="topbar-link" href="https://b02279437-crypto.github.io/liu-mama-calculator/product.html">
+      產品介紹 →
+    </a>
+  </div>
+
+<div class="page-inner">
     <h2 id="pageTitle"><span class="english">LIU MAMA Order</span></h2>
 
     <!-- STEP 導覽 -->
@@ -2282,17 +2400,28 @@ window.addEventListener('DOMContentLoaded',()=>{
   const main=document.getElementById('mainContent');
   const pageTitle=document.getElementById('pageTitle');
 
-  // ===== 開場快速跳過：上滑 / 點一下即可進入選單 =====
-  function dismissIntro({ withRippleEvent=null, scrollToMenu=true } = {}){
+
+  // ===== 開場快速跳過：上滑 / 點一下 -> 跳到「選單」（訂購頁 / 產品介紹）=====
+  function goIntroMenu(){
+    if(!intro) return;
+    intro.classList.add('is-menu');
+
+    // 立即顯示 hero panel（避免等完整動畫跑完）
+    const heroPanel = document.getElementById('intro-hero-panel');
+    if(heroPanel) heroPanel.classList.add('show');
+    if(btn) btn.classList.add('show');
+    if(storyBtn) storyBtn.classList.add('show');
+  }
+
+  // Start Order：正式進入訂購頁
+  function dismissIntro({ withRippleEvent=null, scrollToTop=true } = {}){
     try{
       if(withRippleEvent){ triggerRipple(withRippleEvent); }
     }catch(_e){}
 
     if(intro){
-      intro.classList.add('fade-out'); // 會同時淡出＋往上滑
-      setTimeout(()=>{
-        intro.style.display='none';
-      }, 650);
+      intro.classList.add('fade-out'); // 淡出＋往上滑
+      setTimeout(()=>{ intro.style.display='none'; }, 650);
     }
 
     if(main){ main.classList.add('show'); }
@@ -2301,7 +2430,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     setupRevealOnScroll();
     showLaunchModal();
 
-    if(scrollToMenu){
+    if(scrollToTop){
       setStep(1);
       scrollToPageTopSmooth();
     }
@@ -2310,40 +2439,38 @@ window.addEventListener('DOMContentLoaded',()=>{
   function bindIntroQuickDismiss(){
     if(!intro) return;
     let startY=null;
-    let dismissed=false;
+    let moved=false;
 
     intro.addEventListener('touchstart',(e)=>{
-      if(dismissed) return;
       const t = e.touches && e.touches[0];
       if(!t) return;
       startY = t.clientY;
+      moved = false;
     }, {passive:true});
 
     intro.addEventListener('touchmove',(e)=>{
-      if(dismissed || startY===null) return;
+      if(startY===null) return;
       const t = e.touches && e.touches[0];
       if(!t) return;
       const dy = t.clientY - startY;
       if(dy < -55){
-        dismissed=true;
-        dismissIntro({scrollToMenu:true});
+        moved=true;
+        goIntroMenu();
       }
     }, {passive:true});
 
-    const tapSkip = (e)=>{
-      if(dismissed) return;
-      // 點「產品故事」不跳過（照原本邏輯進產品頁）
-      if(e.target && e.target.closest && e.target.closest('#storyBtn')) return;
-      // Start 按鈕本身會帶 ripple，交給它處理
+    const tapToMenu = (e)=>{
+      // 點到 Start / 產品介紹按鈕本身就不攔截
       if(e.target && e.target.closest && e.target.closest('#startBtn')) return;
+      if(e.target && e.target.closest && e.target.closest('#storyBtn')) return;
 
-      dismissed=true;
-      dismissIntro({scrollToMenu:true});
+      goIntroMenu();
     };
 
-    intro.addEventListener('click', tapSkip);
-    intro.addEventListener('touchend', tapSkip, {passive:true});
+    intro.addEventListener('click', tapToMenu);
+    intro.addEventListener('touchend', (e)=>{ if(!moved) tapToMenu(e); }, {passive:true});
   }
+
 
 
   if(skipIntro){
@@ -2364,7 +2491,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     startIntroSequence();
 
 if(btn){
-      btn.addEventListener('click',(e)=>{ dismissIntro({ withRippleEvent:e, scrollToMenu:true }); });
+      btn.addEventListener('click',(e)=>{ dismissIntro({ withRippleEvent:e, scrollToTop:true }); });
 }
   }
 
