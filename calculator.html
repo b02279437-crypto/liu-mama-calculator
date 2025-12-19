@@ -147,8 +147,8 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   border-color:#2B3E53;
 }
 
-/* ===== Intro：上滑/點一下 -> 跳到「選單」 ===== */
-.intro-scroll-hint{
+/* ===== Intro： -> 跳到「選單」 ===== */
+.scroll-hint{
   position:fixed;
   left:50%;
   bottom:18px;
@@ -163,17 +163,17 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   pointer-events:none;
   z-index:10001;
 }
-.intro-scroll-hint .scroll-hint-text{
+.scroll-hint .scroll-hint-text{
   font-family:'Amatic SC','Noto Serif TC',cursive;
 }
-.intro-scroll-hint .scroll-hint-line{
+.scroll-hint .scroll-hint-line{
   width:1px;
   height:14px;
   background:#cbd5e1;
   position:relative;
   overflow:hidden;
 }
-.intro-scroll-hint .scroll-hint-line::after{
+.scroll-hint .scroll-hint-line::after{
   content:"";
   position:absolute;
   left:0;
@@ -183,14 +183,8 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   background:#64748b;
   animation:scrollLine 1.6s infinite var(--ease-soft);
 }
-.intro-scroll-hint .scroll-hint-sub{
-  font-size:10px;
-  letter-spacing:.18em;
-  color:#9aa3af;
-}
-
 /* 跳到選單狀態：強制顯示 hero panel，並關掉提示 */
-#intro.is-menu .intro-scroll-hint{ display:none; }
+#intro.is-menu .scroll-hint{ display:none; }
 #intro.is-menu #intro-logo,
 #intro.is-menu #intro-hero,
 #intro.is-menu #intro-text{
@@ -1071,7 +1065,15 @@ th{
     transform:translateY(-50%) rotate(-1.2deg) scale(1);
     filter:blur(1px) saturate(1.05) brightness(1);
   }
-  50%{
+  
+@keyframes scrollLine{
+  0%{ transform:translateY(-10px); opacity:0; }
+  20%{ opacity:1; }
+  50%{ transform:translateY(12px); opacity:1; }
+  80%{ opacity:1; }
+  100%{ transform:translateY(26px); opacity:0; }
+}
+50%{
     opacity:.85;
     transform:translateY(-50%) rotate(-1.2deg) scale(1.04);
     filter:blur(1.6px) saturate(1.15) brightness(1.08);
@@ -1557,6 +1559,9 @@ th{
   *{ animation:none !important; transition:none !important; }
   #startBtn::after,
   #storyBtn::after{ display:none !important; }
+
+  /* keep scroll-hint animation even if Reduce Motion is on */
+  .scroll-hint-line::after{ animation:scrollLine 1.6s infinite var(--ease-soft) !important; }
 }
 
 .coupon-hint{ line-height:1.5; }
@@ -1610,7 +1615,7 @@ th{
   </div>
 
   <!-- 上滑提示（像產品頁的小標示） -->
-   <div class="scroll-hint reveal">
+   <div class="scroll-hint">
     <span class="scroll-hint-text">SCROLL</span>
     <span class="scroll-hint-line"></span>
   </div>
