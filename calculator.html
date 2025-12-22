@@ -2119,7 +2119,7 @@ const CAMPAIGN_CONFIG = {
     // 何時恢復原價（12/19 00:00）
     priceCutoff:  { y: 2025, m: 12, d: 19, hh: 0, mm: 0, ss: 0 },
 
-    // 新年優惠開始（12/26 00:00）
+    // 新年優惠開始（1/1 00:00）
     newYearStart: { y: 2026, m: 1, d: 1, hh: 0, mm: 0, ss: 0 },
   },
 
@@ -2167,7 +2167,7 @@ function getSaleDates(now = new Date()){
   // ✅ 日期設定（台灣時間, UTC+8）
   // - 倒數顯示到 12/18
   // - 12/19 00:00（台北時間）恢復原價
-  // - 12/26 00:00（台北時間）新年優惠券/優惠碼開始
+  // - 1/1 00:00（台北時間）新年優惠券/優惠碼開始
   const countdownEnd = makeTWDate(CAMPAIGN_CONFIG.dates.countdownEnd);
   const priceCutoff  = makeTWDate(CAMPAIGN_CONFIG.dates.priceCutoff);
   const newYearStart = makeTWDate(CAMPAIGN_CONFIG.dates.newYearStart);
@@ -2247,8 +2247,8 @@ function updateCouponVisibility(){
 
   // phase:
   // - sale：開賣期間 → 不顯示優惠碼區
-  // - line：12/19~12/25 → 顯示「LINE官方上線」提示
-  // - ny：12/26 起 → 顯示優惠碼區
+  // - line：12/19~12/31 → 顯示「LINE官方上線」提示
+  // - ny：1/1 起 → 顯示優惠碼區
   if(phase === 'sale'){
     couponBox.style.display = 'none';
     lineInfoBox.style.display = 'none';
@@ -2266,7 +2266,7 @@ function updateCouponVisibility(){
     lineInfoBox.style.display = 'none';
   }
 
-  // 新年優惠卷 12/26 才開始：此階段不在頁面顯示提示（避免混淆）
+  // 新年優惠卷 1/1 才開始：此階段不在頁面顯示提示（避免混淆）
   const nyHint = document.getElementById('nyStartHint');
   if(nyHint){
     nyHint.style.display = 'none';
