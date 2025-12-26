@@ -107,7 +107,8 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   transform:translateY(0);
   transition:opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
 }
-#intro.fade-out{opacity:0; transform:none; pointer-events:none;}
+#intro.fade-out{opacity:0;
+  transform:translateY(-14vh); pointer-events:none;}
 
 /* ===== Topbar（產品介紹同款） ===== */
 .topbar{
@@ -186,25 +187,6 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   animation-iteration-count:infinite;
   animation-timing-function:var(--ease-soft, ease-in-out);
 }
-/* 跳到選單過渡：先淡出故事，再切到 is-menu（避免瞬間空白） */
-#intro.to-menu .scroll-hint{ display:none; }
-#intro.to-menu #intro-logo,
-#intro.to-menu #intro-hero,
-#intro.to-menu #intro-text{
-  opacity:0 !important;
-  transition:opacity 420ms var(--ease);
-}
-#intro.to-menu #intro-hero-panel{
-  opacity:1 !important;
-  pointer-events:auto !important;
-  transform:none !important;
-}
-#intro.to-menu #startBtn,
-#intro.to-menu #storyBtn{
-  opacity:1 !important;
-  transform:none !important;
-}
-
 /* 跳到選單狀態：強制顯示 hero panel，並關掉提示 */
 #intro.is-menu .scroll-hint{ display:none; }
 #intro.is-menu #intro-logo,
@@ -215,12 +197,12 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
 #intro.is-menu #intro-hero-panel{
   opacity:1 !important;
   pointer-events:auto !important;
-  transform:none !important;
+  transform:translateY(0) scale(1) !important;
 }
 #intro.is-menu #startBtn,
 #intro.is-menu #storyBtn{
   opacity:1 !important;
-  transform:none !important;
+  transform:translateY(0) !important;
 }
 
 #intro-logo{
@@ -274,8 +256,10 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   justify-content:center;
   opacity:0;
   pointer-events:none;
-  transform:none;
-  transition:opacity var(--t-slow) var(--ease);
+  transform:translateY(10px) scale(.98);
+  transition:
+    opacity var(--t-slow) var(--ease),
+    transform var(--t-slow) var(--ease);
 }
 #intro-hero-panel.show{
   opacity:1;
@@ -361,9 +345,10 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   position:relative;
   isolation:isolate;
   opacity:0;
-  transform:none;
+  transform:translateY(10px);
   transition:
     opacity var(--t-base) var(--ease),
+    transform var(--t-fast) var(--ease),
     box-shadow .25s var(--ease),
     filter .25s var(--ease);
 }
@@ -1587,65 +1572,6 @@ th{
 .coupon-hint .coupon-line{ display:block; margin-top:4px; }
 .coupon-hint .coupon-line a{ display:inline; margin-left:2px; }
 
-
-/* --- Groupbuy Ended --- */
-#couponBox,#lineInfoBox{display:none !important;}
-
-.ended-box{
-  margin-top:14px;
-  padding:18px 18px 16px;
-  border-radius:18px;
-  border:1px solid rgba(255,255,255,.18);
-  background:rgba(255,255,255,.06);
-  box-shadow:0 10px 34px rgba(0,0,0,.25);
-}
-.ended-title{
-  margin:0 0 10px;
-  font-size:16px;
-  font-weight:800;
-  letter-spacing:.02em;
-}
-.ended-text{
-  margin:0 0 14px;
-  line-height:1.65;
-  opacity:.95;
-}
-.ended-links{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:12px;
-}
-.btn-soft{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:10px 14px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.22);
-  background:rgba(0,0,0,.18);
-  color:var(--text);
-  text-decoration:none;
-  font-weight:800;
-  letter-spacing:.02em;
-}
-.btn-soft:hover{ background:rgba(0,0,0,.26); }
-.btn-primary-wide{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:100%;
-  padding:12px 16px;
-  border-radius:999px;
-  background:var(--accent);
-  color:#fff;
-  font-weight:900;
-  letter-spacing:.02em;
-  text-decoration:none;
-  box-shadow:0 16px 34px rgba(0,0,0,.28);
-}
-.btn-primary-wide:hover{ filter:brightness(1.05); }
-
 </style>
 
 
@@ -1731,7 +1657,7 @@ th{
            alt="Liu Mama 麻辣鍋底產品照">
       <div class="hero-overlay">
         <div class="hero-eyebrow">LIU MAMA </div>
-        <div class="hero-title">手炒麻辣鍋底 · 開團中</div>
+        <div class="hero-title">手炒麻辣鍋底 · 開賣中</div>
         <div class="hero-sub">
           手炒的麻辣，暖心又暖胃。<br>
         </div>
@@ -1773,7 +1699,7 @@ th{
   </div>
 
 <div class="page-inner">
-    <h2 id="pageTitle"><span class="english">LIU MAMA x SHELLY</span></h2>
+    <h2 id="pageTitle"><span class="english">LIU MAMA Order</span></h2>
 
     <!-- STEP 導覽 -->
     <div class="step-nav" aria-label="訂購流程">
@@ -1798,24 +1724,8 @@ th{
           手炒的麻辣，暖心又暖胃
         </p>
         <p id="promoInline" class="promo-inline">
-          <span class="promo-mark">⛧</span>
-          團購價 <strong class="price-red">$300</strong>
-          <span class="promo-sep">·</span>
-          距離結單 <strong class="promo-days" id="promoDays">--</strong>
+          距離結單：<strong class="promo-days" id="closeCountdown">--</strong>
         </p>
-
-        <div id="groupbuyEnded" class="ended-box" hidden>
-          <p class="ended-title">本團購已於 <strong>1/25 23:59</strong> 結束，謝謝大家熱情支持！</p>
-          <p class="ended-text">
-            已下單的朋友請放心，我們將依付款順序依序出貨，<br>
-            出貨後會以 <strong>Email</strong> 通知您。
-          </p>
-          <div class="ended-links">
-            <a class="btn-soft" href="https://www.instagram.com/liu_mama2015/" target="_blank" rel="noopener">追蹤 IG</a>
-            <a class="btn-soft" href="https://line.me/R/ti/p/@217mwvhv?oat_content=url&ts=12201256" target="_blank" rel="noopener">加入 LINE</a>
-          </div>
-          <a class="btn-primary-wide" href="https://b02279437-crypto.github.io/liu-mama-calculator/calculator.html" target="_blank" rel="noopener">前往官網購買</a>
-        </div>
       </div>
 
       <section class="reveal">
@@ -1855,7 +1765,7 @@ th{
             <td>麻辣底料包<br><small>(2人份)</small></td>
             <td>
               <div class="price-cell">
-                <span class="price-old" id="priceOld">$320</span>
+                <span class="price-old" id="priceOld">$300</span>
                 <span class="price-new" id="priceNew">$300</span>
               </div>
             </td>
@@ -2011,12 +1921,11 @@ th{
       ×
     </button>
     <div class="promo-label">LIU MAMA</div>
-    <h3 id="launchTitle">劉嘛麻 開團中&nbsp;.ᐟ.ᐟ</h3>
+    <h3 id="launchTitle">劉嘛麻 開賣啦&nbsp;.ᐟ.ᐟ</h3>
 
     <p class="promo-main">
-      手炒麻辣鍋底<br>
       團購價 <strong>$300</strong><br>
-      限時團購 · 結單前把握
+      1/20 結單 · 趁現在一起買
     </p>
 
     <p class="promo-sub">
@@ -2200,19 +2109,19 @@ const CAMPAIGN_CONFIG = {
   // 主要日期（台北時間 UTC+8）
   dates: {
     // 倒數顯示到哪一天（沿用你目前的邏輯：該日 00:00）
-    countdownEnd: { y: 2026, m: 1, d: 25, hh: 23, mm: 59, ss: 0 },
+    countdownEnd: { y: 2025, m: 12, d: 18 },
 
     // 何時恢復原價（12/19 00:00）
-    priceCutoff:  { y: 2099, m: 12, d: 31, hh: 0, mm: 0, ss: 0 },
+    priceCutoff:  { y: 2025, m: 12, d: 19, hh: 0, mm: 0, ss: 0 },
 
     // 新年優惠開始（1/1 00:00）
-    newYearStart: { y: 2100, m: 1, d: 1, hh: 0, mm: 0, ss: 0 },
+    newYearStart: { y: 2026, m: 1, d: 1, hh: 0, mm: 0, ss: 0 },
   },
 
   // 價格
   prices: {
-    regular: 320,
-    X0,
+    regular: 300,
+    sale:    300,
   },
 
   // LINE
@@ -2224,11 +2133,10 @@ const CAMPAIGN_CONFIG = {
   // kind:
   // - 'percent'：打幾%折（percent: 5 代表 5% OFF = 95折）
   // - 'set_unit_price'：指定每盒價格（unitPrice）
-  coupons: {},
+  coupons: {
+    'LIUMAMA2025': { kind:'percent', percent: 5, minSubtotal: 1000, label:'95折' },
+  },
 };
-
-// ★ 團購到期預覽（預覽版會改成 true）
-const FORCE_EXPIRED = false;
 
 function makeTWDate(obj){
   if(!obj) return new Date();
@@ -2249,34 +2157,31 @@ const PRICE_SALE    = CAMPAIGN_CONFIG.prices.sale;
 const COUPONS       = CAMPAIGN_CONFIG.coupons;
 
 
-/** 倒數顯示到 12/18；價格在 12/19 00:00（台灣時間）回復 $320 */
+/** ===== 團購版（固定價） =====
+ *  - 價格固定：$300
+ *  - 結單倒數：由 setupInlinePromo() 顯示「距離結單」
+ *  （保留 getSaleDates 介面，避免其他程式引用時出錯）
+ */
 function getSaleDates(now = new Date()){
-  // ✅ 日期設定（台灣時間, UTC+8）
-  // - 倒數顯示到 12/18
-  // - 12/19 00:00（台北時間）恢復原價
-  // - 1/1 00:00（台北時間）新年優惠券/優惠碼開始
-  const countdownEnd = makeTWDate(CAMPAIGN_CONFIG.dates.countdownEnd);
-  const priceCutoff  = makeTWDate(CAMPAIGN_CONFIG.dates.priceCutoff);
-  const newYearStart = makeTWDate(CAMPAIGN_CONFIG.dates.newYearStart);
-  return { countdownEnd, priceCutoff, newYearStart };
+  const y = now.getFullYear();
+  // 結單日：1/20 23:59:59（若已超過則用下一年）
+  let closeAt = new Date(y, 0, 20, 23, 59, 59);
+  if(now.getTime() > closeAt.getTime()){
+    closeAt = new Date(y + 1, 0, 20, 23, 59, 59);
+  }
+  return { countdownEnd: closeAt, priceCutoff: closeAt, newYearStart: closeAt };
 }
 function getCampaignPhase(now = getNow()){
-  const { priceCutoff, newYearStart } = getSaleDates(now);
-  if(now < priceCutoff) return 'sale'; // 仍在開賣價期間
-  if(now < newYearStart) return 'line'; // LINE官方上線期（尚未開放新年優惠）
-  return 'ny'; // 新年優惠開始
+  return 'group';
 }
-
 function getPricingContext(now = getNow()){
-  const { priceCutoff, newYearStart } = getSaleDates(now);
-  const phase = getCampaignPhase(now);
-  const isSaleActive = (phase === 'sale');
+  const { countdownEnd } = getSaleDates(now);
   return {
-    phase,
-    isSaleActive,
-    unitPrice: isSaleActive ? PRICE_SALE : PRICE_REGULAR,
-    priceCutoff,
-    newYearStart
+    phase: 'group',
+    isSaleActive: false,
+    unitPrice: PRICE_REGULAR,
+    priceCutoff: countdownEnd,
+    newYearStart: countdownEnd
   };
 }
 
@@ -2327,48 +2232,8 @@ function setLineLinks(){
 function updateCouponVisibility(){
   const couponBox = document.getElementById('couponBox');
   const lineInfoBox = document.getElementById('lineInfoBox');
-  if(!couponBox || !lineInfoBox) return;
-
-  const ctx = getPricingContext(getNow());
-  const phase = ctx.phase;
-
-  // phase:
-  // - sale：開賣期間 → 不顯示優惠碼區
-  // - line：12/19~12/31 → 顯示「LINE官方上線」提示
-  // - ny：1/1 起 → 顯示優惠碼區
-  if(phase === 'sale'){
-    couponBox.style.display = 'none';
-    lineInfoBox.style.display = 'none';
-    appliedCoupon = '';
-    const input = document.getElementById('couponInput');
-    if(input) input.value = '';
-  }else if(phase === 'line'){
-    couponBox.style.display = 'none';
-    lineInfoBox.style.display = '';
-    appliedCoupon = '';
-    const input = document.getElementById('couponInput');
-    if(input) input.value = '';
-  }else{
-    couponBox.style.display = '';
-    lineInfoBox.style.display = 'none';
-  }
-
-  // 新年優惠卷 1/1 才開始：此階段不在頁面顯示提示（避免混淆）
-  const nyHint = document.getElementById('nyStartHint');
-  if(nyHint){
-    nyHint.style.display = 'none';
-    nyHint.textContent = '';
-  }
-
-  // 新年期：更新 coupon hint 連結文字
-  const a2 = document.getElementById('lineLink2');
-  if(a2){
-    if(phase === 'ny'){
-      a2.textContent = '加入LINE好友，領取新年優惠卷';
-    }else{
-      a2.textContent = '快加入，得知最新優惠資訊';
-    }
-  }
+  if(couponBox) couponBox.style.display = 'none';
+  if(lineInfoBox) lineInfoBox.style.display = 'none';
 }
 
 function updatePricingUI(){
@@ -2377,61 +2242,37 @@ function updatePricingUI(){
   const priceNew = document.getElementById('priceNew');
   const launchMain = document.querySelector('#launchModal .promo-main');
 
-  const ctx = getPricingContext(getNow());
-  const { isSaleActive, phase } = ctx;
-
-  // 商品價格顯示（表格）
+  // 團購固定價：只顯示 $300
   if(priceOld && priceNew){
-    if(isSaleActive){
-      priceOld.classList.remove('is-hidden');
-      priceNew.classList.remove('is-regular');
-      priceOld.textContent = '$' + PRICE_REGULAR;
-      priceNew.textContent = '$' + PRICE_SALE;
-    }else{
-      priceOld.classList.add('is-hidden');
-      priceNew.classList.add('is-regular');
-      priceNew.textContent = '$' + PRICE_REGULAR;
-    }
+    priceOld.classList.add('is-hidden');
+    priceNew.classList.add('is-regular');
+    priceNew.textContent = '$' + PRICE_REGULAR;
   }
 
-  const mm = String(ctx.newYearStart.getMonth()+1).padStart(2,'0');
-  const dd = String(ctx.newYearStart.getDate()).padStart(2,'0');
-
-  // 首屏活動文案（團購倒數）
+  // 首屏：副標題下方顯示「距離結單」倒數
   if(promo){
-    promo.innerHTML = `
-      <span class="promo-mark">⛧</span>
-      團購價 <strong class="price-red">$${PRICE_SALE}</strong>
-      <span class="promo-sep">·</span>
-      距離結單 <strong class="promo-days" id="promoDays">--</strong>
-    `;
-    setupInlinePromo();
+    promo.innerHTML = `距離結單：<strong class="promo-days" id="closeCountdown">--</strong>`;
   }
+  setupInlinePromo();
 
-if(launchMain){
+  // 彈窗文案（保留風格但改為團購）
+  if(launchMain){
     launchMain.innerHTML = `
-      手炒麻辣鍋底<br>
-      團購價 <strong>$${PRICE_SALE}</strong><br>
-      結單日：1/25 23:59
+      團購價 <strong>$${PRICE_REGULAR}</strong><br>
+      1/20 結單 · 趁現在一起買
     `;
   }
 
-  updateCouponVisibility();
+  // 團購頁不顯示優惠碼區（避免誤解）
+  const couponBox = document.getElementById('couponBox');
+  const lineInfoBox = document.getElementById('lineInfoBox');
+  if(couponBox) couponBox.style.display = 'none';
+  if(lineInfoBox) lineInfoBox.style.display = 'none';
+
   setLineLinks();
 }
 function schedulePricingSwitch(){
-  const now = getNow();
-  const { priceCutoff, newYearStart } = getSaleDates(now);
-
-  [priceCutoff, newYearStart].forEach(target=>{
-    const ms = target - now;
-    if(ms > 0 && ms < 1000 * 60 * 60 * 72){ // 72 小時內才排程，避免很久的 timeout
-      setTimeout(()=>{
-        updatePricingUI();
-        calculate(true);
-      }, ms + 900);
-    }
-  });
+  // 團購固定價：不需要排程切換
 }
 function applyCoupon(){
   const input = document.getElementById('couponInput');
@@ -2509,7 +2350,6 @@ window.addEventListener('DOMContentLoaded',()=>{
   schedulePricingSwitch();
   calculate(true);
   setStep(1);
-  applyGroupbuyEndState();
 
   const intro=document.getElementById('intro');
   const btn=document.getElementById('startBtn');
@@ -2521,22 +2361,16 @@ window.addEventListener('DOMContentLoaded',()=>{
   // ===== 開場快速跳過：上滑 / 點一下 -> 跳到「選單」（訂購頁 / 產品介紹）=====
   function goIntroMenu(){
     if(!intro) return;
-    if(intro.classList.contains('is-menu')) return;
-
-    // 先淡出故事文字，再切到選單（避免瞬間空白）
-    intro.classList.add('to-menu');
+    intro.classList.add('is-menu');
 
     // 立即顯示 hero panel（避免等完整動畫跑完）
     const heroPanel = document.getElementById('intro-hero-panel');
     if(heroPanel) heroPanel.classList.add('show');
     if(btn) btn.classList.add('show');
     if(storyBtn) storyBtn.classList.add('show');
-
-    setTimeout(()=>{ 
-      if(intro) intro.classList.add('is-menu'); 
-    }, 450);
   }
-// Start Order：正式進入訂購頁
+
+  // Start Order：正式進入訂購頁
   function dismissIntro({ withRippleEvent=null, scrollToTop=true } = {}){
     try{
       if(withRippleEvent){ triggerRipple(withRippleEvent); }
@@ -2761,80 +2595,59 @@ function enableEmailAutoSuggest(){
 }
 
 /* ===== 倒數天數 ===== */
+/* ===== 距離結單：倒數計時 =====
+   - 顯示格式：{天數}天 HH:MM:SS
+   - 結單日：每年 1/20 23:59:59（若已超過則用下一年）
+*/
 function setupInlinePromo(){
-  const el = document.getElementById('promoDays');
+  const el = document.getElementById('closeCountdown') || document.getElementById('promoDays');
   if(!el) return;
 
-  const end = makeTWDate(CAMPAIGN_CONFIG.dates.countdownEnd);
+  // 取得「下一個」1/20 23:59:59
+  function getCloseAt(now = new Date()){
+    const y = now.getFullYear();
+    let closeAt = new Date(y, 0, 20, 23, 59, 59); // Jan = 0
+    if(now.getTime() > closeAt.getTime()){
+      closeAt = new Date(y + 1, 0, 20, 23, 59, 59);
+    }
+    return closeAt;
+  }
 
-  const pad2 = (n)=> String(n).padStart(2,'0');
+  let timer = null;
+  let lastDays = null;
 
-  const tick = ()=>{
-    const now = getNow();
-    const diff = end.getTime() - now.getTime();
+  function pad2(n){ return String(n).padStart(2,'0'); }
+
+  function tick(){
+    const now = new Date();
+    const closeAt = getCloseAt(now);
+    const diff = closeAt.getTime() - now.getTime();
 
     if(diff <= 0){
-      el.textContent = '已結束';
+      el.textContent = '已結單';
+      if(timer){ clearInterval(timer); timer = null; }
       return;
     }
 
-    const totalSec = Math.floor(diff / 1000);
-    const days = Math.floor(totalSec / 86400);
-    const hh = Math.floor((totalSec % 86400) / 3600);
-    const mm = Math.floor((totalSec % 3600) / 60);
-    const ss = totalSec % 60;
+    const totalSeconds = Math.floor(diff / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const rem = totalSeconds % 86400;
+    const hh = Math.floor(rem / 3600);
+    const mm = Math.floor((rem % 3600) / 60);
+    const ss = rem % 60;
 
     el.textContent = `${days}天 ${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
-  };
+
+    // 只在「天數變化」時做一下小彈跳（不然每秒跳會太吵）
+    if(lastDays === null || days !== lastDays){
+      el.classList.remove('animate'); void el.offsetWidth; el.classList.add('animate');
+      lastDays = days;
+    }
+  }
 
   tick();
-  setInterval(tick, 1000);
-}
-
-
-function applyGroupbuyEndState(){
-  const endedBox = document.getElementById('groupbuyEnded');
-  if(!endedBox) return false;
-
-  const end = makeTWDate(CAMPAIGN_CONFIG.dates.countdownEnd);
-  const isEnded = FORCE_EXPIRED || (getNow().getTime() > end.getTime());
-
-  if(!isEnded) return false;
-
-  // 顯示結束訊息
-  endedBox.hidden = false;
-
-  // 隱藏可填寫 / 結帳區塊（保留頁面風格）
-  const hideIds = ['promoInline','productTable','checkoutCard','formBtn','couponBox','lineInfoBox'];
-  hideIds.forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.style.display='none';
-  });
-
-  document.querySelectorAll('.reveal, .account-box, .scroll-hint').forEach(el=>{
-    el.style.display='none';
-  });
-
-  return true;
-}
-
-function animatePromoNumber(el, target){
-  if(!el) return;
-  let from = parseInt((el.textContent||'').replace(/[^\d]/g,''),10);
-  if(isNaN(from)) from = 0;
-
-  const duration = 900;
-  const t0 = performance.now();
-  const ease = t => 1 - Math.pow(1 - t, 3);
-
-  function frame(now){
-    const p = Math.min(1, (now - t0) / duration);
-    const v = Math.max(0, Math.round(from + (target - from) * ease(p)));
-    el.textContent = v + ' 天';
-    if(p < 1){ requestAnimationFrame(frame); }
-  }
-  el.classList.remove('animate'); void el.offsetWidth; el.classList.add('animate');
-  requestAnimationFrame(frame);
+  if(timer) clearInterval(timer);
+  timer = setInterval(tick, 1000);
 }
 
 /* ===== Stepper ===== */
@@ -2885,9 +2698,16 @@ function buildQty(){
     syncTo(getVal() + delta);
   }
 
-  // 點按 +/-
-  minus.addEventListener('click', ()=> step(-1));
-  plus .addEventListener('click', ()=> step( 1));
+  // 點按：改用 pointerdown 立即 +1/-1，避免 click + pointerdown 造成一次跳兩格
+  // 鍵盤操作仍可用 Enter / Space
+  const onKey = (delta)=>(e)=>{
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      step(delta);
+    }
+  };
+  minus.addEventListener('keydown', onKey(-1));
+  plus .addEventListener('keydown', onKey( 1));
 
   // 長按（保留原手感，且不限制上限）
   function setupHold(btn, delta){
