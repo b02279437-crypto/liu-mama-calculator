@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="format-detection" content="telephone=no" />
-<title>LIU MAMA x SHELLY｜團購表單</title>
+<title>LIU MAMA Order</title>
 
 <!-- 字體 -->
 <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Noto+Serif+TC:wght@500;600&display=swap" rel="stylesheet">
@@ -107,8 +107,7 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   transform:translateY(0);
   transition:opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
 }
-#intro.fade-out{opacity:0;
-  transform:translateY(-14vh); pointer-events:none;}
+#intro.fade-out{opacity:0; transform:none; pointer-events:none;}
 
 /* ===== Topbar（產品介紹同款） ===== */
 .topbar{
@@ -187,38 +186,41 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   animation-iteration-count:infinite;
   animation-timing-function:var(--ease-soft, ease-in-out);
 }
+/* 跳到選單過渡：先淡出故事，再切到 is-menu（避免瞬間空白） */
+#intro.to-menu .scroll-hint{ display:none; }
+#intro.to-menu #intro-logo,
+#intro.to-menu #intro-hero,
+#intro.to-menu #intro-text{
+  opacity:0 !important;
+  transition:opacity 420ms var(--ease);
+}
+#intro.to-menu #intro-hero-panel{
+  opacity:1 !important;
+  pointer-events:auto !important;
+  transform:none !important;
+}
+#intro.to-menu #startBtn,
+#intro.to-menu #storyBtn{
+  opacity:1 !important;
+  transform:none !important;
+}
+
 /* 跳到選單狀態：強制顯示 hero panel，並關掉提示 */
 #intro.is-menu .scroll-hint{ display:none; }
 #intro.is-menu #intro-logo,
 #intro.is-menu #intro-hero,
-#intro.is-menu #intro-collab{
-  position:absolute;
-  left:50%; top:50%;
-  transform:translate(-50%, -35%);
-  width:min(92vw, 980px);
-  text-align:center;
-  font-family:'Amatic SC',cursive;
-  font-weight:700;
-  font-size:clamp(54px,9vw,110px);
-  letter-spacing:.08em;
-  color: rgba(43,62,83,.92);
-  opacity:0;
-  pointer-events:none;
-  transition:opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
-  text-shadow:0 20px 55px rgba(15,33,55,.18);
+#intro.is-menu #intro-text{
+  display:none !important;
 }
-#intro-collab.show{opacity:1; transform:translate(-50%, -45%);}
-#intro-collab.hide{opacity:0; transform:translate(-50%, -55%);}
-
 #intro.is-menu #intro-hero-panel{
   opacity:1 !important;
   pointer-events:auto !important;
-  transform:translateY(0) scale(1) !important;
+  transform:none !important;
 }
 #intro.is-menu #startBtn,
 #intro.is-menu #storyBtn{
   opacity:1 !important;
-  transform:translateY(0) !important;
+  transform:none !important;
 }
 
 #intro-logo{
@@ -250,25 +252,6 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   opacity:1;
   transform:translateY(0);
 }
-#intro-collab{
-  position:absolute;
-  left:50%; top:50%;
-  transform:translate(-50%, -35%);
-  width:min(92vw, 980px);
-  text-align:center;
-  font-family:'Amatic SC',cursive;
-  font-weight:700;
-  font-size:clamp(54px,9vw,110px);
-  letter-spacing:.08em;
-  color:var(--navy);
-  opacity:0;
-  pointer-events:none;
-  transition:opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
-  text-shadow:0 20px 55px rgba(15,33,55,.18);
-}
-#intro-collab.show{opacity:1; transform:translate(-50%, -45%);}
-#intro-collab.hide{opacity:0; transform:translate(-50%, -55%);}
-
 #intro-text{
   font-weight:500;
   color:#333;
@@ -291,10 +274,8 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   justify-content:center;
   opacity:0;
   pointer-events:none;
-  transform:translateY(10px) scale(.98);
-  transition:
-    opacity var(--t-slow) var(--ease),
-    transform var(--t-slow) var(--ease);
+  transform:none;
+  transition:opacity var(--t-slow) var(--ease);
 }
 #intro-hero-panel.show{
   opacity:1;
@@ -329,13 +310,11 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   color:#f9f7f3;
 }
 .hero-eyebrow{
-  font-family:'Amatic SC',cursive;
-  font-weight:700;
-  font-size:clamp(24px, 4.4vw, 40px);
-  letter-spacing:.12em;
-  text-transform:none;
-  margin-bottom:8px;
-  opacity:.95;
+  font-size:11px;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  margin-bottom:10px;
+  opacity:.85;
 }
 .hero-title{
   font-size:26px;
@@ -382,10 +361,9 @@ table td,table th,.total,#qty1,#formReminder,.ship-price{
   position:relative;
   isolation:isolate;
   opacity:0;
-  transform:translateY(10px);
+  transform:none;
   transition:
     opacity var(--t-base) var(--ease),
-    transform var(--t-fast) var(--ease),
     box-shadow .25s var(--ease),
     filter .25s var(--ease);
 }
@@ -507,7 +485,7 @@ h2.title-in{
 .brand-tagline{
   margin:6px 0 6px;
   font-size:14px;
-  color: var(--navy);
+  color:#3f4f61;
   letter-spacing:.38em;
   font-weight:500;
 }
@@ -518,45 +496,6 @@ h2.title-in{
   line-height:1.7;
   color:var(--promo-text);
   letter-spacing:.16em;
-}
-
-/* ===== SHELLY 團購標題質感微調 ===== */
-.promo-inline{
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-}
-.collab-title{
-  font-family:'Amatic SC',cursive;
-  font-weight:700;
-  font-size:clamp(44px,6.8vw,86px);
-  letter-spacing:.06em;
-  color:var(--navy);
-  text-shadow:0 18px 45px rgba(15,33,55,.14);
-}
-.collab-sub{
-  font-size:12px;
-  letter-spacing:.32em;
-  font-weight:700;
-  color:rgba(15,33,55,.72);
-  border:1px solid rgba(15,33,55,.18);
-  padding:6px 10px;
-  border-radius:999px;
-  background:rgba(255,255,255,.55);
-}
-.promo-days{
-  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace;
-  font-variant-numeric:tabular-nums;
-  letter-spacing:.12em;
-}
-.groupbuy-ended-note{
-  margin-top:10px;
-  text-align:center;
-  font-size:13px;
-  letter-spacing:.12em;
-  color:rgba(15,33,55,.70);
 }
 .promo-inline .price-red{
   color:var(--promo-red);
@@ -761,26 +700,7 @@ h2.title-in{
     width:clamp(240px, 68vw, 360px);
     margin:14px auto -66px;
   }
-  #intro-collab{
-  position:absolute;
-  left:50%; top:50%;
-  transform:translate(-50%, -35%);
-  width:min(92vw, 980px);
-  text-align:center;
-  font-family:'Amatic SC',cursive;
-  font-weight:700;
-  font-size:clamp(54px,9vw,110px);
-  letter-spacing:.08em;
-  color:var(--navy);
-  opacity:0;
-  pointer-events:none;
-  transition:opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
-  text-shadow:0 20px 55px rgba(15,33,55,.18);
-}
-#intro-collab.show{opacity:1; transform:translate(-50%, -45%);}
-#intro-collab.hide{opacity:0; transform:translate(-50%, -55%);}
-
-#intro-text{
+  #intro-text{
     margin-top:-34px;
     line-height:1.9;
   }
@@ -1668,409 +1588,64 @@ th{
 .coupon-hint .coupon-line a{ display:inline; margin-left:2px; }
 
 
-#promoInline{display:none!important;}
+/* --- Groupbuy Ended --- */
+#couponBox,#lineInfoBox{display:none !important;}
 
-.groupbuy-countdown-bar{
+.ended-box{
   margin-top:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  padding:10px 14px;
-  border-radius:999px;
-  border:1px solid rgba(15,33,55,.16);
-  background:rgba(255,255,255,.55);
-  backdrop-filter: blur(8px);
-}
-.groupbuy-countdown-label{
-  font-size:12px;
-  letter-spacing:.22em;
-  font-weight:700;
-  color:rgba(15,33,55,.70);
-}
-.groupbuy-countdown-time{
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-variant-numeric: tabular-nums;
-  letter-spacing:.14em;
-  font-size:13px;
-  color:var(--navy);
-}
-.groupbuy-ended-note{
-  margin-top:12px;
-  text-align:center;
-  font-size:13px;
-  letter-spacing:.12em;
-  color:rgba(15,33,55,.70);
-}
-
-#launchModal{display:none!important;}
-
-/* groupbuy countdown plain text */
-.groupbuy-countdown-bar{
-  margin-top:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  padding:0 !important;
-  border:none !important;
-  border-radius:0 !important;
-  background:transparent !important;
-  backdrop-filter:none !important;
-}
-.groupbuy-countdown-label{
-  font-size:13px;
-  letter-spacing:.14em;
-  font-weight:700;
-  color:rgba(15,33,55,.78);
-}
-.groupbuy-countdown-time{
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-variant-numeric: tabular-nums;
-  letter-spacing:.12em;
-  font-size:13px;
-  color:var(--navy);
-}
-.groupbuy-ended-wrap{
-  margin-top:18px;
-  text-align:center;
-}
-.groupbuy-ended-title{
-  font-weight:700;
-  letter-spacing:.12em;
-  font-size:16px;
-  color:var(--navy);
-}
-.groupbuy-ended-desc{
-  margin-top:10px;
-  font-size:13px;
-  line-height:1.8;
-  color:rgba(15,33,55,.72);
-}
-.groupbuy-ended-links{
-  margin-top:14px;
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-.groupbuy-ended-links a{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:10px 14px;
-  border-radius:999px;
-  border:1px solid rgba(15,33,55,.18);
-  background:rgba(255,255,255,.55);
-  color:var(--navy);
-  text-decoration:none;
-  font-size:13px;
-  letter-spacing:.08em;
-  transition:transform .15s ease, opacity .15s ease;
-}
-.groupbuy-ended-links a:hover{ transform:translateY(-1px); }
-.groupbuy-ended-links a:active{ opacity:.9; transform:translateY(0); }
-
-.groupbuy-countdown-line1{
-  display:flex;
-  gap:8px;
-  align-items:baseline;
-  justify-content:center;
-}
-.groupbuy-countdown-line2{
-  margin-top:10px;
-  text-align:center;
-  font-size:13px;
-  letter-spacing:.10em;
-  color:rgba(15,33,55,.74);
-}
-.groupbuy-cta{
-  display:inline-block;
-  margin-top:10px;
-  padding:10px 14px;
-  border-radius:999px;
-  border:1px solid rgba(15,33,55,.18);
-  background:rgba(255,255,255,.55);
-  color:var(--navy);
-  text-decoration:none;
-  letter-spacing:.08em;
-  font-size:13px;
-}
-
-/* groupbuy countdown line2 */
-.groupbuy-countdown-line1{
-  display:flex;
-  gap:8px;
-  align-items:baseline;
-  justify-content:center;
-}
-.groupbuy-countdown-label{
-  font-size:13px;
-  letter-spacing:.14em;
-  font-weight:700;
-  color:rgba(15,33,55,.78);
-}
-.groupbuy-countdown-time{
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-variant-numeric: tabular-nums;
-  letter-spacing:.12em;
-  font-size:13px;
-  color:var(--navy);
-}
-.groupbuy-countdown-line2{
-  margin-top:10px;
-  text-align:center;
-  font-family:'Noto Serif TC', serif;
-  font-weight:600;
-  font-size:14px;
-  letter-spacing:.06em;
-  line-height:1.55;
-  color:rgba(15,33,55,.78);
-}
-/* ended page design */
-.ended-page{
-  margin-top:18px;
-  padding:22px 18px;
-  text-align:left;
-}
-.ended-badge{
-  display:inline-block;
-  font-size:12px;
-  letter-spacing:.28em;
-  font-weight:700;
-  color:rgba(15,33,55,.72);
-  border:1px solid rgba(15,33,55,.18);
-  padding:6px 10px;
-  border-radius:999px;
-  background:rgba(255,255,255,.60);
+  padding:18px 18px 16px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.06);
+  box-shadow:0 10px 34px rgba(0,0,0,.25);
 }
 .ended-title{
-  margin:14px 0 10px;
-  font-size:18px;
-  line-height:1.5;
-  letter-spacing:.06em;
-  color:var(--navy);
+  margin:0 0 10px;
+  font-size:16px;
+  font-weight:800;
+  letter-spacing:.02em;
 }
-.ended-body p{
-  margin:10px 0;
-  font-size:14px;
-  line-height:1.9;
-  color:rgba(15,33,55,.74);
+.ended-text{
+  margin:0 0 14px;
+  line-height:1.65;
+  opacity:.95;
 }
-.ended-link{
-  color:var(--navy);
-  font-weight:700;
-  text-decoration:underline;
-  text-underline-offset:3px;
-}
-.ended-cta{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  margin-top:8px;
-  padding:12px 16px;
-  border-radius:999px;
-  border:1px solid rgba(15,33,55,.18);
-  background:rgba(255,255,255,.70);
-  color:var(--navy);
-  text-decoration:none;
-  font-weight:700;
-  letter-spacing:.08em;
-}
-.ended-social{
-  margin-top:14px;
+.ended-links{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
+  margin-bottom:12px;
 }
-.ended-pill{
+.btn-soft{
   display:inline-flex;
   align-items:center;
-  gap:8px;
+  justify-content:center;
   padding:10px 14px;
   border-radius:999px;
-  border:1px solid rgba(15,33,55,.18);
-  background:rgba(255,255,255,.55);
-  color:var(--navy);
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(0,0,0,.18);
+  color:var(--text);
   text-decoration:none;
-  font-size:13px;
-  letter-spacing:.08em;
+  font-weight:800;
+  letter-spacing:.02em;
 }
-
-/* ended state: hide all main content except ended page */
-.is-ended main > *:not(#groupbuyEndedPage){ display:none !important; }
-
-.ended-actions{ margin-top:14px; }
-.ended-note{ margin-top:10px; }
-
-/* ===== Ended page redesign (v15) ===== */
-.is-ended main {
-  padding-top: 14px;
+.btn-soft:hover{ background:rgba(0,0,0,.26); }
+.btn-primary-wide{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  padding:12px 16px;
+  border-radius:999px;
+  background:var(--accent);
+  color:#fff;
+  font-weight:900;
+  letter-spacing:.02em;
+  text-decoration:none;
+  box-shadow:0 16px 34px rgba(0,0,0,.28);
 }
+.btn-primary-wide:hover{ filter:brightness(1.05); }
 
-.ended-page {
-  margin-top: 10px;
-  padding: 0;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-}
-
-.ended-wrap {
-  max-width: 920px;
-  margin: 0 auto;
-  padding: 22px 18px 10px;
-}
-
-.ended-brand {
-  text-align: center;
-  margin-bottom: 16px;
-}
-
-.ended-brand-en {
-  font-family: 'Amatic SC', cursive;
-  font-weight: 700;
-  font-size: clamp(44px, 7vw, 72px);
-  letter-spacing: .10em;
-  color: var(--navy);
-  line-height: 1;
-}
-
-.ended-brand-zh {
-  margin-top: 6px;
-  font-family: 'Noto Serif TC', serif;
-  font-weight: 600;
-  letter-spacing: .22em;
-  font-size: 12px;
-  color: rgba(15,33,55,.62);
-}
-
-.ended-card {
-  background: rgba(255,255,255,.55);
-  border: 1px solid rgba(15,33,55,.14);
-  border-radius: 26px;
-  padding: 22px 18px;
-  text-align: center;
-  backdrop-filter: blur(10px);
-}
-
-.ended-pill-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(15,33,55,.18);
-  background: rgba(255,255,255,.65);
-  font-size: 12px;
-  letter-spacing: .28em;
-  font-weight: 700;
-  color: rgba(15,33,55,.70);
-}
-
-.ended-title {
-  margin: 14px 0 10px;
-  font-family: 'Noto Serif TC', serif;
-  font-weight: 700;
-  letter-spacing: .06em;
-  font-size: 18px;
-  line-height: 1.6;
-  color: var(--navy);
-}
-
-.ended-date {
-  font-weight: 800;
-}
-
-.ended-desc {
-  margin: 0 auto 16px;
-  max-width: 34em;
-  font-size: 14px;
-  line-height: 1.9;
-  color: rgba(15,33,55,.72);
-}
-
-.br-mobile {
-  display: none;
-}
-
-.ended-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.ended-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 11px 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(15,33,55,.18);
-  background: rgba(255,255,255,.60);
-  color: var(--navy);
-  text-decoration: none;
-  font-size: 13px;
-  letter-spacing: .10em;
-  font-weight: 700;
-  transition: transform .15s ease, opacity .15s ease;
-  min-width: 140px;
-}
-
-.ended-btn:hover {
-  transform: translateY(-1px);
-}
-
-.ended-btn:active {
-  transform: translateY(0);
-  opacity: .92;
-}
-
-.ended-btn-primary {
-  background: rgba(15,33,55,.90);
-  color: rgba(255,255,255,.95);
-  border-color: rgba(15,33,55,.90);
-}
-
-.ended-footnote {
-  margin-top: 14px;
-  font-size: 12px;
-  letter-spacing: .12em;
-  color: rgba(15,33,55,.58);
-}
-
-@media (max-width: 520px) {
-  .ended-btn { min-width: 0; width: 100%; }
-  .br-mobile { display: inline; }
-  .ended-card { padding: 20px 16px; }
-}
-
-/* intro menu fade-only overrides */
-.fade-out{
-  opacity:0 !important;
-  transform:none !important;
-  pointer-events:none !important;
-}
-
-#intro.is-menu #intro-logo,
-#intro.is-menu #intro-hero,
-#intro.is-menu #intro-collab{
-  transition: opacity 260ms ease !important;
-  transform: translate(-50%, -35%) !important;
-}
-
-#intro.is-menu #intro-hero-panel{
-  transition: opacity 260ms ease !important;
-  transform: translateY(0) !important;
-}
-
-#intro.is-menu #startBtn,
-#intro.is-menu #storyBtn{
-  transition: opacity 260ms ease !important;
-  transform: translateY(0) !important;
-}
 </style>
 
 
@@ -2149,15 +1724,13 @@ th{
 陪你溫暖每一餐。
   </div>
 
-  <div id="intro-collab" aria-hidden="true">LIU MAMA x SHELLY</div>
-
   <div id="intro-hero-panel">
     <div class="hero-frame">
       <img class="hero-image" decoding="async" loading="eager"
            src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2"
            alt="Liu Mama 麻辣鍋底產品照">
       <div class="hero-overlay">
-        <div class="hero-eyebrow">LIU MAMA x SHELLY</div>
+        <div class="hero-eyebrow">LIU MAMA </div>
         <div class="hero-title">手炒麻辣鍋底 · 開團中</div>
         <div class="hero-sub">
           手炒的麻辣，暖心又暖胃。<br>
@@ -2224,21 +1797,25 @@ th{
         <p class="brand-tagline">
           手炒的麻辣，暖心又暖胃
         </p>
-        <div id="groupbuyCountdownBar" class="groupbuy-countdown-bar" style="display:none;">
-  <div class="groupbuy-countdown-line1">
-    <span class="groupbuy-countdown-label">距離結單：</span>
-    <span class="groupbuy-countdown-time" id="groupbuyCountdown">--天 --:--:--</span>
-  </div>
-</div>
-</div>
         <p id="promoInline" class="promo-inline">
           <span class="promo-mark">⛧</span>
-          <span class="collab-title">LIU MAMA x SHELLY</span>
-          <span class="collab-sub">團購表單</span>
-          <strong class="price-red">$300</strong>
+          團購價 <strong class="price-red">$300</strong>
           <span class="promo-sep">·</span>
-          團購倒數 <strong class="promo-days" id="promoDays">--天 --:--:--</strong>
+          距離結單 <strong class="promo-days" id="promoDays">--</strong>
         </p>
+
+        <div id="groupbuyEnded" class="ended-box" hidden>
+          <p class="ended-title">本團購已於 <strong>1/25 23:59</strong> 結束，謝謝大家熱情支持！</p>
+          <p class="ended-text">
+            已下單的朋友請放心，我們將依付款順序依序出貨，<br>
+            出貨後會以 <strong>Email</strong> 通知您。
+          </p>
+          <div class="ended-links">
+            <a class="btn-soft" href="https://www.instagram.com/liu_mama2015/" target="_blank" rel="noopener">追蹤 IG</a>
+            <a class="btn-soft" href="https://line.me/R/ti/p/@217mwvhv?oat_content=url&ts=12201256" target="_blank" rel="noopener">加入 LINE</a>
+          </div>
+          <a class="btn-primary-wide" href="https://b02279437-crypto.github.io/liu-mama-calculator/calculator.html" target="_blank" rel="noopener">前往官網購買</a>
+        </div>
       </div>
 
       <section class="reveal">
@@ -2278,7 +1855,7 @@ th{
             <td>麻辣底料包<br><small>(2人份)</small></td>
             <td>
               <div class="price-cell">
-                <span class="price-old" id="priceOld">$300</span>
+                <span class="price-old" id="priceOld">$320</span>
                 <span class="price-new" id="priceNew">$300</span>
               </div>
             </td>
@@ -2315,10 +1892,10 @@ th{
         </div>
 
         <p id="pickupNote" class="pickup-note" hidden>
-          自取地點：<br>
+          自取地點：<br><br>
           ① 【食實甜點工作室】<br>
           台北市士林區天母北路47號1F<br>
-          <span style="opacity:.8;">（天母商圈）</span><br>
+          <span style="opacity:.8;">（天母商圈）</span><br><br>
           ② 【Kuki House 軟餅乾專店】<br>
           台北市大同區太原路97巷8號1樓<br>
           <span style="opacity:.8;">（近承德路、京站）</span>
@@ -2434,12 +2011,12 @@ th{
       ×
     </button>
     <div class="promo-label">LIU MAMA</div>
-    <h3 id="launchTitle">劉嘛麻 開賣啦&nbsp;.ᐟ.ᐟ</h3>
+    <h3 id="launchTitle">劉嘛麻 開團中&nbsp;.ᐟ.ᐟ</h3>
 
     <p class="promo-main">
       手炒麻辣鍋底<br>
-      11/18 ~ 12/18 開賣價 <strong>$300</strong><br>
-      期間限定價 · 先嚐一鍋就愛上
+      團購價 <strong>$300</strong><br>
+      限時團購 · 結單前把握
     </p>
 
     <p class="promo-sub">
@@ -2489,9 +2066,8 @@ async function startIntroSequence(){
   const logo      = document.getElementById('intro-logo');
   const hero      = document.getElementById('intro-hero');
   const text      = document.getElementById('intro-text');
-  const collab    = document.getElementById('intro-collab');
   const heroPanel = document.getElementById('intro-hero-panel');
-const btn       = document.getElementById('startBtn');
+  const btn       = document.getElementById('startBtn');
   const storyBtn  = document.getElementById('storyBtn');
 
   const maxWait = new Promise(r=>setTimeout(r,4000));
@@ -2520,14 +2096,7 @@ const btn       = document.getElementById('startBtn');
     setTimeout(()=>{
       if(hero){ hero.style.display='none'; }
       if(text){ text.style.display='none'; }
-      // 追加：合作標題（故事後面）
-      if(collab){ collab.classList.add('show'); }
-      setTimeout(()=>{ if(collab){ collab.classList.add('hide'); collab.classList.remove('show'); } }, FADE_TIME);
-      setTimeout(()=>{
-        if(collab){ collab.style.display='none'; }
-        if(heroPanel){ heroPanel.classList.add('show'); }
-      }, STAGE_SWITCH);
-
+      if(heroPanel){ heroPanel.classList.add('show'); }
       setTimeout(()=>{
         if(btn) btn.classList.add('show');
         if(storyBtn) storyBtn.classList.add('show');
@@ -2631,19 +2200,19 @@ const CAMPAIGN_CONFIG = {
   // 主要日期（台北時間 UTC+8）
   dates: {
     // 倒數顯示到哪一天（沿用你目前的邏輯：該日 00:00）
-    countdownEnd: { y: 2025, m: 12, d: 18 },
+    countdownEnd: { y: 2026, m: 1, d: 25, hh: 23, mm: 59, ss: 0 },
 
     // 何時恢復原價（12/19 00:00）
-    priceCutoff:  { y: 2025, m: 12, d: 19, hh: 0, mm: 0, ss: 0 },
+    priceCutoff:  { y: 2099, m: 12, d: 31, hh: 0, mm: 0, ss: 0 },
 
     // 新年優惠開始（1/1 00:00）
-    newYearStart: { y: 2026, m: 1, d: 1, hh: 0, mm: 0, ss: 0 },
+    newYearStart: { y: 2100, m: 1, d: 1, hh: 0, mm: 0, ss: 0 },
   },
 
   // 價格
   prices: {
-    regular: 300,
-    sale:    300,
+    regular: 320,
+    X0,
   },
 
   // LINE
@@ -2655,22 +2224,11 @@ const CAMPAIGN_CONFIG = {
   // kind:
   // - 'percent'：打幾%折（percent: 5 代表 5% OFF = 95折）
   // - 'set_unit_price'：指定每盒價格（unitPrice）
-  coupons: {
-    'LIUMAMA2025': { kind:'percent', percent: 5, minSubtotal: 1000, label:'95折' },
-  },
+  coupons: {},
 };
 
-/** ================================
- * 網紅團購模式（與官網同版型）
- * - 價格固定：300
- * - 下單流程：改為跳 Google 表單（預填連結）
- * 不同網紅只要改 GROUPBUY_PRICE / GROUPBUY_FORM_URL 即可
- * ================================ */
-const GROUPBUY_MODE = true;
-const GROUPBUY_PRICE = 300;
-const GROUPBUY_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSf7qLqbpgv2WskVxeZFhDnES6RsF-_cNgbT_w4wwPI20kjkBw/viewform?usp=pp_url&entry.1152845848=%E5%8A%89%E5%A7%B3&entry.178268335=09022&entry.441082214=123&entry.1732058404=123&entry.509305715=711%E5%8F%96%E8%B2%A8&entry.1351577488=2&entry.1880220031=1&entry.1077043201=1&entry.92080690=1&entry.2023782625=1&entry.1734866797=1&entry.1645940238=1&entry.1503712729=%E9%A3%9F%E5%AF%A6%E7%94%9C%E9%BB%9E%E5%B7%A5%E4%BD%9C%E5%AE%A4+%E8%87%BA%E5%8C%97%E5%B8%82%E5%A3%AB%E6%9E%97%E5%8D%80%E5%A4%A9%E6%AF%8D%E5%8C%97%E8%B7%AF47%E8%99%9F1F&entry.2082945351=1&entry.1479019444=1';
-const GROUPBUY_OPEN_NEW_TAB = false; // 預覽版 true：新分頁；官方版 false：同頁跳轉
-
+// ★ 團購到期預覽（預覽版會改成 true）
+const FORCE_EXPIRED = false;
 
 function makeTWDate(obj){
   if(!obj) return new Date();
@@ -2691,7 +2249,7 @@ const PRICE_SALE    = CAMPAIGN_CONFIG.prices.sale;
 const COUPONS       = CAMPAIGN_CONFIG.coupons;
 
 
-/** 倒數顯示到 12/18；價格在 12/19 00:00（台灣時間）回復 $300 */
+/** 倒數顯示到 12/18；價格在 12/19 00:00（台灣時間）回復 $320 */
 function getSaleDates(now = new Date()){
   // ✅ 日期設定（台灣時間, UTC+8）
   // - 倒數顯示到 12/18
@@ -2703,7 +2261,6 @@ function getSaleDates(now = new Date()){
   return { countdownEnd, priceCutoff, newYearStart };
 }
 function getCampaignPhase(now = getNow()){
-  if(GROUPBUY_MODE) return 'groupbuy';
   const { priceCutoff, newYearStart } = getSaleDates(now);
   if(now < priceCutoff) return 'sale'; // 仍在開賣價期間
   if(now < newYearStart) return 'line'; // LINE官方上線期（尚未開放新年優惠）
@@ -2711,16 +2268,6 @@ function getCampaignPhase(now = getNow()){
 }
 
 function getPricingContext(now = getNow()){
-  if(GROUPBUY_MODE){
-    const d = new Date();
-    return {
-      phase: 'groupbuy',
-      isSaleActive: false,
-      unitPrice: GROUPBUY_PRICE,
-      priceCutoff: d,
-      newYearStart: d
-    };
-  }
   const { priceCutoff, newYearStart } = getSaleDates(now);
   const phase = getCampaignPhase(now);
   const isSaleActive = (phase === 'sale');
@@ -2782,12 +2329,6 @@ function updateCouponVisibility(){
   const lineInfoBox = document.getElementById('lineInfoBox');
   if(!couponBox || !lineInfoBox) return;
 
-  if(GROUPBUY_MODE){
-    couponBox.style.display = 'none';
-    lineInfoBox.style.display = 'none';
-    return;
-  }
-
   const ctx = getPricingContext(getNow());
   const phase = ctx.phase;
 
@@ -2838,42 +2379,6 @@ function updatePricingUI(){
 
   const ctx = getPricingContext(getNow());
   const { isSaleActive, phase } = ctx;
-  // ===== 團購模式（不顯示新年優惠/LINE提示，改為團購倒數 + 表單） =====
-  if(phase === 'groupbuy'){
-    // 價格顯示
-    if(priceOld && priceNew){
-      priceOld.classList.add('is-hidden');
-      priceNew.classList.add('is-regular');
-      priceOld.textContent = '$' + GROUPBUY_PRICE;
-      priceNew.textContent = '$' + GROUPBUY_PRICE;
-    }
-    // 首屏文案：團購倒數（保留同版型）
-    if(promo){
-      promo.innerHTML = `
-        <span class="promo-mark">⛧</span>
-        <span class="collab-title">LIU MAMA x SHELLY</span>
-        <span class="collab-sub">團購表單</span>
-        <strong class="price-red">$${GROUPBUY_PRICE}</strong>
-        <span class="promo-sep">·</span>
-        團購倒數 <strong class="promo-days" id="promoDays">--天 --:--:--</strong>
-      `;
-    }
-    // 彈窗文案（不顯示新年優惠）
-    if(launchMain){
-      launchMain.innerHTML = `
-        <span style="font-family:'Amatic SC',cursive;font-weight:700;letter-spacing:.08em;">LIU MAMA x SHELLY</span><br>
-        團購表單開放中<br>
-        1/25 截止（倒數中）
-      `;
-    }
-    // 隱藏優惠碼/LINE 區塊
-    const couponBox = document.getElementById('couponBox');
-    const lineInfoBox = document.getElementById('lineInfoBox');
-    if(couponBox) couponBox.style.display = 'none';
-    if(lineInfoBox) lineInfoBox.style.display = 'none';
-    return;
-  }
-
 
   // 商品價格顯示（表格）
   if(priceOld && priceNew){
@@ -2892,59 +2397,23 @@ function updatePricingUI(){
   const mm = String(ctx.newYearStart.getMonth()+1).padStart(2,'0');
   const dd = String(ctx.newYearStart.getDate()).padStart(2,'0');
 
-  // 首屏活動文案（依 phase 切換）
+  // 首屏活動文案（團購倒數）
   if(promo){
-    if(phase === 'sale'){
-      promo.innerHTML = `
-        <span class="promo-mark">⛧</span>
-        11/18 ~ 12/18 開賣價
-        <strong class="price-red">$${PRICE_SALE}</strong>
-        <span class="promo-sep">·</span>
-        倒數 <strong class="promo-days" id="promoDays">-- 天</strong>
-      `;
-      setupInlinePromo(); // 重新跑倒數
-    }else if(phase === 'line'){
-      promo.innerHTML = `
-        <span class="promo-mark">⛧</span>
-        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">
-          劉嘛麻LINE官方上線啦!
-        </a>
-        <span class="promo-sep">·</span>
-        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">
-          快加入，得知最新優惠資訊
-        </a>
-      `;
-    }else{
-      promo.innerHTML = `
-        <span class="promo-mark">⛧</span>
-        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">
-          加入LINE好友，領取新年優惠卷
-        </a>
-      `;
-    }
+    promo.innerHTML = `
+      <span class="promo-mark">⛧</span>
+      團購價 <strong class="price-red">$${PRICE_SALE}</strong>
+      <span class="promo-sep">·</span>
+      距離結單 <strong class="promo-days" id="promoDays">--</strong>
+    `;
+    setupInlinePromo();
   }
 
-  // 開賣彈窗文案同步切換
-  if(launchMain){
-    if(phase === 'sale'){
-      launchMain.innerHTML = `
-        手炒麻辣鍋底<br>
-        11/18 ~ 12/18 開賣價 <strong>$${PRICE_SALE}</strong><br>
-        期間限定價 · 先嚐一鍋就愛上
-      `;
-    }else if(phase === 'line'){
-      launchMain.innerHTML = `
-        LINE官方上線啦!<br>
-        快加入，得知最新優惠資訊<br>
-        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">點我加入</a>
-      `;
-    }else{
-      launchMain.innerHTML = `
-        手炒麻辣鍋底<br>
-        加入好友，領取新年優惠卷<br>
-        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">點我加入</a>
-      `;
-    }
+if(launchMain){
+    launchMain.innerHTML = `
+      手炒麻辣鍋底<br>
+      團購價 <strong>$${PRICE_SALE}</strong><br>
+      結單日：1/25 23:59
+    `;
   }
 
   updateCouponVisibility();
@@ -3040,6 +2509,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   schedulePricingSwitch();
   calculate(true);
   setStep(1);
+  applyGroupbuyEndState();
 
   const intro=document.getElementById('intro');
   const btn=document.getElementById('startBtn');
@@ -3051,19 +2521,22 @@ window.addEventListener('DOMContentLoaded',()=>{
   // ===== 開場快速跳過：上滑 / 點一下 -> 跳到「選單」（訂購頁 / 產品介紹）=====
   function goIntroMenu(){
     if(!intro) return;
-    intro.classList.add('is-menu');
-    const collabEl = document.getElementById('intro-collab');
-    if(collabEl){ collabEl.style.display='none'; collabEl.classList.remove('typing','fade'); }
+    if(intro.classList.contains('is-menu')) return;
 
+    // 先淡出故事文字，再切到選單（避免瞬間空白）
+    intro.classList.add('to-menu');
 
     // 立即顯示 hero panel（避免等完整動畫跑完）
     const heroPanel = document.getElementById('intro-hero-panel');
-if(heroPanel) heroPanel.classList.add('show');
+    if(heroPanel) heroPanel.classList.add('show');
     if(btn) btn.classList.add('show');
     if(storyBtn) storyBtn.classList.add('show');
-  }
 
-  // Start Order：正式進入訂購頁
+    setTimeout(()=>{ 
+      if(intro) intro.classList.add('is-menu'); 
+    }, 450);
+  }
+// Start Order：正式進入訂購頁
   function dismissIntro({ withRippleEvent=null, scrollToTop=true } = {}){
     try{
       if(withRippleEvent){ triggerRipple(withRippleEvent); }
@@ -3105,15 +2578,7 @@ if(heroPanel) heroPanel.classList.add('show');
       const dy = t.clientY - startY;
       if(dy < -55){
         moved=true;
-        // 點擊/滑動跳過：跳到「選單」（Start / 產品介紹）
-      if(intro){
-        intro.classList.add('fade-out');
-        setTimeout(()=>{ intro.style.display='none'; }, 260);
-      }
-      if(main){ main.classList.add('show'); }
-      if(pageTitle){ pageTitle.classList.add('title-in'); }
-      setupRevealOnScroll();
-      return;
+        goIntroMenu();
       }
     }, {passive:true});
 
@@ -3122,13 +2587,7 @@ if(heroPanel) heroPanel.classList.add('show');
       if(e.target && e.target.closest && e.target.closest('#startBtn')) return;
       if(e.target && e.target.closest && e.target.closest('#storyBtn')) return;
 
-      // 點擊/滑動跳過：淡出後顯示選單（不放大、不跳出）
-      try{ intro.classList.add('fade-out'); }catch(err){}
-      setTimeout(()=>{
-        try{ intro.classList.remove('fade-out'); }catch(err){}
-        goIntroMenu();
-      }, 260);
-      return;
+      goIntroMenu();
     };
 
     intro.addEventListener('click', tapToMenu);
@@ -3138,7 +2597,18 @@ if(heroPanel) heroPanel.classList.add('show');
 
 
   if(skipIntro){
-    goIntroMenu();
+    if(intro){
+      intro.classList.add('fade-out');
+      intro.style.display='none';
+    }
+    if(main){
+      main.classList.add('show');
+    }
+    if(pageTitle){
+      pageTitle.classList.add('title-in');
+    }
+    setupRevealOnScroll();
+    showLaunchModal();
   }else{
     bindIntroQuickDismiss();
     startIntroSequence();
@@ -3292,24 +2762,62 @@ function enableEmailAutoSuggest(){
 
 /* ===== 倒數天數 ===== */
 function setupInlinePromo(){
-  const daysEl = document.getElementById('promoDays');
-  if(!daysEl) return;
+  const el = document.getElementById('promoDays');
+  if(!el) return;
 
-  try{
-    const now   = new Date();
-    const year  = now.getFullYear();
-    const today = new Date(year, now.getMonth(), now.getDate());
-    const end   = new Date(year, 11, 18);
+  const end = makeTWDate(CAMPAIGN_CONFIG.dates.countdownEnd);
 
-    const MS = 24*60*60*1000;
-    let diffDays = Math.round((end - today) / MS);
-    if(diffDays < 0) diffDays = 0;
+  const pad2 = (n)=> String(n).padStart(2,'0');
 
-    animatePromoNumber(daysEl, diffDays);
-  }catch(err){
-    daysEl.textContent = '— 天';
-  }
+  const tick = ()=>{
+    const now = getNow();
+    const diff = end.getTime() - now.getTime();
+
+    if(diff <= 0){
+      el.textContent = '已結束';
+      return;
+    }
+
+    const totalSec = Math.floor(diff / 1000);
+    const days = Math.floor(totalSec / 86400);
+    const hh = Math.floor((totalSec % 86400) / 3600);
+    const mm = Math.floor((totalSec % 3600) / 60);
+    const ss = totalSec % 60;
+
+    el.textContent = `${days}天 ${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
+  };
+
+  tick();
+  setInterval(tick, 1000);
 }
+
+
+function applyGroupbuyEndState(){
+  const endedBox = document.getElementById('groupbuyEnded');
+  if(!endedBox) return false;
+
+  const end = makeTWDate(CAMPAIGN_CONFIG.dates.countdownEnd);
+  const isEnded = FORCE_EXPIRED || (getNow().getTime() > end.getTime());
+
+  if(!isEnded) return false;
+
+  // 顯示結束訊息
+  endedBox.hidden = false;
+
+  // 隱藏可填寫 / 結帳區塊（保留頁面風格）
+  const hideIds = ['promoInline','productTable','checkoutCard','formBtn','couponBox','lineInfoBox'];
+  hideIds.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.style.display='none';
+  });
+
+  document.querySelectorAll('.reveal, .account-box, .scroll-hint').forEach(el=>{
+    el.style.display='none';
+  });
+
+  return true;
+}
+
 function animatePromoNumber(el, target){
   if(!el) return;
   let from = parseInt((el.textContent||'').replace(/[^\d]/g,''),10);
@@ -3661,14 +3169,6 @@ function goToStep2(){
 
 /* ===== STEP3：前往表單 ===== */
 function goToForm(){
-  if(GROUPBUY_MODE){
-    if(GROUPBUY_OPEN_NEW_TAB){
-      window.open(GROUPBUY_FORM_URL,'_blank');
-    }else{
-      window.location.href = GROUPBUY_FORM_URL;
-    }
-    return;
-  }
   const name  = document.getElementById('customerName');
   const phone = document.getElementById('customerPhone');
   const email = document.getElementById('customerEmail');
@@ -3767,101 +3267,5 @@ document.addEventListener('keydown',(e)=>{
   }
 });
 </script>
-
-<script>
-/* ===== SHELLY 團購倒數與結束頁（穩定版 v11） ===== */
-(function(){
-  const END = new Date('2026-01-25T23:59:00+08:00');
-  // 官方版：false；到期預覽版：true（檔案內會各自寫死）
-  const FORCE_EXPIRED = false;
-  const LINE_URL = 'https://line.me/R/ti/p/@217mwvhv?oat_content=url&ts=12201256';
-  const IG_URL = 'https://www.instagram.com/liu_mama2015/';
-  const OFFICIAL_BUY_URL = 'https://b02279437-crypto.github.io/liu-mama-calculator/calculator.html';
-
-  const pad = (n)=>String(n).padStart(2,'0');
-
-  function setEndedUI(){
-    document.body.classList.add('is-ended');
-    const bar = document.getElementById('groupbuyCountdownBar');
-    if(bar) bar.style.display = 'none';
-  }
-
-  function renderEndedPage(){
-    const main = document.querySelector('main');
-    if(!main) return;
-    if(document.getElementById('groupbuyEndedPage')) return;
-
-    const page = document.createElement('section');
-    page.id = 'groupbuyEndedPage';
-    page.className = 'card ended-page';
-          page.innerHTML = `
-        <div class="ended-wrap">
-          <div class="ended-brand">
-            <div class="ended-brand-en">LIU MAMA x SHELLY</div>
-            <div class="ended-brand-zh">團購已結束</div>
-          </div>
-
-          <div class="ended-card">
-<h3 class="ended-title">本團購已於 <span class="ended-date">1/25</span> 結束，謝謝大家熱情支持！</h3>
-            <p class="ended-desc">
-              已下單的朋友請放心，我們將依付款順序依序出貨，<br class="br-mobile">
-              <br>出貨後會以 <strong>Email</strong> 通知您。
-            </p>
-
-            <div class="ended-actions">
-              <a class="ended-btn ended-btn-primary" href="${OFFICIAL_BUY_URL}" target="_blank" rel="noopener">
-                前往官網購買
-              </a>
-              <a class="ended-btn" href="${LINE_URL}" target="_blank" rel="noopener">
-                LINE 官方
-              </a>
-              <a class="ended-btn" href="${IG_URL}" target="_blank" rel="noopener">
-                Instagram
-              </a>
-            </div>
-
-            <div class="ended-footnote">
-              想了解下一次開團/新品消息？請追蹤 IG 或加入 LINE 官方。
-            </div>
-          </div>
-        </div>
-      `;
-    main.prepend(page);
-  }
-
-  function setEnded(){
-    setEndedUI();
-    renderEndedPage();
-  }
-
-  function tick(){
-    const bar = document.getElementById('groupbuyCountdownBar');
-    const el  = document.getElementById('groupbuyCountdown');
-    if(bar) bar.style.display = '';
-    if(!el) return;
-
-    const now  = new Date();
-    const diff = FORCE_EXPIRED ? -1 : (END - now);
-    if(diff <= 0){
-      el.textContent = '00天 00:00:00';
-      setEnded();
-      return;
-    }
-    const total = Math.floor(diff/1000);
-    const d = Math.floor(total/86400);
-    const h = Math.floor((total%86400)/3600);
-    const m = Math.floor((total%3600)/60);
-    const ss = total%60;
-    el.textContent = `${pad(d)}天 ${pad(h)}:${pad(m)}:${pad(ss)}`;
-  }
-
-  window.addEventListener('DOMContentLoaded', ()=>{
-    tick();
-    setInterval(tick, 1000);
-    if(FORCE_EXPIRED) setEnded();
-  });
-})();
-</script>
-
 </body>
 </html>
