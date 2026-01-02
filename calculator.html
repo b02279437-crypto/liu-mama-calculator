@@ -2788,14 +2788,12 @@ function buildQty(){
   function step(delta){
     syncTo(getVal() + delta);
   }
-
-  // 點按 +/-
-  minus.addEventListener('click', ()=> step(-1));
-  plus .addEventListener('click', ()=> step( 1));
+  // 點按/觸控：用 pointerdown 先加減一次；同時攔截後續 click，避免手機點一下跳 2
 
   // 長按（保留原手感，且不限制上限）
   function setupHold(btn, delta){
     let t1=null, t2=null, started=false;
+    let lastPointerTs = 0; // 用來阻擋 pointerdown 後自動觸發的 click (避免 +2/-2)
 
     const start=()=>{
       if(started) return;
@@ -2821,7 +2819,23 @@ function buildQty(){
       if(t2){ clearInterval(t2); t2=null; }
     };
 
-    btn.addEventListener('pointerdown', (e)=>{ e.preventDefault(); start(); });
+    btn.addEventListener('pointerdown', (e)=>{
+      lastPointerTs = Date.now();
+      e.preventDefault();
+      start();
+    });
+
+    // 鍵盤（Enter/Space）會觸發 click；手機/滑鼠點擊會先 pointerdown 再 click
+    // 所以：若剛剛已 pointerdown，就吃掉 click，避免一次跳兩格
+    btn.addEventListener('click', (e)=>{
+      if(Date.now() - lastPointerTs < 700){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        return;
+      }
+      step(delta);
+    });
+
     btn.addEventListener('pointerup', stop);
     btn.addEventListener('pointercancel', stop);
     btn.addEventListener('pointerleave', stop);
