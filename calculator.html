@@ -1770,7 +1770,7 @@ th{
             <td>
               <div class="price-cell">
                 <span class="price-old" id="priceOld">$320</span>
-                <span class="price-new" id="priceNew">$299</span>
+                <span class="price-new is-regular" id="priceNew">$320</span>
               </div>
             </td>
             <td>
@@ -1865,16 +1865,17 @@ th{
             </div>
 
             <div class="coupon-box" id="couponBox">
-  <div class="coupon-title">COUPON</div>
-  <div class="coupon-controls">
-    <input id="couponInput" type="text" placeholder="輸入優惠碼（滿$1000可用）" autocomplete="off" enterkeyhint="done">
-    <button id="applyCouponBtn" class="btn btn-sketch" type="button">套用</button>
-  </div>
-  <div class="coupon-hint">
-    <span class="coupon-line">※ 商品滿 <b>$1000</b> 才能使用優惠碼（運費另計）。</span>
-    <span class="coupon-line">沒有優惠碼？ <a id="lineLink2" href="#" target="_blank" rel="noopener">加入LINE官方，得知最新優惠資訊</a></span>
+  <div class="coupon-title">LINE</div>
+  <div class="coupon-hint" style="text-align:right;">
+    <span class="coupon-line">劉嘛麻 LINE 官方上線啦！</span>
+    <span class="coupon-line">
+      <a href="https://page.line.me/217mwvhv" target="_blank" rel="noopener">
+      訂單有任何問題歡迎 line 聯絡
+      </a>
+    </span>
   </div>
 </div>
+
 
 <div class="coupon-box" id="lineInfoBox" style="display:none;">
   <div class="coupon-title">LINE</div>
@@ -2126,7 +2127,7 @@ const CAMPAIGN_CONFIG = {
   // 價格
   prices: {
     regular: 320,
-    sale:    299,
+    sale:    320,
   },
 
   // LINE
@@ -2173,11 +2174,8 @@ function getSaleDates(now = new Date()){
   const newYearStart = makeTWDate(CAMPAIGN_CONFIG.dates.newYearStart);
   return { countdownEnd, priceCutoff, newYearStart };
 }
-function getCampaignPhase(now = getNow()){
-  const { priceCutoff, newYearStart } = getSaleDates(now);
-  if(now < priceCutoff) return 'sale'; // 仍在開賣價期間
-  if(now < newYearStart) return 'line'; // LINE官方上線期（尚未開放新年優惠）
-  return 'ny'; // 新年優惠開始
+function getCampaignPhase(){ 
+  return 'line'; 
 }
 
 function getPricingContext(now = getNow()){
