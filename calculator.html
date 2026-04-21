@@ -2008,10 +2008,9 @@ readonly
       ×
     </button>
     <div class="promo-label">LIU MAMA</div>
-    <h3 id="launchTitle">家庭包 即將上市&nbsp;.ᐟ.ᐟ</h3>
+    <h3 id="launchTitle">劉嘛麻家庭包 正式上市&nbsp;.ᐟ.ᐟ</h3>
 
     <p class="promo-main">
-      聽到大家的心聲了<br>
       家庭包內含兩個底料包<br>
       人多才好吃，鍋也一樣。<br>
       但一個人吃，也可以剛剛好
@@ -2533,7 +2532,7 @@ function schedulePricingSwitch(){
   const ms = familyLaunch - now;
   if(ms > 0 && ms < 1000 * 60 * 60 * 24 * 30){
     setTimeout(()=>{
-      if (typeof window.updatePricingUI === "function") window.updatePricingUI();
+      updatePricingUI();
       calculate(true);
       updateSummary();
     }, ms + 900);
@@ -2603,7 +2602,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   }
 
   buildQty();
-  // defer copy/pricing UI to API-driven layer
+  updatePricingUI();
+  schedulePricingSwitch();
   calculate(true);
   setStep(1);
 
@@ -3862,7 +3862,7 @@ document.addEventListener('keydown',(e)=>{
           : cfgCopy('launch_modal_title_pre', EDITOR_CONFIG.copy.launchModal.title || '');
       }
 
-      if (typeof window.updatePricingUI === "function") window.updatePricingUI();
+      updatePricingUI();
       calculate(true);
       updateSummary();
     }catch(err){
@@ -3872,6 +3872,218 @@ document.addEventListener('keydown',(e)=>{
 
   document.addEventListener('DOMContentLoaded', function(){
     fetchAndApply();
+  });
+})();
+</script>
+
+
+<style id="dynamic-product-mobile-fix">
+@media (max-width:480px){
+  #dynamicProductRows .price-new,
+  #dynamicProductRows .price-old,
+  #dynamicProductRows .price-prelaunch,
+  #dynamicProductRows .price-note{
+    font-size:11px !important;
+    letter-spacing:.02em !important;
+    white-space:normal !important;
+    line-height:1.25 !important;
+  }
+  #dynamicProductRows td{ padding:10px 6px !important; }
+  #dynamicProductRows .price-cell{ gap:2px; }
+}
+.price-old{ display:none !important; }
+#dynamicProductRows .price-cell{ display:flex; flex-direction:column; align-items:center; gap:2px; }
+#dynamicProductRows .price-prelaunch{ font-size:13px; font-weight:700; color:var(--item-text); }
+#dynamicProductRows .price-note{ display:block; color:#7b8086; margin-top:2px; letter-spacing:.08em; font-size:11px; }
+#dynamicProductRows .qty-stepper.is-disabled{ opacity:.45; pointer-events:none; }
+</style>
+
+
+<script id="dynamic-product-api-override">
+(function(){
+  function ready(fn){ if(document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+  ready(function(){
+    const table = document.getElementById('productTable');
+    if(!table) return;
+
+    const state = window.__dynamicState = window.__dynamicState || { products: [], qty: {} };
+
+    function getCfg(){ return window.SITE_CFG || null; }
+    function getProducts(){ const cfg=getCfg(); return (cfg && Array.isArray(cfg.products)) ? cfg.products : []; }
+    function now(){ return (typeof getNow === 'function') ? getNow() : new Date(); }
+    function launchActive(p){
+      if(!p) return true;
+      if(!p.launch_date) return true;
+      const d = new Date(String(p.launch_date).replace(' ','T'));
+      if(isNaN(d.getTime())) return true;
+      return now() >= d;
+    }
+    function productPrice(p){ return Number(p && p.price || 0); }
+    function ensureBody(){
+      let body = document.getElementById('dynamicProductRows');
+      if(body) return body;
+      body = document.createElement('tbody');
+      body.id = 'dynamicProductRows';
+      const firstStaticRow = table.querySelector('tr:nth-child(2)');
+      while(firstStaticRow && firstStaticRow.parentNode === table){ break; }
+      table.appendChild(body);
+      return body;
+    }
+    function hideStaticRows(){
+      ['priceOld','priceNew','familyPriceLabel','familyPriceNote','qty_family','qtyFamilyMinus','qtyFamilyPlus'].forEach(id=>{ const el=document.getElementById(id); if(el) el.dataset.dynamicHidden='1'; });
+      const rows = table.querySelectorAll('tr');
+      rows.forEach((tr, idx)=>{ if(idx>0 && !tr.closest('#dynamicProductRows')) tr.style.display='none'; });
+    }
+    function setQty(id,val){ state.qty[id] = Math.max(0, parseInt(val||0,10)||0); }
+    function getQty(id){ return Math.max(0, parseInt(state.qty[id]||0,10)||0); }
+    function syncLegacyInputs(){
+      const single = state.products[0];
+      const family = state.products.find(p=>p.id==='family_pack') || state.products[1];
+      const q1 = document.getElementById('qty1'); if(q1 && single) q1.value = getQty(single.id);
+      const qf = document.getElementById('qty_family'); if(qf && family) qf.value = getQty(family.id);
+    }
+    function renderProducts(){
+      const products = getProducts().filter(p => p && p.visible !== false && p.enabled !== false);
+      if(!products.length) return;
+      state.products = products.slice().sort((a,b)=>(Number(a.sort||999)-Number(b.sort||999)));
+      state.products.forEach(p=>{ if(state.qty[p.id]==null) state.qty[p.id]=0; });
+      hideStaticRows();
+      const body = ensureBody();
+      body.innerHTML = '';
+      state.products.forEach((p, idx)=>{
+        const live = launchActive(p);
+        const qty = getQty(p.id);
+        const tr = document.createElement('tr');
+        tr.dataset.productId = p.id;
+        const currentPriceHtml = live
+          ? `<span class="price-new is-regular">$${productPrice(p)}</span>`
+          : `<span class="price-prelaunch">${p.prelaunch_price_text || ''}</span>${p.prelaunch_note ? `<small class="price-note">${p.prelaunch_note}</small>` : ''}`;
+        tr.innerHTML = `
+          <td>${p.name || ''}<br><small>(${p.sub_label || ''})</small></td>
+          <td><div class="price-cell">${currentPriceHtml}</div></td>
+          <td>
+            <div class="qty-stepper ${(!live && p.prelaunch_orderable===false)?'is-disabled':''}" role="group" aria-label="${p.name || '數量'}">
+              <button type="button" class="qty-btn" data-role="minus">−</button>
+              <input class="qty-input" type="text" inputmode="numeric" pattern="[0-9]*" value="${qty}" ${(!live && p.prelaunch_orderable===false)?'readonly':''}>
+              <button type="button" class="qty-btn" data-role="plus">＋</button>
+            </div>
+          </td>`;
+        const minus = tr.querySelector('[data-role="minus"]');
+        const plus = tr.querySelector('[data-role="plus"]');
+        const input = tr.querySelector('.qty-input');
+        const lock = !live && p.prelaunch_orderable===false;
+        function apply(v){ setQty(p.id,v); input.value = getQty(p.id); syncLegacyInputs(); if(window.calculate) window.calculate(false); if(window.updateSummary) window.updateSummary(); }
+        if(lock){ minus.disabled=true; plus.disabled=true; input.readOnly=true; apply(0); }
+        minus.addEventListener('click', ()=> apply(getQty(p.id)-1));
+        plus.addEventListener('click', ()=> apply(getQty(p.id)+1));
+        input.addEventListener('input', ()=> apply((input.value||'').replace(/\D/g,'')));
+        body.appendChild(tr);
+      });
+      syncLegacyInputs();
+    }
+
+    function selectedShipping(){
+      const method = document.querySelector('input[name="shipMethod"]:checked');
+      if(!method) return null;
+      const cfg = getCfg();
+      if(cfg && Array.isArray(cfg.shipping)) return cfg.shipping.find(s=>s.id===method.value) || null;
+      return null;
+    }
+
+    const originalApplyCampaignAndProducts = window.applyCampaignAndProducts;
+    window.applyCampaignAndProducts = function(){
+      if(typeof originalApplyCampaignAndProducts === 'function') originalApplyCampaignAndProducts();
+      renderProducts();
+    };
+
+    const originalCalculate = window.calculate;
+    window.calculate = function(isInit){
+      if(!state.products.length) return originalCalculate ? originalCalculate(isInit) : undefined;
+      const shipping = selectedShipping();
+      const ship = Number(shipping && shipping.fee || 0);
+      let subtotal = 0;
+      state.products.forEach(p=>{ subtotal += getQty(p.id) * productPrice(p); });
+      const single = state.products[0];
+      const { unitPrice } = (typeof getPricingContext === 'function') ? getPricingContext(now()) : {unitPrice: productPrice(single)};
+      const discountObj = (typeof computeDiscount === 'function') ? computeDiscount(getQty(single && single.id), unitPrice) : {discount:0};
+      const discount = Number(discountObj.discount || 0);
+      const total = Math.max(0, subtotal - discount + ship);
+      if(typeof animateTotal === 'function') animateTotal(total, !!isInit);
+      if(window.updateSummary) window.updateSummary();
+    };
+
+    window.updateSummary = function(){
+      if(!state.products.length) return;
+      const shipping = selectedShipping();
+      const shipFee = Number(shipping && shipping.fee || 0);
+      const shipLabel = shipping && shipping.name || '未選擇';
+      let subtotal = 0;
+      const parts = [];
+      state.products.forEach(p=>{
+        const q = getQty(p.id);
+        subtotal += q * productPrice(p);
+        if(q>0) parts.push(`${p.name} × ${q}`);
+      });
+      const single = state.products[0];
+      const { unitPrice } = (typeof getPricingContext === 'function') ? getPricingContext(now()) : {unitPrice: productPrice(single)};
+      const dis = (typeof computeDiscount === 'function') ? computeDiscount(getQty(single && single.id), unitPrice) : {discount:0,label:''};
+      const discount = Number(dis.discount || 0);
+      const total = Math.max(0, subtotal - discount + shipFee);
+      const name = document.getElementById('customerName')?.value.trim() || '';
+      const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
+      set('summaryQty', parts.length ? parts.join(' + ') : '0 份');
+      set('summaryShip', shipLabel);
+      set('summarySubtotal', '$' + subtotal);
+      set('summaryShipFee', '$' + shipFee);
+      set('summaryTotal', '$' + total);
+      set('summaryName', name || '—');
+      const row=document.getElementById('summaryDiscountRow'); const val=document.getElementById('summaryDiscount'); const lab=document.getElementById('summaryCouponLabel');
+      if(row && val && lab){ if(discount>0){ row.style.display=''; val.textContent='-$'+discount; lab.textContent=dis.label || '優惠'; } else { row.style.display='none'; } }
+      if(window.updateCheckoutProductCard) window.updateCheckoutProductCard();
+    };
+
+    window.updateCheckoutProductCard = function(){
+      const img = document.getElementById('checkoutProductImage');
+      if(!img || !state.products.length) return;
+      const chosen = state.products.find(p=>getQty(p.id)>0 && p.image) || state.products.find(p=>p.image);
+      if(chosen){ img.src = chosen.image; img.alt = `${chosen.name || '商品'}商品圖`; }
+    };
+
+    window.goToForm = function(){
+      const name  = document.getElementById('customerName')?.value.trim() || '';
+      const phone = document.getElementById('customerPhone')?.value.trim() || '';
+      const email = document.getElementById('customerEmail')?.value.trim() || '';
+      const method = document.querySelector('input[name="shipMethod"]:checked');
+      if(!method){ alert('請選擇運送方式'); return; }
+      const shipping = selectedShipping() || {name:'', fee:0};
+      const familyLive = (typeof isFamilyLaunchActive === 'function') ? isFamilyLaunchActive(now()) : true;
+      const formConfig = familyLive ? EDITOR_CONFIG.forms.after : EDITOR_CONFIG.forms.before;
+      let subtotal = 0;
+      state.products.forEach(p=>{ subtotal += getQty(p.id) * productPrice(p); });
+      const single = state.products[0];
+      const { unitPrice } = (typeof getPricingContext === 'function') ? getPricingContext(now()) : {unitPrice: productPrice(single)};
+      const dis = (typeof computeDiscount === 'function') ? computeDiscount(getQty(single && single.id), unitPrice) : {discount:0};
+      const total = Math.max(0, subtotal - Number(dis.discount||0) + Number(shipping.fee||0));
+      const payload = {
+        [formConfig.fields.name]: name,
+        [formConfig.fields.phone]: phone,
+        [formConfig.fields.email]: email,
+        [formConfig.fields.shipMethod]: shipping.name,
+        [formConfig.fields.total]: total
+      };
+      state.products.forEach((p, idx)=>{
+        const q = getQty(p.id);
+        if(p.form_field){ payload[p.form_field] = q; }
+        else if(idx===0 && formConfig.fields.qtySingle){ payload[formConfig.fields.qtySingle] = q; }
+        else if(p.id==='family_pack' && familyLive && formConfig.fields.qtyFamily){ payload[formConfig.fields.qtyFamily] = q; }
+      });
+      const query = Object.entries(payload).map(([k,v])=>`&${k}=${encodeURIComponent(v)}`).join('');
+      window.open(`${formConfig.base}${query}`,'_blank');
+    };
+
+    const origFetch = window.fetchAndApply;
+    // If original fetch exists only inside closure, we can't access; call render after short delay too.
+    setTimeout(function(){ try{ renderProducts(); if(window.updatePricingUI) window.updatePricingUI(); if(window.calculate) window.calculate(true); }catch(e){ console.error(e);} }, 1200);
   });
 })();
 </script>
