@@ -2030,7 +2030,7 @@ readonly
    ================================================== */
 
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbwQGqW3i9xr5yaulWWBn9rWcTWFxC1FF93_Q_e6chZasdzZZJZKJByMtV_StZ0XwJbi/exec?action=config';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzEofWroYk-ReTKyLlipvwuwHQ05xJBok0jz3OfjTDHX0ItwnFOxZGvHJlfmBBZnIM/exec?action=config';
 
 function deepMerge_(target, source){
   if(!source || typeof source !== 'object') return target;
@@ -2101,28 +2101,78 @@ function applyRemoteSiteConfig_(remote){
 
   if(remote.copy){
     nextEditor.copy = nextEditor.copy || {};
+
     if(remote.copy.brand_tagline) nextEditor.copy.brandTagline = remote.copy.brand_tagline;
+    if(remote.copy.topbar_brand) nextEditor.copy.topbarBrand = remote.copy.topbar_brand;
+    if(remote.copy.topbar_link_text) nextEditor.copy.topbarLinkText = remote.copy.topbar_link_text;
+    if(remote.copy.hero_eyebrow) nextEditor.copy.heroEyebrow = remote.copy.hero_eyebrow;
+    if(remote.copy.hero_title) nextEditor.copy.heroTitle = remote.copy.hero_title;
+    if(remote.copy.hero_sub) nextEditor.copy.heroSub = remote.copy.hero_sub;
 
-    if(remote.copy.promo_inline){
-      nextEditor.copy.promo = nextEditor.copy.promo || {};
-      nextEditor.copy.promo.before = nextEditor.copy.promo.before || {};
-      nextEditor.copy.promo.after  = nextEditor.copy.promo.after || {};
-      nextEditor.copy.promo.before.customText = remote.copy.promo_inline;
-      nextEditor.copy.promo.after.customText  = remote.copy.promo_inline;
+    nextEditor.copy.promo = nextEditor.copy.promo || {};
+    nextEditor.copy.promo.before = nextEditor.copy.promo.before || {};
+    nextEditor.copy.promo.after  = nextEditor.copy.promo.after || {};
+    if(remote.copy.promo_inline_pre) nextEditor.copy.promo.before.customText = remote.copy.promo_inline_pre;
+    if(remote.copy.promo_inline_post) nextEditor.copy.promo.after.customText  = remote.copy.promo_inline_post;
+
+    nextEditor.copy.launchModal = nextEditor.copy.launchModal || {};
+    if(remote.copy.launch_modal_title_pre) nextEditor.copy.launchModal.titleBefore = remote.copy.launch_modal_title_pre;
+    if(remote.copy.launch_modal_title_post) nextEditor.copy.launchModal.titleAfter = remote.copy.launch_modal_title_post;
+    if(remote.copy.launch_modal_text_pre){
+      const lines = String(remote.copy.launch_modal_text_pre).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+      if(lines.length) nextEditor.copy.launchModal.beforeLines = lines.slice();
+    }
+    if(remote.copy.launch_modal_text_post){
+      const lines = String(remote.copy.launch_modal_text_post).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+      if(lines.length) nextEditor.copy.launchModal.afterLines = lines.slice();
     }
 
-    if(remote.copy.launch_modal_title){
-      nextEditor.copy.launchModal = nextEditor.copy.launchModal || {};
-      nextEditor.copy.launchModal.title = remote.copy.launch_modal_title;
-    }
-    if(remote.copy.launch_modal_body){
-      const lines = String(remote.copy.launch_modal_body).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
-      if(lines.length){
-        nextEditor.copy.launchModal = nextEditor.copy.launchModal || {};
-        nextEditor.copy.launchModal.beforeLines = lines.slice();
-        nextEditor.copy.launchModal.afterLines  = lines.slice();
-      }
-    }
+    nextEditor.copy.summary = nextEditor.copy.summary || {};
+    if(remote.copy.summary_qty_label) nextEditor.copy.summary.qtyLabel = remote.copy.summary_qty_label;
+    if(remote.copy.summary_name_label) nextEditor.copy.summary.nameLabel = remote.copy.summary_name_label;
+    if(remote.copy.summary_note) nextEditor.copy.summary.note = remote.copy.summary_note;
+
+    nextEditor.copy.fields = nextEditor.copy.fields || {};
+    if(remote.copy.customer_name_label) nextEditor.copy.fields.nameLabel = remote.copy.customer_name_label;
+    if(remote.copy.customer_name_placeholder) nextEditor.copy.fields.namePlaceholder = remote.copy.customer_name_placeholder;
+    if(remote.copy.customer_phone_label) nextEditor.copy.fields.phoneLabel = remote.copy.customer_phone_label;
+    if(remote.copy.customer_phone_placeholder) nextEditor.copy.fields.phonePlaceholder = remote.copy.customer_phone_placeholder;
+    if(remote.copy.customer_email_label) nextEditor.copy.fields.emailLabel = remote.copy.customer_email_label;
+    if(remote.copy.customer_email_placeholder) nextEditor.copy.fields.emailPlaceholder = remote.copy.customer_email_placeholder;
+
+    nextEditor.copy.buttons = nextEditor.copy.buttons || {};
+    if(remote.copy.step1_next_button) nextEditor.copy.buttons.step1Next = remote.copy.step1_next_button;
+    if(remote.copy.copy_account_button) nextEditor.copy.buttons.copyAccount = remote.copy.copy_account_button;
+    if(remote.copy.screenshot_button) nextEditor.copy.buttons.screenshot = remote.copy.screenshot_button;
+    if(remote.copy.back_to_step1_button) nextEditor.copy.buttons.backToStep1 = remote.copy.back_to_step1_button;
+    if(remote.copy.go_form_button) nextEditor.copy.buttons.goForm = remote.copy.go_form_button;
+    if(remote.copy.coupon_apply_button) nextEditor.copy.buttons.applyCoupon = remote.copy.coupon_apply_button;
+
+    nextEditor.copy.boxes = nextEditor.copy.boxes || {};
+    if(remote.copy.line_box_title) nextEditor.copy.boxes.lineTitle = remote.copy.line_box_title;
+    if(remote.copy.line_box_line1) nextEditor.copy.boxes.lineLine1 = remote.copy.line_box_line1;
+    if(remote.copy.line_box_line2) nextEditor.copy.boxes.lineLine2 = remote.copy.line_box_line2;
+    if(remote.copy.coupon_box_title) nextEditor.copy.boxes.couponTitle = remote.copy.coupon_box_title;
+    if(remote.copy.coupon_input_placeholder) nextEditor.copy.boxes.couponPlaceholder = remote.copy.coupon_input_placeholder;
+    if(remote.copy.coupon_invalid_text) nextEditor.copy.boxes.couponInvalid = remote.copy.coupon_invalid_text;
+    if(remote.copy.coupon_success_text) nextEditor.copy.boxes.couponSuccess = remote.copy.coupon_success_text;
+
+    if(remote.copy.page_title) nextEditor.pageTitle = remote.copy.page_title;
+    if(remote.copy.intro_text) nextEditor.introText = remote.copy.intro_text;
+    if(remote.copy.footer_note) nextEditor.footerNote = remote.copy.footer_note;
+    if(remote.copy.pickup_note) nextEditor.pickupNote = remote.copy.pickup_note;
+    if(remote.copy.total_note) nextEditor.totalNote = remote.copy.total_note;
+    if(remote.copy.form_reminder) nextEditor.formReminder = remote.copy.form_reminder;
+    if(remote.copy.section_customer_info) nextEditor.sectionCustomerInfo = remote.copy.section_customer_info;
+    if(remote.copy.section_product_info) nextEditor.sectionProductInfo = remote.copy.section_product_info;
+    if(remote.copy.section_step2_title) nextEditor.sectionStep2Title = remote.copy.section_step2_title;
+    if(remote.copy.account_box_title) nextEditor.accountBoxTitle = remote.copy.account_box_title;
+    if(remote.copy.account_box_note) nextEditor.accountBoxNote = remote.copy.account_box_note;
+    if(remote.copy.step2_bottom_note) nextEditor.step2BottomNote = remote.copy.step2_bottom_note;
+    if(remote.copy.summary_subtotal_label) nextEditor.summarySubtotalLabel = remote.copy.summary_subtotal_label;
+    if(remote.copy.summary_shipping_label) nextEditor.summaryShippingLabel = remote.copy.summary_shipping_label;
+    if(remote.copy.summary_discount_label) nextEditor.summaryDiscountLabel = remote.copy.summary_discount_label;
+    if(remote.copy.summary_total_label) nextEditor.summaryTotalLabel = remote.copy.summary_total_label;
   }
 
   if(remote.campaigns){
@@ -2132,6 +2182,12 @@ function applyRemoteSiteConfig_(remote){
     nextEditor.line = nextEditor.line || {};
     if(remote.campaigns.line_url) nextEditor.line.url = remote.campaigns.line_url;
 
+    nextEditor.campaignToggles = {
+      lineEnabled: remote.campaigns.line_enabled !== false,
+      couponEnabled: remote.campaigns.coupon_enabled !== false,
+      couponInputEnabled: remote.campaigns.coupon_input_enabled === true
+    };
+
     if(remote.campaigns.bank_account){
       nextEditor.bank = nextEditor.bank || {};
       nextEditor.bank.code = remote.campaigns.bank_code || nextEditor.bank.code || '824';
@@ -2139,7 +2195,6 @@ function applyRemoteSiteConfig_(remote){
       nextEditor.bank.account = remote.campaigns.bank_account;
     }
 
-    nextEditor.copy = nextEditor.copy || {};
     nextEditor.copy.familyCard = nextEditor.copy.familyCard || {};
     if(remote.campaigns.family_price_label_before_launch){
       nextEditor.copy.familyCard.beforePriceLabel = remote.campaigns.family_price_label_before_launch;
@@ -2153,6 +2208,7 @@ function applyRemoteSiteConfig_(remote){
     const single = remote.products.find(p => p.id === 'mala_base') || remote.products[0];
     const family = remote.products.find(p => p.id === 'family_pack');
 
+    nextEditor.productsFromApi = remote.products.slice();
     nextEditor.prices = nextEditor.prices || {};
     nextEditor.images = nextEditor.images || {};
     nextEditor.copy = nextEditor.copy || {};
@@ -2163,6 +2219,9 @@ function applyRemoteSiteConfig_(remote){
         nextEditor.images.hero = single.image;
         nextEditor.images.checkoutSingle = single.image;
       }
+      if(single.name) nextEditor.singleProductName = single.name;
+      if(single.sub_label) nextEditor.singleProductSubLabel = single.sub_label;
+      if(single.tag) nextEditor.singleProductTag = single.tag;
     }
 
     if(family){
@@ -2170,14 +2229,9 @@ function applyRemoteSiteConfig_(remote){
       if(family.image) nextEditor.images.checkoutFamily = family.image;
       nextEditor.copy.familyCard = nextEditor.copy.familyCard || {};
       if(family.sub_label) nextEditor.copy.familyCard.beforeSubLabel = nextEditor.copy.familyCard.afterSubLabel = `(${family.sub_label})`;
+      if(family.prelaunch_price_text) nextEditor.copy.familyCard.beforePriceLabel = family.prelaunch_price_text;
+      if(family.prelaunch_note) nextEditor.copy.familyCard.beforePriceNote = family.prelaunch_note;
       nextEditor.copy.familyCard.afterPriceLabel = '$' + (Number(family.price) || nextEditor.prices.family);
-
-      if(remote.campaigns && remote.campaigns.family_price_label_before_launch){
-        nextEditor.copy.familyCard.beforePriceLabel = remote.campaigns.family_price_label_before_launch;
-      }
-      if(remote.campaigns && remote.campaigns.family_price_note_before_launch){
-        nextEditor.copy.familyCard.beforePriceNote = remote.campaigns.family_price_note_before_launch;
-      }
     }
   }
 
@@ -2204,12 +2258,123 @@ function applyRemoteSiteConfig_(remote){
   window.__REMOTE_SITE_CONFIG__ = remote;
 }
 
+function applyStaticCopyToDom_(){
+  const copy = EDITOR_CONFIG.copy || {};
+  const fields = copy.fields || {};
+  const buttons = copy.buttons || {};
+  const boxes = copy.boxes || {};
+
+  if(EDITOR_CONFIG.pageTitle) document.title = EDITOR_CONFIG.pageTitle;
+  const pageTitle = document.getElementById('pageTitle');
+  if(pageTitle && EDITOR_CONFIG.pageTitle){ pageTitle.textContent = EDITOR_CONFIG.pageTitle; }
+
+  const introText = document.getElementById('intro-text');
+  if(introText && EDITOR_CONFIG.introText){ introText.textContent = EDITOR_CONFIG.introText; }
+  const heroEyebrow = document.querySelector('.hero-eyebrow');
+  if(heroEyebrow && copy.heroEyebrow){ heroEyebrow.textContent = copy.heroEyebrow; }
+  const heroTitle = document.querySelector('.hero-title');
+  if(heroTitle && copy.heroTitle){ heroTitle.textContent = copy.heroTitle; }
+  const heroSub = document.querySelector('.hero-sub');
+  if(heroSub && copy.heroSub){ heroSub.innerHTML = String(copy.heroSub).replace(/\n/g,'<br>'); }
+  const topbarName = document.querySelector('.topbar-name');
+  if(topbarName && copy.topbarBrand){ topbarName.textContent = copy.topbarBrand; }
+  const topbarLink = document.querySelector('.topbar-link');
+  if(topbarLink && copy.topbarLinkText){ topbarLink.textContent = copy.topbarLinkText; }
+
+  const brandTag = document.querySelector('.brand-tagline');
+  if(brandTag && copy.brandTagline){ brandTag.textContent = copy.brandTagline; }
+  const sectionTitles = document.querySelectorAll('.section-title');
+  if(sectionTitles[0] && EDITOR_CONFIG.sectionCustomerInfo) sectionTitles[0].textContent = EDITOR_CONFIG.sectionCustomerInfo;
+  if(sectionTitles[1] && EDITOR_CONFIG.sectionProductInfo) sectionTitles[1].textContent = EDITOR_CONFIG.sectionProductInfo;
+  if(sectionTitles[2] && EDITOR_CONFIG.sectionStep2Title) sectionTitles[2].textContent = EDITOR_CONFIG.sectionStep2Title;
+
+  const labels = {
+    customerName: fields.nameLabel,
+    customerPhone: fields.phoneLabel,
+    customerEmail: fields.emailLabel
+  };
+  Object.keys(labels).forEach(id => {
+    const input = document.getElementById(id);
+    const label = input ? document.querySelector(`label[for="${id}"]`) : null;
+    if(label && labels[id]) label.textContent = labels[id];
+  });
+  const placeholders = {
+    customerName: fields.namePlaceholder,
+    customerPhone: fields.phonePlaceholder,
+    customerEmail: fields.emailPlaceholder
+  };
+  Object.keys(placeholders).forEach(id => {
+    const input = document.getElementById(id);
+    if(input && placeholders[id]) input.placeholder = placeholders[id];
+  });
+
+  const totalNote = document.querySelector('#total + .total-note');
+  if(totalNote && EDITOR_CONFIG.totalNote) totalNote.textContent = EDITOR_CONFIG.totalNote;
+  const formReminder = document.getElementById('formReminder');
+  if(formReminder && EDITOR_CONFIG.formReminder) formReminder.textContent = EDITOR_CONFIG.formReminder;
+  const footerNote = document.querySelector('.footer-note');
+  if(footerNote && EDITOR_CONFIG.footerNote) footerNote.textContent = EDITOR_CONFIG.footerNote;
+
+  const summaryRows = document.querySelectorAll('.checkout-summary .summary-row span:first-child');
+  if(summaryRows[0] && EDITOR_CONFIG.summarySubtotalLabel) summaryRows[0].textContent = EDITOR_CONFIG.summarySubtotalLabel;
+  if(summaryRows[1] && EDITOR_CONFIG.summaryShippingLabel) summaryRows[1].childNodes[0].nodeValue = EDITOR_CONFIG.summaryShippingLabel + '（';
+  const discountLabelWrap = document.querySelector('#summaryDiscountRow span:first-child');
+  if(discountLabelWrap && EDITOR_CONFIG.summaryDiscountLabel) discountLabelWrap.childNodes[0].nodeValue = EDITOR_CONFIG.summaryDiscountLabel + '（';
+  const summaryTotalLabel = document.querySelector('.summary-total span:first-child');
+  if(summaryTotalLabel && EDITOR_CONFIG.summaryTotalLabel) summaryTotalLabel.textContent = EDITOR_CONFIG.summaryTotalLabel;
+
+  const summarySmall = document.querySelector('.summary-small');
+  if(summarySmall && copy.summary){
+    const qtyLab = copy.summary.qtyLabel || '訂購份數';
+    const nameLab = copy.summary.nameLabel || '訂購人';
+    summarySmall.innerHTML = `${qtyLab}：<span id="summaryQty">0 份</span> · ${nameLab}：<span id="summaryName">—</span>`;
+  }
+  const summaryNote = document.querySelector('.summary-note');
+  if(summaryNote && copy.summary && copy.summary.note){ summaryNote.innerHTML = String(copy.summary.note).replace(/\n/g,'<br>'); }
+
+  const accountTitle = document.querySelector('.account-box h3');
+  if(accountTitle && EDITOR_CONFIG.accountBoxTitle) accountTitle.textContent = EDITOR_CONFIG.accountBoxTitle;
+  const accountNote = document.querySelector('.account-box p:last-of-type');
+  if(accountNote && EDITOR_CONFIG.accountBoxNote) accountNote.textContent = EDITOR_CONFIG.accountBoxNote;
+  const copyBtn = document.getElementById('copyBtn');
+  if(copyBtn && buttons.copyAccount) copyBtn.textContent = buttons.copyAccount;
+  const ssBtn = document.getElementById('screenshotBtn');
+  if(ssBtn && buttons.screenshot) ssBtn.textContent = buttons.screenshot;
+  const backBtn = document.getElementById('backToStep1Btn');
+  if(backBtn && buttons.backToStep1) backBtn.textContent = buttons.backToStep1;
+  const formBtn = document.getElementById('formBtn');
+  if(formBtn && buttons.goForm) formBtn.textContent = buttons.goForm;
+  const nextBtn = document.getElementById('toStep2Btn');
+  if(nextBtn && buttons.step1Next) nextBtn.textContent = buttons.step1Next;
+
+  const step2Bottom = document.querySelector('#step2Panel .total-note');
+  if(step2Bottom && EDITOR_CONFIG.step2BottomNote) step2Bottom.textContent = EDITOR_CONFIG.step2BottomNote;
+
+  const couponTitle = document.getElementById('couponBoxTitle');
+  if(couponTitle && boxes.couponTitle) couponTitle.textContent = boxes.couponTitle;
+  const couponInput = document.getElementById('couponInput');
+  if(couponInput && boxes.couponPlaceholder) couponInput.placeholder = boxes.couponPlaceholder;
+  const applyCouponBtn = document.getElementById('applyCouponBtn');
+  if(applyCouponBtn && buttons.applyCoupon) applyCouponBtn.textContent = buttons.applyCoupon;
+
+  const lineBoxTitle = document.getElementById('lineBoxTitle');
+  if(lineBoxTitle && boxes.lineTitle) lineBoxTitle.textContent = boxes.lineTitle;
+  const lineBoxLine1 = document.getElementById('lineBoxLine1');
+  if(lineBoxLine1 && boxes.lineLine1) lineBoxLine1.textContent = boxes.lineLine1;
+  const lineLinkInfo = document.getElementById('lineLinkInfo');
+  if(lineLinkInfo && boxes.lineLine2) lineLinkInfo.textContent = boxes.lineLine2;
+
+  const pickupNote = document.getElementById('pickupNote');
+  if(pickupNote && EDITOR_CONFIG.pickupNote) pickupNote.innerHTML = String(EDITOR_CONFIG.pickupNote).replace(/\n/g,'<br>');
+}
+
 async function loadRemoteSiteConfig_(){
   try{
     const res = await fetch(API_URL, { method:'GET', mode:'cors', cache:'no-store' });
     if(!res.ok) throw new Error('HTTP ' + res.status);
     const remote = await res.json();
     applyRemoteSiteConfig_(remote);
+    if(document.readyState !== 'loading') applyStaticCopyToDom_();
   }catch(err){
     console.warn('讀取試算表設定失敗，改用頁面內建設定。', err);
   }
@@ -2660,8 +2825,11 @@ function setLineLinks(){
 function updateCouponVisibility(){
   const couponBox = document.getElementById('couponBox');
   const lineInfoBox = document.getElementById('lineInfoBox');
-  if(couponBox) couponBox.style.display = '';
-  if(lineInfoBox) lineInfoBox.style.display = 'none';
+  const toggles = EDITOR_CONFIG.campaignToggles || {};
+  const showCoupon = !!toggles.couponInputEnabled;
+  const showLine = toggles.lineEnabled !== false;
+  if(couponBox) couponBox.style.display = showCoupon ? '' : 'none';
+  if(lineInfoBox) lineInfoBox.style.display = showLine ? '' : 'none';
 }
 
 function getModalLines(phase, launchDate){
@@ -2730,7 +2898,9 @@ function updatePricingUI(){
   });
 
   if(promo){
-    if(familyLive){
+    if(promoCopy.customText){
+      promo.innerHTML = promoCopy.customText;
+    }else if(familyLive){
       promo.innerHTML = `
         <span class="promo-mark">${promoCopy.badge || '⛧'}</span>
         ${promoCopy.title}
@@ -2749,7 +2919,7 @@ function updatePricingUI(){
   }
 
   if(launchTitle){
-    launchTitle.textContent = EDITOR_CONFIG.copy.launchModal.title;
+    launchTitle.textContent = familyLive ? (EDITOR_CONFIG.copy.launchModal.titleAfter || EDITOR_CONFIG.copy.launchModal.title || '') : (EDITOR_CONFIG.copy.launchModal.titleBefore || EDITOR_CONFIG.copy.launchModal.title || '');
   }
 
   if(launchMain){
@@ -2814,9 +2984,9 @@ function applyCoupon(){
   input.value = code;
 
   if((res.discount || 0) <= 0){
-    showToast(`已套用優惠碼：${code}（本次無折扣）`);
+    showToast((EDITOR_CONFIG.copy.boxes && EDITOR_CONFIG.copy.boxes.couponSuccess) ? `${EDITOR_CONFIG.copy.boxes.couponSuccess}：${code}（本次無折扣）` : `已套用優惠碼：${code}（本次無折扣）`);
   }else{
-    showToast(`已套用優惠碼：${code}`);
+    showToast((EDITOR_CONFIG.copy.boxes && EDITOR_CONFIG.copy.boxes.couponSuccess) ? `${EDITOR_CONFIG.copy.boxes.couponSuccess}：${code}` : `已套用優惠碼：${code}`);
   }
   calculate(false);
   updateSummary();
@@ -2826,6 +2996,7 @@ function applyCoupon(){
 /* ===== 初始化 ===== */
 window.addEventListener('DOMContentLoaded', async ()=>{
   await loadRemoteSiteConfig_();
+  applyStaticCopyToDom_();
 
   const params = new URLSearchParams(window.location.search);
   const skipIntro = params.get('skipIntro') === '1';
