@@ -854,9 +854,7 @@ th{
   line-height:1.15;
 }
 .price-old{
-  color:#7b8086;
-  text-decoration:line-through;
-  text-decoration-thickness:1.4px;
+  display:none !important;
 }
 .price-new{
   margin-top:3px;
@@ -1728,7 +1726,7 @@ th{
           <span class="promo-mark">⛧</span>
           5/1 家庭包正式上市
           <span class="promo-sep">·</span>
-          家庭包內含兩個底料包
+          精簡環保包裝
         </p>
       </div>
 
@@ -1836,8 +1834,8 @@ value="0"
 
 <div class="price-cell">
 
-<span class="price-new is-regular" id="familyPriceLabel">COMING SOON</span>
-<small id="familyPriceNote" style="display:block;color:#7b8086;margin-top:4px;letter-spacing:.08em;">5/1 正式上線</small>
+<span class="price-new is-regular prelaunch-price" id="familyPriceLabel">COMING SOON</span>
+<small id="familyPriceNote" class="prelaunch-note" style="display:block;color:#7b8086;margin-top:4px;letter-spacing:.08em;">5/1 正式上線</small>
 
 </div>
 
@@ -2008,9 +2006,10 @@ readonly
       ×
     </button>
     <div class="promo-label">LIU MAMA</div>
-    <h3 id="launchTitle">劉嘛麻家庭包 正式上市&nbsp;.ᐟ.ᐟ</h3>
+    <h3 id="launchTitle">家庭包coming soon&nbsp;.ᐟ.ᐟ</h3>
 
     <p class="promo-main">
+      聽到大家的心聲了<br>
       家庭包內含兩個底料包<br>
       人多才好吃，鍋也一樣。<br>
       但一個人吃，也可以剛剛好
@@ -2277,6 +2276,8 @@ const EDITOR_CONFIG = {
     },
     launchModal: {
       title: '家庭包coming soon .ᐟ.ᐟ',
+      beforeTitle: '家庭包coming soon .ᐟ.ᐟ',
+      afterTitle: '劉嘛麻家庭包 正式上市 .ᐟ.ᐟ',
       beforeLines: [
        '聽到大家的心聲了',
        '家庭包內含兩個底料包',
@@ -2516,7 +2517,9 @@ function updatePricingUI(){
   }
 
   if(launchTitle){
-    launchTitle.textContent = EDITOR_CONFIG.copy.launchModal.title;
+    launchTitle.textContent = familyLive
+      ? (EDITOR_CONFIG.copy.launchModal.afterTitle || EDITOR_CONFIG.copy.launchModal.title)
+      : (EDITOR_CONFIG.copy.launchModal.beforeTitle || '家庭包coming soon .ᐟ.ᐟ');
   }
 
   if(launchMain){
@@ -2602,7 +2605,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   }
 
   buildQty();
-  updatePricingUI();
+  if (window.updatePricingUI) window.updatePricingUI();
   schedulePricingSwitch();
   calculate(true);
   setStep(1);
@@ -3432,7 +3435,7 @@ document.addEventListener('keydown',(e)=>{
     const single = getProduct('mala_base');
     const family = getProduct('family_pack');
     const now = getNow();
-    const familyLive = isFamilyLaunchActive(now);
+    const familyLive = (typeof window.familyLive === 'function') ? window.familyLive() : isFamilyLaunchActive(now);
 
     // promo text
     const promo = document.getElementById('promoInline');
@@ -3857,9 +3860,11 @@ document.addEventListener('keydown',(e)=>{
       // synchronize original config object where harmless
       if(EDITOR_CONFIG?.line) EDITOR_CONFIG.line.url = cfgCampaign('line_url', EDITOR_CONFIG.line.url || '');
       if(EDITOR_CONFIG?.copy?.launchModal){
-        EDITOR_CONFIG.copy.launchModal.title = isFamilyLaunchActive(getNow())
-          ? cfgCopy('launch_modal_title_post', EDITOR_CONFIG.copy.launchModal.title || '')
-          : cfgCopy('launch_modal_title_pre', EDITOR_CONFIG.copy.launchModal.title || '');
+        EDITOR_CONFIG.copy.launchModal.beforeTitle = cfgCopy('launch_modal_title_pre', EDITOR_CONFIG.copy.launchModal.beforeTitle || '家庭包coming soon .ᐟ.ᐟ');
+        EDITOR_CONFIG.copy.launchModal.afterTitle = cfgCopy('launch_modal_title_post', EDITOR_CONFIG.copy.launchModal.afterTitle || '劉嘛麻家庭包 正式上市 .ᐟ.ᐟ');
+        EDITOR_CONFIG.copy.launchModal.title = familyLive()
+          ? EDITOR_CONFIG.copy.launchModal.afterTitle
+          : EDITOR_CONFIG.copy.launchModal.beforeTitle;
       }
 
       updatePricingUI();
@@ -3877,213 +3882,346 @@ document.addEventListener('keydown',(e)=>{
 </script>
 
 
-<style id="dynamic-product-mobile-fix">
-@media (max-width:480px){
-  #dynamicProductRows .price-new,
-  #dynamicProductRows .price-old,
-  #dynamicProductRows .price-prelaunch,
-  #dynamicProductRows .price-note{
-    font-size:11px !important;
-    letter-spacing:.02em !important;
-    white-space:normal !important;
-    line-height:1.25 !important;
-  }
-  #dynamicProductRows td{ padding:10px 6px !important; }
-  #dynamicProductRows .price-cell{ gap:2px; }
-}
-.price-old{ display:none !important; }
-#dynamicProductRows .price-cell{ display:flex; flex-direction:column; align-items:center; gap:2px; }
-#dynamicProductRows .price-prelaunch{ font-size:13px; font-weight:700; color:var(--item-text); }
-#dynamicProductRows .price-note{ display:block; color:#7b8086; margin-top:2px; letter-spacing:.08em; font-size:11px; }
-#dynamicProductRows .qty-stepper.is-disabled{ opacity:.45; pointer-events:none; }
-</style>
-
-
-<script id="dynamic-product-api-override">
+<script>
+/* ===== Dynamic products + safer fallback overrides ===== */
 (function(){
-  function ready(fn){ if(document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
-  ready(function(){
+  const API_URL = 'https://script.google.com/macros/s/AKfycbzEofWroYk-ReTKyLlipvwuwHQ05xJBok0jz3OfjTDHX0ItwnFOxZGvHJlfmBBZnIM/exec?action=config';
+  let CFG = null;
+  let PRODUCT_QTYS = {};
+  let SELECTED_SHIP = '';
+
+  function nowTs(){ return new Date(); }
+  function toDateSafe(s){
+    if(!s) return null;
+    const d = new Date(String(s).replace(' ', 'T'));
+    return isNaN(d.getTime()) ? null : d;
+  }
+  function nl2html(s){ return String(s||'').replace(/
+/g,'<br>'); }
+  function text(el, value){ if(el && value != null) el.textContent = value; }
+  function html(el, value){ if(el && value != null) el.innerHTML = value; }
+  function cfgCopy(k, fb=''){ return CFG?.copy?.[k] ?? fb; }
+  function cfgCampaign(k, fb=''){ return (CFG?.campaigns?.[k] ?? fb); }
+  function getProducts(){ return Array.isArray(CFG?.products) ? CFG.products.slice() : []; }
+  function getShipping(){ return Array.isArray(CFG?.shipping) ? CFG.shipping.slice() : []; }
+  function normalizeCoupon(code){ return String(code||'').trim().toUpperCase(); }
+  function couponMap(){
+    const map={};
+    (CFG?.coupons||[]).forEach(c=>{ if(c?.code) map[String(c.code).trim().toUpperCase()] = c; });
+    return map;
+  }
+  function familyLive(){
+    if(!cfgCampaign('family_launch_enabled', true)) return false;
+    const d = toDateSafe(cfgCampaign('family_launch_date',''));
+    return d ? nowTs() >= d : false;
+  }
+  function productIsOrderable(p){
+    if(!p) return false;
+    if(p.id === 'family_pack'){
+      if(familyLive()) return true;
+      return !!p.prelaunch_orderable;
+    }
+    if(p.launch_date){
+      const d = toDateSafe(p.launch_date);
+      if(d && nowTs() < d && p.prelaunch_orderable === false) return false;
+    }
+    return true;
+  }
+  function productDisplayPrice(p){
+    if(p?.id === 'family_pack' && !familyLive()){
+      return {main: p.prelaunch_price_text || cfgCampaign('family_price_label_before_launch','COMING SOON'), note: p.prelaunch_note || cfgCampaign('family_price_note_before_launch',''), prelaunch:true};
+    }
+    return {main: '$' + Number(p?.price || 0), note:'', prelaunch:false};
+  }
+  function ensureQtyState(){
+    getProducts().forEach(p=>{ if(!(p.id in PRODUCT_QTYS)) PRODUCT_QTYS[p.id] = 0; });
+  }
+  function setSelectedShippingDefault(){
+    if(SELECTED_SHIP && getShipping().some(s=>s.id===SELECTED_SHIP)) return;
+    const first = getShipping().find(s=>s.enabled!==false);
+    SELECTED_SHIP = first?.id || '';
+  }
+  function renderProductsTable(){
     const table = document.getElementById('productTable');
     if(!table) return;
-
-    const state = window.__dynamicState = window.__dynamicState || { products: [], qty: {} };
-
-    function getCfg(){ return window.SITE_CFG || null; }
-    function getProducts(){ const cfg=getCfg(); return (cfg && Array.isArray(cfg.products)) ? cfg.products : []; }
-    function now(){ return (typeof getNow === 'function') ? getNow() : new Date(); }
-    function launchActive(p){
-      if(!p) return true;
-      if(!p.launch_date) return true;
-      const d = new Date(String(p.launch_date).replace(' ','T'));
-      if(isNaN(d.getTime())) return true;
-      return now() >= d;
+    const products = getProducts().filter(p => p && p.visible !== false && p.enabled !== false);
+    ensureQtyState();
+    let tbody = table.querySelector('tbody[data-dynamic="1"]');
+    if(!tbody){
+      tbody = document.createElement('tbody');
+      tbody.setAttribute('data-dynamic','1');
+      const oldRows = Array.from(table.querySelectorAll('tr')).slice(1);
+      oldRows.forEach(r=>r.remove());
+      table.appendChild(tbody);
     }
-    function productPrice(p){ return Number(p && p.price || 0); }
-    function ensureBody(){
-      let body = document.getElementById('dynamicProductRows');
-      if(body) return body;
-      body = document.createElement('tbody');
-      body.id = 'dynamicProductRows';
-      const firstStaticRow = table.querySelector('tr:nth-child(2)');
-      while(firstStaticRow && firstStaticRow.parentNode === table){ break; }
-      table.appendChild(body);
-      return body;
-    }
-    function hideStaticRows(){
-      ['priceOld','priceNew','familyPriceLabel','familyPriceNote','qty_family','qtyFamilyMinus','qtyFamilyPlus'].forEach(id=>{ const el=document.getElementById(id); if(el) el.dataset.dynamicHidden='1'; });
-      const rows = table.querySelectorAll('tr');
-      rows.forEach((tr, idx)=>{ if(idx>0 && !tr.closest('#dynamicProductRows')) tr.style.display='none'; });
-    }
-    function setQty(id,val){ state.qty[id] = Math.max(0, parseInt(val||0,10)||0); }
-    function getQty(id){ return Math.max(0, parseInt(state.qty[id]||0,10)||0); }
-    function syncLegacyInputs(){
-      const single = state.products[0];
-      const family = state.products.find(p=>p.id==='family_pack') || state.products[1];
-      const q1 = document.getElementById('qty1'); if(q1 && single) q1.value = getQty(single.id);
-      const qf = document.getElementById('qty_family'); if(qf && family) qf.value = getQty(family.id);
-    }
-    function renderProducts(){
-      const products = getProducts().filter(p => p && p.visible !== false && p.enabled !== false);
-      if(!products.length) return;
-      state.products = products.slice().sort((a,b)=>(Number(a.sort||999)-Number(b.sort||999)));
-      state.products.forEach(p=>{ if(state.qty[p.id]==null) state.qty[p.id]=0; });
-      hideStaticRows();
-      const body = ensureBody();
-      body.innerHTML = '';
-      state.products.forEach((p, idx)=>{
-        const live = launchActive(p);
-        const qty = getQty(p.id);
-        const tr = document.createElement('tr');
-        tr.dataset.productId = p.id;
-        const currentPriceHtml = live
-          ? `<span class="price-new is-regular">$${productPrice(p)}</span>`
-          : `<span class="price-prelaunch">${p.prelaunch_price_text || ''}</span>${p.prelaunch_note ? `<small class="price-note">${p.prelaunch_note}</small>` : ''}`;
-        tr.innerHTML = `
-          <td>${p.name || ''}<br><small>(${p.sub_label || ''})</small></td>
-          <td><div class="price-cell">${currentPriceHtml}</div></td>
-          <td>
-            <div class="qty-stepper ${(!live && p.prelaunch_orderable===false)?'is-disabled':''}" role="group" aria-label="${p.name || '數量'}">
-              <button type="button" class="qty-btn" data-role="minus">−</button>
-              <input class="qty-input" type="text" inputmode="numeric" pattern="[0-9]*" value="${qty}" ${(!live && p.prelaunch_orderable===false)?'readonly':''}>
-              <button type="button" class="qty-btn" data-role="plus">＋</button>
-            </div>
-          </td>`;
-        const minus = tr.querySelector('[data-role="minus"]');
-        const plus = tr.querySelector('[data-role="plus"]');
-        const input = tr.querySelector('.qty-input');
-        const lock = !live && p.prelaunch_orderable===false;
-        function apply(v){ setQty(p.id,v); input.value = getQty(p.id); syncLegacyInputs(); if(window.calculate) window.calculate(false); if(window.updateSummary) window.updateSummary(); }
-        if(lock){ minus.disabled=true; plus.disabled=true; input.readOnly=true; apply(0); }
-        minus.addEventListener('click', ()=> apply(getQty(p.id)-1));
-        plus.addEventListener('click', ()=> apply(getQty(p.id)+1));
-        input.addEventListener('input', ()=> apply((input.value||'').replace(/\D/g,'')));
-        body.appendChild(tr);
+    tbody.innerHTML = '';
+    products.forEach((p, idx)=>{
+      const disp = productDisplayPrice(p);
+      const tr = document.createElement('tr');
+      tr.setAttribute('data-product-id', p.id);
+      tr.innerHTML = `
+        <td>${p.name || ''}<br><small>${p.sub_label ? '(' + p.sub_label + ')' : ''}</small></td>
+        <td>
+          <div class="price-cell">
+            <span class="price-old" style="display:none !important;"></span>
+            <span class="price-new is-regular ${disp.prelaunch ? 'prelaunch-price':''}">${disp.main}</span>
+            <small class="prelaunch-note" style="display:${disp.note ? 'block':'none'};color:#7b8086;margin-top:4px;letter-spacing:.08em;">${disp.note || ''}</small>
+          </div>
+        </td>
+        <td>
+          <div class="qty-stepper" role="group" aria-label="數量">
+            <button type="button" class="qty-btn" data-qty-minus="${p.id}">−</button>
+            <input class="qty-input" type="text" inputmode="numeric" pattern="[0-9]*" value="${PRODUCT_QTYS[p.id] || 0}" data-qty-input="${p.id}" ${productIsOrderable(p)?'':'readonly disabled style="opacity:.45;pointer-events:none;"'}>
+            <button type="button" class="qty-btn" data-qty-plus="${p.id}" ${productIsOrderable(p)?'':'disabled style="opacity:.45;pointer-events:none;"'}>＋</button>
+          </div>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+  function renderShippingCards(){
+    const wrap = document.querySelector('.ship-wrap');
+    if(!wrap) return;
+    const items = getShipping().filter(s=>s && s.enabled!==false);
+    setSelectedShippingDefault();
+    wrap.innerHTML = '';
+    items.forEach(s=>{
+      const checked = s.id === SELECTED_SHIP;
+      const label = document.createElement('label');
+      label.className = 'ship-card' + (checked ? ' selected' : '');
+      label.setAttribute('for','ship_'+s.id);
+      label.innerHTML = `
+        <input type="radio" name="shipMethod" id="ship_${s.id}" value="${s.id}" ${checked ? 'checked' : ''}>
+        <div class="ship-title">${s.name || ''}</div>
+        <div class="ship-price">$${Number(s.fee || 0)}</div>`;
+      wrap.appendChild(label);
+    });
+    wrap.querySelectorAll('input[name="shipMethod"]').forEach(input=>{
+      input.addEventListener('change', ()=>{
+        SELECTED_SHIP = input.value;
+        wrap.querySelectorAll('.ship-card').forEach(card=>card.classList.toggle('selected', card.querySelector('input')?.checked));
+        window.calculate(false);
       });
-      syncLegacyInputs();
+    });
+  }
+  function selectedShipping(){ return getShipping().find(s=>s.id===SELECTED_SHIP) || null; }
+  function selectedProducts(){
+    const products = getProducts().filter(p => p && p.enabled !== false && p.visible !== false);
+    return products.map(p=>({product:p, qty:Number(PRODUCT_QTYS[p.id]||0)})).filter(x=>x.qty>0 && productIsOrderable(x.product));
+  }
+  function computeDynamicDiscount(subtotal){
+    const code = normalizeCoupon(window.appliedCoupon || '');
+    const cp = couponMap()[code];
+    if(!cp || cp.enabled===false) return {discount:0,label:'',notEligible:false,minSubtotal:0};
+    if(cp.min_subtotal && subtotal < Number(cp.min_subtotal||0)) return {discount:0,label:cp.name||cp.code,notEligible:true,minSubtotal:Number(cp.min_subtotal||0)};
+    let discount = 0;
+    const type = String(cp.discount_type||'').toLowerCase();
+    if(type.includes('percent') || type.includes('折') || cp.discount_value){
+      discount = Math.round(subtotal * (Number(cp.discount_value||0) / 100));
     }
-
-    function selectedShipping(){
-      const method = document.querySelector('input[name="shipMethod"]:checked');
-      if(!method) return null;
-      const cfg = getCfg();
-      if(cfg && Array.isArray(cfg.shipping)) return cfg.shipping.find(s=>s.id===method.value) || null;
-      return null;
+    return {discount, label:cp.name || cp.code, notEligible:false, minSubtotal:Number(cp.min_subtotal||0)};
+  }
+  function updateCheckoutImage(){
+    const img = document.getElementById('checkoutProductImage');
+    if(!img) return;
+    const sel = selectedProducts();
+    const product = (sel[sel.length-1] && sel[sel.length-1].product) || getProducts()[0];
+    if(product?.image){ img.src = product.image; img.alt = (product.name || '商品') + '商品圖'; }
+  }
+  function applyAllCopy(){
+    if(!CFG) return;
+    document.title = cfgCopy('page_title', document.title);
+    text(document.querySelector('.topbar-name'), cfgCopy('topbar_brand', document.querySelector('.topbar-name')?.textContent || ''));
+    text(document.querySelector('.topbar-link'), cfgCopy('topbar_link_text', document.querySelector('.topbar-link')?.textContent || ''));
+    text(document.querySelector('.brand-tagline'), cfgCopy('brand_tagline', document.querySelector('.brand-tagline')?.textContent || ''));
+    text(document.getElementById('intro-text'), cfgCopy('intro_text', document.getElementById('intro-text')?.textContent || ''));
+    text(document.querySelector('.hero-eyebrow'), cfgCopy('hero_eyebrow', document.querySelector('.hero-eyebrow')?.textContent || ''));
+    text(document.querySelector('.hero-title'), cfgCopy('hero_title', document.querySelector('.hero-title')?.textContent || ''));
+    html(document.querySelector('.hero-sub'), nl2html(cfgCopy('hero_sub', document.querySelector('.hero-sub')?.textContent || '')));
+    const sections = document.querySelectorAll('.section-title');
+    text(sections[0], cfgCopy('section_customer_info', sections[0]?.textContent || ''));
+    text(sections[1], cfgCopy('section_product_info', sections[1]?.textContent || ''));
+    text(sections[2], cfgCopy('section_step2_title', sections[2]?.textContent || ''));
+    text(document.querySelector('label[for="customerName"]'), cfgCopy('customer_name_label', '訂購人姓名'));
+    text(document.querySelector('label[for="customerPhone"]'), cfgCopy('customer_phone_label', '訂購人電話'));
+    text(document.querySelector('label[for="customerEmail"]'), cfgCopy('customer_email_label', '訂購人 Email'));
+    const c1=document.getElementById('customerName'); if(c1) c1.placeholder = cfgCopy('customer_name_placeholder', c1.placeholder || '');
+    const c2=document.getElementById('customerPhone'); if(c2) c2.placeholder = cfgCopy('customer_phone_placeholder', c2.placeholder || '');
+    const c3=document.getElementById('customerEmail'); if(c3) c3.placeholder = cfgCopy('customer_email_placeholder', c3.placeholder || '');
+    const totalNotes=document.querySelectorAll('.total-note');
+    if(totalNotes[0]) text(totalNotes[0], cfgCopy('total_note', totalNotes[0].textContent || ''));
+    if(totalNotes[1]) text(totalNotes[1], cfgCopy('step2_bottom_note', totalNotes[1].textContent || ''));
+    text(document.getElementById('toStep2Btn'), cfgCopy('step1_next_button', document.getElementById('toStep2Btn')?.textContent || ''));
+    text(document.getElementById('formReminder'), cfgCopy('form_reminder', document.getElementById('formReminder')?.textContent || ''));
+    text(document.querySelector('.footer-note'), cfgCopy('footer_note', document.querySelector('.footer-note')?.textContent || ''));
+    const summaryRows = document.querySelectorAll('.checkout-summary .summary-row');
+    if(summaryRows[0]) text(summaryRows[0].querySelector('span:first-child'), cfgCopy('summary_subtotal_label', '商品小計'));
+    if(summaryRows[1]){ const n=summaryRows[1].querySelector('span:first-child'); if(n) n.childNodes[0].nodeValue = cfgCopy('summary_shipping_label','運費') + '（'; }
+    if(summaryRows[2]){ const n=summaryRows[2].querySelector('span:first-child'); if(n) n.childNodes[0].nodeValue = cfgCopy('summary_discount_label','優惠折扣') + '（'; }
+    text(document.querySelector('.summary-total span:first-child'), cfgCopy('summary_total_label','合計金額'));
+    html(document.querySelector('.summary-note'), nl2html(cfgCopy('summary_note', document.querySelector('.summary-note')?.textContent || '')));
+    text(document.querySelector('.account-box h3'), cfgCopy('account_box_title', '匯款帳戶資訊'));
+    const noteP=document.querySelector('.account-box p:nth-of-type(2)'); html(noteP, nl2html(cfgCopy('account_box_note', noteP?.textContent || '')));
+    const accountP=document.querySelector('.account-box p:first-of-type'); if(accountP) accountP.innerHTML = `${cfgCampaign('bank_code','824')} ${cfgCampaign('bank_name','連線商業銀行')}　帳號：<span id="accountNumber">${cfgCampaign('bank_account','')}</span>`;
+    text(document.getElementById('copyBtn'), cfgCopy('copy_account_button','複製匯款帳號'));
+    text(document.getElementById('screenshotBtn'), cfgCopy('screenshot_button','下載訂單截圖'));
+    text(document.getElementById('backToStep1Btn'), cfgCopy('back_to_step1_button','返回 STEP.1'));
+    text(document.getElementById('formBtn'), cfgCopy('go_form_button','下一步：填寫寄送資訊'));
+    html(document.getElementById('pickupNote'), nl2html(cfgCopy('pickup_note', document.getElementById('pickupNote')?.textContent || '')));
+    const promo=document.getElementById('promoInline'); if(promo){ promo.innerHTML = `<span class="promo-mark">⛧</span> ${familyLive() ? cfgCopy('promo_inline_post','') : cfgCopy('promo_inline_pre','')}`; }
+    text(document.getElementById('launchTitle'), familyLive() ? cfgCopy('launch_modal_title_post', '') : cfgCopy('launch_modal_title_pre', ''));
+    html(document.querySelector('#launchModal .promo-main'), nl2html(familyLive() ? cfgCopy('launch_modal_text_post','') : cfgCopy('launch_modal_text_pre','')));
+    const lineEnabled = !!cfgCampaign('line_enabled', true);
+    const couponEnabled = !!cfgCampaign('coupon_enabled', true);
+    const couponInputEnabled = !!cfgCampaign('coupon_input_enabled', false);
+    const couponBox = document.getElementById('couponBox');
+    const lineInfoBox = document.getElementById('lineInfoBox');
+    if(couponBox){
+      if(couponEnabled && couponInputEnabled){
+        couponBox.style.display='';
+        couponBox.innerHTML = `<div class="coupon-title">${cfgCopy('coupon_box_title','優惠碼')}</div><div class="coupon-controls"><input id="couponInput" type="text" placeholder="${cfgCopy('coupon_input_placeholder','請輸入優惠碼')}"><button type="button" class="btn btn-sketch" onclick="applyCoupon()">${cfgCopy('coupon_apply_button','套用')}</button></div>`;
+      } else if(lineEnabled){
+        couponBox.style.display='';
+        couponBox.innerHTML = `<div class="coupon-title">${cfgCopy('line_box_title','LINE')}</div><div class="coupon-hint" style="text-align:right;"><span class="coupon-line">${cfgCopy('line_box_line1','')}</span><span class="coupon-line"><a href="${cfgCampaign('line_url','https://page.line.me/217mwvhv')}" target="_blank" rel="noopener">${cfgCopy('line_box_line2','')}</a></span></div>`;
+      } else {
+        couponBox.style.display='none';
+      }
     }
+    if(lineInfoBox){
+      if(lineEnabled){
+        lineInfoBox.style.display='';
+        text(lineInfoBox.querySelector('.coupon-title'), cfgCopy('line_box_title','LINE'));
+        const lines=lineInfoBox.querySelectorAll('.coupon-line');
+        if(lines[0]) lines[0].textContent = cfgCopy('line_box_line1','');
+        const a=document.getElementById('lineLinkInfo'); if(a){ a.textContent = cfgCopy('line_box_line2',''); a.href = cfgCampaign('line_url','https://page.line.me/217mwvhv'); }
+      } else { lineInfoBox.style.display='none'; }
+    }
+  }
 
-    const originalApplyCampaignAndProducts = window.applyCampaignAndProducts;
-    window.applyCampaignAndProducts = function(){
-      if(typeof originalApplyCampaignAndProducts === 'function') originalApplyCampaignAndProducts();
-      renderProducts();
+  function installDynamicHandlers(){
+    const table = document.getElementById('productTable');
+    if(!table) return;
+    table.onclick = function(e){
+      const plus = e.target.closest('[data-qty-plus]');
+      const minus = e.target.closest('[data-qty-minus]');
+      if(!plus && !minus) return;
+      const id = (plus || minus).getAttribute(plus ? 'data-qty-plus':'data-qty-minus');
+      const p = getProducts().find(x=>x.id===id);
+      if(!productIsOrderable(p)) return;
+      PRODUCT_QTYS[id] = Math.max(0, Number(PRODUCT_QTYS[id]||0) + (plus ? 1 : -1));
+      const input = table.querySelector('[data-qty-input="'+id+'"]');
+      if(input) input.value = PRODUCT_QTYS[id];
+      window.calculate(false);
     };
+  }
 
-    const originalCalculate = window.calculate;
-    window.calculate = function(isInit){
-      if(!state.products.length) return originalCalculate ? originalCalculate(isInit) : undefined;
-      const shipping = selectedShipping();
-      const ship = Number(shipping && shipping.fee || 0);
-      let subtotal = 0;
-      state.products.forEach(p=>{ subtotal += getQty(p.id) * productPrice(p); });
-      const single = state.products[0];
-      const { unitPrice } = (typeof getPricingContext === 'function') ? getPricingContext(now()) : {unitPrice: productPrice(single)};
-      const discountObj = (typeof computeDiscount === 'function') ? computeDiscount(getQty(single && single.id), unitPrice) : {discount:0};
-      const discount = Number(discountObj.discount || 0);
-      const total = Math.max(0, subtotal - discount + ship);
-      if(typeof animateTotal === 'function') animateTotal(total, !!isInit);
-      if(window.updateSummary) window.updateSummary();
+  window.updateCheckoutProductCard = updateCheckoutImage;
+  window.applyCoupon = function(){
+    const input = document.getElementById('couponInput');
+    if(!input) return;
+    const code = normalizeCoupon(input.value);
+    if(!code){ window.appliedCoupon=''; input.value=''; window.calculate(false); return; }
+    const cp = couponMap()[code];
+    if(!cp){ alert(cfgCopy('coupon_invalid_text','優惠碼無效')); return; }
+    window.appliedCoupon = code;
+    const subtotal = selectedProducts().reduce((s,x)=>s + x.qty * Number(x.product.price||0), 0);
+    const disc = computeDynamicDiscount(subtotal);
+    if(disc.notEligible){ alert(`商品滿 $${disc.minSubtotal} 才能使用優惠碼喔。`); return; }
+    if(input) input.value = code;
+    window.calculate(false);
+  };
+  window.calculate = function(isInit){
+    const items = selectedProducts();
+    const subtotal = items.reduce((s,x)=>s + x.qty * Number(x.product.price||0), 0);
+    const ship = Number(selectedShipping()?.fee || 0);
+    const disc = computeDynamicDiscount(subtotal);
+    const total = Math.max(0, subtotal - disc.discount + ship);
+    if(typeof animateTotal === 'function') animateTotal(total, !!isInit);
+    else { const totalEl=document.getElementById('total'); if(totalEl) totalEl.textContent = 'Total Amount: $' + total; }
+    window.updateSummary();
+  };
+  window.updateSummary = function(){
+    const items = selectedProducts();
+    const subtotal = items.reduce((s,x)=>s + x.qty * Number(x.product.price||0), 0);
+    const shipObj = selectedShipping();
+    const shipFee = Number(shipObj?.fee || 0);
+    const disc = computeDynamicDiscount(subtotal);
+    const total = Math.max(0, subtotal - disc.discount + shipFee);
+    const qtyText = items.length ? items.map(x=>`${x.qty}${x.product.name}`).join(' + ') : '0';
+    text(document.getElementById('summaryQty'), qtyText);
+    text(document.getElementById('summaryShip'), shipObj?.name || '未選擇');
+    text(document.getElementById('summarySubtotal'), '$' + subtotal);
+    text(document.getElementById('summaryShipFee'), '$' + shipFee);
+    text(document.getElementById('summaryTotal'), '$' + total);
+    text(document.getElementById('summaryName'), document.getElementById('customerName')?.value.trim() || '—');
+    const row=document.getElementById('summaryDiscountRow');
+    const val=document.getElementById('summaryDiscount');
+    const lab=document.getElementById('summaryCouponLabel');
+    if(row && val && lab){
+      if(disc.discount>0){ row.style.display=''; text(val, '-$'+disc.discount); text(lab, disc.label || normalizeCoupon(window.appliedCoupon || '')); }
+      else { row.style.display='none'; text(val,'-$0'); text(lab,'—'); }
+    }
+    updateCheckoutImage();
+  };
+  window.goToForm = function(){
+    const name = document.getElementById('customerName')?.value.trim() || '';
+    const phone = document.getElementById('customerPhone')?.value.trim() || '';
+    const email = document.getElementById('customerEmail')?.value.trim() || '';
+    const shipObj = selectedShipping();
+    if(!shipObj){ alert('請選擇運送方式'); return; }
+    const items = selectedProducts();
+    if(!items.length){ alert('請先選擇商品數量'); return; }
+    const subtotal = items.reduce((s,x)=>s + x.qty * Number(x.product.price||0), 0);
+    const disc = computeDynamicDiscount(subtotal);
+    const total = Math.max(0, subtotal - disc.discount + Number(shipObj.fee || 0));
+    const formConfig = familyLive() ? EDITOR_CONFIG.forms.after : EDITOR_CONFIG.forms.before;
+    const payload = {
+      [formConfig.fields.name]: name,
+      [formConfig.fields.phone]: phone,
+      [formConfig.fields.email]: email,
+      [formConfig.fields.shipMethod]: shipObj.name,
+      [formConfig.fields.total]: total,
     };
+    items.forEach(x=>{
+      if(x.product.form_field) payload[x.product.form_field] = x.qty;
+    });
+    const query = Object.entries(payload).map(([k,v])=>`&${k}=${encodeURIComponent(v)}`).join('');
+    window.open(`${formConfig.base}${query}`, '_blank');
+  };
 
-    window.updateSummary = function(){
-      if(!state.products.length) return;
-      const shipping = selectedShipping();
-      const shipFee = Number(shipping && shipping.fee || 0);
-      const shipLabel = shipping && shipping.name || '未選擇';
-      let subtotal = 0;
-      const parts = [];
-      state.products.forEach(p=>{
-        const q = getQty(p.id);
-        subtotal += q * productPrice(p);
-        if(q>0) parts.push(`${p.name} × ${q}`);
-      });
-      const single = state.products[0];
-      const { unitPrice } = (typeof getPricingContext === 'function') ? getPricingContext(now()) : {unitPrice: productPrice(single)};
-      const dis = (typeof computeDiscount === 'function') ? computeDiscount(getQty(single && single.id), unitPrice) : {discount:0,label:''};
-      const discount = Number(dis.discount || 0);
-      const total = Math.max(0, subtotal - discount + shipFee);
-      const name = document.getElementById('customerName')?.value.trim() || '';
-      const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
-      set('summaryQty', parts.length ? parts.join(' + ') : '0 份');
-      set('summaryShip', shipLabel);
-      set('summarySubtotal', '$' + subtotal);
-      set('summaryShipFee', '$' + shipFee);
-      set('summaryTotal', '$' + total);
-      set('summaryName', name || '—');
-      const row=document.getElementById('summaryDiscountRow'); const val=document.getElementById('summaryDiscount'); const lab=document.getElementById('summaryCouponLabel');
-      if(row && val && lab){ if(discount>0){ row.style.display=''; val.textContent='-$'+discount; lab.textContent=dis.label || '優惠'; } else { row.style.display='none'; } }
-      if(window.updateCheckoutProductCard) window.updateCheckoutProductCard();
-    };
+  async function initDynamic(){
+    try{
+      const res = await fetch(API_URL, {cache:'no-store'});
+      const cfg = await res.json();
+      if(!cfg || !cfg.ok) return;
+      CFG = cfg;
+      ensureQtyState();
+      setSelectedShippingDefault();
+      applyAllCopy();
+      renderProductsTable();
+      renderShippingCards();
+      installDynamicHandlers();
+      updateCheckoutImage();
+      window.calculate(true);
+    } catch(err){ console.error('dynamic init failed', err); }
+  }
 
-    window.updateCheckoutProductCard = function(){
-      const img = document.getElementById('checkoutProductImage');
-      if(!img || !state.products.length) return;
-      const chosen = state.products.find(p=>getQty(p.id)>0 && p.image) || state.products.find(p=>p.image);
-      if(chosen){ img.src = chosen.image; img.alt = `${chosen.name || '商品'}商品圖`; }
-    };
+  const extraCss = document.createElement('style');
+  extraCss.textContent = `
+    .price-old{display:none !important;}
+    .prelaunch-price{font-size:11px !important; letter-spacing:0 !important; white-space:nowrap;}
+    @media (max-width:480px){
+      .prelaunch-price{font-size:9px !important; letter-spacing:0 !important;}
+      .prelaunch-note{font-size:10px !important;}
+      #productTable td:nth-child(2), #productTable th:nth-child(2){padding-left:4px;padding-right:4px;}
+    }
+  `;
+  document.head.appendChild(extraCss);
 
-    window.goToForm = function(){
-      const name  = document.getElementById('customerName')?.value.trim() || '';
-      const phone = document.getElementById('customerPhone')?.value.trim() || '';
-      const email = document.getElementById('customerEmail')?.value.trim() || '';
-      const method = document.querySelector('input[name="shipMethod"]:checked');
-      if(!method){ alert('請選擇運送方式'); return; }
-      const shipping = selectedShipping() || {name:'', fee:0};
-      const familyLive = (typeof isFamilyLaunchActive === 'function') ? isFamilyLaunchActive(now()) : true;
-      const formConfig = familyLive ? EDITOR_CONFIG.forms.after : EDITOR_CONFIG.forms.before;
-      let subtotal = 0;
-      state.products.forEach(p=>{ subtotal += getQty(p.id) * productPrice(p); });
-      const single = state.products[0];
-      const { unitPrice } = (typeof getPricingContext === 'function') ? getPricingContext(now()) : {unitPrice: productPrice(single)};
-      const dis = (typeof computeDiscount === 'function') ? computeDiscount(getQty(single && single.id), unitPrice) : {discount:0};
-      const total = Math.max(0, subtotal - Number(dis.discount||0) + Number(shipping.fee||0));
-      const payload = {
-        [formConfig.fields.name]: name,
-        [formConfig.fields.phone]: phone,
-        [formConfig.fields.email]: email,
-        [formConfig.fields.shipMethod]: shipping.name,
-        [formConfig.fields.total]: total
-      };
-      state.products.forEach((p, idx)=>{
-        const q = getQty(p.id);
-        if(p.form_field){ payload[p.form_field] = q; }
-        else if(idx===0 && formConfig.fields.qtySingle){ payload[formConfig.fields.qtySingle] = q; }
-        else if(p.id==='family_pack' && familyLive && formConfig.fields.qtyFamily){ payload[formConfig.fields.qtyFamily] = q; }
-      });
-      const query = Object.entries(payload).map(([k,v])=>`&${k}=${encodeURIComponent(v)}`).join('');
-      window.open(`${formConfig.base}${query}`,'_blank');
-    };
-
-    const origFetch = window.fetchAndApply;
-    // If original fetch exists only inside closure, we can't access; call render after short delay too.
-    setTimeout(function(){ try{ renderProducts(); if(window.updatePricingUI) window.updatePricingUI(); if(window.calculate) window.calculate(true); }catch(e){ console.error(e);} }, 1200);
+  document.addEventListener('DOMContentLoaded', function(){
+    initDynamic();
+    ['customerName','customerPhone','customerEmail'].forEach(id=>{
+      document.getElementById(id)?.addEventListener('input', ()=>window.updateSummary());
+    });
   });
 })();
 </script>
