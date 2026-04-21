@@ -2008,9 +2008,10 @@ readonly
       ×
     </button>
     <div class="promo-label">LIU MAMA</div>
-    <h3 id="launchTitle">劉嘛麻家庭包 正式上市&nbsp;.ᐟ.ᐟ</h3>
+    <h3 id="launchTitle">家庭包 即將上市&nbsp;.ᐟ.ᐟ</h3>
 
     <p class="promo-main">
+      聽到大家的心聲了<br>
       家庭包內含兩個底料包<br>
       人多才好吃，鍋也一樣。<br>
       但一個人吃，也可以剛剛好
@@ -2532,7 +2533,7 @@ function schedulePricingSwitch(){
   const ms = familyLaunch - now;
   if(ms > 0 && ms < 1000 * 60 * 60 * 24 * 30){
     setTimeout(()=>{
-      updatePricingUI();
+      if (typeof window.updatePricingUI === "function") window.updatePricingUI();
       calculate(true);
       updateSummary();
     }, ms + 900);
@@ -2602,8 +2603,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   }
 
   buildQty();
-  updatePricingUI();
-  schedulePricingSwitch();
+  // defer copy/pricing UI to API-driven layer
   calculate(true);
   setStep(1);
 
@@ -3862,7 +3862,7 @@ document.addEventListener('keydown',(e)=>{
           : cfgCopy('launch_modal_title_pre', EDITOR_CONFIG.copy.launchModal.title || '');
       }
 
-      updatePricingUI();
+      if (typeof window.updatePricingUI === "function") window.updatePricingUI();
       calculate(true);
       updateSummary();
     }catch(err){
