@@ -1657,7 +1657,7 @@ th{
            alt="Liu Mama 麻辣鍋底產品照">
       <div class="hero-overlay">
         <div class="hero-eyebrow">LIU MAMA </div>
-        <div class="hero-title">手炒麻辣鍋底 · 開賣中</div>
+        <div class="hero-title">手炒麻辣鍋底</div>
         <div class="hero-sub">
           手炒的麻辣，暖心又暖胃。<br>
         </div>
@@ -1723,12 +1723,12 @@ th{
         <p class="brand-tagline">
           手炒的麻辣，暖心又暖胃
         </p>
+        <!-- 文案顯示內容由下方 EDITOR_CONFIG.copy.promo 控制 -->
         <p id="promoInline" class="promo-inline">
           <span class="promo-mark">⛧</span>
-          11/18 ~ 12/18 開賣價
-          <strong class="price-red">$299</strong>
+          5/1 家庭包正式上市
           <span class="promo-sep">·</span>
-          倒數 <strong class="promo-days" id="promoDays">-- 天</strong>
+          家庭包內含兩個底料包
         </p>
       </div>
 
@@ -1760,31 +1760,114 @@ th{
       <section class="reveal">
         <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
-        <table id="productTable">
-          <colgroup>
-            <col class="col-item"><col class="col-price"><col class="col-action">
-          </colgroup>
-          <tr><th>品項</th><th>價格</th><th>數量</th></tr>
-          <tr>
-            <td>麻辣底料包<br><small>(2人份)</small></td>
-            <td>
-              <div class="price-cell">
-                <span class="price-old" id="priceOld">$320</span>
-                <span class="price-new is-regular" id="priceNew">$320</span>
-              </div>
-            </td>
-            <td>
-              <div class="qty-stepper" role="group" aria-label="數量">
-                <button type="button" class="qty-btn" id="qtyMinus" aria-label="減少">−</button>
-                <input id="qtyInput" class="qty-input" type="text" inputmode="numeric" pattern="[0-9]*"
-                       value="0" role="spinbutton" aria-valuemin="0" aria-valuenow="0" aria-live="polite">
-                <button type="button" class="qty-btn" id="qtyPlus" aria-label="增加">＋</button>
-              </div>
-              <select id="qty1" onchange="calculate()" aria-label="數量" hidden></select>
-            </td>
-          </tr>
-        </table>
-      </section>
+<table id="productTable">
+
+<colgroup>
+<col class="col-item">
+<col class="col-price">
+<col class="col-action">
+</colgroup>
+
+<tr>
+<th>品項</th>
+<th>價格</th>
+<th>數量</th>
+</tr>
+
+
+<!-- 麻辣底料包 -->
+
+<tr>
+
+<td>
+麻辣底料包<br>
+<small>(2人份)</small>
+</td>
+
+<td>
+
+<div class="price-cell">
+
+<span class="price-old" id="priceOld">$320</span>
+
+<span class="price-new is-regular" id="priceNew">$320</span>
+
+</div>
+
+</td>
+
+<td>
+
+<div class="qty-stepper" role="group" aria-label="數量">
+
+<button type="button" class="qty-btn" id="qtyMinus">−</button>
+
+<input
+id="qtyInput"
+class="qty-input"
+type="text"
+inputmode="numeric"
+pattern="[0-9]*"
+value="0"
+>
+
+<button type="button" class="qty-btn" id="qtyPlus">＋</button>
+
+</div>
+
+<select id="qty1" hidden></select>
+
+</td>
+
+</tr>
+
+
+<!-- 家庭包 -->
+
+<!-- 家庭包區塊：價格/字樣由下方 EDITOR_CONFIG.copy.familyCard 控制 -->
+<tr id="familyRow">
+
+<td>
+家庭包<br>
+<small id="familySubLabel">(4-6人份)</small>
+</td>
+
+<td>
+
+<div class="price-cell">
+
+<span class="price-new is-regular" id="familyPriceLabel">COMING SOON</span>
+<small id="familyPriceNote" style="display:block;color:#7b8086;margin-top:4px;letter-spacing:.08em;">5/1 正式上線</small>
+
+</div>
+
+</td>
+
+<td>
+
+<div class="qty-stepper" id="familyStepper">
+
+<button type="button" class="qty-btn" id="qtyFamilyMinus" onclick="changeQty2(-1)">−</button>
+
+<input
+id="qty_family"
+class="qty-input"
+type="text"
+inputmode="numeric"
+pattern="[0-9]*"
+value="0"
+readonly
+>
+
+<button type="button" class="qty-btn" id="qtyFamilyPlus" onclick="changeQty2(1)">＋</button>
+
+</div>
+
+</td>
+
+</tr>
+
+</table>      </section>
 
       <section class="reveal">
         <div class="ship-wrap" role="radiogroup" aria-label="寄送方式">
@@ -1839,11 +1922,10 @@ th{
 
         <div class="checkout-layout" id="checkoutCard">
           <div class="checkout-product">
-            <img decoding="async" loading="lazy"
-                 src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-7"
+            <img id="checkoutProductImage" decoding="async" loading="lazy"
+                 src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2"
                  alt="劉嘛麻 麻辣鍋底商品圖">
-            <div class="checkout-product-name">麻辣底料包（2人份）</div>
-          </div>
+            </div>
 
           <div class="checkout-summary">
             <div class="summary-row">
@@ -1919,30 +2001,261 @@ th{
   </div>
 </main>
 
-<!-- 開賣 Modal -->
+<!-- 開賣 Modal：文字由下方 EDITOR_CONFIG.copy.launchModal 控制 -->
 <div id="launchModal" class="promo-modal-backdrop" aria-hidden="true">
   <div class="promo-modal" role="dialog" aria-modal="true" aria-labelledby="launchTitle">
     <button type="button" class="promo-close" id="launchClose" aria-label="關閉">
       ×
     </button>
     <div class="promo-label">LIU MAMA</div>
-    <h3 id="launchTitle">劉嘛麻 開賣啦&nbsp;.ᐟ.ᐟ</h3>
+    <h3 id="launchTitle">劉嘛麻家庭包 正式上市&nbsp;.ᐟ.ᐟ</h3>
 
     <p class="promo-main">
-      手炒麻辣鍋底<br>
-      11/18 ~ 12/18 開賣價 <strong>$299</strong><br>
-      期間限定價 · 先嚐一鍋就愛上
+      家庭包內含兩個底料包<br>
+      人多才好吃，鍋也一樣。<br>
+      但一個人吃，也可以剛剛好
     </p>
 
-    <p class="promo-sub">
-      四川改良 &emsp;×&emsp; 十三融香 &emsp;×&emsp; 香麻登場
-    </p>
+    <p class="promo-sub"></p>
   </div>
 </div>
 
 <div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
 
 <script>
+/* ==================================================
+   維護說明：
+   1. 先找 EDITOR_CONFIG 改文案 / 圖片 / 表單 / 日期
+   2. 下面其餘 function 盡量不要改，避免功能跑掉
+   ================================================== */
+
+
+const API_URL = 'https://script.google.com/macros/s/AKfycbwQGqW3i9xr5yaulWWBn9rWcTWFxC1FF93_Q_e6chZasdzZZJZKJByMtV_StZ0XwJbi/exec?action=config';
+
+function deepMerge_(target, source){
+  if(!source || typeof source !== 'object') return target;
+  Object.keys(source).forEach(key => {
+    const sv = source[key];
+    if(Array.isArray(sv)){
+      target[key] = sv.slice();
+    }else if(sv && typeof sv === 'object'){
+      if(!target[key] || typeof target[key] !== 'object' || Array.isArray(target[key])){
+        target[key] = {};
+      }
+      deepMerge_(target[key], sv);
+    }else if(sv !== undefined){
+      target[key] = sv;
+    }
+  });
+  return target;
+}
+
+function cloneJson_(obj){
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function toDateParts_(value, fallbackObj){
+  if(!value) return fallbackObj;
+  if(typeof value === 'object' && value.y) return value;
+  const d = new Date(value);
+  if(isNaN(d.getTime())) return fallbackObj;
+  return {
+    y: d.getFullYear(),
+    m: d.getMonth() + 1,
+    d: d.getDate(),
+    hh: d.getHours(),
+    mm: d.getMinutes(),
+    ss: d.getSeconds()
+  };
+}
+
+function couponMapFromApi_(items){
+  const out = {};
+  (items || []).forEach(item => {
+    const code = String(item.code || '').trim().toUpperCase();
+    if(!code) return;
+    const type = String(item.discount_type || '').trim().toLowerCase();
+    const value = Number(item.discount_value) || 0;
+    if(type === 'percent'){
+      out[code] = {
+        kind:'percent',
+        percent:value,
+        minSubtotal:Number(item.min_subtotal) || 0,
+        label:item.name || (value + '% OFF')
+      };
+    }else if(type === 'set_unit_price' || type === 'fixed_price'){
+      out[code] = {
+        kind:'set_unit_price',
+        unitPrice:value,
+        minSubtotal:Number(item.min_subtotal) || 0,
+        label:item.name || code
+      };
+    }
+  });
+  return out;
+}
+
+function applyRemoteSiteConfig_(remote){
+  if(!remote || !remote.ok) return;
+  const nextEditor = cloneJson_(EDITOR_CONFIG);
+
+  if(remote.copy){
+    nextEditor.copy = nextEditor.copy || {};
+    if(remote.copy.brand_tagline) nextEditor.copy.brandTagline = remote.copy.brand_tagline;
+
+    if(remote.copy.promo_inline){
+      nextEditor.copy.promo = nextEditor.copy.promo || {};
+      nextEditor.copy.promo.before = nextEditor.copy.promo.before || {};
+      nextEditor.copy.promo.after  = nextEditor.copy.promo.after || {};
+      nextEditor.copy.promo.before.customText = remote.copy.promo_inline;
+      nextEditor.copy.promo.after.customText  = remote.copy.promo_inline;
+    }
+
+    if(remote.copy.launch_modal_title){
+      nextEditor.copy.launchModal = nextEditor.copy.launchModal || {};
+      nextEditor.copy.launchModal.title = remote.copy.launch_modal_title;
+    }
+    if(remote.copy.launch_modal_body){
+      const lines = String(remote.copy.launch_modal_body).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+      if(lines.length){
+        nextEditor.copy.launchModal = nextEditor.copy.launchModal || {};
+        nextEditor.copy.launchModal.beforeLines = lines.slice();
+        nextEditor.copy.launchModal.afterLines  = lines.slice();
+      }
+    }
+  }
+
+  if(remote.campaigns){
+    nextEditor.dates = nextEditor.dates || {};
+    nextEditor.dates.familyLaunch = toDateParts_(remote.campaigns.family_launch_date, nextEditor.dates.familyLaunch);
+
+    nextEditor.line = nextEditor.line || {};
+    if(remote.campaigns.line_url) nextEditor.line.url = remote.campaigns.line_url;
+
+    if(remote.campaigns.bank_account){
+      nextEditor.bank = nextEditor.bank || {};
+      nextEditor.bank.code = remote.campaigns.bank_code || nextEditor.bank.code || '824';
+      nextEditor.bank.name = remote.campaigns.bank_name || nextEditor.bank.name || '連線商業銀行';
+      nextEditor.bank.account = remote.campaigns.bank_account;
+    }
+
+    nextEditor.copy = nextEditor.copy || {};
+    nextEditor.copy.familyCard = nextEditor.copy.familyCard || {};
+    if(remote.campaigns.family_price_label_before_launch){
+      nextEditor.copy.familyCard.beforePriceLabel = remote.campaigns.family_price_label_before_launch;
+    }
+    if(remote.campaigns.family_price_note_before_launch){
+      nextEditor.copy.familyCard.beforePriceNote = remote.campaigns.family_price_note_before_launch;
+    }
+  }
+
+  if(Array.isArray(remote.products) && remote.products.length){
+    const single = remote.products.find(p => p.id === 'mala_base') || remote.products[0];
+    const family = remote.products.find(p => p.id === 'family_pack');
+
+    nextEditor.prices = nextEditor.prices || {};
+    nextEditor.images = nextEditor.images || {};
+    nextEditor.copy = nextEditor.copy || {};
+
+    if(single){
+      if(single.price) nextEditor.prices.single = Number(single.price) || nextEditor.prices.single;
+      if(single.image){
+        nextEditor.images.hero = single.image;
+        nextEditor.images.checkoutSingle = single.image;
+      }
+    }
+
+    if(family){
+      if(family.price) nextEditor.prices.family = Number(family.price) || nextEditor.prices.family;
+      if(family.image) nextEditor.images.checkoutFamily = family.image;
+      nextEditor.copy.familyCard = nextEditor.copy.familyCard || {};
+      if(family.sub_label) nextEditor.copy.familyCard.beforeSubLabel = nextEditor.copy.familyCard.afterSubLabel = `(${family.sub_label})`;
+      nextEditor.copy.familyCard.afterPriceLabel = '$' + (Number(family.price) || nextEditor.prices.family);
+
+      if(remote.campaigns && remote.campaigns.family_price_label_before_launch){
+        nextEditor.copy.familyCard.beforePriceLabel = remote.campaigns.family_price_label_before_launch;
+      }
+      if(remote.campaigns && remote.campaigns.family_price_note_before_launch){
+        nextEditor.copy.familyCard.beforePriceNote = remote.campaigns.family_price_note_before_launch;
+      }
+    }
+  }
+
+  if(Array.isArray(remote.coupons)){
+    nextEditor.coupons = couponMapFromApi_(remote.coupons);
+  }
+
+  EDITOR_CONFIG = nextEditor;
+  CAMPAIGN_CONFIG = {
+    dates: EDITOR_CONFIG.dates,
+    prices: {
+      regular: EDITOR_CONFIG.prices.single,
+      sale: EDITOR_CONFIG.prices.single,
+      family: EDITOR_CONFIG.prices.family,
+    },
+    line: EDITOR_CONFIG.line,
+    coupons: EDITOR_CONFIG.coupons,
+  };
+  LINE_URL      = CAMPAIGN_CONFIG.line.url;
+  PRICE_REGULAR = CAMPAIGN_CONFIG.prices.regular;
+  PRICE_SALE    = CAMPAIGN_CONFIG.prices.sale;
+  FAMILY_PRICE  = CAMPAIGN_CONFIG.prices.family;
+  COUPONS       = CAMPAIGN_CONFIG.coupons;
+  window.__REMOTE_SITE_CONFIG__ = remote;
+}
+
+async function loadRemoteSiteConfig_(){
+  try{
+    const res = await fetch(API_URL, { method:'GET', mode:'cors', cache:'no-store' });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const remote = await res.json();
+    applyRemoteSiteConfig_(remote);
+  }catch(err){
+    console.warn('讀取試算表設定失敗，改用頁面內建設定。', err);
+  }
+}
+
+function getShippingOptions_(){
+  const remote = window.__REMOTE_SITE_CONFIG__;
+  const rows = (remote && Array.isArray(remote.shipping) && remote.shipping.length)
+    ? remote.shipping.slice().sort((a,b)=>(Number(a.sort)||999)-(Number(b.sort)||999))
+    : [
+        { id:'711', name:'711取貨', fee:60, enabled:true },
+        { id:'post', name:'宅配到家', fee:120, enabled:true },
+        { id:'pickup', name:'自取', fee:0, enabled:true }
+      ];
+  return rows.filter(r => r.enabled !== false);
+}
+
+function getShippingOptionById_(id){
+  return getShippingOptions_().find(x => String(x.id) === String(id)) || null;
+}
+
+function refreshShippingCards_(){
+  const options = getShippingOptions_();
+  const cards = {
+    '711': document.getElementById('ship711')?.closest('.ship-card'),
+    'post': document.getElementById('shipPost')?.closest('.ship-card'),
+    'pickup': document.getElementById('shipPickup')?.closest('.ship-card')
+  };
+  options.forEach(opt => {
+    const card = cards[opt.id];
+    if(!card) return;
+    const input = card.querySelector('input');
+    const title = card.querySelector('.ship-title');
+    const price = card.querySelector('.ship-price');
+    if(title) title.textContent = opt.name || '';
+    if(price) price.textContent = '$' + (Number(opt.fee) || 0);
+    card.style.display = '';
+    if(input) input.disabled = false;
+  });
+  Object.keys(cards).forEach(id => {
+    if(options.some(o => String(o.id) === id)) return;
+    const card = cards[id];
+    if(card) card.style.display = 'none';
+  });
+}
+
 /* ===== 工具：圖片 ready ===== */
 function imgReady(el){
   if(el && el.complete){
@@ -1954,6 +2267,26 @@ function imgReady(el){
     });
   }
   return Promise.resolve();
+}
+let qty_family = 0;
+
+function changeQty2(delta){
+
+if(!isFamilyLaunchActive(getNow())){
+  qty_family = 0;
+  document.getElementById("qty_family").value = qty_family;
+  return;
+}
+
+qty_family += delta;
+
+if(qty_family < 0) qty_family = 0;
+
+document.getElementById("qty_family").value = qty_family;
+
+calculate();
+updateSummary();
+
 }
 
 /* ===== 工具：平滑捲動 ===== */
@@ -2107,41 +2440,127 @@ function hideLaunchModal(){
 function getNow(){ return new Date(); }
 
 // ===============================
-// ✅ 單一設定區：以後要改「日期/折扣/優惠碼」都改這裡
-//   - 月份請用「1~12」(例如 12月 = 12)
-//   - 時間預設 00:00:00；需要指定時再加 hh/mm/ss
+// ✅✅✅ 可直接修改區（以後優先改這裡）
+// 你之後如果要換文案、圖片、表單、日期，先找這一區就好。
+// 其他下面功能程式盡量不要動。
 // ===============================
-const CAMPAIGN_CONFIG = {
-  // 主要日期（台北時間 UTC+8）
+let EDITOR_CONFIG = {
+  // ===== 1) 日期設定 =====
+  // 月份請用 1~12，例如 5 月就寫 m: 5
   dates: {
-    // 倒數顯示到哪一天（沿用你目前的邏輯：該日 00:00）
-    countdownEnd: { y: 2025, m: 12, d: 18 },
-
-    // 何時恢復原價（12/19 00:00）
-    priceCutoff:  { y: 2025, m: 12, d: 19, hh: 0, mm: 0, ss: 0 },
-
-    // 新年優惠開始（1/1 00:00）
-    newYearStart: { y: 2026, m: 1, d: 1, hh: 0, mm: 0, ss: 0 },
+    familyLaunch: { y: 2026, m: 5, d: 1, hh: 0, mm: 0, ss: 0 },
   },
 
-  // 價格
+  // ===== 2) 價格設定 =====
   prices: {
-    regular: 320,
-    sale:    320,
+    single: 320,   // 2人份價格
+    family: 590,   // 家庭包價格
   },
 
-  // LINE
+  // ===== 3) 圖片設定 =====
+  images: {
+    hero: 'https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2',
+    checkoutSingle: 'https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2',
+    checkoutFamily: 'https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2',
+  },
+
+  // ===== 4) LINE 連結 =====
   line: {
     url: 'https://page.line.me/217mwvhv',
   },
 
-  // ✅ 優惠碼（之後要換新券、改折扣、改門檻，都在這裡改）
+  // ===== 5) 優惠碼設定 =====
   // kind:
-  // - 'percent'：打幾%折（percent: 5 代表 5% OFF = 95折）
-  // - 'set_unit_price'：指定每盒價格（unitPrice）
+  // - percent：百分比折扣，例如 5 = 95 折
+  // - set_unit_price：指定單盒價格
   coupons: {
     'LIUMAMA2025': { kind:'percent', percent: 5, minSubtotal: 1000, label:'95折' },
   },
+
+  // ===== 6) 商品文案設定 =====
+  // before = 5/1 前顯示
+  // after  = 5/1 後顯示
+  copy: {
+    promo: {
+      before: {
+        badge: '⛧',
+        title: '家庭包正式上市',
+        datePrefixMode: 'auto', // auto 會顯示 05/01 這種日期
+        subText: '精簡環保包裝',
+      },
+      after: {
+        badge: '⛧',
+        title: '家庭包正式開賣',
+        priceText: '$590',
+        subText: '精簡環保包裝',
+      },
+    },
+    familyCard: {
+      beforeSubLabel: '(4-6人份)',
+      beforePriceLabel: 'COMING SOON',
+      beforePriceNote: '5/1 正式上線',
+      afterSubLabel: '(4-6人份)',
+      afterPriceLabel: '$590',
+    },
+    launchModal: {
+      title: '家庭包coming soon .ᐟ.ᐟ',
+      beforeLines: [
+       '聽到大家的心聲了',
+       '家庭包內含兩個底料包',
+       '人多才好吃，鍋也一樣。',
+       '但一個人吃，也可以剛剛好'
+      ],
+      afterLines: [
+        '家庭包內含兩個底料包',
+        '人多才好吃，鍋也一樣。',
+        '但一個人吃，也可以剛剛好',
+      ],
+    },
+    summary: {
+      singleLabel: '盒(2人包)',
+      familyLabel: '盒(家庭包)',
+    },
+  },
+
+  // ===== 7) Google 表單設定 =====
+  // 之後如果你換表單或欄位，只改這裡
+  forms: {
+    before: {
+      base: 'https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url',
+      fields: {
+        name: 'entry.1152845848',
+        phone: 'entry.178268335',
+        email: 'entry.441082214',
+        qtySingle: 'entry.1732058404',
+        shipMethod: 'entry.509305715',
+        total: 'entry.1351577488',
+      },
+    },
+    after: {
+      base: 'https://docs.google.com/forms/d/e/1FAIpQLSf7qLqbpgv2WskVxeZFhDnES6RsF-_cNgbT_w4wwPI20kjkBw/viewform?usp=pp_url',
+      fields: {
+        name: 'entry.1152845848',
+        phone: 'entry.178268335',
+        email: 'entry.441082214',
+        qtySingle: 'entry.1732058404',
+        qtyFamily: 'entry.1303542598',
+        shipMethod: 'entry.509305715',
+        total: 'entry.308306024',
+      },
+    },
+  },
+};
+
+// ===== 相容舊程式用常數（下面功能區會繼續使用） =====
+let CAMPAIGN_CONFIG = {
+  dates: EDITOR_CONFIG.dates,
+  prices: {
+    regular: EDITOR_CONFIG.prices.single,
+    sale: EDITOR_CONFIG.prices.single,
+    family: EDITOR_CONFIG.prices.family,
+  },
+  line: EDITOR_CONFIG.line,
+  coupons: EDITOR_CONFIG.coupons,
 };
 
 function makeTWDate(obj){
@@ -2157,37 +2576,35 @@ function makeTWDate(obj){
 }
 
 // 下面維持原本程式使用的常數名稱（功能不變）
-const LINE_URL      = CAMPAIGN_CONFIG.line.url;
-const PRICE_REGULAR = CAMPAIGN_CONFIG.prices.regular;
-const PRICE_SALE    = CAMPAIGN_CONFIG.prices.sale;
-const COUPONS       = CAMPAIGN_CONFIG.coupons;
+let LINE_URL      = CAMPAIGN_CONFIG.line.url;
+let PRICE_REGULAR = CAMPAIGN_CONFIG.prices.regular;
+let PRICE_SALE    = CAMPAIGN_CONFIG.prices.sale;
+let FAMILY_PRICE  = CAMPAIGN_CONFIG.prices.family;
+let COUPONS       = CAMPAIGN_CONFIG.coupons;
 
 
-/** 倒數顯示到 12/18；價格在 12/19 00:00（台灣時間）回復 $320 */
+/** 家庭包於 2026/5/1 00:00（台北時間）正式上線 */
 function getSaleDates(now = new Date()){
-  // ✅ 日期設定（台灣時間, UTC+8）
-  // - 倒數顯示到 12/18
-  // - 12/19 00:00（台北時間）恢復原價
-  // - 1/1 00:00（台北時間）新年優惠券/優惠碼開始
-  const countdownEnd = makeTWDate(CAMPAIGN_CONFIG.dates.countdownEnd);
-  const priceCutoff  = makeTWDate(CAMPAIGN_CONFIG.dates.priceCutoff);
-  const newYearStart = makeTWDate(CAMPAIGN_CONFIG.dates.newYearStart);
-  return { countdownEnd, priceCutoff, newYearStart };
+  const raw = CAMPAIGN_CONFIG.dates.familyLaunch;
+  const familyLaunch = (typeof raw === 'string') ? new Date(raw) : makeTWDate(raw);
+  return { familyLaunch: isNaN(familyLaunch.getTime()) ? new Date() : familyLaunch };
 }
-function getCampaignPhase(){ 
-  return 'line'; 
+function isFamilyLaunchActive(now = getNow()){
+  const { familyLaunch } = getSaleDates(now);
+  return now >= familyLaunch;
+}
+function getCampaignPhase(now = getNow()){
+  return isFamilyLaunchActive(now) ? 'family-live' : 'family-soon';
 }
 
 function getPricingContext(now = getNow()){
-  const { priceCutoff, newYearStart } = getSaleDates(now);
+  const { familyLaunch } = getSaleDates(now);
   const phase = getCampaignPhase(now);
-  const isSaleActive = (phase === 'sale');
   return {
     phase,
-    isSaleActive,
-    unitPrice: isSaleActive ? PRICE_SALE : PRICE_REGULAR,
-    priceCutoff,
-    newYearStart
+    isSaleActive: false,
+    unitPrice: PRICE_REGULAR,
+    familyLaunch
   };
 }
 
@@ -2206,6 +2623,11 @@ function computeDiscount(qty, unitPrice){
   if(!cfg) return { discount:0, label:'' };
 
   if(cfg.kind === 'set_unit_price'){
+    const subtotal = qty * unitPrice;
+    const min = Number(cfg.minSubtotal) || 0;
+    if(min > 0 && subtotal < min){
+      return { discount:0, label: cfg.label || code, notEligible:true, minSubtotal:min };
+    }
     if(unitPrice <= cfg.unitPrice){
       return { discount:0, label: cfg.label || code };
     }
@@ -2238,48 +2660,23 @@ function setLineLinks(){
 function updateCouponVisibility(){
   const couponBox = document.getElementById('couponBox');
   const lineInfoBox = document.getElementById('lineInfoBox');
-  if(!couponBox || !lineInfoBox) return;
+  if(couponBox) couponBox.style.display = '';
+  if(lineInfoBox) lineInfoBox.style.display = 'none';
+}
 
-  const ctx = getPricingContext(getNow());
-  const phase = ctx.phase;
+function getModalLines(phase, launchDate){
+  const beforeLines = [...(EDITOR_CONFIG.copy.launchModal.beforeLines || [])];
+  const afterLines = [...(EDITOR_CONFIG.copy.launchModal.afterLines || [])];
+  if(phase === 'family-live') return afterLines;
 
-  // phase:
-  // - sale：開賣期間 → 不顯示優惠碼區
-  // - line：12/19~12/31 → 顯示「LINE官方上線」提示
-  // - ny：1/1 起 → 顯示優惠碼區
-  if(phase === 'sale'){
-    couponBox.style.display = 'none';
-    lineInfoBox.style.display = 'none';
-    appliedCoupon = '';
-    const input = document.getElementById('couponInput');
-    if(input) input.value = '';
-  }else if(phase === 'line'){
-    couponBox.style.display = 'none';
-    lineInfoBox.style.display = '';
-    appliedCoupon = '';
-    const input = document.getElementById('couponInput');
-    if(input) input.value = '';
-  }else{
-    couponBox.style.display = '';
-    lineInfoBox.style.display = 'none';
-  }
-
-  // 新年優惠卷 1/1 才開始：此階段不在頁面顯示提示（避免混淆）
-  const nyHint = document.getElementById('nyStartHint');
-  if(nyHint){
-    nyHint.style.display = 'none';
-    nyHint.textContent = '';
-  }
-
-  // 新年期：更新 coupon hint 連結文字
-  const a2 = document.getElementById('lineLink2');
-  if(a2){
-    if(phase === 'ny'){
-      a2.textContent = '加入LINE好友，領取新年優惠卷';
-    }else{
-      a2.textContent = '快加入，得知最新優惠資訊';
+  return beforeLines.map(line => {
+    if(line.includes('即將上市')){
+      const mm = String(launchDate.getMonth()+1).padStart(2,'0');
+      const dd = String(launchDate.getDate()).padStart(2,'0');
+      return `${mm}/${dd} 劉嘛麻家庭包 正式上市`;
     }
-  }
+    return line;
+  });
 }
 
 function updatePricingUI(){
@@ -2287,80 +2684,76 @@ function updatePricingUI(){
   const priceOld = document.getElementById('priceOld');
   const priceNew = document.getElementById('priceNew');
   const launchMain = document.querySelector('#launchModal .promo-main');
+  const launchTitle = document.getElementById('launchTitle');
+  const familySubLabel = document.getElementById('familySubLabel');
+  const familyPriceLabel = document.getElementById('familyPriceLabel');
+  const familyPriceNote = document.getElementById('familyPriceNote');
+  const familyInput = document.getElementById('qty_family');
+  const familyMinus = document.getElementById('qtyFamilyMinus');
+  const familyPlus = document.getElementById('qtyFamilyPlus');
 
-  const ctx = getPricingContext(getNow());
-  const { isSaleActive, phase } = ctx;
+  const now = getNow();
+  const ctx = getPricingContext(now);
+  const familyLive = isFamilyLaunchActive(now);
+  const mm = String(ctx.familyLaunch.getMonth()+1).padStart(2,'0');
+  const dd = String(ctx.familyLaunch.getDate()).padStart(2,'0');
+  const promoCopy = familyLive ? EDITOR_CONFIG.copy.promo.after : EDITOR_CONFIG.copy.promo.before;
+  const familyCopy = EDITOR_CONFIG.copy.familyCard;
+  const modalLines = getModalLines(ctx.phase, ctx.familyLaunch);
 
-  // 商品價格顯示（表格）
   if(priceOld && priceNew){
-    if(isSaleActive){
-      priceOld.classList.remove('is-hidden');
-      priceNew.classList.remove('is-regular');
-      priceOld.textContent = '$' + PRICE_REGULAR;
-      priceNew.textContent = '$' + PRICE_SALE;
-    }else{
-      priceOld.classList.add('is-hidden');
-      priceNew.classList.add('is-regular');
-      priceNew.textContent = '$' + PRICE_REGULAR;
-    }
+    priceOld.classList.add('is-hidden');
+    priceNew.classList.add('is-regular');
+    priceNew.textContent = '$' + PRICE_REGULAR;
   }
 
-  const mm = String(ctx.newYearStart.getMonth()+1).padStart(2,'0');
-  const dd = String(ctx.newYearStart.getDate()).padStart(2,'0');
+  if(familySubLabel){
+    familySubLabel.textContent = familyLive ? familyCopy.afterSubLabel : familyCopy.beforeSubLabel;
+  }
+  if(familyPriceLabel){
+    familyPriceLabel.textContent = familyLive ? familyCopy.afterPriceLabel : familyCopy.beforePriceLabel;
+    familyPriceLabel.classList.toggle('is-regular', !familyLive);
+  }
+  if(familyPriceNote){
+    familyPriceNote.textContent = familyCopy.beforePriceNote;
+    familyPriceNote.style.display = familyLive ? 'none' : 'block';
+  }
+  if(familyInput && !familyLive){
+    familyInput.value = '0';
+    qty_family = 0;
+  }
+  [familyInput, familyMinus, familyPlus].forEach(el => {
+    if(!el) return;
+    el.disabled = !familyLive;
+    el.style.opacity = familyLive ? '1' : '.45';
+    el.style.pointerEvents = familyLive ? '' : 'none';
+  });
 
-  // 首屏活動文案（依 phase 切換）
   if(promo){
-    if(phase === 'sale'){
+    if(familyLive){
       promo.innerHTML = `
-        <span class="promo-mark">⛧</span>
-        11/18 ~ 12/18 開賣價
-        <strong class="price-red">$${PRICE_SALE}</strong>
+        <span class="promo-mark">${promoCopy.badge || '⛧'}</span>
+        ${promoCopy.title}
+        <strong class="price-red">${promoCopy.priceText || ('$' + FAMILY_PRICE)}</strong>
         <span class="promo-sep">·</span>
-        倒數 <strong class="promo-days" id="promoDays">-- 天</strong>
-      `;
-      setupInlinePromo(); // 重新跑倒數
-    }else if(phase === 'line'){
-      promo.innerHTML = `
-        <span class="promo-mark">⛧</span>
-        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">
-          劉嘛麻LINE官方上線啦!
-        </a>
-        <span class="promo-sep">·</span>
-        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">
-          快加入，得知最新優惠資訊
-        </a>
+        ${promoCopy.subText || ''}
       `;
     }else{
       promo.innerHTML = `
-        <span class="promo-mark">⛧</span>
-        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">
-          加入LINE好友，領取新年優惠卷
-        </a>
+        <span class="promo-mark">${promoCopy.badge || '⛧'}</span>
+        ${promoCopy.datePrefixMode === 'auto' ? `${mm}/${dd} ` : ''}${promoCopy.title}
+        <span class="promo-sep">·</span>
+        ${promoCopy.subText || ''}
       `;
     }
   }
 
-  // 開賣彈窗文案同步切換
+  if(launchTitle){
+    launchTitle.textContent = EDITOR_CONFIG.copy.launchModal.title;
+  }
+
   if(launchMain){
-    if(phase === 'sale'){
-      launchMain.innerHTML = `
-        手炒麻辣鍋底<br>
-        11/18 ~ 12/18 開賣價 <strong>$${PRICE_SALE}</strong><br>
-        期間限定價 · 先嚐一鍋就愛上
-      `;
-    }else if(phase === 'line'){
-      launchMain.innerHTML = `
-        LINE官方上線啦!<br>
-        快加入，得知最新優惠資訊<br>
-        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">點我加入</a>
-      `;
-    }else{
-      launchMain.innerHTML = `
-        手炒麻辣鍋底<br>
-        加入好友，領取新年優惠卷<br>
-        <a class="promo-link" href="${LINE_URL}" target="_blank" rel="noopener">點我加入</a>
-      `;
-    }
+    launchMain.innerHTML = modalLines.join('<br>');
   }
 
   updateCouponVisibility();
@@ -2368,17 +2761,15 @@ function updatePricingUI(){
 }
 function schedulePricingSwitch(){
   const now = getNow();
-  const { priceCutoff, newYearStart } = getSaleDates(now);
-
-  [priceCutoff, newYearStart].forEach(target=>{
-    const ms = target - now;
-    if(ms > 0 && ms < 1000 * 60 * 60 * 72){ // 72 小時內才排程，避免很久的 timeout
-      setTimeout(()=>{
-        updatePricingUI();
-        calculate(true);
-      }, ms + 900);
-    }
-  });
+  const { familyLaunch } = getSaleDates(now);
+  const ms = familyLaunch - now;
+  if(ms > 0 && ms < 1000 * 60 * 60 * 24 * 30){
+    setTimeout(()=>{
+      updatePricingUI();
+      calculate(true);
+      updateSummary();
+    }, ms + 900);
+  }
 }
 function applyCoupon(){
   const input = document.getElementById('couponInput');
@@ -2396,15 +2787,7 @@ function applyCoupon(){
     return;
   }
 
-  // 到期後（恢復原價後）才開放領取/使用優惠碼
   const ctx = getPricingContext(getNow());
-  if(ctx.phase !== 'ny'){
-  const mm = String(ctx.newYearStart.getMonth()+1).padStart(2,'0');
-  const dd = String(ctx.newYearStart.getDate()).padStart(2,'0');
-  alert(`新年優惠卷將於 ${mm}/${dd} 00:00 開放領取喔。`);
-  showToast(`新年優惠卷將於 ${mm}/${dd} 00:00 開放領取喔。`);
-  return;
-}
 
   // 無此碼
   if(!COUPONS[code]){
@@ -2441,7 +2824,9 @@ function applyCoupon(){
 
 
 /* ===== 初始化 ===== */
-window.addEventListener('DOMContentLoaded',()=>{
+window.addEventListener('DOMContentLoaded', async ()=>{
+  await loadRemoteSiteConfig_();
+
   const params = new URLSearchParams(window.location.search);
   const skipIntro = params.get('skipIntro') === '1';
 
@@ -2862,6 +3247,7 @@ function buildQty(){
 let lastTotal=0;
 function calculate(isInit){
   const qty1 = parseInt(document.getElementById('qty1').value) || 0;
+  const qty_family = parseInt(document.getElementById('qty_family')?.value) || 0;
 
   // 運費：不參與折扣，折扣後再加運費
   let ship = 0;
@@ -2873,7 +3259,9 @@ function calculate(isInit){
   }
 
   const { unitPrice } = getPricingContext(getNow());
-  const subtotal = qty1 * unitPrice;
+  const subtotal =
+(qty1 * unitPrice) +
+(qty_family * FAMILY_PRICE);
 
   const { discount } = computeDiscount(qty1, unitPrice);
   const newTotal = Math.max(0, subtotal - discount + ship);
@@ -2915,254 +3303,215 @@ function animateTotal(target, isInit){
   }
   requestAnimationFrame(frame);
 }
+const PRODUCT_IMAGE_SINGLE = EDITOR_CONFIG.images.checkoutSingle;
+const PRODUCT_IMAGE_FAMILY = EDITOR_CONFIG.images.checkoutFamily;
 
-/* ===== STEP2 摘要 ===== */
+function updateCheckoutProductCard(){
+  const familyLive = isFamilyLaunchActive(getNow());
+  const qty = parseInt(document.getElementById('qty1')?.value) || 0;
+  const qtyFamily = familyLive ? (parseInt(document.getElementById('qty_family')?.value) || 0) : 0;
+  const img = document.getElementById('checkoutProductImage');
+  if(!img) return;
+
+  if(qtyFamily > 0){
+    img.src = PRODUCT_IMAGE_FAMILY;
+    img.alt = '劉嘛麻 家庭包商品圖';
+  }else{
+    img.src = PRODUCT_IMAGE_SINGLE;
+    img.alt = '劉嘛麻 麻辣鍋底商品圖';
+  }
+}
+
 function updateSummary(){
-  const qty   = parseInt(document.getElementById('qty1').value) || 0;
-  const method= document.querySelector('input[name="shipMethod"]:checked');
-  const name  = document.getElementById('customerName').value.trim();
 
-  let shipFee=0;
-  let shipLabel='未選擇';
+  const qty = parseInt(document.getElementById('qty1').value) || 0;
+  const familyLive = isFamilyLaunchActive(getNow());
+  const qty_family = familyLive ? (parseInt(document.getElementById('qty_family')?.value) || 0) : 0;
+
+  const method = document.querySelector('input[name="shipMethod"]:checked');
+  const name = document.getElementById('customerName').value.trim();
+
+  let shipFee = 0;
+  let shipLabel = '未選擇';
+
   if(method){
-    if(method.value==='711'){ shipFee=60; shipLabel='711取貨'; }
-    else if(method.value==='post'){ shipFee=120; shipLabel='宅配到家'; }
-    else if(method.value==='pickup'){ shipFee=0; shipLabel='自取'; }
+    if(method.value === '711'){
+      shipFee = 60;
+      shipLabel = '711取貨';
+    }
+    else if(method.value === 'post'){
+      shipFee = 120;
+      shipLabel = '宅配到家';
+    }
+    else if(method.value === 'pickup'){
+      shipFee = 0;
+      shipLabel = '自取';
+    }
   }
 
   const { unitPrice } = getPricingContext(getNow());
-  const subtotal = qty * unitPrice;
+
+  const subtotal =
+  (qty * unitPrice) +
+  ((familyLive ? qty_family : 0) * FAMILY_PRICE);
 
   const { discount, label } = computeDiscount(qty, unitPrice);
+
   const total = Math.max(0, subtotal - discount + shipFee);
 
-  document.getElementById('summaryQty').textContent      = qty + ' 份';
-  document.getElementById('summaryShip').textContent     = shipLabel;
+  document.getElementById('summaryQty').textContent = familyLive
+    ? (qty + EDITOR_CONFIG.copy.summary.singleLabel + " + " + qty_family + EDITOR_CONFIG.copy.summary.familyLabel)
+    : (qty + EDITOR_CONFIG.copy.summary.singleLabel);
+
+  document.getElementById('summaryShip').textContent = shipLabel;
+
   document.getElementById('summarySubtotal').textContent = '$' + subtotal;
-  document.getElementById('summaryShipFee').textContent  = '$' + shipFee;
-  document.getElementById('summaryTotal').textContent    = '$' + total;
-  document.getElementById('summaryName').textContent     = name || '—';
+
+  document.getElementById('summaryShipFee').textContent = '$' + shipFee;
+
+  document.getElementById('summaryTotal').textContent = '$' + total;
+
+  document.getElementById('summaryName').textContent = name || '—';
+
+  updateCheckoutProductCard();
 
   const row = document.getElementById('summaryDiscountRow');
   const val = document.getElementById('summaryDiscount');
   const lab = document.getElementById('summaryCouponLabel');
+
   if(row && val && lab){
+
     if(discount > 0){
+
       row.style.display = '';
       val.textContent = '-$' + discount;
       lab.textContent = label || normalizeCoupon(appliedCoupon) || '優惠碼';
+
     }else{
+
       row.style.display = 'none';
       val.textContent = '-$0';
       lab.textContent = '—';
+
     }
   }
+
 }
+/* ===== STEP2 摘要 ===== */
 
 /* ===== 複製／截圖／Toast ===== */
-function copyAccount(){
-  const acct = document.getElementById('accountNumber')
-    .textContent           // 取純文字
-    .replace(/\s+/g, '')   // 把所有空白字元移除
-    .trim();               // 再保險一次頭尾去空白
-
-  if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(acct).then(()=>{
-      showToast('匯款帳號已複製，完成匯款後請前往下一步填寫寄送資訊。');
-    }).catch(()=>alert('匯款帳號已複製！'));
-  }else{
-    const ta=document.createElement('textarea');
-    ta.value=acct;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    showToast('匯款帳號已複製，完成匯款後請前往下一步填寫寄送資訊。');
-  }
-}
-
-function screenshotOrder(){
-  const target=document.getElementById('checkoutCard') || document.getElementById('mainContent');
-  if(typeof html2canvas==='undefined'){
-    alert('截圖功能庫尚未載入，請稍後再試或檢查網路連線。');
-    return;
-  }
-  html2canvas(target).then(canvas=>{
-    const link=document.createElement('a');
-    link.href=canvas.toDataURL('image/png');
-    link.download='liu_mama_order.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showToast('截圖已下載！記得填寫表單喔。');
-  }).catch(()=>alert('截圖失敗，請再試一次'));
-}
-function showToast(msg){
-  const el=document.getElementById('toast');
-  if(!el){
-    alert(msg);
-    return;
-  }
-  el.textContent=msg;
-  el.classList.add('show');
-  clearTimeout(showToast._t);
-  showToast._t=setTimeout(()=>el.classList.remove('show'),2300);
-}
-function setFieldError(el, id, msg){
-  const hint=document.getElementById(id);
-  if(msg){
-    el.classList.add('input-error');
-    el.setAttribute('aria-invalid','true');
-    hint.textContent=msg;
-    hint.hidden=false;
-  }else{
-    el.classList.remove('input-error');
-    el.setAttribute('aria-invalid','false');
-    hint.textContent='';
-    hint.hidden=true;
-  }
-}
-
-/* ===== STEP1 → STEP2 ===== */
-function goToStep2(){
-  const name  = document.getElementById('customerName');
-  const phone = document.getElementById('customerPhone');
-  const email = document.getElementById('customerEmail');
-  const qty   = parseInt(document.getElementById('qty1').value)||0;
-  const method= document.querySelector('input[name="shipMethod"]:checked');
-
-  let ok=true;
-  let firstErrorField=null;
-
-  setFieldError(name,'errName','');
-  setFieldError(phone,'errPhone','');
-  setFieldError(email,'errEmail','');
-
-  if(!name.value.trim()){
-    setFieldError(name,'errName','請輸入訂購人姓名');
-    if(!firstErrorField) firstErrorField = name;
-    ok=false;
-  }
-  if(!phone.value.trim()){
-    setFieldError(phone,'errPhone','請輸入訂購人電話');
-    if(!firstErrorField) firstErrorField = phone;
-    ok=false;
-  }else if(!/^\d{10}$/.test(phone.value.trim())){
-    setFieldError(phone,'errPhone','電話需為 10 碼數字');
-    if(!firstErrorField) firstErrorField = phone;
-    ok=false;
-  }
-  if(!email.value.trim()){
-    setFieldError(email,'errEmail','請輸入 Email');
-    if(!firstErrorField) firstErrorField = email;
-    ok=false;
-  }else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())){
-    setFieldError(email,'errEmail','Email 格式不正確');
-    if(!firstErrorField) firstErrorField = email;
-    ok=false;
-  }
-
-  if(!ok){
-    if(firstErrorField) scrollToField(firstErrorField);
-    showToast('有欄位未填寫或格式不正確，請依紅字提示修正。');
-    return;
-  }
-
-  if(qty<=0){
-    showToast('請選擇購買數量');
-    return;
-  }
-  if(!method){
-    showToast('請選擇寄送方式');
-    return;
-  }
-
-  updateSummary();
-  setStep(2);
-
-  setTimeout(scrollToPageTopSmooth, 80);
-}
-
-/* ===== STEP3：前往表單 ===== */
 function goToForm(){
-  const name  = document.getElementById('customerName');
-  const phone = document.getElementById('customerPhone');
-  const email = document.getElementById('customerEmail');
-  const qty   = parseInt(document.getElementById('qty1').value)||0;
-  const method= document.querySelector('input[name="shipMethod"]:checked');
 
-  let ok=true;
-  let firstErrorField=null;
+  const name  = document.getElementById('customerName').value.trim();
+  const phone = document.getElementById('customerPhone').value.trim();
+  const email = document.getElementById('customerEmail').value.trim();
 
-  setFieldError(name,'errName','');
-  setFieldError(phone,'errPhone','');
-  setFieldError(email,'errEmail','');
+  const qty = parseInt(document.getElementById('qty1').value) || 0;
+  const familyLive = isFamilyLaunchActive(getNow());
+  const qty_family = familyLive ? (parseInt(document.getElementById('qty_family')?.value) || 0) : 0;
 
-  if(!name.value.trim()){
-    setFieldError(name,'errName','請輸入訂購人姓名');
-    if(!firstErrorField) firstErrorField = name;
-    ok=false;
-  }
-  if(!phone.value.trim()){
-    setFieldError(phone,'errPhone','請輸入訂購人電話');
-    if(!firstErrorField) firstErrorField = phone;
-    ok=false;
-  }else if(!/^\d{10}$/.test(phone.value.trim())){
-    setFieldError(phone,'errPhone','電話需為 10 碼數字');
-    if(!firstErrorField) firstErrorField = phone;
-    ok=false;
-  }
-  if(!email.value.trim()){
-    setFieldError(email,'errEmail','請輸入 Email');
-    if(!firstErrorField) firstErrorField = email;
-    ok=false;
-  }else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())){
-    setFieldError(email,'errEmail','Email 格式不正確');
-    if(!firstErrorField) firstErrorField = email;
-    ok=false;
-  }
+  const method = document.querySelector('input[name="shipMethod"]:checked');
 
-  if(!ok){
-    if(firstErrorField) scrollToField(firstErrorField);
-    showToast('有欄位未填寫或格式不正確，請依紅字提示修正。');
-    return;
-  }
-
-  if(qty<=0){
-    showToast('請選擇購買數量');
-    return;
-  }
   if(!method){
-    showToast('請選擇寄送方式');
+    alert("請選擇運送方式");
     return;
   }
 
-  let shipLabel='';
-  if(method.value==='711') shipLabel='711取貨';
-  else if(method.value==='post') shipLabel='宅配到家';
-  else if(method.value==='pickup') shipLabel='自取';
+  let shipLabel = '';
+  let shipFee = 0;
 
-    const { unitPrice } = getPricingContext(getNow());
-  const subtotal = qty * unitPrice;
-  const { discount } = computeDiscount(qty, unitPrice);
-  const shipFee = (method.value==='711' ? 60 : method.value==='post' ? 120 : 0);
-  const total = Math.max(0, subtotal - discount + shipFee);
+  const shipCfg = getShippingOptionById_(method.value);
+  if(shipCfg){
+    shipLabel = shipCfg.name || '';
+    shipFee = Number(shipCfg.fee) || 0;
+  }
 
-  const base = 'https://docs.google.com/forms/d/e/1FAIpQLScXsrY_3yROVmqR3sa-WecBs4y8wKeZuPLSM0QNgy602xEWJA/viewform?usp=pp_url';
-  const formUrl = base
-    + `&entry.1152845848=${encodeURIComponent(name.value.trim())}`
-    + `&entry.178268335=${encodeURIComponent(phone.value.trim())}`
-    + `&entry.441082214=${encodeURIComponent(email.value.trim())}`
-    + `&entry.1732058404=${qty}`
-    + `&entry.509305715=${encodeURIComponent(shipLabel)}`
-    + `&entry.1351577488=${encodeURIComponent(total)}`;
+  const { unitPrice } = getPricingContext(getNow());
+
+  const subtotal =
+    (qty * unitPrice) +
+    (qty_family * FAMILY_PRICE);
+
+  const { discount } =
+    computeDiscount(qty, unitPrice);
+
+  const total =
+    Math.max(0, subtotal - discount + shipFee);
+
+  const formConfig = familyLive ? EDITOR_CONFIG.forms.after : EDITOR_CONFIG.forms.before;
+  const payload = {
+    [formConfig.fields.name]: name,
+    [formConfig.fields.phone]: phone,
+    [formConfig.fields.email]: email,
+    [formConfig.fields.qtySingle]: qty,
+    [formConfig.fields.shipMethod]: shipLabel,
+    [formConfig.fields.total]: total,
+  };
+
+  if(familyLive && formConfig.fields.qtyFamily){
+    payload[formConfig.fields.qtyFamily] = qty_family;
+  }
+
+  const query = Object.entries(payload)
+    .map(([key, value]) => `&${key}=${encodeURIComponent(value)}`)
+    .join('');
+
+  const formUrl = `${formConfig.base}${query}`;
   window.open(formUrl,'_blank');
 }
+function goToStep2(){
 
+  const name  = document.getElementById('customerName').value.trim();
+  const phone = document.getElementById('customerPhone').value.trim();
+  const email = document.getElementById('customerEmail').value.trim();
+
+  const qty = parseInt(document.getElementById('qty1').value) || 0;
+  const familyLive = isFamilyLaunchActive(getNow());
+  const qty_family = familyLive ? (parseInt(document.getElementById('qty_family')?.value) || 0) : 0;
+
+  const method = document.querySelector('input[name="shipMethod"]:checked');
+
+  if(!name){
+    alert("請填寫訂購人姓名");
+    document.getElementById('customerName').focus();
+    return;
+  }
+
+  if(!phone){
+    alert("請填寫訂購人電話");
+    document.getElementById('customerPhone').focus();
+    return;
+  }
+
+  if(!email){
+    alert("請填寫 Email");
+    document.getElementById('customerEmail').focus();
+    return;
+  }
+
+  if(qty === 0 && qty_family === 0){
+    alert("請選擇購買數量");
+    return;
+  }
+
+  if(!method){
+    alert("請選擇寄送方式");
+    return;
+  }
+
+  // 更新摘要
+  updateSummary();
+
+  // 切換 STEP
+  setStep(2);
+
+  // 捲到最上面
+  scrollToPageTopSmooth();
+}
 /* ===== Ripple ===== */
 function triggerRipple(e){
-  const btn=e.currentTarget;
-  const rect=btn.getBoundingClientRect();
+  const btn = e.currentTarget;
+  const rect = btn.getBoundingClientRect();
   btn.style.setProperty('--rx',(e.clientX-rect.left)+'px');
   btn.style.setProperty('--ry',(e.clientY-rect.top)+'px');
   btn.classList.remove('rippling');
@@ -3183,5 +3532,7 @@ document.addEventListener('keydown',(e)=>{
   }
 });
 </script>
+
+
 </body>
 </html>
