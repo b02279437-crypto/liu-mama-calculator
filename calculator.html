@@ -3377,36 +3377,25 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   function bindIntroQuickDismiss(){
     if(!intro) return;
-    let startY = null;
-    let startX = null;
-    let swipeEnabled = false;
+    let tapEnabled = false;
     let hasDismissed = false;
 
-    setTimeout(()=>{ swipeEnabled = true; }, 1800);
+    // 先讓手機使用者至少看到一段開場，再開放點一下跳到選單
+    setTimeout(()=>{ tapEnabled = true; }, 2200);
 
-    intro.addEventListener('touchstart',(e)=>{
-      const t = e.touches && e.touches[0];
-      if(!t) return;
-      startY = t.clientY;
-      startX = t.clientX;
-    }, {passive:true});
+    const tapToMenu = (e)=>{
+      if(!tapEnabled || hasDismissed) return;
 
-    intro.addEventListener('touchend',(e)=>{
-      if(!swipeEnabled || hasDismissed || startY === null || startX === null) return;
-      const t = e.changedTouches && e.changedTouches[0];
-      if(!t) return;
+      // 點到 Start / 產品介紹按鈕本身就不攔截
+      if(e.target && e.target.closest && e.target.closest('#startBtn')) return;
+      if(e.target && e.target.closest && e.target.closest('#storyBtn')) return;
 
-      const dy = t.clientY - startY;
-      const dx = t.clientX - startX;
+      hasDismissed = true;
+      goIntroMenu();
+    };
 
-      startY = null;
-      startX = null;
-
-      if(dy < -55 && Math.abs(dy) > Math.abs(dx)){
-        hasDismissed = true;
-        goIntroMenu();
-      }
-    }, {passive:true});
+    intro.addEventListener('click', tapToMenu);
+    intro.addEventListener('touchend', tapToMenu, {passive:true});
   }
 
 
