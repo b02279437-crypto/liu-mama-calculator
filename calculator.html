@@ -1142,15 +1142,7 @@ th{
     transform:translateY(-50%) rotate(-1.2deg) scale(1);
     filter:blur(1px) saturate(1.05) brightness(1);
   }
-  
-@keyframes scrollLine{
-  0%{ transform:translateY(-10px); opacity:0; }
-  20%{ opacity:1; }
-  50%{ transform:translateY(12px); opacity:1; }
-  80%{ opacity:1; }
-  100%{ transform:translateY(26px); opacity:0; }
-}
-50%{
+  50%{
     opacity:.85;
     transform:translateY(-50%) rotate(-1.2deg) scale(1.04);
     filter:blur(1.6px) saturate(1.15) brightness(1.08);
@@ -1160,6 +1152,13 @@ th{
     transform:translateY(-50%) rotate(-1.2deg) scale(1);
     filter:blur(1px) saturate(1.05) brightness(1);
   }
+}
+@keyframes scrollLine{
+  0%{ transform:translateY(-10px); opacity:0; }
+  20%{ opacity:1; }
+  50%{ transform:translateY(12px); opacity:1; }
+  80%{ opacity:1; }
+  100%{ transform:translateY(26px); opacity:0; }
 }
 .total.glow::before{
   animation: glowPulse 1.8s var(--ease) 1;
@@ -3377,25 +3376,55 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   function bindIntroQuickDismiss(){
     if(!intro) return;
-    let tapEnabled = false;
+
     let hasDismissed = false;
+    let startX = 0;
+    let startY = 0;
+    let touchStarted = false;
 
-    // 先讓手機使用者至少看到一段開場，再開放點一下跳到選單
-    setTimeout(()=>{ tapEnabled = true; }, 2200);
+    const onDesktopClick = (e)=>{
+      if(hasDismissed) return;
 
-    const tapToMenu = (e)=>{
-      if(!tapEnabled || hasDismissed) return;
-
-      // 點到 Start / 產品介紹按鈕本身就不攔截
       if(e.target && e.target.closest && e.target.closest('#startBtn')) return;
       if(e.target && e.target.closest && e.target.closest('#storyBtn')) return;
+
+      const isTouchLike = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+      if(isTouchLike) return;
 
       hasDismissed = true;
       goIntroMenu();
     };
 
-    intro.addEventListener('click', tapToMenu);
-    intro.addEventListener('touchend', tapToMenu, {passive:true});
+    intro.addEventListener('click', onDesktopClick);
+
+    intro.addEventListener('touchstart', (e)=>{
+      if(hasDismissed) return;
+      const t = e.touches && e.touches[0];
+      if(!t) return;
+      startX = t.clientX;
+      startY = t.clientY;
+      touchStarted = true;
+    }, { passive:true });
+
+    intro.addEventListener('touchend', (e)=>{
+      if(hasDismissed || !touchStarted) return;
+
+      const t = e.changedTouches && e.changedTouches[0];
+      touchStarted = false;
+      if(!t) return;
+
+      if(e.target && e.target.closest && e.target.closest('#startBtn')) return;
+      if(e.target && e.target.closest && e.target.closest('#storyBtn')) return;
+
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+
+      // 手機只保留上滑跳過，不再點一下就跳過
+      if(Math.abs(dx) < 80 && dy < -70){
+        hasDismissed = true;
+        goIntroMenu();
+      }
+    }, { passive:true });
   }
 
 
