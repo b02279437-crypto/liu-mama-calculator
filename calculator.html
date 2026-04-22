@@ -3199,6 +3199,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     if(!intro) return;
     let startY=null;
     let moved=false;
+    let hasDismissed=false;
 
     intro.addEventListener('touchstart',(e)=>{
       const t = e.touches && e.touches[0];
@@ -3208,26 +3209,21 @@ window.addEventListener('DOMContentLoaded',()=>{
     }, {passive:true});
 
     intro.addEventListener('touchmove',(e)=>{
-      if(startY===null) return;
+      if(startY===null || hasDismissed) return;
       const t = e.touches && e.touches[0];
       if(!t) return;
       const dy = t.clientY - startY;
       if(dy < -55){
-        moved=true;
+        moved = true;
+        hasDismissed = true;
         goIntroMenu();
       }
     }, {passive:true});
 
-    const tapToMenu = (e)=>{
-      // 點到 Start / 產品介紹按鈕本身就不攔截
-      if(e.target && e.target.closest && e.target.closest('#startBtn')) return;
-      if(e.target && e.target.closest && e.target.closest('#storyBtn')) return;
-
-      goIntroMenu();
-    };
-
-    intro.addEventListener('click', tapToMenu);
-    intro.addEventListener('touchend', (e)=>{ if(!moved) tapToMenu(e); }, {passive:true});
+    intro.addEventListener('touchend', ()=>{
+      startY = null;
+      moved = false;
+    }, {passive:true});
   }
 
 
