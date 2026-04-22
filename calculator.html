@@ -3311,7 +3311,7 @@ document.addEventListener('keydown',(e)=>{
 <script>
 /* ===== SAFE SHEET SYNC (保留原版樣式 / 原版功能 / 原版版面) ===== */
 (function(){
-  const API_URL = 'https://script.google.com/macros/s/AKfycbzEofWroYk-ReTKyLlipvwuwHQ05xJBok0jz3OfjTDHX0ItwnFOxZGvHJlfmBBZnIM/exec?action=config';
+  const API_URL = 'https://script.google.com/macros/s/AKfycby8dNUTuZIuUcm-BdyNuoyC_cAQVODiZ3pmY_McjFL296uSRcvQTTZtjfEPZNFZEYH4/exec';
   const originalApplyCoupon = typeof window.applyCoupon === 'function' ? window.applyCoupon : null;
 
   let SITE_CFG = null;
@@ -3847,10 +3847,41 @@ document.addEventListener('keydown',(e)=>{
     window.open(formConfig.base + query, '_blank');
   };
 
+  function buildApiCandidates(baseUrl){
+    const raw = String(baseUrl || '').trim();
+    if(!raw) return [];
+    const clean = raw.replace(/\/$/, '');
+    const sep = clean.includes('?') ? '&' : '?';
+    return [
+      clean,
+      clean + sep + 'action=config'
+    ].filter((v, i, arr) => arr.indexOf(v) === i);
+  }
+
+  async function fetchConfig_(){
+    const candidates = buildApiCandidates(API_URL);
+    let lastErr = null;
+
+    for(const base of candidates){
+      try{
+        const url = base + (base.includes('?') ? '&' : '?') + '_ts=' + Date.now();
+        const res = await fetch(url, { cache: 'no-store' });
+        const raw = await res.text();
+        if(!raw) continue;
+        const cfg = JSON.parse(raw);
+        if(cfg && cfg.ok) return cfg;
+      }catch(err){
+        lastErr = err;
+      }
+    }
+
+    if(lastErr) throw lastErr;
+    return null;
+  }
+
   async function initSync(){
     try{
-      const res = await fetch(API_URL, { cache: 'no-store' });
-      const cfg = await res.json();
+      const cfg = await fetchConfig_();
       if(!cfg || !cfg.ok){
         return;
       }
