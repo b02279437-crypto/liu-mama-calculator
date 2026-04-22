@@ -1940,6 +1940,173 @@ table{
 }
 </style>
 
+
+<style id="upgrade-12345-mobile-intro-fix">
+/* ===== UI 升級 1~5：手機固定底欄 / 條件啟用 / 轉場 / 摘要層級 / 截圖模式 ===== */
+.step-panel{
+  display:block;
+  opacity:1;
+  transform:translateY(0);
+  transition:opacity .34s var(--ease), transform .34s var(--ease);
+}
+.step-panel[hidden]{
+  display:none !important;
+}
+.step-panel.is-leaving{
+  opacity:0;
+  transform:translateY(10px);
+}
+.step-panel.is-entering{
+  display:block !important;
+  opacity:0;
+  transform:translateY(16px);
+}
+.step-panel.is-entering.is-ready{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.step-next-btn[disabled],
+.mobile-checkout-btn[disabled]{
+  opacity:.42 !important;
+  filter:saturate(.7);
+  cursor:not-allowed !important;
+  pointer-events:none !important;
+  box-shadow:none !important;
+}
+
+.step-error{
+  width:min(520px, 90%);
+  margin:8px auto 0;
+  text-align:left;
+}
+.input-error{
+  border-color:#c85d52 !important;
+  background:#fff8f7 !important;
+}
+
+.summary-row{
+  color:#6f7b89;
+}
+.summary-row span:first-child{
+  letter-spacing:.08em;
+}
+.summary-row span:last-child{
+  color:#415163;
+}
+.summary-total{
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid #d8dee7;
+}
+.summary-total span:first-child{
+  font-size:13px;
+  letter-spacing:.12em;
+}
+.summary-total span:last-child{
+  font-size:19px;
+  letter-spacing:.06em;
+  color:#23364b;
+}
+.account-box{
+  box-shadow:0 12px 28px rgba(0,0,0,0.065);
+  border:1px solid rgba(68,86,108,.08);
+}
+
+.mobile-sticky-checkout{
+  position:fixed;
+  left:12px;
+  right:12px;
+  bottom:12px;
+  z-index:9997;
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 12px 12px 14px;
+  border-radius:18px;
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(68,86,108,.12);
+  box-shadow:0 18px 36px rgba(25,40,60,.14);
+  -webkit-backdrop-filter:blur(14px) saturate(1.02);
+  backdrop-filter:blur(14px) saturate(1.02);
+  opacity:0;
+  transform:translateY(18px);
+  pointer-events:none;
+  transition:opacity .28s var(--ease), transform .28s var(--ease);
+}
+.mobile-sticky-checkout.is-visible{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.mobile-sticky-amount{
+  min-width:0;
+  text-align:left;
+  color:#34475b;
+}
+.mobile-sticky-label{
+  display:block;
+  font-size:10px;
+  letter-spacing:.18em;
+  color:#7d8894;
+  margin-bottom:3px;
+}
+.mobile-sticky-total{
+  display:block;
+  font-size:22px;
+  line-height:1;
+  font-family:'Amatic SC', cursive;
+  letter-spacing:.12em;
+  color:var(--navy);
+}
+.mobile-checkout-btn{
+  flex:0 0 auto;
+  min-width:144px;
+  justify-content:center;
+}
+
+body.screenshot-mode .step2-actions,
+body.screenshot-mode #couponBox,
+body.screenshot-mode #couponInputBox,
+body.screenshot-mode #lineInfoBox,
+body.screenshot-mode .total-note[style],
+body.screenshot-mode .section-title,
+body.screenshot-mode .topbar,
+body.screenshot-mode .footer-note,
+body.screenshot-mode .promo-modal-backdrop,
+body.screenshot-mode .mobile-sticky-checkout{
+  display:none !important;
+}
+body.screenshot-mode #step2Panel{
+  padding-top:0 !important;
+}
+body.screenshot-mode .checkout-layout,
+body.screenshot-mode .account-box{
+  box-shadow:none !important;
+}
+body.screenshot-mode .checkout-summary,
+body.screenshot-mode .account-box,
+body.screenshot-mode .checkout-product{
+  background:#fff !important;
+  border:1px solid rgba(68,86,108,.10);
+}
+
+@media (max-width:480px){
+  .page-inner{
+    padding-bottom:110px;
+  }
+  .mobile-sticky-checkout{
+    display:flex;
+  }
+}
+@media (min-width:481px){
+  .mobile-sticky-checkout{
+    display:none !important;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -2249,6 +2416,9 @@ readonly
           <span style="opacity:.8;">（近承德路、京站）</span>
         </p>
 
+        <p class="error-hint step-error" id="errQty" hidden></p>
+        <p class="error-hint step-error" id="errShip" hidden></p>
+
         <div class="total" id="total" role="status" aria-live="polite" aria-atomic="true">Total Amount: $0</div>
         <div class="total-note">運費另計（折扣後再加運費） · 單位：新台幣</div>
 
@@ -2271,6 +2441,16 @@ readonly
           © LIU MAMA 2015–2025 · Handcrafted spicy mala hot pot
         </div>
       </section>
+    </div>
+
+    <div class="mobile-sticky-checkout" id="mobileStickyCheckout" aria-hidden="true">
+      <div class="mobile-sticky-amount">
+        <span class="mobile-sticky-label">合計金額</span>
+        <strong class="mobile-sticky-total" id="mobileStickyTotal">$0</strong>
+      </div>
+      <button id="mobileCheckoutBtn" class="btn btn-crayon mobile-checkout-btn" type="button" onclick="goToStep2()">
+        下一步
+      </button>
     </div>
 
     <!-- ===== STEP2 ===== -->
@@ -3197,32 +3377,35 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   function bindIntroQuickDismiss(){
     if(!intro) return;
-    let startY=null;
-    let moved=false;
-    let hasDismissed=false;
+    let startY = null;
+    let startX = null;
+    let swipeEnabled = false;
+    let hasDismissed = false;
+
+    setTimeout(()=>{ swipeEnabled = true; }, 1800);
 
     intro.addEventListener('touchstart',(e)=>{
       const t = e.touches && e.touches[0];
       if(!t) return;
       startY = t.clientY;
-      moved = false;
+      startX = t.clientX;
     }, {passive:true});
 
-    intro.addEventListener('touchmove',(e)=>{
-      if(startY===null || hasDismissed) return;
-      const t = e.touches && e.touches[0];
+    intro.addEventListener('touchend',(e)=>{
+      if(!swipeEnabled || hasDismissed || startY === null || startX === null) return;
+      const t = e.changedTouches && e.changedTouches[0];
       if(!t) return;
+
       const dy = t.clientY - startY;
-      if(dy < -55){
-        moved = true;
+      const dx = t.clientX - startX;
+
+      startY = null;
+      startX = null;
+
+      if(dy < -55 && Math.abs(dy) > Math.abs(dx)){
         hasDismissed = true;
         goIntroMenu();
       }
-    }, {passive:true});
-
-    intro.addEventListener('touchend', ()=>{
-      startY = null;
-      moved = false;
     }, {passive:true});
   }
 
@@ -3976,7 +4159,313 @@ document.addEventListener('keydown',(e)=>{
     }
   }
 });
-document.addEventListener('DOMContentLoaded', ()=>{ try{ updateEnhancedOrderViews(); }catch(e){} });
+
+/* ===== UI 升級：共同工具 ===== */
+function showToast(message){
+  const toast = document.getElementById('toast');
+  if(!toast) return;
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(()=> toast.classList.remove('show'), 2200);
+}
+
+function copyAccount(){
+  const text = document.getElementById('accountNumber')?.textContent?.trim() || '';
+  if(!text) return;
+  const done = ()=> showToast('已複製匯款帳號');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>{
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try{ document.execCommand('copy'); }catch(e){}
+      ta.remove();
+      done();
+    });
+  }else{
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    ta.remove();
+    done();
+  }
+}
+
+async function screenshotOrder(){
+  const target = document.querySelector('#step2Panel section') || document.getElementById('step2Panel');
+  if(!target || typeof html2canvas === 'undefined'){
+    showToast('目前無法下載截圖，請稍後再試');
+    return;
+  }
+  document.body.classList.add('screenshot-mode');
+  await new Promise(r=>setTimeout(r, 80));
+  try{
+    const canvas = await html2canvas(target, {
+      backgroundColor: '#f7f6f2',
+      scale: Math.min(2, window.devicePixelRatio || 1.5),
+      useCORS: true
+    });
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = 'LIU_MAMA_order.png';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    showToast('已下載訂單截圖');
+  }catch(e){
+    showToast('訂單截圖失敗，請再試一次');
+  }finally{
+    document.body.classList.remove('screenshot-mode');
+  }
+}
+
+function isValidEmailFormat(email){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+function clearFieldError(inputId, errId){
+  const input = document.getElementById(inputId);
+  const err = document.getElementById(errId);
+  if(input) input.classList.remove('input-error');
+  if(err){
+    err.hidden = true;
+    err.textContent = '';
+  }
+}
+function setFieldError(inputId, errId, message){
+  const input = document.getElementById(inputId);
+  const err = document.getElementById(errId);
+  if(input) input.classList.add('input-error');
+  if(err){
+    err.hidden = false;
+    err.textContent = message;
+  }
+}
+function clearStepError(id){
+  const el = document.getElementById(id);
+  if(el){
+    el.hidden = true;
+    el.textContent = '';
+  }
+}
+function setStepError(id, message){
+  const el = document.getElementById(id);
+  if(el){
+    el.hidden = false;
+    el.textContent = message;
+  }
+}
+
+function getStep1State(){
+  const familyLive = isFamilyLaunchActive(getNow());
+  const qty = parseInt(document.getElementById('qty1')?.value) || 0;
+  const qtyFamily = familyLive ? (parseInt(document.getElementById('qty_family')?.value) || 0) : 0;
+  const method = document.querySelector('input[name="shipMethod"]:checked');
+  const name = document.getElementById('customerName')?.value.trim() || '';
+  const phone = (document.getElementById('customerPhone')?.value || '').replace(/\D/g,'');
+  const email = document.getElementById('customerEmail')?.value.trim() || '';
+  const totalText = document.getElementById('total')?.textContent || 'Total Amount: $0';
+  const totalMatch = totalText.match(/\$([0-9]+)/);
+  const total = totalMatch ? Number(totalMatch[1]) : 0;
+  return {familyLive, qty, qtyFamily, method, name, phone, email, total};
+}
+
+function validateStep1(showErrors){
+  const s = getStep1State();
+  let firstInvalid = null;
+  let ok = true;
+
+  clearFieldError('customerName','errName');
+  clearFieldError('customerPhone','errPhone');
+  clearFieldError('customerEmail','errEmail');
+  clearStepError('errQty');
+  clearStepError('errShip');
+
+  if(!s.name){
+    ok = false;
+    if(showErrors) setFieldError('customerName','errName','請填寫訂購人姓名');
+    firstInvalid = firstInvalid || document.getElementById('customerName');
+  }
+
+  if(!s.phone){
+    ok = false;
+    if(showErrors) setFieldError('customerPhone','errPhone','請填寫訂購人電話');
+    firstInvalid = firstInvalid || document.getElementById('customerPhone');
+  }else if(s.phone.length < 10){
+    ok = false;
+    if(showErrors) setFieldError('customerPhone','errPhone','請輸入完整電話號碼');
+    firstInvalid = firstInvalid || document.getElementById('customerPhone');
+  }
+
+  if(!s.email){
+    ok = false;
+    if(showErrors) setFieldError('customerEmail','errEmail','請填寫 Email');
+    firstInvalid = firstInvalid || document.getElementById('customerEmail');
+  }else if(!isValidEmailFormat(s.email)){
+    ok = false;
+    if(showErrors) setFieldError('customerEmail','errEmail','Email 格式不正確');
+    firstInvalid = firstInvalid || document.getElementById('customerEmail');
+  }
+
+  if((s.qty + s.qtyFamily) === 0){
+    ok = false;
+    if(showErrors) setStepError('errQty','請先選擇購買數量');
+    firstInvalid = firstInvalid || document.getElementById('productTable');
+  }
+
+  if(!s.method){
+    ok = false;
+    if(showErrors) setStepError('errShip','請選擇寄送方式');
+    firstInvalid = firstInvalid || document.querySelector('.ship-wrap');
+  }
+
+  if(showErrors && firstInvalid){
+    scrollToField(firstInvalid);
+    if(firstInvalid.focus) firstInvalid.focus();
+  }
+
+  return ok;
+}
+
+function updateStep1CTAState(){
+  const isStep1 = !document.getElementById('step1Panel')?.hidden;
+  const valid = validateStep1(false);
+  const totalText = document.getElementById('total')?.textContent || 'Total Amount: $0';
+  const totalMatch = totalText.match(/\$([0-9]+)/);
+  const total = totalMatch ? Number(totalMatch[1]) : 0;
+
+  const desktopBtn = document.getElementById('toStep2Btn');
+  const mobileWrap = document.getElementById('mobileStickyCheckout');
+  const mobileBtn = document.getElementById('mobileCheckoutBtn');
+  const mobileTotal = document.getElementById('mobileStickyTotal');
+
+  if(desktopBtn) desktopBtn.disabled = !valid;
+  if(mobileBtn) mobileBtn.disabled = !valid;
+  if(mobileTotal) mobileTotal.textContent = '$' + total;
+
+  if(mobileWrap){
+    const hasItems = total > 0;
+    mobileWrap.classList.toggle('is-visible', isStep1 && hasItems);
+    mobileWrap.setAttribute('aria-hidden', isStep1 && hasItems ? 'false' : 'true');
+  }
+}
+
+/* ===== UI 升級：更高級的 Step 轉場 ===== */
+function setStep(step){
+  const step1 = document.getElementById('step1Panel');
+  const step2 = document.getElementById('step2Panel');
+  const n1 = document.getElementById('stepNav1');
+  const n2 = document.getElementById('stepNav2');
+  const n3 = document.getElementById('stepNav3');
+
+  const target = step === 2 ? step2 : step1;
+  const current = step === 2 ? step1 : step2;
+
+  if(n1 && n2 && n3){
+    n1.classList.remove('is-active','is-done');
+    n2.classList.remove('is-active','is-done');
+    n3.classList.remove('is-active','is-done');
+    if(step === 1){
+      n1.classList.add('is-active');
+    }else if(step === 2){
+      n1.classList.add('is-done');
+      n2.classList.add('is-active');
+    }
+  }
+
+  if(!target || !current){
+    if(step1) step1.hidden = (step !== 1);
+    if(step2) step2.hidden = (step !== 2);
+    updateStep1CTAState();
+    return;
+  }
+
+  if(current.hidden === false && target.hidden === true){
+    current.classList.add('is-leaving');
+    setTimeout(()=>{
+      current.hidden = true;
+      current.classList.remove('is-leaving');
+
+      target.hidden = false;
+      target.classList.add('is-entering');
+      requestAnimationFrame(()=>{
+        target.classList.add('is-ready');
+      });
+      setTimeout(()=>{
+        target.classList.remove('is-entering','is-ready');
+      }, 360);
+
+      if(step === 2){
+        const reveals = document.querySelectorAll('#step2Panel .reveal');
+        reveals.forEach(el=>{
+          el.classList.remove('in');
+          void el.offsetWidth;
+          el.classList.add('in');
+        });
+      }
+      updateStep1CTAState();
+    }, 220);
+  }else{
+    if(step1) step1.hidden = (step !== 1);
+    if(step2) step2.hidden = (step !== 2);
+    if(step === 2){
+      const reveals = document.querySelectorAll('#step2Panel .reveal');
+      reveals.forEach(el=>{
+        el.classList.remove('in');
+        void el.offsetWidth;
+        el.classList.add('in');
+      });
+    }
+    updateStep1CTAState();
+  }
+}
+
+function goToStep2(){
+  if(!validateStep1(true)) return;
+  updateSummary();
+  setStep(2);
+  scrollToPageTopSmooth();
+}
+
+(function(){
+  const _calculate = calculate;
+  calculate = function(isInit){
+    _calculate(isInit);
+    updateStep1CTAState();
+  };
+
+  const _updateSummary = updateSummary;
+  updateSummary = function(){
+    _updateSummary();
+    updateStep1CTAState();
+  };
+})();
+
+function initUpgrade12345(){
+  const nameInput  = document.getElementById('customerName');
+  const phoneInput = document.getElementById('customerPhone');
+  const emailInput = document.getElementById('customerEmail');
+
+  [nameInput, phoneInput, emailInput].forEach((el)=>{
+    if(!el) return;
+    el.addEventListener('input', ()=> updateStep1CTAState());
+    el.addEventListener('blur', ()=> validateStep1(true));
+  });
+
+  document.querySelectorAll('.ship-card input').forEach(el=>{
+    el.addEventListener('change', ()=>{
+      clearStepError('errShip');
+      updateStep1CTAState();
+    });
+  });
+
+  updateStep1CTAState();
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{ try{ updateEnhancedOrderViews(); }catch(e){} try{ initUpgrade12345(); }catch(e){} });
 </script>
 
 
