@@ -7,50 +7,33 @@
 <title>LIU MAMA Order</title>
 
 <!--
-/* ==================================================
-【快速修改總入口｜先改這裡】
+==================================================
+【快速修改導覽｜先搜尋這些關鍵字】
+1. 搜尋：EDITOR_CONFIG
+   - 改照片網址
+   - 改開賣時間
+   - 改開賣前/後文案
+   - 改價格
+   - 改 Google 表單
+   - 改優惠碼內容
+   - 開啟 / 關閉優惠券輸入框
 
-1. 改開賣時間
-   搜尋：familyLaunch
-   位置：EDITOR_CONFIG.dates.familyLaunch
-   範例：
-   familyLaunch: { y: 2026, m: 5, d: 1, hh: 0, mm: 0, ss: 0 }
+2. 搜尋：FONT_SIZE_GUIDE
+   - 改主要字體大小
+   - 手機版字體大小也在附近
 
-2. 改價格
-   搜尋：prices
-   位置：EDITOR_CONFIG.prices
-   single = 2人包價格
-   family = 家庭包價格
+3. 搜尋：MOBILE_FAMILY_PRICE_SIZE
+   - 改家庭包未開賣時的價格字體
+   - 目前已改成「5/1開賣」小字，避免手機被吃掉
 
-3. 改圖片
-   搜尋：images
-   位置：EDITOR_CONFIG.images
-   hero = 首頁主圖
-   checkoutSingle = STEP2 單包圖
-   checkoutFamily = STEP2 家庭包圖
+4. 搜尋：COUPON_INPUT_TOGGLE
+   - 改 EDITOR_CONFIG.ui.enableCouponInput
+   - false = 不顯示優惠券輸入框
+   - true  = 顯示優惠券輸入框
 
-4. 改開賣前後文案
-   搜尋：copy
-   位置：EDITOR_CONFIG.copy
-   promo = 上方宣傳文案
-   familyCard = 商品表格中的家庭包文字
-   launchModal = 開賣跳窗文字
-   summary = STEP2 摘要品項名稱
-
-5. 改優惠券開關
-   搜尋：enableCouponInput
-   true  = 顯示優惠券輸入框
-   false = 隱藏優惠券輸入框
-
-6. 改優惠碼內容
-   搜尋：coupons
-   可改優惠碼、折扣%、最低門檻
-
-7. 改表單欄位
-   搜尋：forms
-   before = 開賣前表單
-   after  = 開賣後表單
-================================================== */
+5. 搜尋：HERO_IMAGE / CHECKOUT_IMAGE
+   - 找首頁圖、結帳圖位置
+==================================================
 -->
 
 <!-- 字體 -->
@@ -81,7 +64,7 @@ h2                → 主標題大小
 家庭包未開賣時，手機版容易被吃掉，所以這裡獨立拉出來。
 想再調小/調大，改下面這兩個 selector 就好。
 */
-#familyPriceLabel{
+#familyPriceLabel.is-regular{
   font-size:12px;
   line-height:1.2;
   letter-spacing:.04em;
@@ -94,7 +77,7 @@ h2                → 主標題大小
 }
 
 @media (max-width:480px){
-  #familyPriceLabel{
+  #familyPriceLabel.is-regular{
     font-size:11px;
     line-height:1.15;
     letter-spacing:.02em;
@@ -1852,6 +1835,27 @@ th{
       <section class="reveal">
         <p class="section-title">請選擇購買數量與寄送方式，系統將自動計算金額</p>
 
+<!-- ==================================================
+【商品表格區｜新增品項先從這裡開始】
+
+目前這張表只有：
+1. 麻辣底料包（2人份）
+2. 家庭包（4-6人份）
+
+如果要新增新品項：
+步驟 1：先複製一整個 <tr>...</tr>
+步驟 2：改 id / 名稱 / 價格 / 數量欄位 id
+步驟 3：再去下面補：
+- 數量 function
+- calculate() 金額計算
+- updateSummary() 摘要
+- goToForm() 表單送出
+- forms 欄位設定（如果 Google 表單也要收新品數量）
+
+注意：
+只在這裡新增一列，功能還不會自己生效
+下面程式也一定要一起補
+================================================== -->
 <table id="productTable">
 
 <colgroup>
@@ -1918,6 +1922,23 @@ value="0"
 
 <!-- [好改區｜家庭包開賣前後文字] 搜尋：EDITOR_CONFIG.copy.familyCard -->
 <!-- 家庭包區塊：價格/字樣由下方 EDITOR_CONFIG.copy.familyCard 控制 -->
+<!-- ===== 家庭包品項列 =====
+這一列控制：
+1. 家庭包名稱
+2. 家庭包副標（4-6人份）
+3. 家庭包未開賣時顯示的文字
+4. 家庭包數量按鈕
+
+如果要照這個格式新增新品，
+最簡單就是直接複製這整列，改成：
+- id="newItemRow"
+- id="newItemSubLabel"
+- id="newItemPriceLabel"
+- id="qty_new"
+- onclick="changeQty3(-1 / 1)"
+
+新增完後一定要去下面補 changeQty3()
+========================== -->
 <tr id="familyRow">
 
 <td>
@@ -2147,6 +2168,47 @@ function imgReady(el){
   }
   return Promise.resolve();
 }
+/* ==================================================
+【新增新品項必做清單】
+
+新增 1 個新品，不是只改 1 個地方
+請照順序做：
+
+[1] prices 新增價格
+[2] productTable 複製一列商品<tr>
+[3] 新增 qty 變數與 changeQty function
+[4] calculate() 把新品算進總金額
+[5] updateSummary() 把新品算進摘要
+[6] forms 新增 qtyNew entry
+[7] goToForm() 把新品送進 Google 表單
+
+少改任何一個地方，都會出現：
+- 畫面有新品但金額沒加
+- STEP2 沒顯示新品
+- 表單收不到新品數量
+================================================== */
+/* ===== 品項數量變數區 =====
+現在已有：
+qty1        = 2人包數量
+qty_family  = 家庭包數量
+
+如果新增第3個品項，請照下面格式新增：
+
+let qty_new = 0;
+
+function changeQty3(delta){
+  qty_new += delta;
+  if(qty_new < 0) qty_new = 0;
+
+  document.getElementById("qty_new").value = qty_new;
+
+  calculate();
+  updateSummary();
+}
+
+提醒：
+新增品項的數量 function 名稱不要跟原本重複
+====================== */
 let qty_family = 0;
 
 function changeQty2(delta){
@@ -2325,8 +2387,68 @@ function getNow(){ return new Date(); }
 // 其他下面功能程式盡量不要動。
 // ===============================
 const EDITOR_CONFIG = {
+  /* ==================================================
+  【快速修改總入口｜先改這裡】
+
+  1. 改開賣時間
+     搜尋：familyLaunch
+     位置：EDITOR_CONFIG.dates.familyLaunch
+     範例：
+     familyLaunch: { y: 2026, m: 5, d: 1, hh: 0, mm: 0, ss: 0 }
+
+  2. 改價格
+     搜尋：prices
+     位置：EDITOR_CONFIG.prices
+     single = 2人包價格
+     family = 家庭包價格
+
+  3. 改圖片
+     搜尋：images
+     位置：EDITOR_CONFIG.images
+     hero = 首頁主圖
+     checkoutSingle = STEP2 單包圖
+     checkoutFamily = STEP2 家庭包圖
+
+  4. 改開賣前後文案
+     搜尋：copy
+     位置：EDITOR_CONFIG.copy
+     promo = 上方宣傳文案
+     familyCard = 商品表格中的家庭包文字
+     launchModal = 開賣跳窗文字
+     summary = STEP2 摘要品項名稱
+
+  5. 改優惠券開關
+     搜尋：enableCouponInput
+     true  = 顯示優惠券輸入框
+     false = 隱藏優惠券輸入框
+
+  6. 改優惠碼內容
+     搜尋：coupons
+     可改優惠碼、折扣%、最低門檻
+
+  7. 改表單欄位
+     搜尋：forms
+     before = 開賣前表單
+     after  = 開賣後表單
+  ================================================== */
+
   // ===== 1) 日期設定 =====
   // 搜尋：familyLaunch
+  /* ===== 開賣時間設定 =====
+  這裡是真正控制「家庭包何時開賣」的地方
+
+  格式：
+  familyLaunch: { y: 年, m: 月, d: 日, hh: 時, mm: 分, ss: 秒 }
+
+  例子：
+  2026/5/1 00:00 開賣
+  familyLaunch: { y: 2026, m: 5, d: 1, hh: 0, mm: 0, ss: 0 }
+
+  注意：
+  1. 這裡只控制「是否開賣」
+  2. 畫面上的「5/1開賣」這種文字，不會自動跟著改
+  3. 如果改了日期，也要一起去改 promo / familyCard / launchModal 的文案
+  ======================== */
   // 月份請用 1~12，例如 5 月就寫 m: 5
   dates: {
     familyLaunch: { y: 2026, m: 5, d: 1, hh: 0, mm: 0, ss: 0 },
@@ -2369,6 +2491,22 @@ const EDITOR_CONFIG = {
   },
 
   // ===== 6) 商品文案設定 =====
+  /* ===== 文案修改區 =====
+  這裡只改「畫面顯示文字」，不改功能
+
+  promo
+  - 首頁上方宣傳文字
+
+  familyCard
+  - 商品表格裡家庭包那一列顯示的文字
+  - beforePriceLabel 可改成：5/1開賣、即將開賣、COMING SOON
+
+  launchModal
+  - 開賣跳窗內容
+
+  summary
+  - STEP2 摘要裡的品項名稱
+  ====================== */
   // before = 5/1 前顯示
   // after  = 5/1 後顯示
   copy: {
@@ -2414,6 +2552,22 @@ const EDITOR_CONFIG = {
   },
 
   // ===== 7) Google 表單設定 =====
+  /* ===== Google 表單欄位設定 =====
+  這裡是對應 Google Form 的 entry 編號
+
+  目前分成：
+  before = 開賣前用的表單
+  after  = 開賣後用的表單
+
+  如果新增新品項：
+  1. 先去 Google 表單新增「新品數量」題目
+  2. 找到新品那題的 entry 編號
+  3. 加進 fields，例如：
+
+  qtyNew: 'entry.123456789'
+
+  4. 再去 goToForm() 把 qtyNew 一起送出去
+  =========================== */
   // 之後如果你換表單或欄位，只改這裡
   forms: {
     before: {
@@ -2571,6 +2725,21 @@ function getModalLines(phase, launchDate){
   });
 }
 
+/* ===== 開賣前後畫面切換區 =====
+這裡會依 familyLaunch 自動切換：
+
+未開賣時：
+- 家庭包數量歸零
+- 家庭包按鈕不能按
+- 顯示 beforePriceLabel / beforePriceNote
+
+已開賣時：
+- 家庭包可下單
+- 顯示 afterPriceLabel
+
+如果你改了開賣時間但畫面文字也要一起變，
+請回到 EDITOR_CONFIG.copy.familyCard / promo / launchModal 一起改
+============================= */
 function updatePricingUI(){
   const promo = document.getElementById('promoInline');
   const priceOld = document.getElementById('priceOld');
@@ -3133,7 +3302,27 @@ function buildQty(){
   });
 }
 
-/* ===== 計算金額 ===== */
+/* ===== 金額計算區 =====
+這裡負責：
+1. 商品小計
+2. 優惠折扣
+3. 運費
+4. 總金額
+
+如果新增新品項：
+一定要把新品數量 × 新品價格 加進 subtotal
+
+範例：
+const qty_new = parseInt(document.getElementById('qty_new')?.value) || 0;
+
+const subtotal =
+  (qty * unitPrice) +
+  ((familyLive ? qty_family : 0) * FAMILY_PRICE) +
+  (qty_new * EDITOR_CONFIG.prices.newItem);
+
+如果沒有加在這裡，
+畫面上就算有新品列，總金額也不會算進去
+====================== */
 let lastTotal=0;
 function calculate(isInit){
   const qty1 = parseInt(document.getElementById('qty1').value) || 0;
@@ -3212,6 +3401,29 @@ function updateCheckoutProductCard(){
   }
 }
 
+/* ===== STEP2 訂單摘要區 =====
+這裡負責顯示：
+- 商品小計
+- 運費
+- 折扣
+- 合計
+- 訂購份數文字
+
+如果新增新品項：
+1. subtotal 要加新品
+2. summaryQty 要把新品名稱一起顯示
+
+範例：
+const qty_new = parseInt(document.getElementById('qty_new')?.value) || 0;
+
+document.getElementById('summaryQty').textContent =
+  qty + '盒(2人包)' +
+  ' + ' + qty_family + '盒(家庭包)' +
+  ' + ' + qty_new + '盒(新品)';
+
+如果沒改這裡，
+STEP2 就不會顯示新品
+========================= */
 function updateSummary(){
 
   const qty = parseInt(document.getElementById('qty1').value) || 0;
@@ -3289,7 +3501,31 @@ function updateSummary(){
 }
 /* ===== STEP2 摘要 ===== */
 
-/* ===== 複製／截圖／Toast ===== */
+/* ===== 送出 Google 表單區 =====
+這裡負責把資料帶去表單：
+- 姓名
+- 電話
+- Email
+- 品項數量
+- 運送方式
+- 總金額
+
+如果新增新品項，這裡一定要一起補：
+1. 讀取新品數量
+   const qty_new = parseInt(document.getElementById('qty_new')?.value) || 0;
+
+2. total / subtotal 計算要加新品
+
+3. payload 要加新品欄位
+   if(formConfig.fields.qtyNew){
+     payload[formConfig.fields.qtyNew] = qty_new;
+   }
+
+4. EDITOR_CONFIG.forms.before / after 也要新增 qtyNew 的 entry 編號
+
+如果沒改這裡，
+新品就不會送到 Google 表單
+========================== */
 function goToForm(){
 
   const name  = document.getElementById('customerName').value.trim();
