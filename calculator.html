@@ -1703,6 +1703,243 @@ th{
 
 
 
+
+<style id="liu-mama-luxe-override-final">
+/* ===== 高級感覆寫版（保留原功能／原備註／原文字） ===== */
+:root{
+  --bg:#f8f7f3;
+  --navy:#243446;
+  --gray-blue:#7d8d9d;
+  --paper:#fcfaf6;
+  --line-blue:#d5dce4;
+  --promo-red:#8f3d38;
+  --item-text:#2b3a49;
+  --crayon-blue:#495c70;
+  --crayon-blue-ink:#415263;
+}
+
+html,body{
+  background-color:var(--bg);
+}
+
+.page-inner{
+  max-width:760px;
+}
+
+.topbar{
+  padding-top:18px;
+  color:#697687;
+}
+.topbar-link{
+  border-bottom:1px solid rgba(68,86,108,.28);
+}
+
+.hero-frame{
+  border-radius:24px;
+  box-shadow:0 18px 38px rgba(32,43,56,.14);
+}
+.hero-overlay{
+  background:linear-gradient(90deg, rgba(18,26,36,.64) 0%, rgba(18,26,36,.36) 42%, rgba(18,26,36,.06) 100%);
+}
+
+#startBtn,
+#storyBtn{
+  box-shadow:0 8px 18px rgba(38,48,61,.08);
+}
+#startBtn::after,
+#storyBtn::after{
+  display:none !important;
+}
+
+.input-container,
+.checkout-summary,
+.account-box,
+.checkout-product,
+.coupon-box,
+table{
+  background:rgba(255,255,255,.78);
+  border:1px solid rgba(36,52,70,.06);
+  box-shadow:0 10px 24px rgba(38,48,61,.05);
+}
+
+.btn-crayon{
+  background:#4b5e72;
+  border:1px solid #415263;
+  box-shadow:0 8px 18px rgba(36,52,70,.12), inset 0 1px 0 rgba(255,255,255,.12);
+}
+.btn-crayon::before{
+  opacity:.06;
+}
+.btn-sketch{
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(36,52,70,.22);
+  box-shadow:0 6px 14px rgba(38,48,61,.06);
+}
+.btn-sketch::after{
+  display:none;
+}
+
+.ship-card{
+  background:rgba(255,255,255,.74);
+  border:1px solid rgba(36,52,70,.08);
+  box-shadow:0 8px 18px rgba(38,48,61,.05);
+}
+.ship-card::after{
+  opacity:.08;
+}
+.ship-card:has(input:checked),
+.ship-card.selected{
+  border-color:rgba(36,52,70,.22);
+  box-shadow:0 10px 22px rgba(38,48,61,.08), 0 0 0 4px rgba(36,52,70,.05);
+}
+
+.total{
+  padding:0;
+}
+.total::before{
+  display:none !important;
+}
+
+/* ===== STEP2 左側訂單卡：更高級、更不擠 ===== */
+.checkout-layout{
+  max-width:600px;
+  gap:22px;
+}
+.checkout-product{
+  flex:0 0 180px;
+  padding:12px;
+  border-radius:22px;
+}
+.checkout-product img{
+  border-radius:16px;
+}
+.checkout-product-meta{
+  margin-top:14px;
+  text-align:left;
+}
+.checkout-product-title{
+  font-size:14px;
+  line-height:1.65;
+  letter-spacing:.12em;
+  color:#26374a;
+}
+.checkout-product-items{
+  margin-top:12px;
+  min-height:44px;
+}
+.checkout-product-item{
+  display:block;
+  padding:0 0 10px;
+  line-height:1.72;
+  border-bottom:1px dashed rgba(34,50,67,.08);
+  transition:opacity .22s ease, transform .22s ease;
+}
+.checkout-product-item:last-child{
+  border-bottom:none;
+  padding-bottom:0;
+}
+.checkout-product-item span{
+  display:block;
+}
+.checkout-product-item span:first-child{
+  font-size:12.5px;
+  color:#314253;
+}
+.checkout-product-item span:last-child{
+  margin-top:2px;
+  font-size:10.8px;
+  color:#7b8692;
+  letter-spacing:.1em;
+}
+
+.soft-update{
+  animation:softUpdateFade .28s ease;
+}
+@keyframes softUpdateFade{
+  0%{ opacity:.5; transform:translateY(4px); }
+  100%{ opacity:1; transform:translateY(0); }
+}
+
+.total.animate,
+.total.glow{
+  animation:totalSoftPulse .32s ease !important;
+}
+@keyframes totalSoftPulse{
+  0%{ transform:scale(.985); opacity:.82; }
+  60%{ transform:scale(1.015); opacity:1; }
+  100%{ transform:scale(1); opacity:1; }
+}
+
+@media (max-width:480px){
+  .checkout-layout{
+    max-width:100%;
+    gap:14px;
+  }
+  .checkout-product{
+    width:100%;
+    max-width:340px;
+    margin:0 auto;
+    padding:14px;
+  }
+  .checkout-product-title{
+    font-size:14px;
+    line-height:1.7;
+    letter-spacing:.14em;
+  }
+  .checkout-product-items{
+    margin-top:12px;
+  }
+  .checkout-product-item span:first-child{
+    font-size:12px;
+  }
+  .checkout-product-item span:last-child{
+    font-size:10.5px;
+  }
+}
+</style>
+
+
+<style id="order-preview-restore">
+/* ===== ORDER PREVIEW 框框（保留之前版本） ===== */
+.selection-brief{
+  width:min(560px, 92%);
+  margin:14px auto 0;
+  padding:12px 14px 11px;
+  border-radius:18px;
+  background:rgba(255,255,255,.68);
+  border:1px solid rgba(34,50,67,.07);
+  box-shadow:0 8px 18px rgba(24,34,44,.04);
+  text-align:left;
+}
+.selection-brief-label{
+  font-size:10px;
+  letter-spacing:.24em;
+  color:#8190a0;
+  margin-bottom:6px;
+}
+.selection-brief-main{
+  font-size:13px;
+  color:#314253;
+  letter-spacing:.08em;
+  line-height:1.7;
+}
+.selection-brief-sub{
+  margin-top:4px;
+  font-size:11px;
+  color:#6c7782;
+  letter-spacing:.08em;
+}
+@media (max-width:480px){
+  .selection-brief{
+    width:100%;
+    padding:11px 12px 10px;
+  }
+  .selection-brief-main{
+    font-size:12px;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -2015,6 +2252,13 @@ readonly
         <div class="total" id="total" role="status" aria-live="polite" aria-atomic="true">Total Amount: $0</div>
         <div class="total-note">運費另計（折扣後再加運費） · 單位：新台幣</div>
 
+        <div class="selection-brief" id="selectionBrief" hidden>
+          <div class="selection-brief-label">ORDER PREVIEW</div>
+          <div class="selection-brief-main" id="selectionBriefMain">尚未選擇商品</div>
+          <div class="selection-brief-sub" id="selectionBriefSub">請先選擇商品與寄送方式</div>
+        </div>
+
+
         <button id="toStep2Btn" class="btn btn-crayon step-next-btn" type="button" onclick="goToStep2()">
           下一步：結帳與匯款
         </button>
@@ -2040,6 +2284,12 @@ readonly
             <img id="checkoutProductImage" decoding="async" loading="lazy"
                  src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2"
                  alt="劉嘛麻 麻辣鍋底商品圖">
+            <div class="checkout-product-meta">
+              <div class="checkout-product-title" id="checkoutProductTitle">本次訂購</div>
+              <div class="checkout-product-items" id="checkoutProductItems">
+                <div class="checkout-product-item"><span>尚未選擇商品</span><span>請先於上一步選擇商品</span></div>
+              </div>
+            </div>
             </div>
 
           <div class="checkout-summary">
@@ -3426,6 +3676,69 @@ document.getElementById('summaryQty').textContent =
 如果沒改這裡，
 STEP2 就不會顯示新品
 ========================= */
+
+function softRefresh(el){
+  if(!el) return;
+  el.classList.remove('soft-update');
+  void el.offsetWidth;
+  el.classList.add('soft-update');
+}
+
+function updateEnhancedOrderViews(){
+  const familyLive = isFamilyLaunchActive(getNow());
+  const qty = parseInt(document.getElementById('qty1')?.value) || 0;
+  const qtyFamily = familyLive ? (parseInt(document.getElementById('qty_family')?.value) || 0) : 0;
+  const method = document.querySelector('input[name="shipMethod"]:checked');
+
+  let shipLabel = '未選擇寄送方式';
+  if(method){
+    if(method.value === '711') shipLabel = '711取貨';
+    else if(method.value === 'post') shipLabel = '宅配到家';
+    else if(method.value === 'pickup') shipLabel = '自取';
+  }
+
+  const selectedItems = [];
+  if(qty > 0){
+    selectedItems.push({ name:'手炒麻辣鍋底', detail:'2人份 × ' + qty });
+  }
+  if(qtyFamily > 0){
+    selectedItems.push({ name:'家庭包', detail:'4–6人份 × ' + qtyFamily });
+  }
+
+  const brief = document.getElementById('selectionBrief');
+  const briefMain = document.getElementById('selectionBriefMain');
+  const briefSub = document.getElementById('selectionBriefSub');
+
+  if(brief && briefMain && briefSub){
+    if(selectedItems.length){
+      brief.hidden = false;
+      briefMain.textContent = selectedItems.map(item => item.name + ' × ' + item.detail.split(' × ')[1]).join('　/　');
+      briefSub.textContent = '配送方式：' + shipLabel;
+      softRefresh(brief);
+    }else{
+      brief.hidden = true;
+      briefMain.textContent = '尚未選擇商品';
+      briefSub.textContent = '請先選擇商品與寄送方式';
+    }
+  }
+
+  const cardTitle = document.getElementById('checkoutProductTitle');
+  const cardItems = document.getElementById('checkoutProductItems');
+  if(cardTitle){
+    cardTitle.textContent = '本次訂購';
+  }
+  if(cardItems){
+    if(selectedItems.length){
+      cardItems.innerHTML = selectedItems.map(item =>
+        '<div class="checkout-product-item"><span>' + item.name + '</span><span>' + item.detail + '</span></div>'
+      ).join('');
+    }else{
+      cardItems.innerHTML = '<div class="checkout-product-item"><span>尚未選擇商品</span><span>請先於上一步選擇商品</span></div>';
+    }
+    softRefresh(cardItems);
+  }
+}
+
 function updateSummary(){
 
   const qty = parseInt(document.getElementById('qty1').value) || 0;
@@ -3478,6 +3791,7 @@ function updateSummary(){
   document.getElementById('summaryName').textContent = name || '—';
 
   updateCheckoutProductCard();
+  updateEnhancedOrderViews();
 
   const row = document.getElementById('summaryDiscountRow');
   const val = document.getElementById('summaryDiscount');
@@ -3666,6 +3980,7 @@ document.addEventListener('keydown',(e)=>{
     }
   }
 });
+document.addEventListener('DOMContentLoaded', ()=>{ try{ updateEnhancedOrderViews(); }catch(e){} });
 </script>
 
 
