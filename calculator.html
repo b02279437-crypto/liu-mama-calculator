@@ -6,6 +6,36 @@
 <meta name="format-detection" content="telephone=no" />
 <title>LIU MAMA Order</title>
 
+<!--
+==================================================
+【快速修改導覽｜先搜尋這些關鍵字】
+1. 搜尋：EDITOR_CONFIG
+   - 改照片網址
+   - 改開賣時間
+   - 改開賣前/後文案
+   - 改價格
+   - 改 Google 表單
+   - 改優惠碼內容
+   - 開啟 / 關閉優惠券輸入框
+
+2. 搜尋：FONT_SIZE_GUIDE
+   - 改主要字體大小
+   - 手機版字體大小也在附近
+
+3. 搜尋：MOBILE_FAMILY_PRICE_SIZE
+   - 改家庭包未開賣時的價格字體
+   - 目前已改成「5/1開賣」小字，避免手機被吃掉
+
+4. 搜尋：COUPON_INPUT_TOGGLE
+   - 改 EDITOR_CONFIG.ui.enableCouponInput
+   - false = 不顯示優惠券輸入框
+   - true  = 顯示優惠券輸入框
+
+5. 搜尋：HERO_IMAGE / CHECKOUT_IMAGE
+   - 找首頁圖、結帳圖位置
+==================================================
+-->
+
 <!-- 字體 -->
 <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Noto+Serif+TC:wght@500;600&display=swap" rel="stylesheet">
 <!-- 截圖功能 -->
@@ -16,6 +46,49 @@
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/LOGO2-removebg-preview.png">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-7">
+
+
+<!-- [快速修改｜字體大小] 搜尋：FONT_SIZE_GUIDE -->
+<style id="editor-quick-style">
+/* ===== FONT_SIZE_GUIDE =====
+h2                → 主標題大小
+.brand-tagline    → 品牌標語
+.promo-inline     → 上方宣傳文案
+.price-new        → 商品價格
+#familyPriceLabel → 家庭包未開賣主字
+#familyPriceNote  → 家庭包未開賣補充字
+手機版請再往下搜尋：@media (max-width:480px)
+*/
+
+/* ===== MOBILE_FAMILY_PRICE_SIZE =====
+家庭包未開賣時，手機版容易被吃掉，所以這裡獨立拉出來。
+想再調小/調大，改下面這兩個 selector 就好。
+*/
+#familyPriceLabel{
+  font-size:12px;
+  line-height:1.2;
+  letter-spacing:.04em;
+  white-space:normal;
+}
+#familyPriceNote{
+  font-size:10px;
+  line-height:1.2;
+  letter-spacing:.06em;
+}
+
+@media (max-width:480px){
+  #familyPriceLabel{
+    font-size:11px;
+    line-height:1.15;
+    letter-spacing:.02em;
+  }
+  #familyPriceNote{
+    font-size:9.5px;
+    line-height:1.15;
+    letter-spacing:.04em;
+  }
+}
+</style>
 
 <style>
 :root{
@@ -1652,6 +1725,7 @@ th{
 
   <div id="intro-hero-panel">
     <div class="hero-frame">
+      <!-- [好改區｜首頁照片] 搜尋：HERO_IMAGE，實際網址在下方 EDITOR_CONFIG.images.hero -->
       <img class="hero-image" decoding="async" loading="eager"
            src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2"
            alt="Liu Mama 麻辣鍋底產品照">
@@ -1723,6 +1797,7 @@ th{
         <p class="brand-tagline">
           手炒的麻辣，暖心又暖胃
         </p>
+        <!-- [好改區｜開賣前後上方文案] 搜尋：EDITOR_CONFIG.copy.promo -->
         <!-- 文案顯示內容由下方 EDITOR_CONFIG.copy.promo 控制 -->
         <p id="promoInline" class="promo-inline">
           <span class="promo-mark">⛧</span>
@@ -1824,6 +1899,7 @@ value="0"
 
 <!-- 家庭包 -->
 
+<!-- [好改區｜家庭包開賣前後文字] 搜尋：EDITOR_CONFIG.copy.familyCard -->
 <!-- 家庭包區塊：價格/字樣由下方 EDITOR_CONFIG.copy.familyCard 控制 -->
 <tr id="familyRow">
 
@@ -1836,8 +1912,8 @@ value="0"
 
 <div class="price-cell">
 
-<span class="price-new is-regular" id="familyPriceLabel">COMING SOON</span>
-<small id="familyPriceNote" style="display:block;color:#7b8086;margin-top:4px;letter-spacing:.08em;">5/1 正式上線</small>
+<span class="price-new is-regular" id="familyPriceLabel">5/1開賣</span>
+<small id="familyPriceNote" style="display:block;color:#7b8086;margin-top:4px;letter-spacing:.08em;"></small>
 
 </div>
 
@@ -1922,6 +1998,7 @@ readonly
 
         <div class="checkout-layout" id="checkoutCard">
           <div class="checkout-product">
+            <!-- [好改區｜結帳照片] 搜尋：CHECKOUT_IMAGE，實際網址在下方 EDITOR_CONFIG.images.checkoutSingle / checkoutFamily -->
             <img id="checkoutProductImage" decoding="async" loading="lazy"
                  src="https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2"
                  alt="劉嘛麻 麻辣鍋底商品圖">
@@ -1945,6 +2022,18 @@ readonly
               <span>合計金額</span>
               <span id="summaryTotal">$0</span>
             </div>
+
+            <!-- [好改區｜優惠券輸入框] 搜尋：COUPON_INPUT_TOGGLE -->
+            <div class="coupon-box" id="couponInputBox" style="display:none;">
+  <div class="coupon-title">COUPON</div>
+  <div class="coupon-controls">
+    <input type="text" id="couponInput" placeholder="請輸入優惠碼" autocomplete="off">
+    <button class="btn btn-sketch" type="button" onclick="applyCoupon()">套用</button>
+  </div>
+  <div class="coupon-hint">
+    <span class="coupon-line">優惠碼內容請改上方 EDITOR_CONFIG.coupons</span>
+  </div>
+</div>
 
             <div class="coupon-box" id="couponBox">
   <div class="coupon-title">LINE</div>
@@ -2214,11 +2303,13 @@ function getNow(){ return new Date(); }
 
 // ===============================
 // ✅✅✅ 可直接修改區（以後優先改這裡）
-// 你之後如果要換文案、圖片、表單、日期，先找這一區就好。
+// 搜尋：EDITOR_CONFIG
+// 你之後如果要換文案、圖片、表單、日期、價格、優惠碼、是否顯示優惠券輸入框，先找這一區就好。
 // 其他下面功能程式盡量不要動。
 // ===============================
 const EDITOR_CONFIG = {
   // ===== 1) 日期設定 =====
+  // 搜尋：familyLaunch
   // 月份請用 1~12，例如 5 月就寫 m: 5
   dates: {
     familyLaunch: { y: 2026, m: 5, d: 1, hh: 0, mm: 0, ss: 0 },
@@ -2231,6 +2322,7 @@ const EDITOR_CONFIG = {
   },
 
   // ===== 3) 圖片設定 =====
+  // 搜尋：HERO_IMAGE / CHECKOUT_IMAGE
   images: {
     hero: 'https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2',
     checkoutSingle: 'https://raw.githubusercontent.com/b02279437-crypto/liu-mama-calculator/main/product-2',
@@ -2240,6 +2332,15 @@ const EDITOR_CONFIG = {
   // ===== 4) LINE 連結 =====
   line: {
     url: 'https://page.line.me/217mwvhv',
+  },
+
+  // ===== 4.5) 顯示開關 =====
+  // ===== COUPON_INPUT_TOGGLE =====
+  // enableCouponInput:
+  // false = 不顯示優惠券輸入框（目前預設）
+  // true  = 顯示優惠券輸入框
+  ui: {
+    enableCouponInput: false,
   },
 
   // ===== 5) 優惠碼設定 =====
@@ -2270,13 +2371,13 @@ const EDITOR_CONFIG = {
     },
     familyCard: {
       beforeSubLabel: '(4-6人份)',
-      beforePriceLabel: 'COMING SOON',
-      beforePriceNote: '5/1 正式上線',
+      beforePriceLabel: '5/1開賣',
+      beforePriceNote: '',
       afterSubLabel: '(4-6人份)',
       afterPriceLabel: '$590',
     },
     launchModal: {
-      title: '家庭包coming soon .ᐟ.ᐟ',
+      title: '家庭包 5/1 開賣 .ᐟ.ᐟ',
       beforeLines: [
        '聽到大家的心聲了',
        '家庭包內含兩個底料包',
@@ -2333,6 +2434,7 @@ const CAMPAIGN_CONFIG = {
     family: EDITOR_CONFIG.prices.family,
   },
   line: EDITOR_CONFIG.line,
+  ui: EDITOR_CONFIG.ui,
   coupons: EDITOR_CONFIG.coupons,
 };
 
@@ -2350,6 +2452,7 @@ function makeTWDate(obj){
 
 // 下面維持原本程式使用的常數名稱（功能不變）
 const LINE_URL      = CAMPAIGN_CONFIG.line.url;
+const UI_CONFIG     = CAMPAIGN_CONFIG.ui || {};
 const PRICE_REGULAR = CAMPAIGN_CONFIG.prices.regular;
 const PRICE_SALE    = CAMPAIGN_CONFIG.prices.sale;
 const FAMILY_PRICE  = CAMPAIGN_CONFIG.prices.family;
@@ -2381,6 +2484,7 @@ function getPricingContext(now = getNow()){
 }
 
 /** 優惠碼設定（可自行新增） */
+// 搜尋：EDITOR_CONFIG.coupons
 // （優惠碼設定已集中到 CAMPAIGN_CONFIG.coupons）
 
 let appliedCoupon = '';
@@ -2425,8 +2529,12 @@ function setLineLinks(){
 }
 
 function updateCouponVisibility(){
+  const couponInputBox = document.getElementById('couponInputBox');
   const couponBox = document.getElementById('couponBox');
   const lineInfoBox = document.getElementById('lineInfoBox');
+  const enableCouponInput = !!UI_CONFIG.enableCouponInput;
+
+  if(couponInputBox) couponInputBox.style.display = enableCouponInput ? '' : 'none';
   if(couponBox) couponBox.style.display = '';
   if(lineInfoBox) lineInfoBox.style.display = 'none';
 }
@@ -2482,8 +2590,8 @@ function updatePricingUI(){
     familyPriceLabel.classList.toggle('is-regular', !familyLive);
   }
   if(familyPriceNote){
-    familyPriceNote.textContent = familyCopy.beforePriceNote;
-    familyPriceNote.style.display = familyLive ? 'none' : 'block';
+    familyPriceNote.textContent = familyCopy.beforePriceNote || '';
+    familyPriceNote.style.display = (!familyLive && familyCopy.beforePriceNote) ? 'block' : 'none';
   }
   if(familyInput && !familyLive){
     familyInput.value = '0';
