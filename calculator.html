@@ -7,33 +7,50 @@
 <title>LIU MAMA Order</title>
 
 <!--
-==================================================
-【快速修改導覽｜先搜尋這些關鍵字】
-1. 搜尋：EDITOR_CONFIG
-   - 改照片網址
-   - 改開賣時間
-   - 改開賣前/後文案
-   - 改價格
-   - 改 Google 表單
-   - 改優惠碼內容
-   - 開啟 / 關閉優惠券輸入框
+/* ==================================================
+【快速修改總入口｜先改這裡】
 
-2. 搜尋：FONT_SIZE_GUIDE
-   - 改主要字體大小
-   - 手機版字體大小也在附近
+1. 改開賣時間
+   搜尋：familyLaunch
+   位置：EDITOR_CONFIG.dates.familyLaunch
+   範例：
+   familyLaunch: { y: 2026, m: 5, d: 1, hh: 0, mm: 0, ss: 0 }
 
-3. 搜尋：MOBILE_FAMILY_PRICE_SIZE
-   - 改家庭包未開賣時的價格字體
-   - 目前已改成「5/1開賣」小字，避免手機被吃掉
+2. 改價格
+   搜尋：prices
+   位置：EDITOR_CONFIG.prices
+   single = 2人包價格
+   family = 家庭包價格
 
-4. 搜尋：COUPON_INPUT_TOGGLE
-   - 改 EDITOR_CONFIG.ui.enableCouponInput
-   - false = 不顯示優惠券輸入框
-   - true  = 顯示優惠券輸入框
+3. 改圖片
+   搜尋：images
+   位置：EDITOR_CONFIG.images
+   hero = 首頁主圖
+   checkoutSingle = STEP2 單包圖
+   checkoutFamily = STEP2 家庭包圖
 
-5. 搜尋：HERO_IMAGE / CHECKOUT_IMAGE
-   - 找首頁圖、結帳圖位置
-==================================================
+4. 改開賣前後文案
+   搜尋：copy
+   位置：EDITOR_CONFIG.copy
+   promo = 上方宣傳文案
+   familyCard = 商品表格中的家庭包文字
+   launchModal = 開賣跳窗文字
+   summary = STEP2 摘要品項名稱
+
+5. 改優惠券開關
+   搜尋：enableCouponInput
+   true  = 顯示優惠券輸入框
+   false = 隱藏優惠券輸入框
+
+6. 改優惠碼內容
+   搜尋：coupons
+   可改優惠碼、折扣%、最低門檻
+
+7. 改表單欄位
+   搜尋：forms
+   before = 開賣前表單
+   after  = 開賣後表單
+================================================== */
 -->
 
 <!-- 字體 -->
@@ -2312,7 +2329,7 @@ const EDITOR_CONFIG = {
   // 搜尋：familyLaunch
   // 月份請用 1~12，例如 5 月就寫 m: 5
   dates: {
-    familyLaunch: { y: 2026, m: 5, d: 1, hh: 0, mm: 0, ss: 0 },
+    familyLaunch: { y: 2026, m: 4, d: 21, hh: 0, mm: 0, ss: 0 },
   },
 
   // ===== 2) 價格設定 =====
