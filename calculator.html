@@ -3373,59 +3373,59 @@ window.addEventListener('DOMContentLoaded',()=>{
       scrollToPageTopSmooth();
     }
   }
+function bindIntroQuickDismiss(){
+  if(!intro) return;
 
-  function bindIntroQuickDismiss(){
-    if(!intro) return;
+  let hasDismissed = false;
+  let startX = 0;
+  let startY = 0;
+  let touchStarted = false;
 
-    let hasDismissed = false;
-    let startX = 0;
-    let startY = 0;
-    let touchStarted = false;
+  const onDesktopClick = (e)=>{
+    if(hasDismissed) return;
 
-    const onDesktopClick = (e)=>{
-      if(hasDismissed) return;
+    if(e.target && e.target.closest && e.target.closest('#startBtn')) return;
+    if(e.target && e.target.closest && e.target.closest('#storyBtn')) return;
 
-      if(e.target && e.target.closest && e.target.closest('#startBtn')) return;
-      if(e.target && e.target.closest && e.target.closest('#storyBtn')) return;
+    const isTouchLike = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if(isTouchLike) return;
 
-      const isTouchLike = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-      if(isTouchLike) return;
+    hasDismissed = true;
+    goIntroMenu();
+  };
 
+  intro.addEventListener('click', onDesktopClick);
+
+  intro.addEventListener('touchstart', (e)=>{
+    if(hasDismissed) return;
+    const t = e.touches && e.touches[0];
+    if(!t) return;
+    startX = t.clientX;
+    startY = t.clientY;
+    touchStarted = true;
+  }, { passive:true });
+
+  intro.addEventListener('touchend', (e)=>{
+    if(hasDismissed || !touchStarted) return;
+
+    const t = e.changedTouches && e.changedTouches[0];
+    touchStarted = false;
+    if(!t) return;
+
+    if(e.target && e.target.closest && e.target.closest('#startBtn')) return;
+    if(e.target && e.target.closest && e.target.closest('#storyBtn')) return;
+
+    const dx = t.clientX - startX;
+    const dy = t.clientY - startY;
+
+    // 手機只保留上滑跳過，不再點一下就跳過
+    if(Math.abs(dx) < 80 && dy < -70){
       hasDismissed = true;
       goIntroMenu();
-    };
+    }
+  }, { passive:true });
+}
 
-    intro.addEventListener('click', onDesktopClick);
-
-    intro.addEventListener('touchstart', (e)=>{
-      if(hasDismissed) return;
-      const t = e.touches && e.touches[0];
-      if(!t) return;
-      startX = t.clientX;
-      startY = t.clientY;
-      touchStarted = true;
-    }, { passive:true });
-
-    intro.addEventListener('touchend', (e)=>{
-      if(hasDismissed || !touchStarted) return;
-
-      const t = e.changedTouches && e.changedTouches[0];
-      touchStarted = false;
-      if(!t) return;
-
-      if(e.target && e.target.closest && e.target.closest('#startBtn')) return;
-      if(e.target && e.target.closest && e.target.closest('#storyBtn')) return;
-
-      const dx = t.clientX - startX;
-      const dy = t.clientY - startY;
-
-      // 手機只保留上滑跳過，不再點一下就跳過
-      if(Math.abs(dx) < 80 && dy < -70){
-        hasDismissed = true;
-        goIntroMenu();
-      }
-    }, { passive:true });
-  }
 
 
 
