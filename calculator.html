@@ -2976,7 +2976,8 @@ const EDITOR_CONFIG = {
       afterPriceLabel: '$590',
     },
     launchModal: {
-      title: '家庭包coming soon .ᐟ.ᐟ',
+      beforeTitle: '家庭包coming soon .ᐟ.ᐟ',
+      afterTitle: '家庭包正式開賣 .ᐟ.ᐟ',
       beforeLines: [
        '聽到大家的心聲了',
        '家庭包內含兩個底料包',
@@ -3256,7 +3257,9 @@ function updatePricingUI(){
   }
 
   if(launchTitle){
-    launchTitle.textContent = EDITOR_CONFIG.copy.launchModal.title;
+    launchTitle.textContent = familyLive
+      ? (EDITOR_CONFIG.copy.launchModal.afterTitle || '')
+      : (EDITOR_CONFIG.copy.launchModal.beforeTitle || '');
   }
 
   if(launchMain){
