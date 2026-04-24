@@ -2106,6 +2106,528 @@ body.screenshot-mode .checkout-product{
 }
 </style>
 
+
+
+<style id="liu-mama-logos-clean-override-v2">
+/* ==================================================
+【LOGOS 風格微調版｜只做視覺優化】
+- 不改原本 HTML 文字
+- 不改價格 / 優惠碼 / 表單送出 / 開場流程
+- 只覆寫外觀：留白、陰影、表格、STEP、結帳卡、手機底欄
+================================================== */
+:root{
+  --bg:#f8f7f3;
+  --navy:#243446;
+  --item-text:#2d3b49;
+  --gray-blue:#7f8f9f;
+  --line-blue:#d9e0e7;
+  --promo-red:#8d3f3a;
+  --crayon-blue:#475b70;
+  --crayon-blue-ink:#3f5061;
+  --soft-line:rgba(36,52,70,.075);
+  --soft-shadow:rgba(31,42,54,.06);
+}
+
+html,body{
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,.72) 0%, rgba(248,247,243,0) 38%),
+    var(--bg) !important;
+  color:var(--item-text);
+}
+
+.page-inner{
+  max-width:780px;
+  padding-left:22px;
+  padding-right:22px;
+}
+
+/* ===== Topbar：更像品牌官網導覽 ===== */
+.topbar{
+  max-width:1080px;
+  padding:18px 22px 0;
+  color:#6d7987;
+  font-size:11px;
+  letter-spacing:.18em;
+}
+.topbar-brand{
+  gap:8px;
+}
+.topbar-logo{
+  width:25px;
+  height:25px;
+  background:rgba(255,255,255,.48);
+  border:1px solid rgba(36,52,70,.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+}
+.topbar-link{
+  color:#42556b;
+  border-bottom:1px solid rgba(36,52,70,.22);
+  transition:opacity .22s ease, border-color .22s ease;
+}
+.topbar-link:hover{
+  opacity:.72;
+  border-color:rgba(36,52,70,.42);
+}
+
+/* ===== 開場 Hero：保留原感覺，但更寬、更安靜 ===== */
+#intro-hero-panel{
+  padding:8vh 18px 7vh;
+}
+.hero-frame{
+  width:min(960px, 94vw);
+  border-radius:28px;
+  box-shadow:0 22px 50px rgba(30,38,48,.12) !important;
+  background:#ded5c8;
+}
+.hero-image{
+  min-height:260px;
+}
+.hero-overlay{
+  padding:clamp(22px,5.2vw,42px);
+  background:linear-gradient(
+    90deg,
+    rgba(18,24,32,.62) 0%,
+    rgba(18,24,32,.34) 42%,
+    rgba(18,24,32,.04) 100%
+  ) !important;
+}
+.hero-eyebrow{
+  font-size:10px;
+  letter-spacing:.34em;
+  opacity:.78;
+}
+.hero-title{
+  font-size:clamp(24px,3.2vw,34px);
+  letter-spacing:.24em;
+}
+.hero-sub{
+  letter-spacing:.16em;
+  line-height:1.75;
+}
+#startBtn,
+#storyBtn{
+  border-radius:999px;
+  box-shadow:0 8px 18px rgba(38,48,61,.08) !important;
+}
+#startBtn:hover,
+#storyBtn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 12px 24px rgba(38,48,61,.12) !important;
+}
+
+/* ===== 主標與宣傳：降低壓迫感 ===== */
+h2{
+  margin-top:36px;
+  margin-bottom:8px;
+  color:#25374a;
+  letter-spacing:.035em;
+}
+.brand-block{
+  margin:12px 0 30px;
+}
+.brand-tagline{
+  color:#405166;
+  letter-spacing:.36em;
+}
+.promo-inline{
+  color:#45566a;
+  letter-spacing:.15em;
+}
+
+/* ===== STEP：細緻化，不改流程 ===== */
+.step-nav{
+  gap:54px;
+  margin:18px auto 20px;
+}
+.step-circle{
+  width:14px;
+  height:14px;
+  border-width:1px;
+  border-color:#c9d0d8;
+}
+.step-circle::after{
+  inset:3px;
+}
+.step-label{
+  font-size:10px;
+  letter-spacing:.28em;
+  color:#9aa5b1;
+}
+.step-nav-item.is-active .step-circle{
+  border-color:#293b50;
+}
+.step-nav-item.is-active .step-circle::after{
+  background:#293b50;
+}
+.step-nav-item.is-done .step-circle{
+  border-color:#7d8b9a;
+}
+
+/* ===== 區塊標題：參考品牌頁分區節奏 ===== */
+.section-title{
+  margin:42px 0 16px;
+  font-size:10px;
+  letter-spacing:.22em;
+  color:#7b8794;
+}
+.section-title::before,
+.section-title::after{
+  opacity:.46;
+}
+
+/* ===== 表單區：更清爽，少一點厚卡片感 ===== */
+.input-container{
+  max-width:540px;
+  padding:28px 28px 25px;
+  background:rgba(255,255,255,.66) !important;
+  border:1px solid var(--soft-line) !important;
+  border-radius:24px;
+  box-shadow:0 12px 28px var(--soft-shadow) !important;
+}
+.input-group label{
+  color:#4b5663;
+  letter-spacing:.1em;
+}
+.input-group input{
+  border:1px solid rgba(36,52,70,.14);
+  border-radius:12px;
+  background:rgba(255,255,255,.9);
+}
+.input-group input:focus{
+  border-color:rgba(36,52,70,.34);
+  box-shadow:0 0 0 3px rgba(36,52,70,.07);
+}
+
+/* ===== 商品表格：弱化表格感，像安靜商品清單 ===== */
+table{
+  width:92%;
+  max-width:540px;
+  margin:24px auto 20px;
+  background:rgba(255,255,255,.62) !important;
+  border:1px solid var(--soft-line) !important;
+  border-radius:24px;
+  box-shadow:0 10px 24px rgba(31,42,54,.045) !important;
+  overflow:hidden;
+}
+th{
+  background:rgba(255,255,255,.36) !important;
+  color:#7c8792;
+  font-size:11px;
+  letter-spacing:.18em;
+  border-bottom:1px solid rgba(36,52,70,.08);
+  font-weight:500;
+}
+td{
+  border-bottom:1px solid rgba(36,52,70,.055);
+}
+tr:last-child td{
+  border-bottom:none;
+}
+.price-new{
+  color:var(--promo-red);
+}
+.qty-stepper{
+  border-color:rgba(36,52,70,.13);
+  border-radius:999px;
+  overflow:hidden;
+  background:rgba(255,255,255,.9);
+}
+.qty-btn{
+  background:rgba(241,244,248,.72);
+}
+.qty-btn:hover{
+  background:rgba(231,237,244,.95);
+}
+.qty-input{
+  background:rgba(255,255,255,.94);
+}
+
+/* ===== 寄送方式：保留三選一功能，視覺更像品牌選項 ===== */
+.ship-wrap{
+  margin-top:20px;
+  gap:14px;
+}
+.ship-card{
+  border-radius:20px;
+  background:rgba(255,255,255,.62) !important;
+  border:1px solid rgba(36,52,70,.08) !important;
+  box-shadow:0 9px 20px rgba(31,42,54,.045) !important;
+}
+.ship-card::after{
+  opacity:.06 !important;
+}
+.ship-card:hover{
+  transform:translateY(-1px);
+}
+.ship-card:has(input:checked),
+.ship-card.selected{
+  border-color:rgba(36,52,70,.26) !important;
+  box-shadow:0 12px 26px rgba(31,42,54,.09), 0 0 0 4px rgba(36,52,70,.045) !important;
+}
+.ship-title{
+  color:#304156;
+}
+.ship-price{
+  color:#607184;
+}
+
+/* ===== Total：更乾淨，不像促銷貼紙 ===== */
+.total{
+  margin-top:26px;
+  padding:4px 4px;
+  color:#243446;
+  letter-spacing:.12em;
+}
+.total::before{
+  display:none !important;
+}
+.total-note{
+  color:#7a8794;
+  letter-spacing:.1em;
+}
+.selection-brief{
+  width:min(560px, 92%);
+  margin-top:16px;
+  border-radius:22px;
+  background:rgba(255,255,255,.58);
+  border:1px solid rgba(36,52,70,.065);
+  box-shadow:0 8px 20px rgba(31,42,54,.035);
+}
+.selection-brief-label{
+  color:#8995a2;
+}
+
+/* ===== 按鈕：減少手繪感，保留溫度 ===== */
+.btn{
+  border-radius:999px;
+}
+.btn-crayon{
+  background:#475b70 !important;
+  border:1px solid #405164 !important;
+  box-shadow:0 9px 20px rgba(36,52,70,.13), inset 0 1px 0 rgba(255,255,255,.12) !important;
+}
+.btn-crayon::before{
+  opacity:.045 !important;
+}
+.btn-sketch{
+  background:rgba(255,255,255,.66) !important;
+  border:1px solid rgba(36,52,70,.22) !important;
+  box-shadow:0 6px 14px rgba(31,42,54,.045) !important;
+}
+.btn-sketch::after{
+  display:none !important;
+}
+.step-next-btn{
+  min-width:244px;
+}
+
+/* ===== STEP2：訂單確認更像高級確認卡 ===== */
+.checkout-layout{
+  max-width:620px;
+  gap:24px;
+}
+.checkout-product,
+.checkout-summary,
+.account-box,
+.coupon-box{
+  background:rgba(255,255,255,.66) !important;
+  border:1px solid var(--soft-line) !important;
+  box-shadow:0 12px 28px rgba(31,42,54,.05) !important;
+}
+.checkout-product{
+  flex:0 0 190px;
+  border-radius:26px;
+  padding:13px;
+}
+.checkout-product img{
+  border-radius:18px;
+}
+.checkout-product-title{
+  color:#26374a;
+}
+.checkout-product-item{
+  border-bottom:1px dashed rgba(36,52,70,.08);
+}
+.checkout-summary{
+  border-radius:26px;
+  padding:20px 20px 18px;
+}
+.summary-row{
+  font-size:12.5px;
+  padding:7px 0;
+  color:#6f7b89;
+}
+.summary-row + .summary-row{
+  border-top:1px dashed rgba(36,52,70,.09);
+}
+.summary-row span:last-child{
+  color:#415163;
+}
+.summary-total{
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid rgba(36,52,70,.14);
+}
+.summary-total span:first-child{
+  font-size:13px;
+  letter-spacing:.12em;
+}
+.summary-total span:last-child{
+  font-size:20px;
+  letter-spacing:.06em;
+  color:#23364b;
+}
+.account-box{
+  border-radius:24px;
+}
+
+/* ===== 動畫：幅度變小，更成熟 ===== */
+.reveal{
+  opacity:0;
+  transform:translateY(28px) scale(.985);
+  transition:opacity .85s var(--ease), transform .85s var(--ease);
+}
+.reveal.in{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.total.animate,
+.total.glow{
+  animation:totalSoftPulse .32s ease !important;
+}
+@keyframes totalSoftPulse{
+  0%{ transform:scale(.99); opacity:.86; }
+  60%{ transform:scale(1.01); opacity:1; }
+  100%{ transform:scale(1); opacity:1; }
+}
+
+/* ===== 手機固定底部結帳列：修正原本 rgba 寫法並變精緻 ===== */
+.mobile-sticky-checkout{
+  left:14px;
+  right:14px;
+  bottom:14px;
+  border-radius:999px;
+  padding:10px 10px 10px 16px;
+  background:rgba(255,255,255,.90) !important;
+  border:1px solid rgba(68,86,108,.12) !important;
+  box-shadow:0 14px 32px rgba(25,40,60,.12) !important;
+  -webkit-backdrop-filter:blur(14px) saturate(1.02);
+  backdrop-filter:blur(14px) saturate(1.02);
+}
+.mobile-sticky-label{
+  font-size:9.5px;
+  letter-spacing:.2em;
+}
+.mobile-sticky-total{
+  font-size:21px;
+}
+.mobile-checkout-btn{
+  min-width:136px;
+  border-radius:999px;
+  padding:10px 16px;
+}
+
+/* ===== 手機版：不破壞原排版，只做細節縮放 ===== */
+@media (max-width:480px){
+  .page-inner{
+    padding-left:16px;
+    padding-right:16px;
+  }
+  .topbar{
+    padding:14px 16px 0;
+    letter-spacing:.12em;
+  }
+  .topbar-name{
+    font-size:10.5px;
+  }
+  .topbar-link{
+    font-size:10.5px;
+  }
+  #intro-hero-panel{
+    padding:7vh 14px 6vh;
+  }
+  .hero-frame{
+    border-radius:22px;
+  }
+  .hero-image{
+    min-height:250px;
+  }
+  .hero-overlay{
+    padding:18px;
+  }
+  .hero-eyebrow{
+    letter-spacing:.26em;
+  }
+  .hero-title{
+    font-size:22px;
+    letter-spacing:.18em;
+  }
+  .hero-sub{
+    font-size:12px;
+    letter-spacing:.1em;
+  }
+  h2{
+    font-size:58px;
+    margin-top:24px;
+  }
+  .brand-tagline{
+    letter-spacing:.25em;
+  }
+  .promo-inline{
+    letter-spacing:.12em;
+  }
+  .step-nav{
+    gap:42px;
+    margin-top:16px;
+  }
+  .section-title{
+    margin-top:36px;
+    letter-spacing:.16em;
+  }
+  .input-container{
+    padding:20px 18px;
+    border-radius:22px;
+  }
+  table{
+    width:100%;
+    border-radius:20px;
+  }
+  th,td{
+    padding:11px 6px;
+  }
+  .ship-wrap{
+    gap:6px;
+  }
+  .ship-card{
+    border-radius:18px;
+    padding:9px 3px 8px;
+  }
+  .ship-title,
+  .ship-price{
+    font-size:12px;
+  }
+  .selection-brief{
+    width:100%;
+    border-radius:20px;
+  }
+  .checkout-layout{
+    max-width:100%;
+    gap:16px;
+  }
+  .checkout-product,
+  .checkout-summary,
+  .account-box{
+    border-radius:22px;
+  }
+  .checkout-product{
+    max-width:340px;
+  }
+  .summary-total span:last-child{
+    font-size:19px;
+  }
+}
+</style>
+
 </head>
 
 <body>
